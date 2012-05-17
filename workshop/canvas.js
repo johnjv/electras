@@ -77,27 +77,57 @@
 		this.evaluator = new my.Evaluator(this.layout);
 		this.state = this.evaluator.evaluate('');
 
-		canvas.bind('vmousedown', function (e) {
-			var gest = self.gesture;
+		function GestureHandler(e) {
+			var ex, ey, gest, newGest, toolOffs;
+
 			e.preventDefault();
+			ex = e.pageX;
+			ey = e.pageY;
 			fixEvent(self, e);
+			if (ey < canvas.offset().top) {
+				newGest = null;
+				$('.tool', toolbar).each(function (i, tool) {
+					var elt, offs, dx, dy, type;
+					elt = $(tool);
+					offs = elt.offset();
+					dx = ex - offs.left;
+					dy = ey - offs.top;
+					if (dx >= 0 && dy >= 0 && dx < elt.width()
+							&& dy < elt.height()) {
+						type = toolTypes[elt.attr('type')];
+						newGest = new my.AddGesture(self, type, e);
+						return false;
+					}
+				});
+				if (newGest) {
+					gest = self.gesture;
+					self.gesture = newGest;
+					if (gest && gest.cancel) {
+						gest.cancel(self);
+					}
+					gest = newGest;
+				}
+			} else {
+				gest = self.gesture;
+			}
+
 			if (gest.mouseDown) {
 				gest.mouseDown(self, e);
 			} else {
 				gest.mouseDrag(self, e);
 			}
-		});
+		}
 
-		canvas.bind('vmousemove', function (e) {
+		GestureHandler.prototype.onDrag = function (e) {
 			var gest = self.gesture;
 			e.preventDefault();
 			if (gest) {
 				fixEvent(self, e);
 				gest.mouseDrag(self, e);
 			}
-		});
+		};
 
-		canvas.bind('vmouseup', function (e) {
+		GestureHandler.prototype.onRelease = function (e) {
 			var gest = self.gesture;
 			e.preventDefault();
 			if (gest) {
@@ -105,7 +135,10 @@
 				gest.mouseDrag(self, e);
 				gest.mouseUp(self, e);
 			}
-		});
+		};
+
+		multidrag.register(jqElt, GestureHandler);
+
 	};
 
 	my.Workshop.prototype.circuitChanged = function () {
@@ -146,17 +179,6 @@
 		info = this;
 		toolbar = this.toolbar;
 
-		function newHandler(type) {
-			return function (e) {
-				var gest;
-				e.preventDefault();
-				fixEvent(info, e);
-				gest = new my.AddGesture(info, type, e);
-				info.setGesture(gest);
-				gest.mouseDrag(info, e);
-			};
-		}
-
 		toolbar.empty();
 		$.each(tools, function (i, tool) {
 			var type;
@@ -165,7 +187,7 @@
 				toolbar.append($('<img></img>')
 					.addClass('tool')
 					.attr('src', 'resource/' + type.imgName + '.png')
-					.bind('vmousedown', newHandler(type)));
+					.attr('type', type.id));
 			} else {
 				console.log('unknown tool type "' + tool + '"');
 			}
