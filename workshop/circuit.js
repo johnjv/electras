@@ -1,3 +1,13 @@
+/* for testing this without tutorial present:
+var Tutorial = {};
+
+Tutorial.circuitChanged = function () {
+	var eval;
+	eval = Circuit.getEvaluator();
+	console.log(Circuit.getElements(), eval.evaluate('Ro').accept);
+};
+//*/
+
 var Circuit = (function ($) {
 	"use strict";
 
@@ -29,14 +39,19 @@ var Circuit = (function ($) {
 			}
 		});
 
-		this.evaluator = evaluator;
+		this.evaluator = new Workshop.Evaluator(layout);
 		this.acceptConn = acceptConn;
 	}
 
 	EvaluatorAdapter.prototype.evaluate = function (item) {
 		var state;
 		state = this.evaluator.evaluate();
-		state.accept = state.getValue(this.acceptConn);
+		if (this.acceptConn) {
+			state.accept = state.getValue(this.acceptConn);
+		} else {
+			state.accept = false;
+		}
+		return state;
 	};
 
 	my.getEvaluator = function () {
@@ -54,7 +69,7 @@ var Circuit = (function ($) {
 			return ret;
 		}
 		wiringConn = workshop.gesture.conn0 || null;
-		$.each(layout.elts, function (i, elt) {
+		$.each(workshop.layout.elts, function (i, elt) {
 			var conns, conn, toStr, j, k;
 			conns = [];
 			for (j = 0; j < elt.conns.length; j += 1) {
