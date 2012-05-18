@@ -1,30 +1,19 @@
 $(document).ready(function(){
-	//"use strict";
+	"use strict";
 	var curid = 0;
 	
 	
+	$("#advanceLevel").click(function(){
+		advanceSelector(); // method created by the Levels/Judge team
+	});
 	
-	$("#request").click(function(){
-		var value, picture;
-		value = $("#requestArea").val();
-		if(value == "") {
-				console.log("you requested nothing man");
-		}
-		else{
-			console.log(value);
-			$("#requestedCandy").text(value);
-			picture = setCandyPicture(value);
-			$("requestedCandy").prepend('<img src="candy22.png"></img>');
-		}
-		
+	$("#viewLevels").click(function(){
+		showSelector(); // method created by the Levels/Judge team
 	});
 		
 	$("#start").click(function(){
 		startMachine();
 	});
-	
-	
-	
 	
 	function startMachine(){
 		var items = createSequence();
@@ -37,23 +26,11 @@ $(document).ready(function(){
 				count++;
 				setTimeout(startNext, 3000);
 			}
-			/*
-			if(count === 0){
-				for(var i = 0; i < 8; i += 1){
-					finalItems.push(items[i]);
-				}
-			}*/
+			
 		}
 		startNext();
 	}
 	
-	$("#advanceLevel").click(function(){
-		advanceSelector(); // method created by the Levels/Judge team
-	});
-	
-	$("#viewLevels").click(function(){
-		showSelector(); // method created by the Levels/Judge team
-	});
 
 	function Candy(type){
 		this.type = type;
@@ -69,54 +46,53 @@ $(document).ready(function(){
 		candy = this.type;
 		candy = $.trim(candy);
 		
-		i = $.inArray('CRGY', candy.substring(0, 1)); // check that to see if there is any progress
-		
+		i = $.inArray('CRGY', candy.substring(0, 1)); // check that to see if we can write a better code	
 		if (candy == 'Co') {
-			this.picture = $('<img src="file:///export/home/s12/kimenyiti/Desktop/Odyssey/Electra/resource-image/candy00.png"></img>');
+			this.picture = $('<img src="resource-image/candy00.png"></img>');
 		}
 		
 		else if (candy == 'C|'){
-			this.picture = $('<img src="file:///export/home/s12/kimenyiti/Desktop/Odyssey/Electra/resource-image/candy01.png"></img>');
+			this.picture = $('<img src="resource-image/candy01.png"></img>');
 		}
 		
 		else if (candy == 'C-'){
-			this.picture = $('<img src="file:///export/home/s12/kimenyiti/Desktop/Odyssey/Electra/resource-image/candy02.png"></img>');
+			this.picture = $('<img src="resource-image/candy02.png"></img>');
 		}
 		
 		else if (candy == 'Ro'){
-			this.picture = $('<img src="file:///export/home/s12/kimenyiti/Desktop/Odyssey/Electra/resource-image/candy10.png"></img>');
+			this.picture = $('<img src="resource-image/candy10.png"></img>');
 		}
 		
 		else if (candy == 'R|'){
-			this.picture = $('<img src="file:///export/home/s12/kimenyiti/Desktop/Odyssey/Electra/resource-image/candy11.png"></img>');
+			this.picture = $('<img src="resource-image/candy11.png"></img>');
 		}
 		
 		else if (candy == 'R-'){
-			this.picture = $('<img src="file:///export/home/s12/kimenyiti/Desktop/Odyssey/Electra/resource-image/candy12.png"></img>');
+			this.picture = $('<img src="resource-image/candy12.png"></img>');
 		}
 		
 		else if (candy == 'Go'){
-			this.picture = $('<img src="file:///export/home/s12/kimenyiti/Desktop/Odyssey/Electra/resource-image/candy20.png"></img>');
+			this.picture = $('<img src="resource-image/candy20.png"></img>');
 		}
 		
 		else if (candy == 'G|'){
-			this.picture = $('<img src="file:///export/home/s12/kimenyiti/Desktop/Odyssey/Electra/resource-image/candy21.png"></img>');
+			this.picture = $('<img src="resource-image/candy21.png"></img>');
 		}
 		
 		else if (candy == 'G-'){
-			this.picture = $('<img src="file:///export/home/s12/kimenyiti/Desktop/Odyssey/Electra/resource-image/candy22.png"></img>');
+			this.picture = $('<img src="resource-image/candy22.png"></img>');
 		}
 		
 		else if (candy == 'Yo'){
-			this.picture = $('<img src="file:///export/home/s12/kimenyiti/Desktop/Odyssey/Electra/resource-image/candy30.png"></img>');
+			this.picture = $('<img src="resource-image/candy30.png"></img>');
 		}
 		
 		else if (candy == 'Y|'){
-			this.picture = $('<img src="file:///export/home/s12/kimenyiti/Desktop/Odyssey/Electra/resource-image/candy31.png"></img>');
+			this.picture = $('<img src="resource-image/candy31.png"></img>');
 		}
 		
 		else if (candy == 'Y-'){
-			this.picture = $('<img src="file:///export/home/s12/kimenyiti/Desktop/Odyssey/Electra/resource-image/candy32.png"></img>');
+			this.picture = $('<img src="resource-image/candy32.png"></img>');
 		}
 		
 		else{
@@ -172,9 +148,6 @@ $(document).ready(function(){
         	candyPos = candy.offset();
         	candyPos.left += machine.width();  // 450 should be machine.width()
         	candyPos.top += machine.height()/2 - 60; // should be machine.height() minize something
-        	//console.log("candy top: " + candyPos.top);
-        	//console.log("candy left: " + candyPos.left);
-        	//console.log(machine.width());
        	 	candy.offset(candyPos);
         	machine.append(candy);
         	console.log("just added");
