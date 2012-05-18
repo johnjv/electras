@@ -1,25 +1,25 @@
 
 
 var all_my_chocolates_events = function(){
-  var elements = elements_finished//get_elements();
-  console.log(elements)
+  var elements = elements_start//get_elements();
 
-  if (has_element_where(elements, sensor('chocolate', 'empty')) &&
-      has_element_where(elements, lightbulb('empty'))) {
-    var sensor_out = find_outgoing(filter_elements(elements, sensor('chocolate', 'empty'))[0], 'empty');
+  if (exists(empty_output(type('chocolate', elements))) &&
+      exists(empty_output(type('lightbulb', elements)))) {
+    console.log('start!')
+    var sensor_out = find_outgoing(empty_output(type('chocolate', elements))[0], 'empty');
     highlightSection(sensor_out, true)
     createSpeechBubble(sensor_out, "We must tell the machine what to do.  Click on the sensor to start laying down wire.")
   }
 
-  else if (has_element_where(elements, sensor('chocolate', 'active')) &&
-              has_element_where(elements, lightbulb('empty'))){
-    var lightbulb_in = find_incoming(filter_elements(elements, lightbulb('empty'))[0], 'empty');
+  else if (exists(active_connection(type('chocolate', elements))) &&
+              exists(empty_input(type('lightbulb', elements)))){
+    var lightbulb_in = find_incoming(empty_output(type('lightbulb'))[0], 'empty');
     highlightSection(lightbulb_in, true);
     createSpeechBubble(lightbulb_in, "Good job!  Now connect it to the lightbulb!");
   }
 
-  else if (has_element_where(elements, sensor('chocolate', 'any')) &&
-              has_element_where(elements, lightbulb('any'))) {
+  else if (exists(filled_output(type('chocolate', elements))) &&
+              exists(filled_output(type('lightbulb', elements)))) {
     console.log("the user has connected the two");
     var lever = getLeverLocation()
     highlightSection(lever, false);
@@ -45,7 +45,7 @@ elements_start = [
         y: 100,
         width: 50,
         height: 50,
-        connected_to: 'empty'
+        connected_to: ''
       }
     ]
   },
@@ -59,7 +59,7 @@ elements_start = [
         y: 100,
         width: 10,
         height: 10,
-        connected_to: 'empty'
+        connected_to: ''
       }
     ]
   }
@@ -90,7 +90,7 @@ elements_first_selected = [
         y: 100,
         width: 10,
         height: 10,
-        connected_to: 'empty'
+        connected_to: ''
       }
     ]
   }

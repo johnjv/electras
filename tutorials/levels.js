@@ -260,7 +260,7 @@ var all_levels = [
     all_my_chocolates,
     a_bar_walks_into_my_tummy,
     not_what_I_mint,
-    mint_chocolate,
+    i_mint_chocolate,
     indecisive,
     picky,
     mint_chocolate_returns,
