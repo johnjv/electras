@@ -1,7 +1,7 @@
 
 
 var all_my_chocolates_events = function(){
-  var elements = new Elements(elements_start)//get_elements();
+  var elements = new Elements(elements_finished)//get_elements();
   console.log(elements)
 
 //  if (exists(empty_output(sensor('chocolate', elements))) &&
