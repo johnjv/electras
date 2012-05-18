@@ -15,16 +15,21 @@
 	my.Evaluator = function (layout) {
 		this.layout = layout;
 		this.trues = {}; // set of connection ids with true values
+		this.eltStates = {};
 	};
 
-	my.Evaluator.prototype.evaluate = function (item) {
-		var trues, state, dirty, iters, anyDirty, id, conns, i, j, set;
+	my.Evaluator.prototype.evaluate = function () {
+		var trues, eltStates, state, dirty, iters, anyDirty, id, conns, i, j, set;
 
 		trues = {};
 		$.each(this.trues, function (key, val) {
 			trues[key] = val;
 		});
-		state = new my.State(this.layout, trues);
+		eltStates = {};
+		$.each(this.eltStates, function (key, val) {
+			eltStates[key] = val;
+		});
+		state = new my.State(this.layout, trues, eltStates);
 		dirty = {};
 		$.each(this.layout.elts, function (i, elt) {
 			dirty[elt.id] = elt;
@@ -60,10 +65,11 @@
 			}
 		}
 		this.trues = trues;
+		this.eltStates = eltStates;
 		return state;
 	};
 
-	my.State = function (layout, trues) {
+	my.State = function (layout, trues, eltStates) {
 		var accept;
 
 		accept = false;
@@ -75,6 +81,7 @@
 
 		this.layout = layout;
 		this.trues = trues;
+		this.eltStates = eltStates;
 		this.accept = accept;
 		this.sets = [];
 		this.repaintConns = {};
@@ -91,4 +98,4 @@
 			this.sets.push({conn: conn, val: val});
 		}
 	};
-}(Circuit, jQuery || $));
+}(Workshop, jQuery));
