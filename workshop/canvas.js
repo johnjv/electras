@@ -31,8 +31,7 @@
 			}, {
 				poke: function (elt, x, y, state) {
 					if (x >= -45 && x <= -25 && y >= -15 && y <= 15) {
-						state.eltStates[elt.id] = !state.eltStates[elt.id];
-						elt.type.updateImage(elt, state);
+						state.setState(elt, !state.getState(elt));
 						return true;
 					} else {
 						return false;
@@ -49,7 +48,7 @@
 		'out': new my.ElementType('out', 'output0', -30, -60, 50, 50, [
 				new my.Connection(true, 0, 0, 0, -10)
 			], function (elt, state) {
-				elt.type.updateImage(elt, state);
+				state.setState(elt, state.getValue(elt.conns[0]));
 			}, {
 				updateImage: function (elt, state) {
 					if (state.getValue(elt.conns[0])) {
@@ -68,6 +67,10 @@
 		e.circuitY = e.pageY - poffs.top;
 		return e;
 	}
+
+	my.getElementType = function (id) {
+		return toolTypes[id];
+	};
 
 	my.Workshop = function (jqElt, tools) {
 		var self, toolbar, canvas, name, gesture, info;
@@ -117,6 +120,8 @@
 						gest.cancel(self);
 					}
 					gest = newGest;
+				} else {
+					gest = self.gesture;
 				}
 			} else {
 				gest = self.gesture;
@@ -167,11 +172,44 @@
 	my.Workshop.prototype.circuitChanged = function () {
 		var self, state;
 		self = this;
-		state = self.evaluator.evaluate('');
+		state = self.evaluator.evaluate();
 		self.state = state;
 		$.each(state.repaintConns, function (id, conn) {
 			my.DrawCirc.recolorConnection(self, conn);
 		});
+		$.each(state.repaintElts, function (id, elt) {
+			elt.type.updateImage(elt, state);
+		});
+	};
+
+	my.Workshop.prototype.setLayout = function (layout) {
+		var self;
+
+		self = this;
+		$('img', this.canvas).remove();
+		this.paper.clear();
+
+		this.layout = layout;
+		this.evaluator = new my.Evaluator(layout);
+		this.state = this.evaluator.evaluate();
+
+		$.each(layout.elts, function (i, elt) {
+			my.DrawCirc.createElement(self, elt);
+			elt.type.updateImage(elt, self.state);
+		});
+		$.each(layout.elts, function (i, elt) {
+			var conn0, conn1, i, j;
+			for (i = elt.conns.length - 1; i >= 0; i -= 1) {
+				conn0 = elt.conns[i];
+				if (conn0.input) {
+					for (j = conn0.conns.length - 1; j >= 0; j -= 1) {
+						conn1 = conn0.conns[j];
+						my.DrawCirc.createWire(self, conn0, conn1);
+					}
+				}
+			}
+		});
+		this.fireChange();
 	};
 
 	my.Workshop.prototype.setState = function (state) {

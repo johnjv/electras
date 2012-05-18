@@ -107,6 +107,7 @@
 		elt = this.elt;
 		elt.x = e.circuitX;
 		elt.y = e.circuitY;
+		console.log('drag to', e.circuitX, e.circuitY);
 		my.DrawCirc.repositionElement(info, elt);
 
 		legal = this.isLegalPosition(info);
