@@ -95,9 +95,18 @@ var operator = function(type, connection_type, connection_status){
   }
 }
 
-var not = function(connection_type, connection_status){
+var NOT = function(connection_type, connection_status){
   return operator('NOT', connection_type, connection_status);
 }
+
+var AND = function(connection_type, connection_status){
+  return operator('AND', connection_type, connection_status)
+}
+
+var OR = function(connection_type, connection_status){
+  return operator('OR', connection_type, connection_status)
+}
+
 var sensor = function(flavor, connection_status){
   return {
     type: 'sensor',
@@ -106,6 +115,25 @@ var sensor = function(flavor, connection_status){
       connected_to: connection_status
     }
   };
+}
+
+var type = function(type, elements){
+  return filter_elements(elements, {type: type})
+}
+
+var all_connected_to = function(id, elements){
+  return filter_elements(elements, {connections: {connected_to: id}})
+}
+
+var empty_inputs = function(elements){
+  return filter_elements(elements, {connections: {type: 'incoming', connected_to: 'empty'}})
+}
+
+var active_connection = function(elements){
+  return filter_elements(elements, {connections: {connected_to: 'active'}})
+}
+var id = function(id, elements){
+  return filter_elements(elements, {id: id})[0]
 }
 
 var lightbulb = function(connection_status){
