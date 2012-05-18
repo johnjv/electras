@@ -37,8 +37,8 @@ var not_what_I_mint= {
   script: 'not_what_I_mint'
 }
 
-var mint_chocolate = {
-  levelname: 'Mint_chocolate',
+var i_mint_chocolate = {
+  levelname: 'I Mint Chocolate',
   //this is the first level with the OR component
   levelid: 4,
   orderText: 'I want to combine mint candies and chocolate candies into something EXTREMELY delicious.',
@@ -48,7 +48,7 @@ var mint_chocolate = {
   tools: ['OR'],
   types: ['*o'],
   answers: 'C*, G*',
-  script: 'mint_chocolate'
+  script: 'i_mint_chocolate'
 }
 
 var indecisive = {
