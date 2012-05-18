@@ -17,12 +17,9 @@
 	my.DrawCirc.createElement = function (info, elt) {
 		var type, img, offs0;
 
-		console.log('imgElt = ', elt);
-		console.log(elt.imgElt);
 		if (elt.imgElt) {
 			elt.imgElt.remove();
 		}
-		console.log('done');
 
 		type = elt.type;
 		img = $('<img></img>').addClass('on_canvas');
@@ -58,7 +55,6 @@
 
 		type = elt.type;
 		offs0 = info.canvas.offset();
-		console.log('repos', elt.x, elt.type.imgX, elt.y, elt.type.imgY);
 		elt.imgElt.offset({ left: offs0.left + elt.x + elt.type.imgX,
 			top: offs0.top + elt.y + elt.type.imgY });
 

@@ -235,7 +235,7 @@
 	};
 
 	my.Workshop.prototype.showMessage = function (msg) {
-		console.log(msg);
+		console.log(msg); //OK
 	};
 
 	my.Workshop.prototype.setGesture = function (value) {
@@ -266,7 +266,7 @@
 					.attr('src', 'resource/' + type.imgName + '.png')
 					.attr('type', type.id));
 			} else {
-				console.log('unknown tool type "' + tool + '"');
+				console.log('unknown tool type "' + tool + '"'); //OK
 			}
 		});
 
