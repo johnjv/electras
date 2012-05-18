@@ -26,27 +26,37 @@
 		'in': new my.ElementType('in', 'switch0', -60, -25, 50, 50, [
 				new my.Connection(false, 0, 0, -10, 0)
 			], function (elt, state) {
-				state.setValue(elt.conns[0], elt.state || false);
-			}, function (elt, x, y) {
-				if (x >= -45 && x <= -25 && y >= -15 && y <= 15) {
-					elt.state = !elt.state;
-					if (elt.state) {
+				var val = state.eltStates[elt.id] || false;
+				state.setValue(elt.conns[0], val);
+			}, {
+				poke: function (elt, x, y, state) {
+					if (x >= -45 && x <= -25 && y >= -15 && y <= 15) {
+						state.eltStates[elt.id] = !state.eltStates[elt.id];
+						elt.type.updateImage(elt, state);
+						return true;
+					} else {
+						return false;
+					}
+				},
+				updateImage: function (elt, state) {
+					if (state.eltStates[elt.id]) {
 						elt.setImage('switch1');
 					} else {
 						elt.setImage('switch0');
 					}
-					return true;
-				} else {
-					return false;
 				}
 			}),
 		'out': new my.ElementType('out', 'output0', -30, -60, 50, 50, [
 				new my.Connection(true, 0, 0, 0, -10)
 			], function (elt, state) {
-				if (state.getValue(elt.conns[0])) {
-					elt.setImage('output1');
-				} else {
-					elt.setImage('output0');
+				elt.type.updateImage(elt, state);
+			}, {
+				updateImage: function (elt, state) {
+					if (state.getValue(elt.conns[0])) {
+						elt.setImage('output1');
+					} else {
+						elt.setImage('output0');
+					}
 				}
 			})
 	};
@@ -76,6 +86,7 @@
 		this.layout = new my.Layout();
 		this.evaluator = new my.Evaluator(this.layout);
 		this.state = this.evaluator.evaluate('');
+		this.changeListeners = [];
 
 		function GestureHandler(e) {
 			var ex, ey, gest, newGest, toolOffs;
@@ -116,6 +127,7 @@
 			} else {
 				gest.mouseDrag(self, e);
 			}
+			self.fireChange();
 		}
 
 		GestureHandler.prototype.onDrag = function (e) {
@@ -135,10 +147,21 @@
 				gest.mouseDrag(self, e);
 				gest.mouseUp(self, e);
 			}
+			self.fireChange();
 		};
 
 		multidrag.register(jqElt, GestureHandler);
 
+	};
+
+	my.Workshop.prototype.addChangeListener = function (listener) {
+		this.changeListeners.push(listener);
+	};
+
+	my.Workshop.prototype.fireChange = function () {
+		$.each(this.changeListeners, function (i, listener) {
+			listener();
+		});
 	};
 
 	my.Workshop.prototype.circuitChanged = function () {
@@ -148,6 +171,22 @@
 		self.state = state;
 		$.each(state.repaintConns, function (id, conn) {
 			my.DrawCirc.recolorConnection(self, conn);
+		});
+	};
+
+	my.Workshop.prototype.setState = function (state) {
+		var self;
+		self = this;
+		this.state = state;
+		$.each(this.layout.elts, function (i, elt) {
+			var j, conn;
+			elt.type.updateImage(elt, state);
+			for (j = 0; j < elt.conns.length; j += 1) {
+				conn = elt.conns[j];
+				if (conn.input) {
+					my.DrawCirc.recolorConnection(self, conn);
+				}
+			}
 		});
 	};
 
@@ -200,14 +239,4 @@
 			});
 		});
 	};
-
-	$(document).ready(function () {
-		var main, workshop;
-
-		main = $('#main');
-		if (!main.hasClass('circ-container')) {
-			workshop = new my.Workshop(main);
-			workshop.setTools(['and', 'or', 'not', 'in', 'out']);
-		}
-	});
-}(Circuit, jQuery || $, Raphael));
+}(Workshop, jQuery, Raphael));

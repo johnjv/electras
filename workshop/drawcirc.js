@@ -209,4 +209,4 @@
 		line.attr('stroke-width', WIRE_WIDTH);
 		return line;
 	};
-}(Circuit, jQuery || $));
+}(Workshop, jQuery));
