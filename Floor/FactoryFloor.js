@@ -1,6 +1,6 @@
 $(document).ready(function(){
 	"use strict";
-	var curid = 0;
+	var curid = 1;
 	
 	
 	$("#advanceLevel").click(function(){
@@ -41,12 +41,13 @@ $(document).ready(function(){
 		return this.type;
 	};
 	
-	Candy.prototype.setCandyPicture = function(){	
+	Candy.prototype.setCandyPicture = function(){
+		"use strict";	
 		var candy;
 		candy = this.type;
 		candy = $.trim(candy);
 		
-		i = $.inArray('CRGY', candy.substring(0, 1)); // check that to see if we can write a better code	
+		//i = $.inArray('CRGY', candy.substring(0, 1)); // check that to see if we can write a better code	
 		if (candy == 'Co') {
 			this.picture = $('<img src="resource-image/candy00.png"></img>');
 		}
@@ -102,11 +103,13 @@ $(document).ready(function(){
 	};
 	
 	function setCurId(levelid){
+		"use strict";
 		curid = levelid;
 		console.log("set curid to: " + curid );
 	}
 	
 	function getLevelType(){
+		"use strict";
 		var level = getCurrentLevel(curid);
 		var typeInfo = new Array();
 		var circuitInfo = new Array();
@@ -139,7 +142,7 @@ $(document).ready(function(){
 	}
 	
 	function placeCandy(candy){
-		"user strict";
+		"use strict";
 		var machine, candyPos, items;
         candy.width(20);
         machine = $('#machine');
@@ -159,7 +162,7 @@ $(document).ready(function(){
     
     
     function moveCandy(candy){
-    	"user strict";
+    	"use strict";
     	var machine;
     	machine = $('#machine');
     	$(candy).animate({
@@ -174,21 +177,21 @@ $(document).ready(function(){
 	
 	
 	function levelChanged(oldLevel, newLevel){
-		"user strict";
+		"use strict";
 		//TODO
 		level = newLevel;
 		updateChalkBoard();
 	}
 	
 	function updateChalkBoard(){
-		"user strict"
+		"use strict"
 		var orderText;
 		orderText = Level.orderText; // from the Level team
 		$('#chalkBoard').text(orderText);
 	}
 
 	function getleverLocation(){
-		"user strict";
+		"use strict";
 		var leverLocation, leverPos;
 		leverPos = $("#lever").offset();
 		leverLocation = new Object();
@@ -202,7 +205,7 @@ $(document).ready(function(){
 	}
 
 	function getAdvanceLocation(){
-		"user strict";
+		"use strict";
 		var advanceLocation, advancePos;
 		advancePos = $("#advanceLevel").offset();
 		advanceLocation = new Object();
@@ -215,7 +218,7 @@ $(document).ready(function(){
 	}
 	
 	function howToDisplay() {
-		"user strict";
+		"use strict";
 		//TODO 	This should indicate whether the candy goes in the box or in the hole, it will call putInBox
 		var listToDisplay = new Array();
 		var isAccepted = new Boolean();
@@ -228,13 +231,11 @@ $(document).ready(function(){
 	}
 	
 	function putInBox(candy){
-		"user strict";
+		"use strict";
 		//TODO this will change the css properties of the element that is to go in the box i.e being accepted
 		//var top, newPos
 		//ne
 	}
-	
-	setCurId(1);
 	
 	
 
