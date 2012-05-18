@@ -45,7 +45,7 @@
 	        }	              
 	    levelSays = correct;
 	    
-	    // evaluator = new Circuit.getEvaluator();
+	    //evaluator = new myEvaluator.getEvaluator();
 	    circuitSays = {accept: true}; //evaluator.evaluate(sequence[i]);
 	    sequenceItem = new SequenceItem(sequence[i], levelSays, circuitSays);	   
 	    analysis.push(sequenceItem);
@@ -87,6 +87,8 @@
    	};
    	
     Level.prototype.getSequence = function(types, answers){
+        "use strict";
+        var sequenceLength, sequence;
 	    sequenceLength = 8;
 	    sequence = "";
 	    var levelType = types;	    
@@ -138,37 +140,39 @@
     };
     
       Level.prototype.parseAnswer = function(answer){
-            var answers, newAnswers, i, j;
-            answers = answer.split(",");
-            newAnswers =[];            
-            
-            for(i = 0;i< answers.length; i += 1 ){
-                if($.trim(answers[i].split("")[0]) === '*'){
-                    newAnswers.push( 'G' + $.trim(answers[i].split("")[1]) );
-                    newAnswers.push( 'Y' + $.trim(answers[i].split("")[1]) );
-                    newAnswers.push( 'R' + $.trim(answers[i].split("")[1]) );
-                    newAnswers.push( 'C' + $.trim(answers[i].split("")[1]) );
-                }
-                else if($.trim(answers[i].split("")[1]) === '*'){
-                        newAnswers.push( $.trim(answers[i].split("")[0]) + '-' );
-                        newAnswers.push( $.trim(answers[i].split("")[0]) + 'o' );
-                        newAnswers.push( $.trim(answers[i].split("")[0]) + '|' );
-                }
-                else{
-                    newAnswers.push(answers[i]);
-                }                  
-            }                                    
-            for (i = 0; i < newAnswers.length; i += 1){
-                for (j= 1+i; j < newAnswers.length; j += 1) {
-                    if(newAnswers[i]=== newAnswers[j]){
-                        newAnswers.splice(i,1)          
-                    }            
-                }
+        "use strict";
+        var answers, newAnswers, i, j;
+        answers = answer.split(",");
+        newAnswers =[];            
+        
+        for(i = 0;i< answers.length; i += 1 ){
+            if($.trim(answers[i].split("")[0]) === '*'){
+                newAnswers.push( 'G' + $.trim(answers[i].split("")[1]) );
+                newAnswers.push( 'Y' + $.trim(answers[i].split("")[1]) );
+                newAnswers.push( 'R' + $.trim(answers[i].split("")[1]) );
+                newAnswers.push( 'C' + $.trim(answers[i].split("")[1]) );
             }
-            return newAnswers;            
+            else if($.trim(answers[i].split("")[1]) === '*'){
+                    newAnswers.push( $.trim(answers[i].split("")[0]) + '-' );
+                    newAnswers.push( $.trim(answers[i].split("")[0]) + 'o' );
+                    newAnswers.push( $.trim(answers[i].split("")[0]) + '|' );
+            }
+            else{
+                newAnswers.push(answers[i]);
+            }                  
+        }                                    
+        for (i = 0; i < newAnswers.length; i += 1){
+            for (j= 1+i; j < newAnswers.length; j += 1) {
+                if(newAnswers[i]=== newAnswers[j]){
+                    newAnswers.splice(i,1)          
+                }            
+            }
+        }
+        return newAnswers;            
     };
     
     Level.prototype.getBest = function(types, answers){
+       "use strict";
        var sequence, i, bestCase, j , k, maxSeq, total, arraySeq;       
        maxSeq = 0;
        bestCase = 0;
@@ -193,7 +197,9 @@
 	    return arraySeq[bestCase];
     };
     
-    Level.prototype.addToSeq = function(types){        
+    Level.prototype.addToSeq = function(types){ 
+        "use strict";  
+        var i;     
         var sequence = "";
         var acceptableelementType = types.split(",");
  	 	for(i = 0; i < 8;i++){
