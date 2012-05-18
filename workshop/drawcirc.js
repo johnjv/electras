@@ -15,25 +15,26 @@
 	my.DrawCirc = {};
 
 	my.DrawCirc.createElement = function (info, elt) {
-		var type, offs0, img;
+		var type, img, offs0;
 
+		console.log('imgElt = ', elt);
+		console.log(elt.imgElt);
 		if (elt.imgElt) {
 			elt.imgElt.remove();
 		}
+		console.log('done');
 
 		type = elt.type;
-		offs0 = info.canvas.offset();
 		img = $('<img></img>').addClass('on_canvas');
 		elt.imgElt = img;
 		elt.setImage = setterImage(elt);
 		elt.setImage(type.imgName);
 		img.width(type.imgWidth);
 		img.height(type.imgHeight);
-		img.offset({
-			left: offs0.left + elt.x + elt.type.imgX,
-			top: offs0.top + elt.y + elt.type.imgY
-		});
 		info.canvas.append(img);
+		offs0 = info.canvas.offset();
+		img.offset({ left: offs0.left + elt.x + elt.type.imgX,
+			top: offs0.top + elt.y + elt.type.imgY });
 
 		$.each(elt.conns, function (i, conn) {
 			my.DrawCirc.createStub(info, conn);
@@ -57,10 +58,9 @@
 
 		type = elt.type;
 		offs0 = info.canvas.offset();
-		elt.imgElt.offset({
-			left: offs0.left + elt.x + elt.type.imgX,
-			top: offs0.top + elt.y + elt.type.imgY
-		});
+		console.log('repos', elt.x, elt.type.imgX, elt.y, elt.type.imgY);
+		elt.imgElt.offset({ left: offs0.left + elt.x + elt.type.imgX,
+			top: offs0.top + elt.y + elt.type.imgY });
 
 		$.each(elt.conns, function (i, conn) {
 			my.DrawCirc.createStub(info, conn);

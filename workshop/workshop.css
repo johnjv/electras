@@ -1,12 +1,3 @@
-body {
-	margin: 0px;
-}
-
-div#main {
-	width: 100%;
-	height: 100%;
-}
-
 div.circ-toolbar {
 	background-color: #FFB;
 	height: 58px;
@@ -15,18 +6,20 @@ div.circ-toolbar {
 	width: 100%;
 }
 
+div.circ-canvas {
+	position: relative;
+	border-top: solid 2px #282;
+	height: 100%;
+	width: 100%;
+	background-color: white;
+}
+
 img.tool {
 	margin-left: 8px;
 	margin-top: 8px;
 	vertical-align: middle;
 }
 
-div.circ-canvas {
+img.on_canvas {
 	position: absolute;
-	border-top: solid 2px #282;
-	top: 58px;
-	bottom: 0px;
-	left: 0px;
-	right: 0px;
-	background-color: white;
 }

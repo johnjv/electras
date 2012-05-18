@@ -85,6 +85,16 @@
 		this.accept = accept;
 		this.sets = [];
 		this.repaintConns = {};
+		this.repaintElts = {};
+	};
+
+	my.State.prototype.getState = function (elt) {
+		return this.eltStates[elt.id];
+	};
+
+	my.State.prototype.setState = function (elt, value) {
+		this.eltStates[elt.id] = value;
+		this.repaintElts[elt.id] = elt;
 	};
 
 	my.State.prototype.getValue = function (conn) {

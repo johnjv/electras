@@ -6,6 +6,16 @@ Tutorial.circuitChanged = function () {
 	eval = Circuit.getEvaluator();
 	console.log(Circuit.getElements(), eval.evaluate('Ro').accept);
 };
+
+var levels = [
+	{sensors: 'C', tools: ['']},
+	{sensors: 'C Y', tools: ['and']},
+	{sensors: '- | o', tools: ['and', 'or', 'not']}
+];
+
+function setLevel(id) {
+	Circuit.levelChanged(null, levels[id]);
+}
 //*/
 
 var Circuit = (function ($) {
@@ -13,6 +23,31 @@ var Circuit = (function ($) {
 
 	var my = {};
 	var workshop = null;
+
+	var colorNames = 'CRGY';
+	var shapeNames = 'o|-';
+	var colorSensors = [];
+	var shapeSensors = [];
+
+	(function () {
+		var conns, i, c;
+
+		function propagateSensor(elt, state) {
+			state.setValue(elt.conns[0], state.getState(elt));
+		}
+
+		conns = [ new Workshop.Connection(false, 0, 0, -10, 0) ];
+		for (i = 0; i < colorNames.length; i += 1) {
+			c = colorNames.substring(i, i + 1);
+			colorSensors.push(new Workshop.ElementType(c, 'color' + i,
+				-60, -25, 50, 50, conns, propagateSensor));
+		}
+		for (i = 0; i < shapeNames.length; i += 1) {
+			c = shapeNames.substring(i, i + 1);
+			shapeSensors.push(new Workshop.ElementType(c, 'shape' + i,
+				-60, -25, 50, 50, conns, propagateSensor));
+		}
+	}());
 
 	$(document).ready(function () {
 		var main;
@@ -94,7 +129,68 @@ var Circuit = (function ($) {
 		return ret;
 	};
 
+	function computeSensors(sensorsString) {
+		var sensors, types, totalHeight, maxWidth, gap, y, i, j, c, sensor;
+		
+		totalHeight = 0;
+		maxWidth = 0;
+		types = [];
+		for (i = 0; i < sensorsString.length; i += 1) {
+			c = sensorsString.substring(i, i + 1);
+			sensor = null;
+			j = colorNames.indexOf(c);
+			if (j >= 0) {
+				sensor = colorSensors[j];
+			} else {
+				j = shapeNames.indexOf(c);
+				if (j >= 0) {
+					sensor = shapeSensors[j];
+				} else if (c !== ' ') {
+					console.log('invalid sensor name "' + sensor + '"');
+				}
+			}
+			if (sensor !== null) {
+				totalHeight += sensor.imgHeight;
+				if (-sensor.imgX > maxWidth) {
+					maxWidth = -sensor.imgX;
+				}
+				types.push(sensor);
+			}
+		}
+		gap = Math.round(1.0 * (workshop.canvas.height() - totalHeight) /
+			(types.length + 1));
+		if (gap < 10) {
+			gap = 10;
+		}
+
+		console.log('metrics', workshop.canvas.height(), totalHeight, types.length, gap);
+
+		sensors = [];
+		y = 0;
+		console.log(types);
+		$.each(types, function (i, type) {
+			y += gap;
+			console.log('sensor', type.id, 'at', 10 + maxWidth, y - type.imgY);
+			sensors.push(new Workshop.Element(type, 10 + maxWidth,
+				y - type.imgY));
+			y += type.imgHeight;
+		});
+		return sensors;
+	}
+
 	my.levelChanged = function (oldLevel, newLevel) {
+		var layout, outType, sensors;
+
+		layout = new Workshop.Layout();
+		outType = Workshop.getElementType('out');
+		layout.addElement(new Workshop.Element(outType,
+			workshop.canvas.width() - 10 - outType.imgWidth + outType.imgX,
+			Math.round((workshop.canvas.height() - outType.imgY) / 2.0)));
+		$.each(computeSensors(newLevel.sensors), function (i, sensor) {
+			layout.addElement(sensor);
+		});
+		workshop.setLayout(layout);
+		workshop.setTools(newLevel.tools);
 	};
 
 	return my;
