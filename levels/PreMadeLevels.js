@@ -255,12 +255,6 @@ var kludge = {
   script: 'kludge'
 }
 
-
-
-
-
-
-
 var all_levels = [
     all_my_chocolates,
     a_bar_walks_into_my_tummy,
@@ -281,6 +275,6 @@ var all_levels = [
     fake_it,
     fake_out,
     stop_gap,
-    kludge     
+    kludge    
    
 ];
