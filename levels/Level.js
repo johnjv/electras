@@ -8,8 +8,8 @@ function Level(level){
 	this.tools = level.tools;
 	this.types = level.types;    	
 	this.script = level.script;
-	this.answers = level.answers;   
-    return this;
+	this.answers = level.answers; 
+	this.complete = false;
 }
   	 
    	Level.prototype.analyze = function (){
@@ -37,19 +37,6 @@ function Level(level){
 	   }	   
 	   return analysis;
   	};
-  	
-  	Level.prototype.getLevelNames = function(){
-  	    "use strict";
-  	    var levels = [];
-  	    var i;
-  	    var level;  	    
-  	    for(i = 0; i < all_levels.length; i += 1){  	        
-  	        level = all_levels[i].levelname;
-  	        levels.push(level); 
-  	         	        
-  	    }
-  	    return levels;
-  	 };
    	
     Level.prototype.getSequence = function(types, answers){
         "use strict";
