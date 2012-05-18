@@ -2,11 +2,14 @@ var Filters = (function ($) {
   var my = {}
 
   my.find_connection = function(element, status, type){
-    return $.each(element.connections, function(i, connection){
-      if (connection.type == type && connection.connected_to == status){
-        return connection
-      }
-    })[0]
+    console.log(element.connections)
+    console.log(element.connections.filter(connection_is_match, type))
+    return (element.connections.filter(connection_is_match, type).filter(connection_is_match, status))[0]
+//    return $.each(element.connections, function(i, connection){
+//      if (connection.type == type && connection.connected_to == status){
+//        return connection
+//      }
+//    })[0]
   }
 
   my.filter_elements = function(elements, criterion){ //both criterion and elements are arrays
@@ -28,7 +31,7 @@ var Filters = (function ($) {
       case 'sensor': return matches_key(value, element.type);
       case 'connection_criteria':
         var valid_connections = element.connections.filter(connection_is_match, value) //feed in the entire hash of connection criteria
-        if (valid_connections.length > 0) {return true} else {return false}
+        if (valid_connections && valid_connections.length > 0) {return true} else {return false}
       default:
     }
   }
