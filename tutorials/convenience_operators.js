@@ -5,16 +5,21 @@ var Elements = function(elements){
     return this.elements.length > 0;
   }
 
+  this.empty = function(){
+    return new Elements(Filters.filter_elements(this.elements, {connection_criteria: {connected_to: 'empty'}}))
+  }
+
   this.id = function(id){
     return new Elements(Filters.filter_elements(this.elements, {id: id})[0])
   }
 
   this.all_connected_to = function(id){
-    return new Elements(Filters.filter_elements(this.elements, {connections: {connected_to: id}}))
+    return new Elements(Filters.filter_elements(this.elements, {connection_criteria: {connected_to: id}}))
   }
 
   this.sensor = function(type){
-    if (!type) {
+    console.log('testing sensor', type)
+    if (type == null) {
       type = 'sensor'
     }
     return new Elements(Filters.filter_elements(this.elements, {type: type}))
@@ -52,13 +57,34 @@ var Elements = function(elements){
 
 }
 
-find_incoming = function(Elements, status){
-  element = Elements.elements[0]
-  console.log(element, status)
-  return Filters.find_connection(element, status, 'incoming')
+
+find_incoming = function(elements, status){
+  if (elements.elements) {
+    elements = elements.elements
+  }
+  if (elements && elements.length > 1){
+    elements = elements[0]
+  }
+  console.log("checking incoming", elements, status)
+  if (elements && elements.length > 0) {
+    console.log("we're going in!", elements, status)
+    return Filters.find_connection(elements[0], status, 'incoming')
+  } else {
+    console.log("abandon ship!")
+    return null
+  }
 }
-find_outgoing = function(Elements, status){
-  element = Elements.elements[0]
-  console.log(element, status)
-  return Filters.find_connection(element, status, 'outgoing');
+find_outgoing = function(elements, status){
+  if (elements.elements) {
+    elements = elements.elements
+  }
+  if (elements && elements.length > 1){
+    elements = elements[0]
+  }
+  console.log("checking outgoing", elements, status)
+  if (elements && elements.length > 0) {
+    return Filters.find_connection(elements[0], status, 'outgoing');
+  } else {
+    return null
+  }
 }

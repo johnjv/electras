@@ -11,6 +11,10 @@ var call_script = function(script_name){
 window.testFirst = function(){
   all_my_chocolates_events()
 }
+
+window.testSecond = function(){
+  a_bar_walks_into_my_tummy_events()
+}
 //var scripts = {
 //  'all_my_chocolates': all_my_chocolates_events,
 //  'a_bar_walks_into_my_tummy': a_bar_walks_into_my_tummy_events
