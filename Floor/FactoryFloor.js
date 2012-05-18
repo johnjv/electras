@@ -1,8 +1,5 @@
 $(document).ready(function(){
 	//"use strict";
-	var curid = 0;
-	
-	
 	
 	$("#request").click(function(){
 		var value, picture;
@@ -23,28 +20,21 @@ $(document).ready(function(){
 		startMachine();
 	});
 	
-	
+
 	
 	
 	function startMachine(){
 		var items = createSequence();
 		var count =0;
 		
-		function startNext(){
-			if(count < 8) {
-				placeCandy(items[count]);
-				moveCandy(items[count]);
-				count++;
-				setTimeout(startNext, 3000);
-			}
-			/*
-			if(count === 0){
-				for(var i = 0; i < 8; i += 1){
-					finalItems.push(items[i]);
-				}
-			}*/
-		}
-		startNext();
+		function startNext(){	
+		    if(count < 8) {
+			    placeCandy(finalItems[count]);
+			    moveCandy(finalItems[count]);
+			    count++;
+			    setTimeout(startNext, 3000);
+		    }
+	    }		
 	}
 	
 	$("#advanceLevel").click(function(){
@@ -68,8 +58,6 @@ $(document).ready(function(){
 		var candy;
 		candy = this.type;
 		candy = $.trim(candy);
-		
-		i = $.inArray('CRGY', candy.substring(0, 1)); // check that to see if there is any progress
 		
 		if (candy == 'Co') {
 			this.picture = $('<img src="file:///export/home/s12/kimenyiti/Desktop/Odyssey/Electra/resource-image/candy00.png"></img>');
@@ -125,13 +113,8 @@ $(document).ready(function(){
 		return this.picture;
 	};
 	
-	function setCurId(levelid){
-		curid = levelid;
-		console.log("set curid to: " + curid );
-	}
-	
 	function getLevelType(){
-		var level = getCurrentLevel(curid);
+		var level = getCurrentLevel(7);
 		var typeInfo = new Array();
 		var circuitInfo = new Array();
 		var levelInfo = new Array();
@@ -260,8 +243,6 @@ $(document).ready(function(){
 		//var top, newPos
 		//ne
 	}
-	
-	setCurId(1);
 	
 	
 
