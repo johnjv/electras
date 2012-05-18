@@ -248,7 +248,10 @@ function makePage(finished){
     var i = 0;
     var html; 
     var levels = [];   
-    deleteTables();
+    //deleteTables();
+    $("levelSelect1 > tbody: #levels1").children().remove();
+    $("levelSelect2 > tbody: #levels2").children().remove();
+    $("levelSelect3 > tbody: #levels3").children().remove();
     levels = Level.getLevelNames();    
     for(i = 0; i < levels.length; i+=1){
         html = checkFinish(finished, levels[i].levelname, levels[i].levelid);
@@ -270,11 +273,11 @@ function checkFinish(finished, levels, id){
     "use strict";
     var html, check;
     var  j = 0;   
-    html = '<tr id = "row' + (id) + '"><td id=" level' + (id) + '"><b>' + (id) + '. <a href="../Floor/FactoryFloor.html"> ' + levels + '</a></b></td></tr>';        
+    html = '<tr id = "row' + (id) + '"><td id=" level' + (id) + '"><b>' + (id) + '. ' + levels + '</b></td></tr>';        
     for(j = 0; j < finished.length ; j += 1){        
         if(id === finished[j]){ 
             check = '<img src = "images/checkmark.png" id = "check">';   
-            html = '<tr id = "row' + (id) + '"><td id=" level' + (id) + '"><b>' + (id) + '. <a href="../Floor/FactoryFloor.html"> ' + levels + '</a></b>' + check + '</td></tr>';
+            html = '<tr id = "row' + (id) + '"><td id=" level' + (id) + '"><b>' + (id) + '. ' + levels + '</b>' + check + '</td></tr>';
         }
     }
     return html;
@@ -290,7 +293,7 @@ function deleteTables(){
        while(Table2.rows.length>0) 
            Table2.deleteRow(Table2.rows.length-1);
        while(Table3.rows.length>0) 
-           Table3.deleteRow(Table3.rows.length-1);           
+           Table3.deleteRow(Table3.rows.length-1);
 }
 
 
@@ -302,14 +305,16 @@ function addChildClicks(){
              $('#levelSelect1').hide();
              $('#arrow1').hide(); 
              $('#title').hide();
-             $('#next').show();
-             $('#prev').show();
-             //setCurId(curid);
+             //$('#next').show();
+             //$('#prev').show();
+             $('body').load('../Floor/FloorFactory.html');
+             console.log(curid);
+             setCurId(curid);
              //instead of this, I should call setCurId from the Floor code and then reference their html file.
-             getCurrentLevel(curid);
-             $('#testLevel').show();
-             $('#analysis').show();
-             $('#select').show();
+             //getCurrentLevel(curid);
+             //$('#testLevel').show();
+             //$('#analysis').show();
+             //$('#select').show();
         });
       });
       
@@ -319,14 +324,14 @@ function addChildClicks(){
              $('#levelSelect2').hide();  
              $('#arrow2').hide(); 
              $('#title').hide();
-             $('#next').show(); 
-             $('#prev').show();
-             //setCurId(curid);
+             //$('#next').show(); 
+            // $('#prev').show();
+             setCurId(curid);
              //instead of this, I should call setCurId from the Floor code and then reference their html file.          
-             getCurrentLevel(curid);
-             $('#testLevel').show();
-             $('#analysis').show();
-             $('#select').show();
+             //getCurrentLevel(curid);
+             //$('#testLevel').show();
+             //$('#analysis').show();
+             //$('#select').show();
         });
       });
       
@@ -336,14 +341,14 @@ function addChildClicks(){
              $('#levelSelect3').hide();
              $('#arrow3').hide(); 
              $('#title').hide();
-             $('#next').show();
-             $('#prev').show();
-             //setCurId(curid);
+             //$('#next').show();
+             //$('#prev').show();
+             setCurId(curid);
              //instead of this, I should call setCurId from the Floor code and then reference their html file.
-             getCurrentLevel(curid);
-             $('#testLevel').show();
-             $('#analysis').show();
-             $('#select').show();
+             //getCurrentLevel(curid);
+             //$('#testLevel').show();
+             //$('#analysis').show();
+             //$('#select').show();
            });
       });
 }
