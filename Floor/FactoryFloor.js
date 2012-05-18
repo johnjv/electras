@@ -1,7 +1,5 @@
 $(document).ready(function(){
-	"use strict";
-	var curid = 1;
-	
+	"use strict";	
 	
 	$("#advanceLevel").click(function(){
 		advanceSelector(); // method created by the Levels/Judge team
@@ -236,9 +234,4 @@ $(document).ready(function(){
 		//var top, newPos
 		//ne
 	}
-	
-	
-	
-	
-
 });

@@ -1,19 +1,17 @@
-var all_my_chocolates = {
-  levelname: 'All my chocolates',
-  //this is the first level, and is meant to show how to select end-points, as well as introduce them to the concept of selecting by color.
+var all_my_chocolates = new Level({
+  levelname: 'All my chocolates',  
   levelid: 1,
   orderText:  "Give me every chocolate you make!",
   hint: 'You should connect the chocolate sensor to the lightbulb by clicking on the connectors.',
   sensors:  ['C'],
   tools: [],
-  types:  ['*o'], //this means "All flavors, only balls"
+  types:  ['*o'], 
   answers: 'C*',
   script: 'all_my_chocolates'
-};
+});
 
-var a_bar_walks_into_my_tummy = {
-  levelname: 'A bar walks into my tummy',
-  //this is the second level, and introduces the concept of shapes.  It also gives you choices as to which sensor to select.
+var a_bar_walks_into_my_tummy = new Level({
+  levelname: 'A bar walks into my tummy',  
   levelid: 2,
   orderText: 'I only want bar-shaped candies',
   hint: "You have some choices.  Remember, bar-shaped candies are rectangular.",
@@ -22,9 +20,9 @@ var a_bar_walks_into_my_tummy = {
   types: ['C*'],
   answers: '*-',
   script: 'a_bar_walks_into_my_tummy'
-}
+});
 
-var soyl_not_green = {
+var soyl_not_green = new Level({
   levelname: 'Soyl not green',
   //this is the first level with a component, NOT.  We start with NOT because it only has one connector.
   levelid: 3,
@@ -35,9 +33,9 @@ var soyl_not_green = {
   types: ['*-'],
   answers: 'C*,R*,Y*',
   script: 'soyl_not_green'
-}
+});
 
-var mint_chocolate = {
+var mint_chocolate = new Level({
   levelname: 'Mint_chocolate',
   //this is the first level with the OR component
   levelid: 4,
@@ -49,9 +47,9 @@ var mint_chocolate = {
   types: ['*o'],
   answers: 'C*,G*',
   script: 'mint_chocolate'
-}
+});
 
-var indecisive = {
+var indecisive = new Level({
   levelname: 'Indecisive',
   //second level with the OR component
   levelid: 5,
@@ -63,9 +61,9 @@ var indecisive = {
   types: ['**'],
   answers: 'R*,*o',
   script: 'indecisive'
-}
+});
 
-var picky = {
+var picky = new Level({
   levelname: 'Picky',
   //combines the OR and NOT component
   levelid: 6,
@@ -76,9 +74,9 @@ var picky = {
   types: ['**'],
   answers: 'Co,C-,Ro,R-,Go,G-', 
   script: 'picky'
-}
+});
 
-var mint_chocolate_returns = {
+var mint_chocolate_returns = new Level({
   levelname: 'Mint chocolate returns',
   //combine OR and NOT again.  Gets the player used to thinking in reverse with the NOT.
   levelid: 7,
@@ -89,9 +87,9 @@ var mint_chocolate_returns = {
   types: ['**'],
   answers: 'C*,G*',
   script: 'mint_chocolate_returns'
-}
+});
 
-var classic = {
+var classic = new Level({
   levelname: 'Classic',
   //introduce the AND operator
   levelid: 8,
@@ -102,9 +100,9 @@ var classic = {
   types: ['**'],
   answers: 'C-',
   script: 'classic'
-}
+});
 
-var backlash = {
+var backlash = new Level({
   levelname: 'Backlash',
   //combine the AND and the NOT operators
   levelid: 9,
@@ -115,9 +113,9 @@ var backlash = {
   types: ['**'],
   answers: 'Co,C|,R*,G*,Y*',
   script: 'backlash'
-}
+});
 
-var speak_softly_cherry_a_stick = {
+var speak_softly_cherry_a_stick = new Level({
   levelname: 'Speak softly, cherry a stick',
   levelid: 10,
   orderText: "I want Cherry bars and Lemon bars.",
@@ -127,10 +125,10 @@ var speak_softly_cherry_a_stick = {
   types: ['**'],
   answers: 'C-,Y-',
   script: 'speak_softly_cherry_a_stick'
-}
+});
 //This is the end of the training levels.  From now on we should be able to include all three operators and combine them in ever more interesting ways.
 
-var botique = {
+var botique = new Level({
   levelname: 'Botique',
   //combine the AND and the OR operators
   levelid: 11,
@@ -141,9 +139,9 @@ var botique = {
   types: ['**'],
   answers: 'Y-,Co',
   script: 'botique'
-}
+});
 
-var winnowing = {
+var winnowing = new Level({
   levelname: 'Winnowing',
   //this is another combination of AND and OR
   levelid: 12,
@@ -154,8 +152,9 @@ var winnowing = {
   types: ['**'],
   answers: 'Ro,R|,Yo,Y|',
   script: 'winnowing'
-}
-var gniwonniw = {
+});
+
+var gniwonniw = new Level({
   levelname: 'Gniwonniw',
   //combine all three for the first time.  The solution is the same as the last one, but with a 'not' at the end
   levelid: 13,
@@ -166,9 +165,9 @@ var gniwonniw = {
   types: ['**'],
   answers: 'C-,G-',
   script: 'gniwonniw'
-}
+});
 
-var mish_mash = {
+var mish_mash = new Level({
   levelname: 'Mishmash',
   //combine all three again, but in a more varied way than last time.
   levelid: 14,
@@ -179,9 +178,9 @@ var mish_mash = {
   types: ['**'],
   answers: 'R-,Ro,Go,Yo',
   script: 'mishmash'
-}
+});
 
-var combination = {
+var combination = new Level({
   levelname: 'Combination',
   levelid: 15,
   orderText: "Mint.  ONLY MINT." ,
@@ -191,9 +190,9 @@ var combination = {
   types: ['**'],
   answers: 'G*',
   script: 'combination'
-}
+});
 
-var conditional = {
+var conditional = new Level({
   levelname: 'Conditional',
   //use the same sensor twice... scandolous!
   levelid: 16,
@@ -204,9 +203,9 @@ var conditional = {
   types: ['**'],
   answers: 'C-,R*,Y*,G*',
   script: 'conditional'
-}
+});
 
-var fake_it = {
+var fake_it = new Level({
   levelname: 'Fake it',
   //make an OR operator without the OR operator
   levelid: 17,
@@ -217,9 +216,9 @@ var fake_it = {
   types: ['**'],
   answers: 'C*,G*',
   script: 'fake_it'
-}
+});
 
-var fake_out = {
+var fake_out = new Level({
   levelname: 'Fake out',
   levelid: 18,
   orderText: "I want lemon balls!  And your AND operator!",
@@ -229,9 +228,9 @@ var fake_out = {
   types: ['**'],
   answers: 'Yo',
   script: 'fake_out'
-}
+});
 
-var stop_gap = {
+var stop_gap = new Level({
   levelname: 'Stop gap',
   levelid: 19,
   orderText: "I'll take anything not mint... and I'll take your NOT operator too!",
@@ -241,9 +240,9 @@ var stop_gap = {
   types: ['**'],
   answers: 'C*,R*,Y*',
   script: 'stop_gap'
-}
+});
 
-var kludge = {
+var kludge = new Level({
   levelname: 'Kludge',
   levelid: 20,
   orderText: "I want chocolate balls and sticks that aren't mint.  By the way, I'm loving that NOT operator, I hope you don't need it back!",
@@ -253,7 +252,7 @@ var kludge = {
   types: ['**'],
   answers: 'Co,C|,R|,Y|',
   script: 'kludge'
-}
+});
 
 var all_levels = [
     all_my_chocolates,
@@ -275,6 +274,5 @@ var all_levels = [
     fake_it,
     fake_out,
     stop_gap,
-    kludge    
-   
+    kludge 
 ];

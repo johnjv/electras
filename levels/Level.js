@@ -1,33 +1,16 @@
-   function Level(){    	
-    	this.levelid = 0;
-    	this.levelname = "";
-    	this.orderText = "";
-    	this.hint = ""; 
-    	this.sensors = "";
-    	this.tools = [];
-    	this.types = "";    	
-    	this.script = "";
-    	this.answers = "";
-    	this.analysis = [];    	
-   }
-    	
-  	Level.prototype.getMe = function(levelid){
-  	    "use strict"; 	              
-  	    var currentLevel = all_levels[levelid - 1];
-  	    this.levelid = currentLevel.levelid;
-    	this.levelname = currentLevel.levelname;
-    	this.orderText = currentLevel.orderText;
-    	this.hint = currentLevel.hint; 
-    	this.sensors = currentLevel.sensors;
-    	this.tools = currentLevel.tools;
-    	this.types = currentLevel.types;    	
-    	this.script = currentLevel.script;
-    	this.answers = currentLevel.answers;    	
-  	    currentLevel.analysis = this.analyze(); 
-  	    this.analysis = currentLevel.analysis; 	    
-  	    return currentLevel;
-  	};
-  	 
+function Level(level){
+    "use strict";
+    this.levelid = level.levelid;
+	this.levelname = level.levelname;
+	this.orderText = level.orderText;
+	this.hint = level.hint; 
+	this.sensors = level.sensors;
+	this.tools = level.tools;
+	this.types = level.types;    	
+	this.script = level.script;
+	this.answers = level.answers;   
+    return this;
+}
   	 
    	Level.prototype.analyze = function (){
    	   "use strict";
@@ -45,8 +28,9 @@
 	        }	              
 	    levelSays = correct;
 	    
-	    //evaluator = new myEvaluator.getEvaluator();
-	    circuitSays = {accept: true}; //evaluator.evaluate(sequence[i]);
+	    //evaluator = Circuit.getEvaluator(); 
+        //circuitSays =  evaluator.evaluate(sequence[i]);
+	    circuitSays = {accept: true}; 
 	    sequenceItem = new SequenceItem(sequence[i], levelSays, circuitSays);	   
 	    analysis.push(sequenceItem);
 	    correct = false;
@@ -58,33 +42,14 @@
   	    "use strict";
   	    var levels = [];
   	    var i;
-  	    var level;
-  	    for(i = 1; i <= all_levels.length; i += 1){
-  	        level = this.getMe(i);
-  	        levels.push(level);  	        
-  	    }  	   
+  	    var level;  	    
+  	    for(i = 0; i < all_levels.length; i += 1){  	        
+  	        level = all_levels[i].levelname;
+  	        levels.push(level); 
+  	         	        
+  	    }
   	    return levels;
   	 };
-   	
-   	Level.prototype.getLevel = function(script){
-   	    "use strict";
-   	    var level;
-   	    for(i = 1; i <= all_levels.length; i += 1){
-  	        level = this.getMe(i);
-  	        if(level.script === script){
-  	            return level;
-            }  	    
-  	    }  	    
-   		return "This script does not exist";
-   	};
-   	
-    Level.prototype.getQuestion = function(level){
-        "use strict";
-   	    var question;
-   	    var levelid = this.getMe(level);
-   	    question = levelid.orderText;   	    
-   		return question; 
-   	};
    	
     Level.prototype.getSequence = function(types, answers){
         "use strict";
