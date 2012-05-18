@@ -16,18 +16,18 @@ $(document).ready(function () {
            'marginLeft' : "-=25%"
            }, 1000, function() {     
         });
+        
         $('#levelSelect1').hide();
         $('#right1').hide();
     
          $('#levelSelect2').show();
+         $('#left2').show();
          if(all_levels.length > 20){
              $('#right2').show();
-         }
-         $('#left2').show();
+         }         
         $( "#levelSelect2:first" ).animate({
            'marginLeft' : "-=25%"             
-           }, 1000, function() {
-              
+           }, 1000, function() {              
         });
     
         $( "#levelSelect3:first" ).animate({
@@ -45,6 +45,7 @@ $(document).ready(function () {
            'marginLeft' : "+=25%"
            }, 1000, function() {     
         });
+        
         $('#levelSelect1').show();
         $('#right1').show(); 
         
@@ -72,6 +73,7 @@ $(document).ready(function () {
            'marginLeft' : "-=25%"
            }, 1000, function() {     
         });
+        
         $('#levelSelect1').hide();
         $('#right1').hide(); 
         
@@ -101,6 +103,7 @@ $(document).ready(function () {
            'marginLeft' : "+=25%"
            }, 1000, function() {     
         });
+        
         $('#levelSelect1').hide(); 
         $('#right1').hide(); 
         
@@ -119,8 +122,9 @@ $(document).ready(function () {
         });
         $('#levelSelect3').hide();
         $('#left3').hide();        
-    });    
-    
+    });   
+     
+    //the next three methods are for my testing purposes only.  I will remove them when showSelector and advanceLevel can be tested by the Factory Floor
     $('#select').click(function(){
         showSelector(curid, true);
         $(this).hide();
@@ -128,7 +132,7 @@ $(document).ready(function () {
         $('#testLevel').hide();
         $('#analysis').html("");
         $('#analysis').hide();
-    }); 
+    });     
           
     $('#next').click(function(){        
         $('#testLevel').html("");
@@ -158,7 +162,8 @@ $(document).ready(function () {
 });
 
 
-function advanceLevel(levelid, finish){   
+function advanceLevel(levelid, finish){
+    "use strict";      
     if(finish){                              
         cleared.push(levelid);               
     }  
@@ -168,7 +173,8 @@ function advanceLevel(levelid, finish){
 }
 
 
-function prevLevel(levelid, finish){   
+function prevLevel(levelid, finish){ 
+    "use strict";     
     if(finish){                              
         cleared.push(levelid);               
     }  
@@ -178,7 +184,8 @@ function prevLevel(levelid, finish){
 }
 
 
-function showSelector(levelid, finish){    
+function showSelector(levelid, finish){  
+    "use strict";   
     if(finish){                       
         cleared.push(levelid);        
     }
@@ -204,7 +211,10 @@ function showSelector(levelid, finish){
 
 
 function getCurrentLevel(levelid){
+      "use strict";
       var level = Level.getMe(levelid);
+      
+      //again this is all for my own testing purposes...I will remove this as well after the floor uses it and can test it
       if(levelid === all_levels.length){
           $('#next').hide();          
       }
@@ -229,14 +239,16 @@ function getCurrentLevel(levelid){
       $('#analysis').append('<li><b> Analysis: ' + level.analysis[5].type + " " + level.analysis[5].levelSays + " " + level.analysis[5].circuitSays.accept + '</b></li>');    
       $('#analysis').append('<li><b> Analysis: ' + level.analysis[6].type + " " + level.analysis[6].levelSays + " " + level.analysis[6].circuitSays.accept + '</b></li>'); 
       $('#analysis').append('<li><b> Analysis: ' + level.analysis[7].type + " " + level.analysis[7].levelSays + " " + level.analysis[7].circuitSays.accept + '</b></li>');       
-      return Level.getMe(levelid);    
+      return level;    
 }
 
 
 function makePage(finished){
-    var i = 0; 
-    var levels = []   
-    deleteTables();          
+    "use strict";
+    var i = 0;
+    var html; 
+    var levels = [];   
+    deleteTables();
     levels = Level.getLevelNames();    
     for(i = 0; i < levels.length; i+=1){
         html = checkFinish(finished, levels[i].levelname, levels[i].levelid);
@@ -250,24 +262,26 @@ function makePage(finished){
             $('#levelSelect3').append(html);
         }
    }
-   addChildClicks();
+    addChildClicks();       
 }
 
 
 function checkFinish(finished, levels, id){
+    "use strict";
+    var html, check;
     var  j = 0;   
-    html = '<tr id = "row' + (id) + '"><td id=" level' + (id) + '"><b>' + (id) + ". " + levels + '</b></td></tr>';        
+    html = '<tr id = "row' + (id) + '"><td id=" level' + (id) + '"><b>' + (id) + '. <a href="../Floor/FactoryFloor.html"> ' + levels + '</a></b></td></tr>';        
     for(j = 0; j < finished.length ; j += 1){        
         if(id === finished[j]){ 
-            check = '<img src = "checkmark.png" id = "check">';   
-            html = '<tr id = "row' + (id) + '"><td id=" level' + (id) + '"><b>' + (id) + ". " + levels + '</b>' + check + '</td></tr>';
+            check = '<img src = "images/checkmark.png" id = "check">';   
+            html = '<tr id = "row' + (id) + '"><td id=" level' + (id) + '"><b>' + (id) + '. <a href="../Floor/FactoryFloor.html"> ' + levels + '</a></b>' + check + '</td></tr>';
         }
     }
     return html;
 }
 
-
 function deleteTables(){
+    "use strict";
     var Table1 = document.getElementById("levelSelect1"); 
     var Table2 = document.getElementById("levelSelect2");
     var Table3 = document.getElementById("levelSelect3");
@@ -281,7 +295,8 @@ function deleteTables(){
 
 
 function addChildClicks(){
-   $('#levels1').children().each(function(i, child) {
+    "use strict";
+    $('#levels1').children().each(function(i, child) {
         $(child).click( function(){ 
              curid = i + 1;              
              $('#levelSelect1').hide();
@@ -289,6 +304,8 @@ function addChildClicks(){
              $('#title').hide();
              $('#next').show();
              $('#prev').show();
+             //setCurId(curid);
+             //instead of this, I should call setCurId from the Floor code and then reference their html file.
              getCurrentLevel(curid);
              $('#testLevel').show();
              $('#analysis').show();
@@ -303,7 +320,9 @@ function addChildClicks(){
              $('#arrow2').hide(); 
              $('#title').hide();
              $('#next').show(); 
-             $('#prev').show();          
+             $('#prev').show();
+             //setCurId(curid);
+             //instead of this, I should call setCurId from the Floor code and then reference their html file.          
              getCurrentLevel(curid);
              $('#testLevel').show();
              $('#analysis').show();
@@ -319,6 +338,8 @@ function addChildClicks(){
              $('#title').hide();
              $('#next').show();
              $('#prev').show();
+             //setCurId(curid);
+             //instead of this, I should call setCurId from the Floor code and then reference their html file.
              getCurrentLevel(curid);
              $('#testLevel').show();
              $('#analysis').show();
