@@ -41,7 +41,7 @@ var Filters = (function ($) {
           this_is_a_match *= matches_key(connection_value, connection.type); //yes, you can multiply booleans
           break;
         case 'connected_to':
-          if (connection_value == 'any') {
+          if (connection_value == 'filled') {
             this_is_a_match *= test_regex('[0-9]+', connection.connected_to)
             break;
           } else if (connection_value == 'empty') {
