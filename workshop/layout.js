@@ -1,4 +1,4 @@
-var Circuit = {};
+var Workshop = {};
 
 (function (my, $) {
 	"use strict";
@@ -26,7 +26,7 @@ var Circuit = {};
 	};
 
 	my.ElementType = function (id, imgName, iX, iY, iW, iH, connections,
-			propagate, poke) {
+			propagate, options) {
 		this.id = id; // string: and/or/not/R/G/Y/C/o/-/|/output
 		this.imgName = imgName; // string: image name
 		this.imgX = iX;
@@ -35,7 +35,16 @@ var Circuit = {};
 		this.imgHeight = iH;
 		this.conns = connections;
 		this.propagate = propagate;
-		this.poke = poke || function () { return false; }
+		this.poke = function () { return false; }
+		this.updateImage = this.poke;
+		if (options) {
+			if (options.poke) {
+				this.poke = options.poke;
+			}
+			if (options.updateImage) {
+				this.updateImage = options.updateImage;
+			}
+		}
 	};
 
 	my.Element = function (type, x, y) {
@@ -110,4 +119,4 @@ var Circuit = {};
 		removeArray(conn0.conns, conn1);
 		removeArray(conn1.conns, conn0);
 	};
-}(Circuit, jQuery || $));
+}(Workshop, jQuery));
