@@ -4,7 +4,7 @@ var Tutorial = {};
 Tutorial.circuitChanged = function () {
 	var eval;
 	eval = Circuit.getEvaluator();
-	console.log(Circuit.getElements(), eval.evaluate('Ro').accept);
+	console.log(Circuit.getElements(), eval.evaluate('Ro').accept); //OK
 };
 
 var levels = [
@@ -146,7 +146,7 @@ var Circuit = (function ($) {
 				if (j >= 0) {
 					sensor = shapeSensors[j];
 				} else if (c !== ' ') {
-					console.log('invalid sensor name "' + sensor + '"');
+					console.log('invalid sensor name "' + sensor + '"'); //OK
 				}
 			}
 			if (sensor !== null) {
@@ -163,14 +163,10 @@ var Circuit = (function ($) {
 			gap = 10;
 		}
 
-		console.log('metrics', workshop.canvas.height(), totalHeight, types.length, gap);
-
 		sensors = [];
 		y = 0;
-		console.log(types);
 		$.each(types, function (i, type) {
 			y += gap;
-			console.log('sensor', type.id, 'at', 10 + maxWidth, y - type.imgY);
 			sensors.push(new Workshop.Element(type, 10 + maxWidth,
 				y - type.imgY));
 			y += type.imgHeight;
