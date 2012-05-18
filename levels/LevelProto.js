@@ -3,8 +3,13 @@ function setUpLevel(){
     $('#levelSelect3').hide();
     $('#right2').hide();
     $('#left2').hide();
-    $('#left3').hide(); 
-    
+    $('#left3').hide();
+    makePage(); 
+    addRightClick();
+    addLeftClick();
+}
+        
+function addRightClick(){
     $('#right1').click(function(){      
         $( "#levelSelect1:first" ).animate({
            'marginLeft' : "-=25%"
@@ -22,7 +27,9 @@ function setUpLevel(){
          $('#levelSelect2').show();
          $('#left2').show();
     });
-        
+}
+  
+function addLeftClick(){            
     $('#left2').click(function(){        
         $( "#levelSelect1:first" ).animate({
            'marginLeft' : "+=25%"
@@ -39,30 +46,90 @@ function setUpLevel(){
     });
 }
 
+function makePage() {    
+    var i = 0;
+    var html; 
+    var levels = [];
+    $("#levels1").children().remove();
+    $("#levels2").children().remove();
+    $("#levels3").children().remove();
+    level = all_levels;    
+    for(i = 0; i < level.length; i+=1){
+        html = checkFinish(level[i], i+1);
+        if(i <= 9){
+            $('#levelSelect1').append(html);      
+        }
+        else if(9 < i & i <=19){
+            $('#levelSelect2').append(html);
+        }
+        else{
+            $('#levelSelect3').append(html);
+        }
+   }
+    addChildClicks();          
+}    
+
+function checkFinish(level, id){
+    "use strict";
+    var html, check;
+    var  j = 0;   
+    html = '<tr id = "row' + (id) + '"><td id=" level' + (id) + '"><b>' + (id) + '. ' + level.levelname + '</b></td></tr>';        
+    if(level.complete){ 
+        check = '<img src = "images/checkmark.png" id = "check">';   
+        html = '<tr id = "row' + (id) + '"><td id=" level' + (id) + '"><b>' + (id) + '. ' + level.levelname + '</b>' + check + '</td></tr>';
+    }        
+    return html;
+}
+
+function addChildClicks(){
+    "use strict";
+    $('#levels1').children().each(function(i, child) {
+        $(child).click( function(){
+             $('#levelSelect1').hide();
+             $('#arrow1').hide(); 
+             $('#title').hide();
+             level = all_levels[i+1];                 
+             window.location = '../Floor/FactoryFloor.html';
+        });
+      });
+      
+    $('#levels2').children().each(function(i, child) {        
+         $(child).click( function(){                                    
+             $('#levelSelect2').hide();  
+             $('#arrow2').hide(); 
+             $('#title').hide(); 
+             level = all_levels[i+11];                      
+             window.location = '../Floor/FactoryFloor.html';             
+        });
+      });
+      
+    $('#levels3').children().each(function(i, child) {
+         $(child).click( function(){                       
+             $('#levelSelect3').hide();
+             $('#arrow3').hide(); 
+             $('#title').hide();
+             level = all_levels[i+21];                       
+             window.location = '../Floor/FactoryFloor.html';
+           });
+      });
+}
+
 var LevelSelector = (function($) {
     "use strict";
-    var my = {};
-    var cleared = [];             
+    var my = {};                 
     var level = all_levels[0];
     
-    $(document).ready(function () {    
-       setUpLevel();
-       my.makePage(cleared);
+    $(document).ready(function () {
+       setUpLevel();       
     });
 
-    my.advanceLevel = function(finish){
-        if(finish){                              
-            cleared.push(level.levelid);               
-        }  
+    my.advanceLevel = function(finish){        
         level = all_levels[level.levelid + 1];
     };
 
-    my.showSelector = function(finish){ 
-        window.location("../levels/LevelProto.html");   
-        if(finish){                       
-            cleared.push(level.levelid);        
-        }       
-        makePage(cleared);
+    my.showSelector = function(){ 
+        window.location("../levels/LevelProto.html");
+        makePage();
         if(currentId <= 10){
             $('#levelSelect1').show();
             $('#arrow1').show();
@@ -84,73 +151,4 @@ var LevelSelector = (function($) {
       return level;
     };
     
-    my.makePage = function(finished){    
-        var i = 0;
-        var html; 
-        var levels = [];
-        $("#levels1").children().remove();
-        $("#levels2").children().remove();
-        $("#levels3").children().remove();
-        levels = level.getLevelNames();    
-        for(i = 0; i < levels.length; i+=1){
-            html = my.checkFinish(finished, levels[i], i+1);
-            if(i <= 9){
-                $('#levelSelect1').append(html);      
-            }
-            else if(9 < i & i <=19){
-                $('#levelSelect2').append(html);
-            }
-            else{
-                $('#levelSelect3').append(html);
-            }
-       }
-        my.addChildClicks();       
-    };    
-
-    my.checkFinish = function(finished, levels, id){
-        "use strict";
-        var html, check;
-        var  j = 0;   
-        html = '<tr id = "row' + (id) + '"><td id=" level' + (id) + '"><b>' + (id) + '. ' + levels + '</b></td></tr>';        
-        for(j = 0; j < finished.length ; j += 1){        
-            if(id === finished[j]){ 
-                check = '<img src = "images/checkmark.png" id = "check">';   
-                html = '<tr id = "row' + (id) + '"><td id=" level' + (id) + '"><b>' + (id) + '. ' + levels + '</b>' + check + '</td></tr>';
-            }
-        }
-        return html;
-    };
-
-    my.addChildClicks = function(){
-        "use strict";
-        $('#levels1').children().each(function(i, child) {
-            $(child).click( function(){
-                 $('#levelSelect1').hide();
-                 $('#arrow1').hide(); 
-                 $('#title').hide();
-                 level = all_levels[i+1];                 
-                 window.location = '../Floor/FactoryFloor.html';
-            });
-          });
-          
-        $('#levels2').children().each(function(i, child) {        
-             $(child).click( function(){                                    
-                 $('#levelSelect2').hide();  
-                 $('#arrow2').hide(); 
-                 $('#title').hide(); 
-                 level = all_levels[i+11];                      
-                 window.location = '../Floor/FactoryFloor.html';             
-            });
-          });
-          
-        $('#levels3').children().each(function(i, child) {
-             $(child).click( function(){                       
-                 $('#levelSelect3').hide();
-                 $('#arrow3').hide(); 
-                 $('#title').hide();
-                 level = all_levels[i+21];                       
-                 window.location = '../Floor/FactoryFloor.html';
-               });
-          });
-    };
 }(jQuery));
