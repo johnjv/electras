@@ -59,7 +59,7 @@
 		} else {
 			elt = findElement(info.layout, x, y);
 			if (elt) {
-				if (elt.type.poke(elt, x - elt.x, y - elt.y)) {
+				if (elt.type.poke(elt, x - elt.x, y - elt.y, info.state)) {
 					info.circuitChanged();
 				} else {
 					// TODO initiate move
@@ -233,4 +233,4 @@
 		}
 		info.setGesture(null);
 	};
-}(Circuit, jQuery || $));
+}(Workshop, jQuery));
