@@ -1,9 +1,9 @@
-var page1 = true;        //determines if showSelector should be on this page or not
-var page2 = false;       //determines if showSelector should be on this page or not
-var page3 = false;       //determines if showSelector should be on this page or not
-var cleared = [];        //the array of all the levels that have been successfully finished
-var curid = 0;           //the current level that the user is on
-var Level = new Level;   //call of the level class so we may use it throughout the file
+var page1 = true;        
+var page2 = false;       
+var page3 = false;      
+var cleared = [];        
+var currentId = 0;           
+var Level = new Level;   
     
 
 $(document).ready(function () {    
@@ -124,29 +124,7 @@ $(document).ready(function () {
         $('#left3').hide();        
     });   
      
-    //the next three methods are for my testing purposes only.  I will remove them when showSelector and advanceLevel can be tested by the Factory Floor
-    $('#select').click(function(){
-        showSelector(curid, true);
-        $(this).hide();
-        $('#testLevel').html("");
-        $('#testLevel').hide();
-        $('#analysis').html("");
-        $('#analysis').hide();
-    });     
-          
-    $('#next').click(function(){        
-        $('#testLevel').html("");
-        $('#analysis').html(""); 
-        $('#prev').show();
-        advanceLevel(curid, true);                      
-    });  
     
-    $('#prev').click(function(){
-        $('#testLevel').html("");
-        $('#analysis').html("");
-        $('#next').show(); 
-        prevLevel(curid, true);              
-    });     
            
     makePage(cleared);     
     $('#levelSelect2').hide();
@@ -154,43 +132,35 @@ $(document).ready(function () {
     $('#right2').hide();
     $('#left2').hide();
     $('#left3').hide();
-    $('#select').hide();
-    $('#next').hide();
-    $('#testLevel').hide();
-    $('#analysis').hide("");
-    $('#prev').hide();
 });
 
 
-function advanceLevel(levelid, finish){
+function advanceLevel(finish){
     "use strict";      
     if(finish){                              
-        cleared.push(levelid);               
+        cleared.push(currentId);               
     }  
-    levelid += 1;               
-    getCurrentLevel(levelid);
-    curid = levelid;            
+    currentId += 1;               
+    getCurrentLevel(currentId);
+        
 }
 
 
-function prevLevel(levelid, finish){ 
+function prevLevel(finish){ 
     "use strict";     
     if(finish){                              
-        cleared.push(levelid);               
+        cleared.push(currentId);               
     }  
-    levelid -= 1;               
-    getCurrentLevel(levelid);
-    curid = levelid;            
+    currentId -= 1;               
+    getCurrentLevel(currentId);         
 }
 
 
-function showSelector(levelid, finish){  
+function showSelector(finish){  
     "use strict";   
     if(finish){                       
-        cleared.push(levelid);        
-    }
-    $('#next').hide();
-    $('#prev').hide();    
+        cleared.push(currentId);        
+    }       
     makePage(cleared);
     if(page1){
         $('#levelSelect1').show();
@@ -210,36 +180,9 @@ function showSelector(levelid, finish){
 }
 
 
-function getCurrentLevel(levelid){
+function getCurrentLevel(){
       "use strict";
-      var level = Level.getMe(levelid);
-      
-      //again this is all for my own testing purposes...I will remove this as well after the floor uses it and can test it
-      if(levelid === all_levels.length){
-          $('#next').hide();          
-      }
-      if(levelid === 1){
-          $('#prev').hide();          
-      }
-      $('#testLevel').append('<tr><td><b> Level: ' + level.levelname + '</b></td></tr>');
-      $('#testLevel').append('<tr><td><b> Order: ' + level.orderText + '</b></td></tr>');
-      $('#testLevel').append('<tr><td><b> Hint: '  + level.hint      + '</b></td></tr>');
-      $('#testLevel').append('<tr><td><b> Sensors: ' + level.sensors + '</b></td></tr>');
-      $('#testLevel').append('<tr><td><b> Tools: ' + level.tools  + '</b></td></tr>');
-      $('#testLevel').append('<tr><td><b> Types: ' + level.types + '</b></td></tr>');
-      $('#testLevel').append('<tr><td><b> Script: ' + level.script + '</b></td></tr>');
-      $('#testLevel').append('<tr><td><b> Answers: ' + level.answers + '</b></td></tr>');     
-      
-      
-      $('#analysis').append('<b> Analysis: ' + level.analysis[0].type + " " + level.analysis[0].levelSays + " " + level.analysis[0].circuitSays.accept + '</b>'); 
-      $('#analysis').append('<li><b> Analysis: ' + level.analysis[1].type + " " + level.analysis[1].levelSays + " " + level.analysis[1].circuitSays.accept + '</b></li>');    
-      $('#analysis').append('<li><b> Analysis: ' + level.analysis[2].type + " " + level.analysis[2].levelSays + " " + level.analysis[2].circuitSays.accept + '</b></li>'); 
-      $('#analysis').append('<li><b> Analysis: ' + level.analysis[3].type + " " + level.analysis[3].levelSays + " " + level.analysis[3].circuitSays.accept + '</b></li>');    
-      $('#analysis').append('<li><b> Analysis: ' + level.analysis[4].type + " " + level.analysis[4].levelSays + " " + level.analysis[4].circuitSays.accept + '</b></li>'); 
-      $('#analysis').append('<li><b> Analysis: ' + level.analysis[5].type + " " + level.analysis[5].levelSays + " " + level.analysis[5].circuitSays.accept + '</b></li>');    
-      $('#analysis').append('<li><b> Analysis: ' + level.analysis[6].type + " " + level.analysis[6].levelSays + " " + level.analysis[6].circuitSays.accept + '</b></li>'); 
-      $('#analysis').append('<li><b> Analysis: ' + level.analysis[7].type + " " + level.analysis[7].levelSays + " " + level.analysis[7].circuitSays.accept + '</b></li>');       
-      return level;    
+      return Level.getMe(currentId);
 }
 
 
@@ -301,54 +244,34 @@ function addChildClicks(){
     "use strict";
     $('#levels1').children().each(function(i, child) {
         $(child).click( function(){ 
-             curid = i + 1;              
+             currentId = i + 1;              
              $('#levelSelect1').hide();
              $('#arrow1').hide(); 
              $('#title').hide();
-             //$('#next').show();
-             //$('#prev').show();
-             $('body').load('../Floor/FloorFactory.html');
-             console.log(curid);
-             setCurId(curid);
-             //instead of this, I should call setCurId from the Floor code and then reference their html file.
-             //getCurrentLevel(curid);
-             //$('#testLevel').show();
-             //$('#analysis').show();
-             //$('#select').show();
+             console.log(currentId);
+             window.location = '../Floor/FactoryFloor.html';
         });
       });
       
     $('#levels2').children().each(function(i, child) {        
          $(child).click( function(){ 
-             curid  = i + 11;                       
+             currentId  = i + 11;                       
              $('#levelSelect2').hide();  
              $('#arrow2').hide(); 
              $('#title').hide();
-             //$('#next').show(); 
-            // $('#prev').show();
-             setCurId(curid);
-             //instead of this, I should call setCurId from the Floor code and then reference their html file.          
-             //getCurrentLevel(curid);
-             //$('#testLevel').show();
-             //$('#analysis').show();
-             //$('#select').show();
+             console.log(currentId);
+             window.location = '../Floor/FactoryFloor.html';             
         });
       });
       
     $('#levels3').children().each(function(i, child) {
          $(child).click( function(){
-             curid = i + 21;             
+             currentId = i + 21;             
              $('#levelSelect3').hide();
              $('#arrow3').hide(); 
              $('#title').hide();
-             //$('#next').show();
-             //$('#prev').show();
-             setCurId(curid);
-             //instead of this, I should call setCurId from the Floor code and then reference their html file.
-             //getCurrentLevel(curid);
-             //$('#testLevel').show();
-             //$('#analysis').show();
-             //$('#select').show();
+             console.log(currentId);
+             window.location = '../Floor/FactoryFloor.html';
            });
       });
 }
