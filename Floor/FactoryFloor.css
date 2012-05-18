@@ -1,0 +1,68 @@
+html, body { background: #38C;
+			 width: 100%; 
+			 height: 100%;
+    		 margin: 0px; 
+    		 padding-right: 0px;
+    		 overflow: hidden 
+}
+
+#machine{
+	position: relative;
+	background-image: url('factory.png');
+	background-repeat: no-repeat;
+	background-size: 100%;
+	height: 440px;
+	width: 500px;
+	top: 180px;
+	float: right; 
+}
+
+#requestedCandy{
+	position: absolute;
+	left: 5px;
+	top:80px;
+	height: 10px;
+	width: 50px;
+}
+
+#start{
+	position: absolute;
+	left:75px;
+	top: 100px;
+}
+
+#go{
+	text-align: center;
+	position: absolute;
+	bottom: 0px;
+	left: 85%;
+	width: 200px;
+	height: 100px
+}
+
+.conveyor{
+	position: absolute; 
+	bottom: 40%;
+	left: 40%;
+}
+
+.box{
+	position: absolute;
+	bottom: 45%;
+	left: 30%;
+	height:15%;
+}
+
+.sensor{
+	position: absolute;
+	bottom: 67%;
+	left: 70%;
+	height: 9%;
+}
+
+
+#arrow{
+	position: absolute;
+	bottom: 55%;
+	left:60%;
+}
