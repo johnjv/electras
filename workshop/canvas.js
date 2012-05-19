@@ -263,7 +263,7 @@
 				type = toolTypes[tool];
 				toolbar.append($('<img></img>')
 					.addClass('tool')
-					.attr('src', 'resource/' + type.imgName + '.png')
+					.attr('src', my.getResourcePath(type.imgName + '.png'))
 					.attr('type', type.id));
 			} else {
 				console.log('unknown tool type "' + tool + '"'); //OK

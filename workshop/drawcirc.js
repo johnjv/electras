@@ -2,10 +2,42 @@
 	"use strict";
 	var WIRE_WIDTH = 3;
 	var CONNECT_RADIUS = 3;
-	
+
+	my.getRelativePath = function (desired) {
+		var cwd, cdirs, ddirs, i, j, ret;
+		if (!self || !self.location || !self.location.href) {
+			return '';
+		}
+		cwd = self.location.href;
+		i = cwd.indexOf('electras/');
+		if (i >= 0) {
+			cwd = cwd.substring(i + 'electras/'.length);
+		}
+		cdirs = cwd.split('/');
+		ddirs = desired.split('/');
+		j = 0;
+		while (j < cdirs.length && j < ddirs.length && cdirs[j] === ddirs[j]) {
+			j += 1;
+		}
+		ret = '';
+		for (i = j; i < cdirs.length - 1; i += 1) {
+			ret += '../';
+		}
+		for (i = j; i < ddirs.length; i += 1) {
+			ret += ddirs[i] + '/';
+		}
+		return ret;
+	}
+
+	var baseDirectory = my.getRelativePath('workshop/resource');
+
+	my.getResourcePath = function (filename) {
+		return baseDirectory + filename;
+	}
+
 	function setterImage(elt) {
 		return function (imgName) {
-			var newName = 'resource/' + imgName + '.png';
+			var newName = my.getResourcePath(imgName + '.png');
 			if (elt.imgElt.attr('src') !== newName) {
 				elt.imgElt.attr('src', newName);
 			}
