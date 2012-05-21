@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Electra Factory's Floor</title>
+		<link rel="stylesheet" href="FactoryFloor.css" type="text/css">
+		<link rel="">
+  		<meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, width=device-width">
+ 	</head>
+
+ 	<body>
+ 		<li><a href="../levels/LevelProto.html">Levels</a>
+		<div id="machine">   <img src = "/resource/arm.png" id = "arm"/> </div>
+ 		
+ 		<div>
+ 			<input id ="requestArea" type="text" name ="username" value=""/>
+				<br/>
+			<button id="request">See Request</button>
+			
+			<div id="requestedCandy">
+			
+			</div>
+			
+ 			
+ 		</div>
+ 		
+ 		<button id="start">Start</button>
+ 		
+		<audio src="correct.ogg" id="correct" type="audio/ogg; codecs=vorbi" preload="auto">
+			<p> browser does not support audio format </p>
+		</audio>
+		
+		<audio src="belt.ogg" id="belt" type="audio/ogg; codec=vorbi" preload="auto" loop>
+			<p> browser does not support audio format </p>
+		</audio>
+ 
+  		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+  		<script src="../levels/Level.js"></script>
+  		<script src="../levels/SequenceItem.js"></script>
+  		<script src="../levels/PreMadeLevels.js"></script>
+  		<script src="../levels/LevelProto.js"></script>
+  		<script src="FactoryFloor.js"></script>
+  		
+  		
+  		
+ 	</body>
+</html>
