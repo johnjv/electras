@@ -21,7 +21,9 @@ window.testThird = function(){
   not_what_I_mint_events()
 }
 
-
+window.testFourth = function(){
+  i_mint_chocolate_events()
+}
 //var scripts = {
 //  'all_my_chocolates': all_my_chocolates_events,
 //  'a_bar_walks_into_my_tummy': a_bar_walks_into_my_tummy_events
