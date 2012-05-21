@@ -96,7 +96,7 @@
 			ex = e.pageX;
 			ey = e.pageY;
 			fixEvent(self, e);
-			if (ey < canvas.offset().top) {
+			if (ey < canvas.offset().top || ex < canvas.offset().left) {
 				newGest = null;
 				$('.tool', toolbar).each(function (i, tool) {
 					var elt, offs, dx, dy, typeName, type;
