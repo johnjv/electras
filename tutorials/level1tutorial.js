@@ -1,25 +1,25 @@
 
 
 var all_my_chocolates_events = function(){
-  var elements = elements_start//get_elements();
+  var elements = new Elements(elements_start)//get_elements();
 
-  if (exists(empty_output(type('chocolate', elements))) &&
-      exists(empty_output(type('lightbulb', elements)))) {
-    console.log('start!')
-    var sensor_out = find_outgoing(empty_output(type('chocolate', elements))[0], 'empty');
+  if (elements.sensor('chocolate').output('empty').exists() &&
+      elements.lightbulb().output('empty').exists()){
+    var sensor_out = elements.sensor('chocolate').first_connection()
     highlightSection(sensor_out, true)
     createSpeechBubble(sensor_out, "We must tell the machine what to do.  Click on the sensor to start laying down wire.")
   }
 
-  else if (exists(active_connection(type('chocolate', elements))) &&
-              exists(empty_input(type('lightbulb', elements)))){
-    var lightbulb_in = find_incoming(empty_output(type('lightbulb'))[0], 'empty');
+  else if (elements.sensor('chocolate').active_connection().exists() &&
+          elements.lightbulb().input('empty').exists()){
+    //since lightbulbs only have one connection point, and it has been confirmed that it is empty, it is safe to go directly to it with first_connection
+    var lightbulb_in = elements.lightbulb().first_connection()
     highlightSection(lightbulb_in, true);
     createSpeechBubble(lightbulb_in, "Good job!  Now connect it to the lightbulb!");
   }
 
-  else if (exists(filled_output(type('chocolate', elements))) &&
-              exists(filled_output(type('lightbulb', elements)))) {
+  else if (elements.sensor('chocolate').output('filled').exists() &&
+          elements.lightbulb().output('filled').exists()){
     console.log("the user has connected the two");
     var lever = getLeverLocation()
     highlightSection(lever, false);

@@ -12,28 +12,85 @@
 		}
 	}
 
-	my.Evaluator = function (layout) {
+	function copyShallow(obj) {
+		var ret, key;
+		ret = {};
+		for (key in obj) {
+			if (obj.hasOwnProperty(key)) {
+				ret[key] = obj[key];
+			}
+		}
+		return ret;
+	}
+
+	function State (previous, layout, trues, eltStates) {
+		this.previous = previous;
 		this.layout = layout;
-		this.trues = {}; // set of connection ids with true values
-		this.eltStates = {};
+		this.trues = trues;
+		this.eltStates = eltStates;
+		this.repaintConns = {};
+		this.repaintElts = {};
 	};
 
-	my.Evaluator.prototype.evaluate = function () {
+	function isFrozen(state) {
+		return typeof state.sets === 'undefined';
+	}
+
+	function setFrozen(state, value) {
+		if (value) {
+			if (typeof state.sets !== 'undefined') {
+				delete state.sets;
+			}
+		} else {
+			state.sets = [];
+		}
+	}
+
+	State.prototype.getState = function (elt) {
+		return this.eltStates[elt.id];
+	};
+
+	State.prototype.getValue = function (conn) {
+		return getValue(conn, this.trues);
+	};
+
+	State.prototype.setState = function (elt, value) {
+		if (isFrozen(this)) {
+			var newStates;
+			newStates = copyShallow(this.eltStates);
+			newStates[elt.id] = value;
+			return new State(this, this.layout, this.trues, newStates);
+		} else {
+			this.eltStates[elt.id] = value;
+			this.repaintElts[elt.id] = elt;
+		}
+	};
+
+	State.prototype.setValue = function (conn, val) {
+		if (isFrozen(this)) {
+			throw new Error('state is frozen');
+		} else if (conn.input) {
+			throw new Error('Cannot set value for input');
+		} else {
+			this.sets.push({conn: conn, val: val});
+		}
+	};
+
+	State.prototype.follows = function (state) {
+		return this.previous === state;
+	}
+
+	State.prototype.evaluate = function () {
 		var trues, eltStates, state, dirty, iters, anyDirty, id, conns, i, j, set;
 
-		trues = {};
-		$.each(this.trues, function (key, val) {
-			trues[key] = val;
-		});
-		eltStates = {};
-		$.each(this.eltStates, function (key, val) {
-			eltStates[key] = val;
-		});
-		state = new my.State(this.layout, trues, eltStates);
+		trues = copyShallow(this.trues);
+		eltStates = copyShallow(this.eltStates);
+		state = new State(this, this.layout, trues, eltStates);
+		setFrozen(state, false);
 		dirty = {};
-		$.each(this.layout.elts, function (i, elt) {
-			dirty[elt.id] = elt;
-		});
+		for (i = this.layout.elts.length - 1; i >= 0; i -= 1) {
+			dirty[this.layout.elts[i].id] = this.layout.elts[i];
+		}
 		for (iters = 0; iters < 50; iters += 1) {
 			anyDirty = false;
 			state.sets = [];
@@ -64,38 +121,11 @@
 				}
 			}
 		}
-		this.trues = trues;
-		this.eltStates = eltStates;
+		setFrozen(state, true);
 		return state;
 	};
 
-	my.State = function (layout, trues, eltStates) {
-		var accept;
-
-		accept = false;
-		$.each(layout.elts, function (i, elt) {
-			if (elt.type.id === 'out') {
-				accept = getValue(elt.conns[0], trues);
-			}
-		});
-
-		this.layout = layout;
-		this.trues = trues;
-		this.eltStates = eltStates;
-		this.accept = accept;
-		this.sets = [];
-		this.repaintConns = {};
-	};
-
-	my.State.prototype.getValue = function (conn) {
-		return getValue(conn, this.trues);
-	};
-
-	my.State.prototype.setValue = function (conn, val) {
-		if (conn.input) {
-			throw new Error('Cannot set value for input');
-		} else {
-			this.sets.push({conn: conn, val: val});
-		}
-	};
+	my.newInitialState = function (layout) {
+		return new State(null, layout, {}, {}).evaluate();
+	}
 }(Workshop, jQuery));

@@ -31,9 +31,7 @@
 			}, {
 				poke: function (elt, x, y, state) {
 					if (x >= -45 && x <= -25 && y >= -15 && y <= 15) {
-						state.eltStates[elt.id] = !state.eltStates[elt.id];
-						elt.type.updateImage(elt, state);
-						return true;
+						return state.setState(elt, !state.getState(elt));
 					} else {
 						return false;
 					}
@@ -49,7 +47,7 @@
 		'out': new my.ElementType('out', 'output0', -30, -60, 50, 50, [
 				new my.Connection(true, 0, 0, 0, -10)
 			], function (elt, state) {
-				elt.type.updateImage(elt, state);
+				state.setState(elt, state.getValue(elt.conns[0]));
 			}, {
 				updateImage: function (elt, state) {
 					if (state.getValue(elt.conns[0])) {
@@ -69,6 +67,10 @@
 		return e;
 	}
 
+	my.getElementType = function (id) {
+		return toolTypes[id];
+	};
+
 	my.Workshop = function (jqElt, tools) {
 		var self, toolbar, canvas, name, gesture, info;
 
@@ -84,8 +86,7 @@
 		this.gesture = new my.NullGesture(self);
 		this.paper = raphael(canvas.get(0), canvas.width(), canvas.height());
 		this.layout = new my.Layout();
-		this.evaluator = new my.Evaluator(this.layout);
-		this.state = this.evaluator.evaluate('');
+		this.state = my.newInitialState(this.layout);
 		this.changeListeners = [];
 
 		function GestureHandler(e) {
@@ -95,18 +96,23 @@
 			ex = e.pageX;
 			ey = e.pageY;
 			fixEvent(self, e);
-			if (ey < canvas.offset().top) {
+			if (ey < canvas.offset().top || ex < canvas.offset().left) {
 				newGest = null;
 				$('.tool', toolbar).each(function (i, tool) {
-					var elt, offs, dx, dy, type;
+					var elt, offs, dx, dy, typeName, type;
 					elt = $(tool);
 					offs = elt.offset();
 					dx = ex - offs.left;
 					dy = ey - offs.top;
 					if (dx >= 0 && dy >= 0 && dx < elt.width()
 							&& dy < elt.height()) {
-						type = toolTypes[elt.attr('type')];
-						newGest = new my.AddGesture(self, type, e);
+						typeName = elt.attr('type');
+						if (toolTypes.hasOwnProperty(typeName)) {
+							newGest = new my.AddGesture(self,
+								toolTypes[typeName], e);
+						} else if (typeName === 'eraser') {
+							newGest = new my.EraseGesture(self, e);
+						}
 						return false;
 					}
 				});
@@ -117,6 +123,8 @@
 						gest.cancel(self);
 					}
 					gest = newGest;
+				} else {
+					gest = self.gesture;
 				}
 			} else {
 				gest = self.gesture;
@@ -167,25 +175,56 @@
 	my.Workshop.prototype.circuitChanged = function () {
 		var self, state;
 		self = this;
-		state = self.evaluator.evaluate('');
+		state = this.state.evaluate();
 		self.state = state;
 		$.each(state.repaintConns, function (id, conn) {
 			my.DrawCirc.recolorConnection(self, conn);
 		});
+		$.each(state.repaintElts, function (id, elt) {
+			elt.type.updateImage(elt, state);
+		});
+	};
+
+	my.Workshop.prototype.setLayout = function (layout) {
+		var self;
+
+		self = this;
+		$('img', this.canvas).remove();
+		this.paper.clear();
+
+		this.layout = layout;
+		this.state = my.newInitialState(layout);
+
+		$.each(layout.elts, function (i, elt) {
+			my.DrawCirc.createElement(self, elt);
+			elt.type.updateImage(elt, self.state);
+		});
+		$.each(layout.elts, function (i, elt) {
+			var conn0, conn1, i, j;
+			for (i = elt.conns.length - 1; i >= 0; i -= 1) {
+				conn0 = elt.conns[i];
+				if (conn0.input) {
+					for (j = conn0.conns.length - 1; j >= 0; j -= 1) {
+						conn1 = conn0.conns[j];
+						my.DrawCirc.createWire(self, conn0, conn1);
+					}
+				}
+			}
+		});
+		this.fireChange();
 	};
 
 	my.Workshop.prototype.setState = function (state) {
 		var self;
 		self = this;
 		this.state = state;
+		this.evaluator = state.evaluator;
 		$.each(this.layout.elts, function (i, elt) {
 			var j, conn;
 			elt.type.updateImage(elt, state);
 			for (j = 0; j < elt.conns.length; j += 1) {
 				conn = elt.conns[j];
-				if (conn.input) {
-					my.DrawCirc.recolorConnection(self, conn);
-				}
+				my.DrawCirc.recolorConnection(self, conn);
 			}
 		});
 	};
@@ -197,7 +236,7 @@
 	};
 
 	my.Workshop.prototype.showMessage = function (msg) {
-		console.log(msg);
+		console.log(msg); //OK
 	};
 
 	my.Workshop.prototype.setGesture = function (value) {
@@ -225,10 +264,15 @@
 				type = toolTypes[tool];
 				toolbar.append($('<img></img>')
 					.addClass('tool')
-					.attr('src', 'resource/' + type.imgName + '.png')
+					.attr('src', my.getResourcePath(type.imgName + '.png'))
 					.attr('type', type.id));
-			} else {
-				console.log('unknown tool type "' + tool + '"');
+			} else if (tool === 'eraser') {
+				toolbar.append($('<img></img>')
+					.addClass('tool')
+					.attr('src', my.getResourcePath('eraser.png'))
+					.attr('type', 'eraser'));
+			} else if (tool !== '') {
+				console.log('unknown tool type "' + tool + '"'); //OK
 			}
 		});
 
