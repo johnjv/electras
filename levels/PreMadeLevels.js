@@ -23,7 +23,7 @@ var a_bar_walks_into_my_tummy = new Level({
 });
 
 var soyl_not_green = new Level({
-  levelname: 'Soyl not green',
+  levelname: 'Soyl, not green',
   levelid: 3,
   orderText: "I want everything that's not green!",
   hint: "You can add components now!  Try placing the 'NOT' component between the lightbulb and the green sensor and see what happens.",
@@ -35,7 +35,7 @@ var soyl_not_green = new Level({
 });
 
 var mint_chocolate = new Level({
-  levelname: 'Mint_chocolate',
+  levelname: 'Mint chocolate',
   levelid: 4,
   orderText: 'I want to combine mint candies and chocolate candies into something EXTREMELY delicious.',
   hint: "This is the OR component.  It takes two inputs and lights up if either of them are on.  Try connecting" +
