@@ -96,7 +96,7 @@
 			ex = e.pageX;
 			ey = e.pageY;
 			fixEvent(self, e);
-			if (ey < canvas.offset().top) {
+			if (ey < canvas.offset().top || ex < canvas.offset().left) {
 				newGest = null;
 				$('.tool', toolbar).each(function (i, tool) {
 					var elt, offs, dx, dy, typeName, type;
@@ -271,7 +271,7 @@
 					.addClass('tool')
 					.attr('src', my.getResourcePath('eraser.png'))
 					.attr('type', 'eraser'));
-			} else {
+			} else if (tool !== '') {
 				console.log('unknown tool type "' + tool + '"'); //OK
 			}
 		});
