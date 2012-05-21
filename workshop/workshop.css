@@ -1,0 +1,25 @@
+div.circ-toolbar {
+	background-color: #FFB;
+	height: 58px;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+}
+
+div.circ-canvas {
+	position: relative;
+	border-top: solid 2px #282;
+	height: 100%;
+	width: 100%;
+	background-color: white;
+}
+
+img.tool {
+	margin-left: 8px;
+	margin-top: 8px;
+	vertical-align: middle;
+}
+
+img.on_canvas {
+	position: absolute;
+}
