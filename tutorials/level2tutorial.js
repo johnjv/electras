@@ -58,8 +58,8 @@ var test_lightbulb = function(connection){
       connection_type: 'incoming',
       x: 5,
       y: 10,
-      width: 100,
-      height: 200,
+      width: 10,
+      height: 10,
       connected_to: connection
     }
   ]

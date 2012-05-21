@@ -29,7 +29,6 @@ var Elements = function(elements){
   }
 
   this.input = function(connected_to){
-    console.log("finding input")
     return new Elements(Filters.filter_elements(this.elements, {connection_criteria: {connection_type: 'incoming', connected_to: connected_to}}))
   }
 

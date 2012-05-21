@@ -32,7 +32,6 @@ var Filters = (function ($) {
       case 'type': return matches_key(criteria, element.type);
       case 'sensor': return matches_key(criteria, element.type);
       case 'connection_criteria':
-          console.log("connection criteria!", element, criteria)
         var valid_connections = element.connections.filter(function(connection) {return connection_is_match(connection, criteria)}) //feed in the entire hash of connection criteria
         if (valid_connections && valid_connections.length > 0) {return true} else {return false}
       default:
@@ -41,9 +40,7 @@ var Filters = (function ($) {
 
   var connection_is_match = function(connection, criteria){  //'this' is the criterion
     var this_is_a_match = true;
-    console.log("BEGINNING OF CONNECTION MATCH", criteria, connection)
     $.each(criteria, function(connection_key, connection_value) {
-      console.log(connection, connection_key, connection_value)
       switch (connection_key) {
         case 'connection_type':
           if(!matches_key(connection_value, connection.connection_type)){this_is_a_match = false}
@@ -59,8 +56,6 @@ var Filters = (function ($) {
           break;
       }
     });
-
-    console.log('is this a match?', this_is_a_match)
     return this_is_a_match
   }
 
