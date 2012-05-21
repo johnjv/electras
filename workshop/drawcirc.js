@@ -198,6 +198,9 @@
 				conn.circ.attr('fill', color);
 			}
 		}
+		if (conn.line) {
+			conn.stub.attr('stroke', color);
+		}
 		$.each(conn.conns, function (i, c) {
 			if (c.stub) {
 				c.stub.attr('stroke', color);
