@@ -120,15 +120,22 @@ var LevelSelector = (function($) {
     var level = all_levels[0];
     
     $(document).ready(function () {
-       setUpLevel();       
+       setUpLevel(); 
+       console.log(level.analyze());      
     });
 
-    my.advanceLevel = function(finish){        
+    my.advanceLevel = function(finish){
+        if(finish){ 
+            level.complete = true;
+        }       
         level = all_levels[level.levelid + 1];
     };
 
-    my.showSelector = function(){ 
+    my.showSelector = function(finish){ 
         window.location("../levels/LevelProto.html");
+        if(finish){
+            level.complete = true;
+        }
         makePage();
         if(currentId <= 10){
             $('#levelSelect1').show();
