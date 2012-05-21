@@ -1,35 +1,3 @@
-/* for testing this without tutorial present:
-var Tutorial = {};
-
-Tutorial.circuitChanged = function () {
-	var eval;
-	eval = Circuit.getEvaluator();
-	console.log(Circuit.getElements(), eval.evaluate('Ro').accept); //OK
-};
-
-var levels = [
-	{sensors: 'C', tools: ['']},
-	{sensors: 'C Y', tools: ['and']},
-	{sensors: '- | o', tools: ['and', 'or', 'not']}
-];
-
-function setLevel(id) {
-	curState = null;
-	Circuit.levelChanged(null, levels[id]);
-}
-
-var evaluator = null;
-
-function test(item) {
-	if (!evaluator) {
-		evaluator = Circuit.getEvaluator();
-	}
-	state = evaluator.evaluate(item);
-	Circuit.setState(state);
-	console.log(state); //OK
-}
-//*/
-
 var Circuit = (function ($) {
 	"use strict";
 
@@ -205,18 +173,31 @@ var Circuit = (function ($) {
 	}
 
 	my.levelChanged = function (oldLevel, newLevel) {
-		var layout, outType, sensors;
+		var layout, outType, outElt, sensors, sourceElt, tools;
 
 		layout = new Workshop.Layout();
 		outType = Workshop.getElementType('out');
-		layout.addElement(new Workshop.Element(outType,
+		outElt = new Workshop.Element(outType,
 			workshop.canvas.width() - 10 - outType.imgWidth + outType.imgX,
-			Math.round((workshop.canvas.height() - outType.imgY) / 2.0)));
+			Math.round((workshop.canvas.height() - outType.imgY) / 2.0));
+		layout.addElement(outElt);
+		sourceElt = null;
 		$.each(computeSensors(newLevel.sensors), function (i, sensor) {
+			if (newLevel.link === sensor.type.id) {
+				sourceElt = sensor;
+			}
 			layout.addElement(sensor);
 		});
+		if (sourceElt) {
+			layout.addWire(sourceElt.conns[0], outElt.conns[0]);
+		}
 		workshop.setLayout(layout);
-		workshop.setTools(newLevel.tools);
+		tools = [];
+		$.each(newLevel.tools, function (i, tool) {
+			tools.push(tool);
+		});
+		tools.push('eraser');
+		workshop.setTools(tools);
 	};
 
 	return my;
