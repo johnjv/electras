@@ -2,10 +2,42 @@
 	"use strict";
 	var WIRE_WIDTH = 3;
 	var CONNECT_RADIUS = 3;
-	
+
+	my.getRelativePath = function (desired) {
+		var cwd, cdirs, ddirs, i, j, ret;
+		if (!self || !self.location || !self.location.href) {
+			return '';
+		}
+		cwd = self.location.href;
+		i = cwd.indexOf('electras/');
+		if (i >= 0) {
+			cwd = cwd.substring(i + 'electras/'.length);
+		}
+		cdirs = cwd.split('/');
+		ddirs = desired.split('/');
+		j = 0;
+		while (j < cdirs.length && j < ddirs.length && cdirs[j] === ddirs[j]) {
+			j += 1;
+		}
+		ret = '';
+		for (i = j; i < cdirs.length - 1; i += 1) {
+			ret += '../';
+		}
+		for (i = j; i < ddirs.length; i += 1) {
+			ret += ddirs[i] + '/';
+		}
+		return ret;
+	}
+
+	var baseDirectory = my.getRelativePath('workshop/resource');
+
+	my.getResourcePath = function (filename) {
+		return baseDirectory + filename;
+	}
+
 	function setterImage(elt) {
 		return function (imgName) {
-			var newName = 'resource/' + imgName + '.png';
+			var newName = my.getResourcePath(imgName + '.png');
 			if (elt.imgElt.attr('src') !== newName) {
 				elt.imgElt.attr('src', newName);
 			}
@@ -15,25 +47,23 @@
 	my.DrawCirc = {};
 
 	my.DrawCirc.createElement = function (info, elt) {
-		var type, offs0, img;
+		var type, img, offs0;
 
 		if (elt.imgElt) {
 			elt.imgElt.remove();
 		}
 
 		type = elt.type;
-		offs0 = info.canvas.offset();
 		img = $('<img></img>').addClass('on_canvas');
 		elt.imgElt = img;
 		elt.setImage = setterImage(elt);
 		elt.setImage(type.imgName);
 		img.width(type.imgWidth);
 		img.height(type.imgHeight);
-		img.offset({
-			left: offs0.left + elt.x + elt.type.imgX,
-			top: offs0.top + elt.y + elt.type.imgY
-		});
 		info.canvas.append(img);
+		offs0 = info.canvas.offset();
+		img.offset({ left: offs0.left + elt.x + elt.type.imgX,
+			top: offs0.top + elt.y + elt.type.imgY });
 
 		$.each(elt.conns, function (i, conn) {
 			my.DrawCirc.createStub(info, conn);
@@ -42,11 +72,22 @@
 
 	my.DrawCirc.removeElement = function (info, elt) {
 		$.each(elt.conns, function (i, conn) {
+			var j;
 			if (conn.circ !== null) {
 				conn.circ.remove();
 			}
 			if (conn.stub !== null) {
 				conn.stub.remove();
+			}
+			if (conn.line !== null) {
+				conn.line.remove();
+			}
+			for (j = conn.conns.length - 1; j >= 0; j -= 1) {
+				if (conn.conns[j].line !== null) {
+					conn.conns[j].line.remove();
+					conn.conns[j].line = null;
+					my.DrawCirc.showStub(info, conn.conns[j]);
+				}
 			}
 		});
 		elt.imgElt.remove();
@@ -57,10 +98,8 @@
 
 		type = elt.type;
 		offs0 = info.canvas.offset();
-		elt.imgElt.offset({
-			left: offs0.left + elt.x + elt.type.imgX,
-			top: offs0.top + elt.y + elt.type.imgY
-		});
+		elt.imgElt.offset({ left: offs0.left + elt.x + elt.type.imgX,
+			top: offs0.top + elt.y + elt.type.imgY });
 
 		$.each(elt.conns, function (i, conn) {
 			my.DrawCirc.createStub(info, conn);
@@ -153,6 +192,19 @@
 		return line;
 	};
 
+	my.DrawCirc.removeWire = function (info, conn0, conn1) {
+		if (conn0.line !== null) {
+			conn0.line.remove();
+			conn0.line = null;
+		}
+		if (conn1.line !== null) {
+			conn1.line.remove();
+			conn1.line = null;
+		}
+		my.DrawCirc.showStub(info, conn0);
+		my.DrawCirc.showStub(info, conn1);
+	};
+
 	my.DrawCirc.recolorConnection = function (info, conn) {
 		var color;
 
@@ -169,6 +221,9 @@
 			if (!conn.input) {
 				conn.circ.attr('fill', color);
 			}
+		}
+		if (conn.line) {
+			conn.stub.attr('stroke', color);
 		}
 		$.each(conn.conns, function (i, c) {
 			if (c.stub) {
