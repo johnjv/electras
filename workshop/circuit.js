@@ -14,7 +14,19 @@ var levels = [
 ];
 
 function setLevel(id) {
+	curState = null;
 	Circuit.levelChanged(null, levels[id]);
+}
+
+var evaluator = null;
+
+function test(item) {
+	if (!evaluator) {
+		evaluator = Circuit.getEvaluator();
+	}
+	state = evaluator.evaluate(item);
+	Circuit.setState(state);
+	console.log(state); //OK
 }
 //*/
 
@@ -30,7 +42,7 @@ var Circuit = (function ($) {
 	var shapeSensors = [];
 
 	(function () {
-		var conns, i, c;
+		var conns, i, c, sensor;
 
 		function propagateSensor(elt, state) {
 			state.setValue(elt.conns[0], state.getState(elt));
@@ -39,13 +51,17 @@ var Circuit = (function ($) {
 		conns = [ new Workshop.Connection(false, 0, 0, -10, 0) ];
 		for (i = 0; i < colorNames.length; i += 1) {
 			c = colorNames.substring(i, i + 1);
-			colorSensors.push(new Workshop.ElementType(c, 'color' + i,
-				-60, -25, 50, 50, conns, propagateSensor));
+			sensor = new Workshop.ElementType(c, 'color' + i,
+				-60, -25, 50, 50, conns, propagateSensor);
+			sensor.isSensor = true;
+			colorSensors.push(sensor);
 		}
 		for (i = 0; i < shapeNames.length; i += 1) {
 			c = shapeNames.substring(i, i + 1);
-			shapeSensors.push(new Workshop.ElementType(c, 'shape' + i,
-				-60, -25, 50, 50, conns, propagateSensor));
+			sensor = new Workshop.ElementType(c, 'shape' + i,
+				-60, -25, 50, 50, conns, propagateSensor);
+			sensor.isSensor = true;
+			shapeSensors.push(sensor);
 		}
 	}());
 
@@ -55,7 +71,7 @@ var Circuit = (function ($) {
 		main = $('#circuit');
 		if (!main.hasClass('circ-container')) {
 			workshop = new Workshop.Workshop(main);
-			workshop.setTools(['and', 'or', 'not', 'in', 'out']);
+			workshop.setTools(['and', 'or', 'not', 'in', 'out', 'eraser']);
 			if (typeof Tutorial !== 'undefined' && Tutorial.circuitChanged) {
 				workshop.addChangeListener(function () {
 						Tutorial.circuitChanged();
@@ -64,7 +80,7 @@ var Circuit = (function ($) {
 		}
 	});
 
-	function EvaluatorAdapter(layout) {
+	function Evaluator(layout) {
 		var acceptConn;
 		acceptConn = null;
 		$.each(layout.elts, function (i, elt) {
@@ -74,13 +90,24 @@ var Circuit = (function ($) {
 			}
 		});
 
-		this.evaluator = new Workshop.Evaluator(layout);
+		this.state = Workshop.newInitialState(layout);
 		this.acceptConn = acceptConn;
 	}
 
-	EvaluatorAdapter.prototype.evaluate = function (item) {
-		var state;
-		state = this.evaluator.evaluate();
+	Evaluator.prototype.evaluate = function (item) {
+		var state, color, shape;
+		state = this.state;
+		color = item.substring(0, 1);
+		shape = item.substring(1, 2);
+		$.each(workshop.layout.elts, function (i, elt) {
+			if (elt.type.isSensor) {
+				state = state.setState(elt,
+					elt.type.id === color || elt.type.id === shape);
+			}
+		});
+
+		state = state.evaluate();
+
 		if (this.acceptConn) {
 			state.accept = state.getValue(this.acceptConn);
 		} else {
@@ -90,7 +117,7 @@ var Circuit = (function ($) {
 	};
 
 	my.getEvaluator = function () {
-		return new EvaluatorAdapter(workshop.layout);
+		return new Evaluator(workshop.layout);
 	};
 
 	my.setState = function (state) {
@@ -98,12 +125,15 @@ var Circuit = (function ($) {
 	};
 
 	my.getElements = function () {
-		var ret, wiringConn;
+		var ret, wiringConn, canvOffs, x0, y0;
 		ret = [];
 		if (!workshop || !workshop.layout) {
 			return ret;
 		}
 		wiringConn = workshop.gesture.conn0 || null;
+		canvOffs = workshop.canvas.offset();
+		x0 = canvOffs.left;
+		y0 = canvOffs.top;
 		$.each(workshop.layout.elts, function (i, elt) {
 			var conns, conn, toStr, j, k;
 			conns = [];
@@ -122,7 +152,7 @@ var Circuit = (function ($) {
 					}
 				}
 				conns.push({input: conn.input, connectedTo: toStr,
-					x: elt.x + conn.x, y: elt.y + conn.y, r: 15});
+					x: x0 + elt.x + conn.x, y: y0 + elt.y + conn.y, r: 15});
 			}
 			ret.push({id: elt.id, type: elt.type.id, connects: conns});
 		});

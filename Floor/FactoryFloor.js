@@ -1,5 +1,6 @@
 $(document).ready(function(){
-	"use strict";	
+	"use strict";
+	var curid = 1;
 	
 	$("#advanceLevel").click(function(){
 		advanceSelector(); // method created by the Levels/Judge team
@@ -19,9 +20,26 @@ $(document).ready(function(){
 		
 		function startNext(){
 			if(count < 8) {
-				placeCandy(items[count]);
-				moveCandy(items[count]);
-				count++;
+				if (checkCandy(count) === 1) {
+					placeCandy(items[count]);
+					moveCandy(items[count]);
+					
+				}
+				
+				else if (checkCandy(count) === -1){
+					putAFlag();
+					moveFlag();
+					placeCandy(items[count]);
+					moveCandy(items[count]);
+					
+				}
+				
+				else if (checkCandy(count) === 0) {
+					//putIntoTrash();
+					
+				}
+				count++; 
+				moveArm();
 				setTimeout(startNext, 3000);
 			}
 			
@@ -110,33 +128,91 @@ $(document).ready(function(){
 		"use strict";
 		var level = getCurrentLevel(curid);
 		var typeInfo = new Array();
-		var circuitInfo = new Array();
 		var levelInfo = new Array();
 		
 		for (var i=0; i< level.analysis.length; i+=1){
 		 	typeInfo[i] = new Candy(level.analysis[i].type);
 		}
 		
-		for (var i=0; i< level.analysis.length; i+=1){
-		 	circuitInfo[i] = new Candy(level.analysis[i].circuitSays);
-		}
+		return typeInfo;
+	}
+	
+	function getCircuitSays(){
+		"use strict";
+		var level = getCurrentLevel(curid);
+		var circuitInfo = new Array();
 		
 		for (var i=0; i< level.analysis.length; i+=1){
-		 	levelInfo[i] = new Candy(level.analysis[i].levelSays);
+		 	circuitInfo[i] = level.analysis[i].circuitSays;
 		}
-		 
-		 return typeInfo;
+		
+		return circuitInfo;
+		
+	}
+	
+	function getLevelSays(){
+		"use strict";
+		var level = getCurrentLevel(curid);
+		var levelInfo = new Array();
+		
+		for (var i=0; i< level.analysis.length; i+=1){
+		 	levelInfo[i] = level.analysis[i].levelSays;
+		}
+		
+		return levelInfo;
 	}
 	
 	function createSequence(){
 		var picArray = [];
 		var list = getLevelType();
-		var j;
 		console.log(list);
-		for (j = 0; j<list.length;j+=1){			
+		for (var j = 0; j<list.length;j+=1){
 			picArray.push(list[j].setCandyPicture());
 		}
 		return picArray;
+	}
+	
+	function checkCandy(i) {
+		"use strict";
+		var circuitSays = getCircuitSays();
+		var levelSays = getLevelSays();
+		var value; // this is a value to differentiate the cases
+		
+		console.log(circuitSays[i]);
+		console.log(levelSays[i]);
+		
+		if (circuitSays[i] === false) {
+			if(levelSays[i] === true) {
+					value = 0;
+					console.log("circuit is false, level is true");
+					return value;
+					//putAFlag(candyPictures[i]);		// put a flag
+					//moveIntoBox(candyPictures[i]); // move into box
+			}
+			else{
+					value = -1;
+					console.log("circuit is false, level is false");
+					return value;
+					//moveIntoTrash(candyPictures[i]); // move this into trash
+				}
+			}
+			
+		else {
+			if(levelSays[i] === true) {
+					value = 1;
+					console.log("circuit is true, level is true");
+					return value;
+					//moveIntoBox(candyPictures[i]); // move into box without flag	
+			}
+			else{
+					value = 0;
+					console.log("circuit is true, level is false");
+					return value;
+					//putAFlag(candyPictures[i]);
+					//moveIntoBox(candyPictures[i]);
+			}
+		}
+		
 	}
 	
 	function placeCandy(candy){
@@ -153,16 +229,11 @@ $(document).ready(function(){
         	machine.append(candy);
         	console.log("just added");
         });
-        
-        return candy;
-        
+             
     }
-    
     
     function moveCandy(candy){
     	"use strict";
-    	var machine;
-    	machine = $('#machine');
     	$(candy).animate({
         	left: '-=400'
         }, 3000); 
@@ -173,6 +244,34 @@ $(document).ready(function(){
         }, 500); 
     }
 	
+	function putAFlag(){
+		"use strict";
+		var flag = $('<img src="resource-image/envx.png"></img>');
+		var arm = $('#arm');
+		var flagPos;
+		flag.width(20);
+		machine = $('#machine');
+		machine.append(flag);
+		$(candy).each(function(){
+        	flagPos = candy.offset();
+        	flagPos.left += machine.width() - arm.left;  // 450 should be machine.width()
+        	console.log(flagPos.left);
+        	flagPos.top += machine.height()/2 - 50; // should be machine.height() minize something
+       	 	flag.offset(flagPos);
+        	machine.append(flag);
+        	console.log("just added");
+        });
+	}
+	
+	function moveFlag(){
+		"use strict";
+		$(candy).animate({
+			left:'-=50'
+		},3000);
+		$(candy).animate({
+			height: 'toggle'
+		},3000);
+	}
 	
 	function levelChanged(oldLevel, newLevel){
 		"use strict";
@@ -215,18 +314,6 @@ $(document).ready(function(){
 		return advanceLocation;
 	}
 	
-	function howToDisplay() {
-		"use strict";
-		//TODO 	This should indicate whether the candy goes in the box or in the hole, it will call putInBox
-		var listToDisplay = new Array();
-		var isAccepted = new Boolean();
-		
-		//for ()
-		
-		//if (SequenceItem.circuitSays) {
-			isAccepted = true;
-		//}
-	}
 	
 	function putInBox(candy){
 		"use strict";
@@ -234,4 +321,13 @@ $(document).ready(function(){
 		//var top, newPos
 		//ne
 	}
+	
+	function moveArm(){
+		$('#arm').animate({top: '+=50'}, 1500);
+		$('#arm').animate({top: '-=50'}, 1000);
+	}
+	
+	
+	
+
 });
