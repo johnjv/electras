@@ -71,7 +71,7 @@ var Circuit = (function ($) {
 		main = $('#circuit');
 		if (!main.hasClass('circ-container')) {
 			workshop = new Workshop.Workshop(main);
-			workshop.setTools(['and', 'or', 'not', 'in', 'out']);
+			workshop.setTools(['and', 'or', 'not', 'in', 'out', 'eraser']);
 			if (typeof Tutorial !== 'undefined' && Tutorial.circuitChanged) {
 				workshop.addChangeListener(function () {
 						Tutorial.circuitChanged();
@@ -125,12 +125,15 @@ var Circuit = (function ($) {
 	};
 
 	my.getElements = function () {
-		var ret, wiringConn;
+		var ret, wiringConn, canvOffs, x0, y0;
 		ret = [];
 		if (!workshop || !workshop.layout) {
 			return ret;
 		}
 		wiringConn = workshop.gesture.conn0 || null;
+		canvOffs = workshop.canvas.offset();
+		x0 = canvOffs.left;
+		y0 = canvOffs.top;
 		$.each(workshop.layout.elts, function (i, elt) {
 			var conns, conn, toStr, j, k;
 			conns = [];
@@ -149,7 +152,7 @@ var Circuit = (function ($) {
 					}
 				}
 				conns.push({input: conn.input, connectedTo: toStr,
-					x: elt.x + conn.x, y: elt.y + conn.y, r: 15});
+					x: x0 + elt.x + conn.x, y: y0 + elt.y + conn.y, r: 15});
 			}
 			ret.push({id: elt.id, type: elt.type.id, connects: conns});
 		});

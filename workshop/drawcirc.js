@@ -72,11 +72,22 @@
 
 	my.DrawCirc.removeElement = function (info, elt) {
 		$.each(elt.conns, function (i, conn) {
+			var j;
 			if (conn.circ !== null) {
 				conn.circ.remove();
 			}
 			if (conn.stub !== null) {
 				conn.stub.remove();
+			}
+			if (conn.line !== null) {
+				conn.line.remove();
+			}
+			for (j = conn.conns.length - 1; j >= 0; j -= 1) {
+				if (conn.conns[j].line !== null) {
+					conn.conns[j].line.remove();
+					conn.conns[j].line = null;
+					my.DrawCirc.showStub(info, conn.conns[j]);
+				}
 			}
 		});
 		elt.imgElt.remove();
@@ -179,6 +190,19 @@
 		c1.line = line;
 		my.DrawCirc.recolorConnection(info, c0);
 		return line;
+	};
+
+	my.DrawCirc.removeWire = function (info, conn0, conn1) {
+		if (conn0.line !== null) {
+			conn0.line.remove();
+			conn0.line = null;
+		}
+		if (conn1.line !== null) {
+			conn1.line.remove();
+			conn1.line = null;
+		}
+		my.DrawCirc.showStub(info, conn0);
+		my.DrawCirc.showStub(info, conn1);
 	};
 
 	my.DrawCirc.recolorConnection = function (info, conn) {
