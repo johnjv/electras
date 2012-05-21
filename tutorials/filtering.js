@@ -2,14 +2,7 @@ var Filters = (function ($) {
   var my = {}
 
   my.find_connection = function(element, status, type){
-    console.log(element.connections)
-    console.log(element.connections.filter(connection_is_match, type))
-    return (element.connections.filter(connection_is_match, type).filter(connection_is_match, status))[0]
-//    return $.each(element.connections, function(i, connection){
-//      if (connection.type == type && connection.connected_to == status){
-//        return connection
-//      }
-//    })[0]
+    return element.connections.filter(function(connection) {return connection_is_match(connection, {connection_type: type, connected_to: status})})[0]
   }
 
   my.filter_elements = function(elements, criterion){ //both criterion and elements are arrays
@@ -23,43 +16,52 @@ var Filters = (function ($) {
     return remaining_elements
   };
 
+  var filter_one_element = function(element, criterion){
+    var accepted = true;
+    $.each(criterion, function(key, value){
+      if (!is_match(element, key, value)){
+        accepted = false;
+      }
+    })
+    return accepted;
+  }
 
-  var is_match = function(element, key, value){
+  var is_match = function(element, key, criteria){
     var i = 0;
     switch (key) {
-      case 'type': return matches_key(value, element.type);
-      case 'sensor': return matches_key(value, element.type);
+      case 'type': return matches_key(criteria, element.type);
+      case 'sensor': return matches_key(criteria, element.type);
       case 'connection_criteria':
-        var valid_connections = element.connections.filter(connection_is_match, value) //feed in the entire hash of connection criteria
+          console.log("connection criteria!", element, criteria)
+        var valid_connections = element.connections.filter(function(connection) {return connection_is_match(connection, criteria)}) //feed in the entire hash of connection criteria
         if (valid_connections && valid_connections.length > 0) {return true} else {return false}
       default:
     }
   }
 
-  var connection_is_match = function(connection){  //'this' is the criterion
+  var connection_is_match = function(connection, criteria){  //'this' is the criterion
     var this_is_a_match = true;
-    $.each(this, function(connection_key, connection_value) {
+    console.log("BEGINNING OF CONNECTION MATCH", criteria, connection)
+    $.each(criteria, function(connection_key, connection_value) {
+      console.log(connection, connection_key, connection_value)
       switch (connection_key) {
         case 'connection_type':
-          this_is_a_match *= matches_key(connection_value, connection.type); //yes, you can multiply booleans
+          if(!matches_key(connection_value, connection.connection_type)){this_is_a_match = false}
           break;
         case 'connected_to':
           if (connection_value == 'filled') {
-            this_is_a_match *= test_regex('[0-9]+', connection.connected_to)
-            break;
+            if (!test_regex('[0-9]+', connection.connected_to)) {this_is_a_match = false}
           } else if (connection_value == 'empty') {
-            this_is_a_match *= test_regex(('^$', connection.connected_to))
+            if(!test_regex(('^$', connection.connected_to))) {this_is_a_match = false}
           } else {
-            this_is_a_match *= matches_key(connection_value, connection.connected_to);
-            break;
+            if(!matches_key(connection_value, connection.connected_to)){this_is_a_match = false}
           }
+          break;
       }
     });
-    if (this_is_a_match == true || this_is_a_match == 1){
-      return true
-    } else {
-      return false
-    }
+
+    console.log('is this a match?', this_is_a_match)
+    return this_is_a_match
   }
 
   var test_regex = function(regex, string) {
@@ -79,23 +81,15 @@ var Filters = (function ($) {
   return my;
 }(jQuery))
 
-//
-//var has_element_where = function(elements, criterion){
-//  var element_matches = filter_elements(elements, criterion);
-//  if (element_matches.length > 0) {
-//    return true;
-//  } else {
-//    return false;
-//  }
-//}
-
 //shortcuts and standins
 
 var highlightSection = function(highlighted, isCircular){
+  Tutorial.highlightSection(highlighted.x, highlighted.y, highlighted.height, highlighted.width, isCircular)
   console.log("highlighting: ", highlighted.x, highlighted.y, highlighted.height, highlighted.width, isCircular)
 }
 
 var createSpeechBubble = function(hightlighted, text) {
+  Tutorial.placeBubble(hightlighted, text)
   console.log("creating speech bubble: ", hightlighted.x, hightlighted.y, text);
 }
 
@@ -107,47 +101,3 @@ var getLeverLocation = function(){
     width: 140
   }
 }
-//
-//var operator = function(type, connection_type, connection_status){
-//  return {
-//    type: type,
-//    connection_criteria: {
-//      connection_type: connection_type,
-//      connected_to: connection_status
-//    }
-//  }
-//}
-
-//var NOT = function(connection_type, connection_status){
-//  return operator('NOT', connection_type, connection_status);
-//}
-//
-//var AND = function(connection_type, connection_status){
-//  return operator('AND', connection_type, connection_status)
-//}
-//
-//var OR = function(connection_type, connection_status){
-//  return operator('OR', connection_type, connection_status)
-//}
-
-//var sensor = function(flavor, connection_status){
-//  return {
-//    type: 'sensor',
-//    sensor: flavor,
-//    connection_criteria: {
-//      connected_to: connection_status
-//    }
-//  };
-//}
-
-
-//var lightbulb = function(connection_status){
-//  return {
-//    type: 'lightbulb',
-//    connection_criteria: {
-//      connected_to: connection_status
-//    }
-//  }
-//}
-//
-//
