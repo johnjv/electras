@@ -1,14 +1,10 @@
 
 var a_bar_walks_into_my_tummy_events = function(){
   var elements = new Elements(stick_selected);  //getElements()
-  console.log(elements)
-  var lightbulb_in = find_incoming(elements.lightbulb().empty(), 'empty')     //filter_elements(elements, lightbulb('empty'))[0], 'empty');
-  console.log('made it past lightbulb', lightbulb_in)
+  var lightbulb_in = find_incoming(elements.lightbulb().empty(), 'empty')
   var empty_sensors = elements.sensor().empty().elements
-  console.log('empty sensors', empty_sensors)
 
   if (empty_sensors && empty_sensors.length == 3) {
-    //the start
     $.each(empty_sensors, function(i, sensor){
        highlightSection(find_outgoing([sensor], 'empty'), true);
     })
@@ -16,18 +12,18 @@ var a_bar_walks_into_my_tummy_events = function(){
   }
 
   else if (elements.sensor('bar').active_connection().exists() &&
-            elements.lightbulb().empty().exists()) {  //has_element_where(elements, sensor('bar', 'active'))  && has_element_where(lightbulb('empty'))) {
+            elements.lightbulb().empty().exists()) {
     highlightSection(lightbulb_in, true);
     createSpeechBubble(lightbulb_in, "Good choice!  Now click on the lightbulb just like last time.");
   }
 
   else if (elements.sensor().active_connection().exists() &&
-           elements.lightbulb().empty().exists()){     //has_element_where(sensor('', 'active')) && has_element_where(lightbulb('empty'))){
+           elements.lightbulb().empty().exists()){
     createSpeechBubble(lightbulb_in, 'With great power comes great responsibility.');
   }
 
   else if (elements.lightbulb().input('filled').exists() &&
-          elements.sensor('bar').empty().exists()) {  //has_element_where(lightbulb('any')) && has_element_where(sensor('bar', 'empty'))){
+          elements.sensor('bar').empty().exists()) {
     console.log(find_incoming(elements.lightbulb(), 'filled'))
     createSpeechBubble(find_incoming(elements.lightbulb(), 'filled'), "You can start the machine if you want, but you've been warned.");
 

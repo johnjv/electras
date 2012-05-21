@@ -18,7 +18,6 @@ var Elements = function(elements){
   }
 
   this.sensor = function(type){
-    console.log('testing sensor', type)
     if (type == null) {
       type = 'sensor'
     }
@@ -30,6 +29,7 @@ var Elements = function(elements){
   }
 
   this.input = function(connected_to){
+    console.log("finding input")
     return new Elements(Filters.filter_elements(this.elements, {connection_criteria: {type: 'incoming', connected_to: connected_to}}))
   }
 
@@ -51,6 +51,10 @@ var Elements = function(elements){
 
   this.NOT = function(){
     return new Elements(Filters.filter_elements(this.elements, {type: 'NOT'}))
+  }
+
+  this.first_connection = function(){
+    return this.elements[0].connections[0]
   }
 
   return this
