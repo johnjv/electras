@@ -4,5 +4,7 @@ Prevent adding component atop other component/wire
 Prevent moving fixed components
 allow gestures via click/tap to start and click/tap to end (not just dragging)
 respond to change in canvas size
+Workshop.Layout.stringify/parse
+Circuit.save/restore
 
 Electricity animation

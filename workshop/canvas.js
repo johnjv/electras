@@ -271,7 +271,7 @@
 					.addClass('tool')
 					.attr('src', my.getResourcePath('eraser.png'))
 					.attr('type', 'eraser'));
-			} else {
+			} else if (tool !== '') {
 				console.log('unknown tool type "' + tool + '"'); //OK
 			}
 		});
