@@ -1,5 +1,5 @@
 var not_what_I_mint_events = function(){
-  var elements = new Elements(NOT_incoming_filled) //getElements();
+  var elements = new Elements(NOT_incoming_empty) //getElements();
 
   if (!elements.NOT().exists()){
     createSpeechBubble(elements.lightbulb().first_connection(), "We'll be using the NOT operator.  Whatever is put into it comes out the opposite!")
@@ -22,8 +22,8 @@ var not_what_I_mint_events = function(){
   else if (elements.NOT().input('filled').exists() &&
       (elements.NOT().output('empty').exists() || elements.lightbulb().input('empty').exists())) {
     //if the first part of the operator is filled in, but either the outgoing part of the NOT operator or the incoming part of the lightbulb is still empty
-    var operator_output = find_outgoing(elements.NOT().output('empty'), 'empty')
-    var lightbulb_input = find_incoming(elements.lightbulb().input('empty'), 'empty')
+    var operator_output = Filters.find_connection(elements.NOT().output('empty').elements[0], 'empty', 'outgoing')
+    var lightbulb_input = elements.lightbulb().first_connection()
     highlightSection(operator_output, true)
     highlightSection(lightbulb_input, true)
     createSpeechBubble(operator_output, "Now just finish it off.")
@@ -36,7 +36,7 @@ var test_OR = function(id, incoming1, incoming2, outgoing){
     type: "OR",
     connections: [
       {
-        type: 'incoming',
+        connection_type: 'incoming',
         x: 5,
         y: 10,
         width: 100,
@@ -45,7 +45,7 @@ var test_OR = function(id, incoming1, incoming2, outgoing){
       },
 
       {
-        type: 'incoming',
+        connection_type: 'incoming',
         x: 10,
         y: 15,
         width: 100,
@@ -54,7 +54,7 @@ var test_OR = function(id, incoming1, incoming2, outgoing){
       },
 
       {
-        type: 'outgoing',
+        connection_type: 'outgoing',
         x: 15,
         y: 20,
         width: 100,
@@ -67,12 +67,13 @@ var test_OR = function(id, incoming1, incoming2, outgoing){
 
 
 var test_NOT = function(id, incoming, outgoing){
+
   return {
     id: id,
     type: "NOT",
     connections: [
       {
-        type: 'incoming',
+        connection_type: 'incoming',
         x: 2,
         y: 8,
         width: 100,
@@ -80,7 +81,7 @@ var test_NOT = function(id, incoming, outgoing){
         connected_to: incoming
       },
       {
-        type: 'outgoing',
+        connection_type: 'outgoing',
         x: 15,
         y: 20,
         width: 100,

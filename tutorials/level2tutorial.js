@@ -38,7 +38,7 @@ var test_sensor = function(id, type, connection){
     type: type + " sensor",
     connections: [
       {
-        type: 'outgoing',
+        connection_type: 'outgoing',
         x: 5,
         y: 10,
         width: 50,
@@ -55,7 +55,7 @@ var test_lightbulb = function(connection){
   type: 'lightbulb',
   connections: [
     {
-      type: 'incoming',
+      connection_type: 'incoming',
       x: 5,
       y: 10,
       width: 100,
