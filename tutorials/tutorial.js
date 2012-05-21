@@ -44,7 +44,7 @@ Tutorial = {};
 		var bubbleContainer = $('<div id = "container"></div>');
 		$('body').append(bubbleContainer);
 		bubbleContainer.text(text);
-		bubbleContainer .offset({left: target.offset().left + target.width(), top: target.offset().top + target.height()});
+		bubbleContainer .offset({left: target.x + target.width, top: target.y + target.height});
 		bubbleContainer.css('opacity', '0');
 	}
 
@@ -65,9 +65,9 @@ Tutorial = {};
 		}
 		createSpeechBubble(target, text);
 		var bubbleContainer = $('div#container');
-		var x = target.offset().left + target.width();
-		var y = target.offset().top + target.height();
-		var otherY = target.offset().top - bubbleContainer.height();
+		var x = target.x + target.width;
+		var y = target.y + target.height;
+		var otherY = target.y - bubbleContainer.height();
 		var removed = false;
 		if((x + bubbleContainer.width()) > $(document).width()){
 			x = target.offset().left - bubbleContainer.width();
