@@ -44,7 +44,7 @@
 	my.NullGesture = function (info) { };
 
 	my.NullGesture.prototype.mouseDown = function (info, e) {
-		var x, y, best, gest, elt;
+		var x, y, best, gest, elt, newState;
 		x = e.circuitX;
 		y = e.circuitY;
 		best = findConnection(info.layout, x, y);
@@ -59,8 +59,9 @@
 		} else {
 			elt = findElement(info.layout, x, y);
 			if (elt) {
-				if (elt.type.poke(elt, x - elt.x, y - elt.y, info.state)) {
-					info.circuitChanged();
+				newState = elt.type.poke(elt, x - elt.x, y - elt.y, info.state);
+				if (newState) {
+					info.setState(newState.evaluate());
 				} else {
 					// TODO initiate move
 				}
