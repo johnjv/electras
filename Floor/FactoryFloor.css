@@ -75,3 +75,11 @@ html, body { background: #38C;
 	height: 100px;
 	width: 20px; 
 }
+
+#chalkBoard{
+	position: absolute;
+	top:25%;
+	left: 10%;
+	height: 10%;
+	width: 10%;
+}
