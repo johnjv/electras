@@ -10,9 +10,10 @@ var not_what_I_mint_events = function(){
   }
 
   else if (elements.NOT().input('empty').exists()){
-    console.log(elements.NOT().input('empty'))
-    var operator_input = find_incoming(elements.NOT().input('empty'), 'empty')
-    var sensor_output = find_outgoing(elements.sensor('mint'), 'empty')
+    console.log('made it to the third choice', elements.NOT().input('empty'))
+    var operator_input = Filters.find_connection(elements.NOT().elements[0], 'empty', 'incoming')//find_incoming(elements.NOT().input('empty'), 'empty')
+    console.log('OPERATOR INPUT', operator_input)
+    var sensor_output = Filters.find_connection(elements.sensor('mint').elements[0], 'empty', 'outgoing')
     highlightSection(operator_input, true)
     highlightSection(sensor_output, true)
     createSpeechBubble(operator_input, "Great!  Now connect the mint sensor to the input of the NOT operator") ;

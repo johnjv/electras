@@ -61,34 +61,34 @@ var Elements = function(elements){
 
 }
 
-
-find_incoming = function(elements, status){
-  if (elements.elements) {
-    elements = elements.elements
-  }
-  if (elements && elements.length > 1){
-    elements = elements[0]
-  }
-  console.log("checking incoming", elements, status)
-  if (elements && elements.length > 0) {
-    console.log("we're going in!", elements, status)
-    return Filters.find_connection(elements[0], status, 'incoming')
-  } else {
-    console.log("abandon ship!")
-    return null
-  }
-}
-find_outgoing = function(elements, status){
-  if (elements.elements) {
-    elements = elements.elements
-  }
-  if (elements && elements.length > 1){
-    elements = elements[0]
-  }
-  console.log("checking outgoing", elements, status)
-  if (elements && elements.length > 0) {
-    return Filters.find_connection(elements[0], status, 'outgoing');
-  } else {
-    return null
-  }
-}
+//
+//find_incoming = function(elements, status){
+//  if (elements.elements) {
+//    elements = elements.elements
+//  }
+//  if (elements && elements.length > 1){
+//    elements = elements[0]
+//  }
+//  console.log("checking incoming", elements, status)
+//  if (elements && elements.length > 0) {
+//    console.log("we're going in!", elements, status)
+//    return Filters.find_connection(elements[0], status, 'incoming')
+//  } else {
+//    console.log("abandon ship!")
+//    return null
+//  }
+//}
+//find_outgoing = function(elements, status){
+//  if (elements.elements) {
+//    elements = elements.elements
+//  }
+//  if (elements && elements.length > 1){
+//    elements = elements[0]
+//  }
+//  console.log("checking outgoing", elements, status)
+//  if (elements && elements.length > 0) {
+//    return Filters.find_connection(elements[0], status, 'outgoing');
+//  } else {
+//    return null
+//  }
+//}

@@ -92,10 +92,12 @@ var Filters = (function ($) {
 //shortcuts and standins
 
 var highlightSection = function(highlighted, isCircular){
+  Tutorial.highlightSection(highlighted.x, highlighted.y, highlighted.height, highlighted.width, isCircular)
   console.log("highlighting: ", highlighted.x, highlighted.y, highlighted.height, highlighted.width, isCircular)
 }
 
 var createSpeechBubble = function(hightlighted, text) {
+//  Tutorial.placeBubble(hightlighted, text)
   console.log("creating speech bubble: ", hightlighted.x, hightlighted.y, text);
 }
 
