@@ -1,35 +1,32 @@
 
 var a_bar_walks_into_my_tummy_events = function(){
-  var elements = new Elements(stick_selected);  //getElements()
-  console.log(elements)
-  var lightbulb_in = find_incoming(elements.lightbulb().empty(), 'empty')     //filter_elements(elements, lightbulb('empty'))[0], 'empty');
-  console.log('made it past lightbulb', lightbulb_in)
+  var elements = new Elements(wrong_one);  //getElements()
+  var lightbulb_in = elements.lightbulb().first_connection()
   var empty_sensors = elements.sensor().empty().elements
-  console.log('empty sensors', empty_sensors)
 
   if (empty_sensors && empty_sensors.length == 3) {
-    //the start
     $.each(empty_sensors, function(i, sensor){
-       highlightSection(find_outgoing([sensor], 'empty'), true);
+//       highlightSection(find_outgoing([sensor], 'empty'), true);
+      console.log(sensor)
+        highlightSection(Filters.find_connection(sensor,'empty','outgoing'), true)
     })
     createSpeechBubble(empty_sensors[0].connections[0], "Candies can have 3 shapes: round(o), stick(|), and bar(-)");
   }
 
   else if (elements.sensor('bar').active_connection().exists() &&
-            elements.lightbulb().empty().exists()) {  //has_element_where(elements, sensor('bar', 'active'))  && has_element_where(lightbulb('empty'))) {
+            elements.lightbulb().empty().exists()) {
     highlightSection(lightbulb_in, true);
     createSpeechBubble(lightbulb_in, "Good choice!  Now click on the lightbulb just like last time.");
   }
 
   else if (elements.sensor().active_connection().exists() &&
-           elements.lightbulb().empty().exists()){     //has_element_where(sensor('', 'active')) && has_element_where(lightbulb('empty'))){
+           elements.lightbulb().empty().exists()){
     createSpeechBubble(lightbulb_in, 'With great power comes great responsibility.');
   }
 
   else if (elements.lightbulb().input('filled').exists() &&
-          elements.sensor('bar').empty().exists()) {  //has_element_where(lightbulb('any')) && has_element_where(sensor('bar', 'empty'))){
-    console.log(find_incoming(elements.lightbulb(), 'filled'))
-    createSpeechBubble(find_incoming(elements.lightbulb(), 'filled'), "You can start the machine if you want, but you've been warned.");
+          elements.sensor('bar').empty().exists()) {
+    createSpeechBubble(elements.lightbulb().first_connection(), "You can start the machine if you want, but you've been warned.");
 
     //hook up click event and timer to eventually say "here, try this instead" while highlighting the bar sensor
   }
@@ -44,8 +41,8 @@ var test_sensor = function(id, type, connection){
         type: 'outgoing',
         x: 5,
         y: 10,
-        width: 100,
-        height: 200,
+        width: 50,
+        height: 50,
         connected_to: connection
       }
     ]

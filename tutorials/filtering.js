@@ -2,17 +2,15 @@ var Filters = (function ($) {
   var my = {}
 
   my.find_connection = function(element, status, type){
-    console.log(element.connections)
-    console.log(element.connections.filter(connection_is_match, type))
     return (element.connections.filter(connection_is_match, type).filter(connection_is_match, status))[0]
-//    return $.each(element.connections, function(i, connection){
-//      if (connection.type == type && connection.connected_to == status){
-//        return connection
-//      }
-//    })[0]
   }
 
   my.filter_elements = function(elements, criterion){ //both criterion and elements are arrays
+//
+//    var remaining_elements =  $.filter(elements, function(key, value){
+//      return filter_one_element(value, criterion)
+//    })
+//    console.log(remaining_elements)
     var remaining_elements = elements
     $.each(criterion, function(key, value){
       remaining_elements = remaining_elements.filter(function(element){
@@ -23,6 +21,16 @@ var Filters = (function ($) {
     return remaining_elements
   };
 
+  var filter_one_element = function(element, criterion){
+    var accepted = true;
+    $.each(criterion, function(key, value){
+      if (!is_match(element, key, value)){
+        accepted = false;
+      }
+    })
+    return accepted;
+  }
+
 
   var is_match = function(element, key, value){
     var i = 0;
@@ -30,6 +38,7 @@ var Filters = (function ($) {
       case 'type': return matches_key(value, element.type);
       case 'sensor': return matches_key(value, element.type);
       case 'connection_criteria':
+          console.log("connection criteria!", element, value)
         var valid_connections = element.connections.filter(connection_is_match, value) //feed in the entire hash of connection criteria
         if (valid_connections && valid_connections.length > 0) {return true} else {return false}
       default:
@@ -39,6 +48,7 @@ var Filters = (function ($) {
   var connection_is_match = function(connection){  //'this' is the criterion
     var this_is_a_match = true;
     $.each(this, function(connection_key, connection_value) {
+      console.log(this, connection, connection_key, connection_value)
       switch (connection_key) {
         case 'connection_type':
           this_is_a_match *= matches_key(connection_value, connection.type); //yes, you can multiply booleans
@@ -79,23 +89,15 @@ var Filters = (function ($) {
   return my;
 }(jQuery))
 
-//
-//var has_element_where = function(elements, criterion){
-//  var element_matches = filter_elements(elements, criterion);
-//  if (element_matches.length > 0) {
-//    return true;
-//  } else {
-//    return false;
-//  }
-//}
-
 //shortcuts and standins
 
 var highlightSection = function(highlighted, isCircular){
+  Tutorial.highlightSection(highlighted.x, highlighted.y, highlighted.height, highlighted.width, isCircular)
   console.log("highlighting: ", highlighted.x, highlighted.y, highlighted.height, highlighted.width, isCircular)
 }
 
 var createSpeechBubble = function(hightlighted, text) {
+//  Tutorial.placeBubble(hightlighted, text)
   console.log("creating speech bubble: ", hightlighted.x, hightlighted.y, text);
 }
 
