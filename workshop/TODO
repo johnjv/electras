@@ -1,0 +1,8 @@
+move toolbar to left side of window
+Moving components
+Prevent adding component atop other component/wire
+Prevent moving fixed components
+allow gestures via click/tap to start and click/tap to end (not just dragging)
+respond to change in canvas size
+
+Electricity animation

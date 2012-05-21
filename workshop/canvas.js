@@ -99,15 +99,20 @@
 			if (ey < canvas.offset().top) {
 				newGest = null;
 				$('.tool', toolbar).each(function (i, tool) {
-					var elt, offs, dx, dy, type;
+					var elt, offs, dx, dy, typeName, type;
 					elt = $(tool);
 					offs = elt.offset();
 					dx = ex - offs.left;
 					dy = ey - offs.top;
 					if (dx >= 0 && dy >= 0 && dx < elt.width()
 							&& dy < elt.height()) {
-						type = toolTypes[elt.attr('type')];
-						newGest = new my.AddGesture(self, type, e);
+						typeName = elt.attr('type');
+						if (toolTypes.hasOwnProperty(typeName)) {
+							newGest = new my.AddGesture(self,
+								toolTypes[typeName], e);
+						} else if (typeName === 'eraser') {
+							newGest = new my.EraseGesture(self, e);
+						}
 						return false;
 					}
 				});
@@ -261,6 +266,11 @@
 					.addClass('tool')
 					.attr('src', my.getResourcePath(type.imgName + '.png'))
 					.attr('type', type.id));
+			} else if (tool === 'eraser') {
+				toolbar.append($('<img></img>')
+					.addClass('tool')
+					.attr('src', my.getResourcePath('eraser.png'))
+					.attr('type', 'eraser'));
 			} else {
 				console.log('unknown tool type "' + tool + '"'); //OK
 			}
