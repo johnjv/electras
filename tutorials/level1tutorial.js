@@ -1,9 +1,7 @@
 
 
 var all_my_chocolates_events = function(){
-  console.log("I'm about to grab elements")
   var elements = new Elements(Circuit.getElements())
-  console.log("I have elements: ", elements)
 
   if (elements.sensor('C').output('empty').exists() &&
       elements.lightbulb().input('empty').exists()){
@@ -34,7 +32,6 @@ var all_my_chocolates_events = function(){
 //    highlightSection(advance_location)
 
   }
-  console.log("exiting")
 }
 
 elements_start = [

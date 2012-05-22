@@ -33,7 +33,6 @@ var Filters = (function ($) {
       case 'sensor': return matches_key(criteria, element.type);
       case 'connects':
         var valid_connections = element.connects.filter(function(connection) {return connection_is_match(connection, criteria)}) //feed in the entire hash of connection criteria
-          console.log(valid_connections, element, criteria)
         if (valid_connections && valid_connections.length > 0) {return true} else {return false}
       default:
     }
@@ -41,9 +40,7 @@ var Filters = (function ($) {
 
   var connection_is_match = function(connection, criteria){  //'this' is the criterion
     var this_is_a_match = true;
-    console.log("testing connection", connection, criteria)
     $.each(criteria, function(connection_key, connection_value) {
-      console.log(connection_key, connection_value)
       switch (connection_key) {
         case 'input':
           if(connection_value != connection.input){this_is_a_match = false}
@@ -51,7 +48,6 @@ var Filters = (function ($) {
         case 'connectedTo':
           var one_matches = false;
           these_connections = connection.connectedTo.split()
-          console.log("helloloooooooo", these_connections)
           $.each(these_connections, function(i, link){
 
             if (test_one_link(link, connection_value)){
@@ -66,7 +62,6 @@ var Filters = (function ($) {
   }
 
   var test_one_link = function(link, link_value){
-    console.log("testing link", link, link_value)
     if (link_value == 'filled') {
       if (test_regex('[0-9]+', link)) {return true}
     } else if (link_value == 'empty') {
