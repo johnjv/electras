@@ -21,20 +21,23 @@ Tutorial = {};
 	my.highlightSection = function(x, y, width, height, isCircular){
 		"use strict";
 		if(isCircular){
-			var circHighlighter = $('<img src = "circ_highlighter.svg" class = "highlighter"></img>');
+			var circHighlighter = $('<img src = "circ_highlighter.svg" class = "highlighter" onmousedown = "return false"></img>');
 			circHighlighter.width(width);
 			circHighlighter.height(height);
 			circHighlighter.offset({left: x, top: y});
 			var body = $('body');
 			body.append(circHighlighter);
 		}else{
-			var circHighlighter = $('<img src = "rect_highlighter.png" class = "highlighter"></img>');
+			var circHighlighter = $('<img src = "rect_highlighter.png" class = "highlighter" onmousedown = "return false"></img>');
 			circHighlighter.width(width);
 			circHighlighter.height(height);
 			circHighlighter.offset({left: x, top: y});
 			var body = $('body');
 			body.append(circHighlighter);
 		}
+		$('.highlighter').each(function(){
+			$(this).css("z-index", "-1");
+		});
 		blink(3000, 1000);
 	}
 
@@ -51,7 +54,7 @@ Tutorial = {};
 	/*if you need to remove the highlighter*/
 	my.unhighlightSection = function(){
 		$('img.highlighter').each(function(){
-		$(this).remove();
+			$(this).remove();
 		});
 		$('div#container').remove();
 	}
