@@ -1,12 +1,12 @@
 var Elements = function(elements){
   this.elements = elements
-
+  console.log("we now have: ", elements)
   this.exists = function(){
     return this.elements.length > 0;
   }
 
   this.empty = function(){
-    return new Elements(Filters.filter_elements(this.elements, {connection_criteria: {connected_to: 'empty'}}))
+    return new Elements(Filters.filter_elements(this.elements, {connects: {connectedTo: 'empty'}}))
   }
 
   this.id = function(id){
@@ -14,30 +14,30 @@ var Elements = function(elements){
   }
 
   this.all_connected_to = function(id){
-    return new Elements(Filters.filter_elements(this.elements, {connection_criteria: {connected_to: id}}))
+    return new Elements(Filters.filter_elements(this.elements, {connects: {connectedTo: id}}))
   }
 
   this.sensor = function(type){
-    if (type == null) {
-      type = 'sensor'
-    }
+//    if (type == null) {
+//      type = 'sensor'
+//    }
     return new Elements(Filters.filter_elements(this.elements, {type: type}))
   }
 
-  this.output = function(connected_to){
-    return new Elements(Filters.filter_elements(this.elements, {connection_criteria: {connection_type: 'outgoing', connected_to: connected_to}}))
+  this.output = function(connectedTo){
+    return new Elements(Filters.filter_elements(this.elements, {connects: {input: false, connectedTo: connectedTo}}))
   }
 
-  this.input = function(connected_to){
-    return new Elements(Filters.filter_elements(this.elements, {connection_criteria: {connection_type: 'incoming', connected_to: connected_to}}))
+  this.input = function(connectedTo){
+    return new Elements(Filters.filter_elements(this.elements, {connects: {input: true, connectedTo: connectedTo}}))
   }
 
   this.active_connection = function(){
-    return new Elements(Filters.filter_elements(this.elements, {connection_criteria: {connected_to: 'active'}}))
+    return new Elements(Filters.filter_elements(this.elements, {connects: {connectedTo: 'active'}}))
   }
 
   this.lightbulb = function(){
-    return new Elements(Filters.filter_elements(this.elements, {type: 'lightbulb'}))
+    return new Elements(Filters.filter_elements(this.elements, {type: 'out'}))
   }
 
   this.OR = function(){
@@ -53,7 +53,7 @@ var Elements = function(elements){
   }
 
   this.first_connection = function(){
-    return this.elements[0].connections[0]
+    return this.elements[0].connects[0]
   }
 
   return this

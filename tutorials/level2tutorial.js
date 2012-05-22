@@ -1,6 +1,6 @@
 
 var a_bar_walks_into_my_tummy_events = function(){
-  var elements = new Elements(wrong_one);  //getElements()
+  var elements = new Elements(Circuit.getElements())
   var lightbulb_in = elements.lightbulb().first_connection()
   var empty_sensors = elements.sensor().empty().elements
 
@@ -8,12 +8,12 @@ var a_bar_walks_into_my_tummy_events = function(){
     $.each(empty_sensors, function(i, sensor){
 //       highlightSection(find_outgoing([sensor], 'empty'), true);
       console.log(sensor)
-        highlightSection(Filters.find_connection(sensor,'empty','outgoing'), true)
+        highlightSection(Filters.find_connection(sensor,'empty',false), true)
     })
     createSpeechBubble(empty_sensors[0].connections[0], "Candies can have 3 shapes: round(o), stick(|), and bar(-)");
   }
 
-  else if (elements.sensor('bar').active_connection().exists() &&
+  else if (elements.sensor('-').active_connection().exists() &&
             elements.lightbulb().empty().exists()) {
     highlightSection(lightbulb_in, true);
     createSpeechBubble(lightbulb_in, "Good choice!  Now click on the lightbulb just like last time.");
@@ -25,7 +25,7 @@ var a_bar_walks_into_my_tummy_events = function(){
   }
 
   else if (elements.lightbulb().input('filled').exists() &&
-          elements.sensor('bar').empty().exists()) {
+          elements.sensor('-').empty().exists()) {
     createSpeechBubble(elements.lightbulb().first_connection(), "Uh oh!  Someone connected this wrong!  " +
         "Grab the eraser and click on the wire to give us a nice clean slate to work with.");
   }

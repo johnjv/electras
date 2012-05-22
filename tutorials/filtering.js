@@ -1,8 +1,8 @@
 var Filters = (function ($) {
   var my = {}
 
-  my.find_connection = function(element, connected_to, type){
-    return element.connections.filter(function(connection) {return connection_is_match(connection, {connection_type: type, connected_to: connected_to})})[0]
+  my.find_connection = function(element, connectedTo, type){
+    return element.connects.filter(function(connection) {return connection_is_match(connection, {connection_type: type, connectedTo: connectedTo})})[0]
   }
 
   my.filter_elements = function(elements, criterion){ //both criterion and elements are arrays
@@ -31,8 +31,9 @@ var Filters = (function ($) {
     switch (key) {
       case 'type': return matches_key(criteria, element.type);
       case 'sensor': return matches_key(criteria, element.type);
-      case 'connection_criteria':
-        var valid_connections = element.connections.filter(function(connection) {return connection_is_match(connection, criteria)}) //feed in the entire hash of connection criteria
+      case 'connects':
+        var valid_connections = element.connects.filter(function(connection) {return connection_is_match(connection, criteria)}) //feed in the entire hash of connection criteria
+          console.log(valid_connections, element, criteria)
         if (valid_connections && valid_connections.length > 0) {return true} else {return false}
       default:
     }
@@ -40,14 +41,18 @@ var Filters = (function ($) {
 
   var connection_is_match = function(connection, criteria){  //'this' is the criterion
     var this_is_a_match = true;
+    console.log("testing connection", connection, criteria)
     $.each(criteria, function(connection_key, connection_value) {
+      console.log(connection_key, connection_value)
       switch (connection_key) {
-        case 'connection_type':
-          if(!matches_key(connection_value, connection.connection_type)){this_is_a_match = false}
+        case 'input':
+          if(connection_value != connection.input){this_is_a_match = false}
           break;
-        case 'connected_to':
+        case 'connectedTo':
           var one_matches = false;
-          $.each(connection.connected_to, function(i, link){
+          these_connections = connection.connectedTo.split()
+          console.log("helloloooooooo", these_connections)
+          $.each(these_connections, function(i, link){
 
             if (test_one_link(link, connection_value)){
               one_matches = true;
@@ -61,6 +66,7 @@ var Filters = (function ($) {
   }
 
   var test_one_link = function(link, link_value){
+    console.log("testing link", link, link_value)
     if (link_value == 'filled') {
       if (test_regex('[0-9]+', link)) {return true}
     } else if (link_value == 'empty') {

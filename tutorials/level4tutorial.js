@@ -1,15 +1,15 @@
 var i_mint_chocolate_events = function(){
-  var elements = new Elements(wrong_lightbulb_connection) //getElements();
-  var empty_sensors = elements.sensor().empty('outgoing').elements
+  var elements = new Elements(Circuit.getElements())
+  var empty_sensors = elements.sensor().output('empty').elements
   var has_incoming_active_or = elements.OR().input('active').exists()
   var or_operators = elements.OR().elements
 
   if (or_operators.length < 1){
-    createSpeechBubble(elements.lightbulb('').first_connection(), "This time we'll be using an OR operator.  Go ahead and put one on screen.")
+    createSpeechBubble(elements.lightbulb().first_connection(), "This time we'll be using an OR operator.  Go ahead and put one on screen.")
   }
 
   else if (or_operators.length > 1){
-    createSpeechBubble(or_operators[0].connections[0], "We'll only need one OR operator for this.")
+    createSpeechBubble(or_operators[0].connects[0], "We'll only need one OR operator for this.")
   }
 
 
@@ -22,10 +22,10 @@ var i_mint_chocolate_events = function(){
   else if (empty_sensors.length == 2 && !has_incoming_active_or){
     var operator = or_operators[0]
     //this should show both of them
-    var input = operator.connections[0]
-    $.each(operator.connections,function(i, connection){
+    var input = operator.connects[0]
+    $.each(operator.connects,function(i, connection){
 
-      if (connection.connection_type == 'incoming'){
+      if (connection.input){
         input = connection
         highlightSection(connection, true)
       }
@@ -35,19 +35,19 @@ var i_mint_chocolate_events = function(){
 
   else if (empty_sensors.length == 2 && has_incoming_active_or){
     //highlight two sensor outgoings
-    highlightSection(empty_sensors[0].connections[0], true)
-    highlightSection(empty_sensors[1].connections[0], true)
+    highlightSection(empty_sensors[0].connects[0], true)
+    highlightSection(empty_sensors[1].connects[0], true)
   }
 
   else if (empty_sensors.length == 1 && elements.OR().empty('incoming').exists()) {
     //highlight the remaining outgoing sensor and incoming OR
-    highlightSection(empty_sensors[0].connections[0], true)
-    highlightSection(Filters.find_connection(or_operators[0], '', 'incoming'), true)
-    createSpeechBubble(empty_sensors[0].connections[0], "Now connect the other...")
+    highlightSection(empty_sensors[0].connects[0], true)
+    highlightSection(Filters.find_connection(or_operators[0], '', true), true)
+    createSpeechBubble(empty_sensors[0].connects[0], "Now connect the other...")
   }
 
   else if (empty_sensors.length == 0){
-    createSpeechBubble(or_operators[0].connections[0], "Great!  Now if either mint or chocolate is true, the OR will output true.")
+    createSpeechBubble(or_operators[0].connects[0], "Great!  Now if either mint or chocolate is true, the OR will output true.")
   }
 }
 

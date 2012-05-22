@@ -90,4 +90,14 @@ Tutorial = {};
 		bubbleContainer.draggable();
 		$('div#container').css('opacity', '.8');
 	}
+
+  var call_script = function(script_name){
+    eval(script_name + "_events()")
+  }
+
+  my.circuitChanged = function(){
+    console.log("woohoo I'm here!")
+    var script = LevelSelector.getCurrentLevel().script
+    call_script(script)
+  }
 }(Tutorial, jQuery));

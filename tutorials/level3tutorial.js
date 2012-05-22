@@ -1,5 +1,5 @@
 var not_what_I_mint_events = function(){
-  var elements = new Elements(wrong_lightbulb_connection) //getElements();
+  var elements = new Elements(Circuit.getElements())
 
   if (!elements.NOT().exists()){
     createSpeechBubble(elements.lightbulb().first_connection(), "We'll be using the NOT operator.  Whatever is put into it comes out the opposite!")
@@ -17,9 +17,9 @@ var not_what_I_mint_events = function(){
 
   else if (elements.NOT().input('empty').exists()){
     console.log('made it to the third choice', elements.NOT().input('empty'))
-    var operator_input = Filters.find_connection(elements.NOT().elements[0], 'empty', 'incoming')//find_incoming(elements.NOT().input('empty'), 'empty')
+    var operator_input = Filters.find_connection(elements.NOT().elements[0], 'empty', true)//find_incoming(elements.NOT().input('empty'), 'empty')
     console.log('OPERATOR INPUT', operator_input)
-    var sensor_output = Filters.find_connection(elements.sensor('mint').elements[0], 'empty', 'outgoing')
+    var sensor_output = Filters.find_connection(elements.sensor('mint').elements[0], 'empty', false)
     highlightSection(operator_input, true)
     highlightSection(sensor_output, true)
     createSpeechBubble(operator_input, "Great!  Now connect the mint sensor to the input of the NOT operator") ;
@@ -28,7 +28,7 @@ var not_what_I_mint_events = function(){
   else if (elements.NOT().input('filled').exists() &&
       (elements.NOT().output('empty').exists() || elements.lightbulb().input('empty').exists())) {
     //if the first part of the operator is filled in, but either the outgoing part of the NOT operator or the incoming part of the lightbulb is still empty
-    var operator_output = Filters.find_connection(elements.NOT().output('empty').elements[0], 'empty', 'outgoing')
+    var operator_output = Filters.find_connection(elements.NOT().output('empty').elements[0], 'empty', false)
     var lightbulb_input = elements.lightbulb().first_connection()
     highlightSection(operator_output, true)
     highlightSection(lightbulb_input, true)
