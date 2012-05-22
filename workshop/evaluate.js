@@ -23,14 +23,14 @@
 		return ret;
 	}
 
-	function State (previous, layout, trues, eltStates) {
+	function State(previous, layout, trues, eltStates) {
 		this.previous = previous;
 		this.layout = layout;
 		this.trues = trues;
 		this.eltStates = eltStates;
 		this.repaintConns = {};
 		this.repaintElts = {};
-	};
+	}
 
 	function isFrozen(state) {
 		return typeof state.sets === 'undefined';
@@ -63,6 +63,7 @@
 		} else {
 			this.eltStates[elt.id] = value;
 			this.repaintElts[elt.id] = elt;
+			return this;
 		}
 	};
 

@@ -1,7 +1,10 @@
 (function (my, $) {
 	"use strict";
-	var ERASER_CONNECT = 15;
-	var CONNECT_RADIUS = 15;
+	var ERASER_CONNECT = 15,
+		CONNECT_RADIUS = 15,
+		LEGAL_OK = 0,
+		LEGAL_OUT = 1,
+		LEGAL_OVERLAP = 2;
 
 	function findConnection(layout, x, y) {
 		var minD2, minConn;
@@ -25,7 +28,7 @@
 		});
 		return { d2: minD2, conn: minConn };
 	}
-	
+
 	function findElementImage(layout, x, y) {
 		var ret;
 		ret = null;
@@ -43,7 +46,7 @@
 		});
 		return ret;
 	}
-	
+
 	function findElement(layout, x, y) {
 		var ret, bestD2;
 		ret = findElementImage(layout, x, y);
@@ -52,12 +55,12 @@
 		}
 		bestD2 = ERASER_CONNECT * ERASER_CONNECT + 1;
 		$.each(layout.elts, function (i, elt) {
-			var ex, ey, i, dx, dy, d2;
+			var ex, ey, j, dx, dy, d2;
 			ex = x - elt.x;
 			ey = y - elt.y;
-			for (i = elt.conns.length - 1; i >= 0; i -= 1) {
-				dx = elt.conns[i].x - ex;
-				dy = elt.conns[i].y - ey;
+			for (j = elt.conns.length - 1; j >= 0; j -= 1) {
+				dx = elt.conns[j].x - ex;
+				dy = elt.conns[j].y - ey;
 				d2 = dx * dx + dy * dy;
 				if (d2 < bestD2) {
 					bestD2 = d2;
@@ -67,6 +70,26 @@
 			}
 		});
 		return ret;
+	}
+
+	// Returns LEGAL_OK if location is legal for element, LEGAL_OUT if
+	// element goes beyond canvas bounds, LEGAL_OVERLAP if element
+	// overlaps with other element/wire
+	function isLegalPosition(info, t, x, y) {
+		var i, conn;
+		if (!info.isInside(x + t.imgX + t.imgWidth, y + t.imgY + t.imgHeight) ||
+				!info.isInside(x + t.imgX + t.imgWidth, y + t.imgY) ||
+				!info.isInside(x + t.imgX, y + t.imgY + t.imgHeight) ||
+				!info.isInside(x + t.imgX, y + t.imgY)) {
+			return 1;
+		}
+		for (i = t.conns.length - 1; i >= 0; i -= 1) {
+			conn = t.conns[i];
+			if (!info.isInside(x + conn.x, y + conn.y)) {
+				return 1;
+			}
+		}
+		return 0;
 	}
 
 	function dist2ToSegment(xq, yq, x0, y0, x1, y1) {
@@ -102,9 +125,9 @@
 		bestD2 = ERASER_CONNECT * ERASER_CONNECT + 1;
 		ret = null;
 		$.each(layout.elts, function (i, elt) {
-			var i, j, c0, c1, x0, y0, x1, y1, d2;
-			for (i = elt.conns.length - 1; i >= 0; i -= 1) {
-				c0 = elt.conns[i];
+			var j, k, c0, c1, x0, y0, x1, y1, d2;
+			for (k = elt.conns.length - 1; k >= 0; k -= 1) {
+				c0 = elt.conns[k];
 				x0 = elt.x + c0.x;
 				y0 = elt.y + c0.y;
 				if (c0.input) {
@@ -119,6 +142,18 @@
 						}
 					}
 				}
+			}
+		});
+		return ret;
+	}
+
+	function getConnectedConnections(elt) {
+		var ret;
+		ret = [];
+		$.each(elt.conns, function (i, c0) {
+			var j;
+			for (j = c0.conns.length - 1; j >= 0; j -= 1) {
+				ret.push(c0.conns[j]);
 			}
 		});
 		return ret;
@@ -146,7 +181,8 @@
 				if (newState) {
 					info.setState(newState.evaluate());
 				} else {
-					// TODO initiate move
+					gest = new my.MoveGesture(info, elt, e);
+					info.setGesture(gest);
 				}
 			}
 		}
@@ -164,27 +200,6 @@
 		my.DrawCirc.createElement(info, this.elt);
 	};
 
-	my.AddGesture.prototype.isLegalPosition = function (info) {
-		var elt, x, y, t, i, conn;
-		elt = this.elt;
-		x = elt.x;
-		y = elt.y;
-		t = elt.type;
-		if (!info.isInside(x + t.imgX + t.imgWidth, y + t.imgY + t.imgHeight) ||
-				!info.isInside(x + t.imgX + t.imgWidth, y + t.imgY) ||
-				!info.isInside(x + t.imgX, y + t.imgY + t.imgHeight) ||
-				!info.isInside(x + t.imgX, y + t.imgY)) {
-			return false;
-		}
-		for (i = elt.conns.length - 1; i >= 0; i -= 1) {
-			conn = elt.conns[i];
-			if (!info.isInside(x + conn.x, y + conn.y)) {
-				return false;
-			}
-		}
-		return true;
-	};
-
 	my.AddGesture.prototype.mouseDrag = function (info, e) {
 		var elt, poffs, legal;
 
@@ -193,22 +208,22 @@
 		elt.y = e.circuitY;
 		my.DrawCirc.repositionElement(info, elt);
 
-		legal = this.isLegalPosition(info);
-		if (legal) {
+		legal = isLegalPosition(info, elt.type, e.circuitX, e.circuitY);
+		if (legal === LEGAL_OK) {
 			$(elt.imgElt).stop().fadeTo(0, 1.0);
 		} else {
 			$(elt.imgElt).stop().fadeTo(0, 0.5);
 		}
 		$.each(elt.conns, function (i, conn) {
 			if (conn.circ !== null) {
-				if (legal) {
+				if (legal === LEGAL_OK) {
 					conn.circ.attr('opacity', 1.0);
 				} else {
 					conn.circ.attr('opacity', 0.5);
 				}
 			}
 			if (conn.stub !== null) {
-				if (legal) {
+				if (legal === LEGAL_OK) {
 					conn.stub.attr('opacity', 1.0);
 				} else {
 					conn.stub.attr('opacity', 0.5);
@@ -220,13 +235,136 @@
 	my.AddGesture.prototype.mouseUp = function (info, e) {
 		var elt;
 		elt = this.elt;
-		if (this.isLegalPosition(info)) {
+		if (isLegalPosition(info, elt.type, elt.x, elt.y) === LEGAL_OK) {
 			info.layout.addElement(elt);
 			info.circuitChanged();
 		} else {
 			my.DrawCirc.removeElement(info, elt);
 		}
 		info.setGesture(null);
+	};
+
+	function computeMovedLines(info, elt, dx, dy, opacity) {
+		var drawingElts = [];
+
+		$.each(elt.conns, function (i, conn) {
+			var stub, circ, j, line;
+			if (conn.conns.length === 0) {
+				stub = my.DrawCirc.createStub(info, conn, dx, dy);
+				stub.circ.attr('opacity', opacity);
+				stub.stub.attr('opacity', opacity);
+				drawingElts.push(stub.circ);
+				drawingElts.push(stub.stub);
+			} else if (!conn.input) {
+				circ = my.DrawCirc.createStubCircle(info, conn, dx, dy);
+				circ.attr('opacity', opacity);
+				drawingElts.push(circ);
+			}
+			for (j = conn.conns.length - 1; j >= 0; j -= 1) {
+				line = my.DrawCirc.createWire(info, conn, conn.conns[j],
+					dx, dy);
+				line.attr('opacity', opacity);
+				drawingElts.push(line);
+			}
+		});
+
+		return drawingElts;
+	}
+
+	my.MoveGesture = function (info, elt, e) {
+		this.elt = elt;
+		this.x0 = e.circuitX;
+		this.y0 = e.circuitY;
+		this.drawingElts = computeMovedLines(info, elt, 0, 0);
+		this.dragImg = elt.imgElt;
+		this.offs0 = elt.imgElt.offset();
+		$.each(elt.conns, function (i, conn) {
+			var j;
+			my.DrawCirc.hideStub(info, conn);
+			for (j = conn.conns.length - 1; j >= 0; j -= 1) {
+				my.DrawCirc.hideWire(info, conn, conn.conns[j]);
+			}
+		});
+	};
+
+	my.MoveGesture.prototype.mouseDrag = function (info, e) {
+		var dx, dy, oldElts, newElts, opacity;
+		if (this.dragImg === null) {
+			info.setGesture(null);
+			return;
+		}
+		dx = e.circuitX - this.x0;
+		dy = e.circuitY - this.y0;
+		if (isLegalPosition(info, this.elt.type, this.elt.x + dx,
+				this.elt.y + dy) === LEGAL_OK) {
+			opacity = 1.0;
+		} else {
+			opacity = 0.5;
+		}
+		this.dragImg.offset({left: this.offs0.left + dx, top: this.offs0.top + dy});
+		this.dragImg.stop().fadeTo(0, opacity);
+		newElts = computeMovedLines(info, this.elt, dx, dy, opacity);
+		oldElts = this.drawingElts;
+		this.drawingElts = newElts;
+		$.each(oldElts, function (i, drawingElt) {
+			drawingElt.remove();
+		});
+	};
+
+	my.MoveGesture.prototype.mouseUp = function (info, e) {
+		var dx, dy, elt, legal, conns;
+		dx = e.circuitX - this.x0;
+		dy = e.circuitY - this.y0;
+		elt = this.elt;
+		legal = isLegalPosition(info, elt.type, elt.x + dx,
+				elt.y + dy);
+		if (legal === LEGAL_OK) {
+			if (this.dragImg === null) {
+				info.setGesture(null);
+				return;
+			}
+			elt.x += dx;
+			elt.y += dy;
+			my.DrawCirc.repositionElement(info, elt);
+			this.dragImg = null;
+
+			$.each(this.drawingElts, function (i, drawingElt) {
+				drawingElt.remove();
+			});
+			info.circuitChanged();
+		} else if (legal === LEGAL_OUT) {
+			conns = getConnectedConnections(elt);
+			info.layout.removeElement(elt);
+			my.DrawCirc.removeElement(info, elt);
+			info.circuitChanged();
+			$.each(conns, function (i, conn) {
+				my.DrawCirc.showStub(info, conn);
+				my.DrawCirc.recolorConnection(info, conn);
+			});
+			$.each(this.drawingElts, function (i, drawingElt) {
+				drawingElt.remove();
+			});
+		} else {
+			this.cancel(info);
+		}
+		info.setGesture(null);
+	};
+
+	my.MoveGesture.prototype.cancel = function (info) {
+		if (this.dragImg !== null) {
+			this.dragImg.offset(this.offs0);
+			this.dragImg.fadeTo(0, 1.0);
+		}
+		$.each(this.drawingElts, function (i, drawingElt) {
+			drawingElt.remove();
+		});
+		$.each(this.elt.conns, function (i, conn) {
+			var j;
+			my.DrawCirc.showStub(info, conn);
+			for (j = conn.conns.length - 1; j >= 0; j -= 1) {
+				my.DrawCirc.showWire(info, conn, conn.conns[j]);
+			}
+		});
 	};
 
 	my.WiringGesture = function (info, conn) {
@@ -303,7 +441,7 @@
 			}
 			info.layout.addWire(c0, c1);
 			info.circuitChanged();
-			my.DrawCirc.createWire(info, c0, c1);
+			my.DrawCirc.attachWire(info, c0, c1);
 			my.DrawCirc.showStub(info, c0);
 			if (this.line) {
 				this.line.remove();
@@ -344,18 +482,6 @@
 		}
 	};
 
-	function getAlteredConnections(elt) {
-		var ret;
-		ret = [];
-		$.each(elt.conns, function (i, c0) {
-			var j;
-			for (j = c0.conns.length - 1; j >= 0; j -= 1) {
-				ret.push(c0.conns[j]);
-			}
-		});
-		return ret;
-	}
-
 	my.EraseGesture.prototype.mouseUp = function (info, e) {
 		var wire, elt, conns;
 
@@ -369,11 +495,12 @@
 		} else {
 			elt = findElement(info.layout, e.circuitX, e.circuitY);
 			if (elt !== null) {
-				conns = getAlteredConnections(elt);
+				conns = getConnectedConnections(elt);
 				info.layout.removeElement(elt);
 				my.DrawCirc.removeElement(info, elt);
 				info.circuitChanged();
 				$.each(conns, function (i, conn) {
+					my.DrawCirc.showStub(info, conn);
 					my.DrawCirc.recolorConnection(info, conn);
 				});
 			}

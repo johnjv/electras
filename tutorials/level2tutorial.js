@@ -26,43 +26,8 @@ var a_bar_walks_into_my_tummy_events = function(){
 
   else if (elements.lightbulb().input('filled').exists() &&
           elements.sensor('bar').empty().exists()) {
-    createSpeechBubble(elements.lightbulb().first_connection(), "You can start the machine if you want, but you've been warned.");
-
-    //hook up click event and timer to eventually say "here, try this instead" while highlighting the bar sensor
-  }
-}
-
-var test_sensor = function(id, type, connection){
-  return {
-    id: id,
-    type: type + " sensor",
-    connections: [
-      {
-        connection_type: 'outgoing',
-        x: 5,
-        y: 10,
-        width: 50,
-        height: 50,
-        connected_to: connection
-      }
-    ]
-  }
-}
-
-var test_lightbulb = function(connection){
-  return {
-  id: '1',
-  type: 'lightbulb',
-  connections: [
-    {
-      connection_type: 'incoming',
-      x: 5,
-      y: 10,
-      width: 100,
-      height: 200,
-      connected_to: connection
-    }
-  ]
+    createSpeechBubble(elements.lightbulb().first_connection(), "Uh oh!  Someone connected this wrong!  " +
+        "Grab the eraser and click on the wire to give us a nice clean slate to work with.");
   }
 }
 
@@ -94,3 +59,5 @@ var wrong_one = [
   test_sensor(3, 'stick', ''),
   test_sensor(4, 'ball', '1')
 ]
+
+//change to acommadate eraser

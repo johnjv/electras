@@ -4,7 +4,7 @@ var all_my_chocolates_events = function(){
   var elements = new Elements(elements_start)//get_elements();
 
   if (elements.sensor('chocolate').output('empty').exists() &&
-      elements.lightbulb().output('empty').exists()){
+      elements.lightbulb().input('empty').exists()){
     var sensor_out = elements.sensor('chocolate').first_connection()
     highlightSection(sensor_out, true)
     createSpeechBubble(sensor_out, "We must tell the machine what to do.  Click on the sensor to start laying down wire.")
@@ -19,7 +19,7 @@ var all_my_chocolates_events = function(){
   }
 
   else if (elements.sensor('chocolate').output('filled').exists() &&
-          elements.lightbulb().output('filled').exists()){
+          elements.lightbulb().input('filled').exists()){
     console.log("the user has connected the two");
     var lever = getLeverLocation()
     highlightSection(lever, false);
@@ -40,12 +40,12 @@ elements_start = [
     type: 'chocolate sensor',
     connections: [
       {
-        type: 'outgoing',
+        connection_type: 'outgoing',
         x: 100,
         y: 100,
         width: 50,
         height: 50,
-        connected_to: ''
+        connected_to: ['']
       }
     ]
   },
@@ -54,12 +54,12 @@ elements_start = [
     type: 'lightbulb',
     connections: [
       {
-        type: 'incoming',
+        connection_type: 'incoming',
         x: 500,
         y: 100,
         width: 10,
         height: 10,
-        connected_to: ''
+        connected_to: ['']
       }
     ]
   }
@@ -71,12 +71,12 @@ elements_first_selected = [
     type: 'chocolate sensor',
     connections: [
       {
-        type: 'outgoing',
+        connection_type: 'outgoing',
         x: 100,
         y: 100,
         width: 50,
         height: 50,
-        connected_to: 'active'
+        connected_to: ['active']
       }
     ]
   },
@@ -85,12 +85,12 @@ elements_first_selected = [
     type: 'lightbulb',
     connections: [
       {
-        type: 'incoming',
+        connection_type: 'incoming',
         x: 500,
         y: 100,
         width: 10,
         height: 10,
-        connected_to: ''
+        connected_to: ['']
       }
     ]
   }
@@ -102,12 +102,12 @@ elements_finished = [
     type: 'chocolate sensor',
     connections: [
       {
-        type: 'outgoing',
+        connection_type: 'outgoing',
         x: 100,
         y: 100,
         width: 50,
         height: 50,
-        connected_to: '2'
+        connected_to: ['2']
       }
     ]
   },
@@ -116,12 +116,12 @@ elements_finished = [
     type: 'lightbulb',
     connections: [
       {
-        type: 'incoming',
+        connection_type: 'incoming',
         x: 500,
         y: 100,
         width: 10,
         height: 10,
-        connected_to: '1'
+        connected_to: ['1']
       }
     ]
   }

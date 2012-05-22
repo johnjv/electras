@@ -1,4 +1,4 @@
-(function (my, $, raphael) {
+(function (my, $, raphael, multidrag) {
 	"use strict";
 	var toolTypes = {
 		'and': new my.ElementType('and', 'gateand', -60, -25, 50, 50, [
@@ -200,13 +200,13 @@
 			elt.type.updateImage(elt, self.state);
 		});
 		$.each(layout.elts, function (i, elt) {
-			var conn0, conn1, i, j;
-			for (i = elt.conns.length - 1; i >= 0; i -= 1) {
-				conn0 = elt.conns[i];
+			var conn0, conn1, k, j;
+			for (k = elt.conns.length - 1; k >= 0; k -= 1) {
+				conn0 = elt.conns[k];
 				if (conn0.input) {
 					for (j = conn0.conns.length - 1; j >= 0; j -= 1) {
 						conn1 = conn0.conns[j];
-						my.DrawCirc.createWire(self, conn0, conn1);
+						my.DrawCirc.attachWire(self, conn0, conn1);
 					}
 				}
 			}
@@ -218,7 +218,6 @@
 		var self;
 		self = this;
 		this.state = state;
-		this.evaluator = state.evaluator;
 		$.each(this.layout.elts, function (i, elt) {
 			var j, conn;
 			elt.type.updateImage(elt, state);
@@ -283,4 +282,4 @@
 			});
 		});
 	};
-}(Workshop, jQuery, Raphael));
+}(Workshop, jQuery, Raphael, multidrag));
