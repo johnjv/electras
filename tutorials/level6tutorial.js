@@ -1,5 +1,5 @@
 var picky_events = function(){
-  var elements = new Elements(Circuit.getElemnts())
+  var elements = new Elements(Circuit.getElements())
 
   if(elements.OR().exists() && elements.NOT().exists()){
     //do nothing

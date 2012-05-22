@@ -1,6 +1,6 @@
 var Elements = function(elements){
   this.elements = elements
-  console.log("we now have: ", elements)
+
   this.exists = function(){
     return this.elements.length > 0;
   }
