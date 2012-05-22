@@ -26,9 +26,8 @@ var a_bar_walks_into_my_tummy_events = function(){
 
   else if (elements.lightbulb().input('filled').exists() &&
           elements.sensor('bar').empty().exists()) {
-    createSpeechBubble(elements.lightbulb().first_connection(), "You can start the machine if you want, but you've been warned.");
-
-    //hook up click event and timer to eventually say "here, try this instead" while highlighting the bar sensor
+    createSpeechBubble(elements.lightbulb().first_connection(), "Uh oh!  Someone connected this wrong!  " +
+        "Grab the eraser and click on the wire to give us a nice clean slate to work with.");
   }
 }
 
