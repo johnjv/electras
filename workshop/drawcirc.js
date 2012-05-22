@@ -263,9 +263,13 @@
 		line = my.DrawCirc.createWire(info, conn0, conn1, 0, 0);
 		if (conn0.input) {
 			conn0.line = line;
+			conn0.circ.hide();
 		} else {
 			conn1.line = line;
+			conn1.circ.hide();
 		}
+		conn0.stub.hide();
+		conn1.stub.hide();
 		return line;
 	};
 

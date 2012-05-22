@@ -1,7 +1,9 @@
-Prevent moving component atop other component/wire (or so wire crosses connection)
-Prevent adding component atop other component/wire
+Prevent moving component atop existing wire (or so wire crosses connection)
+Prevent adding component atop existing wire
 Prevent adding wire that crosses another connection
 Prevent moving fixed components
+
+Auto-connect component when connection is close to another
 
 Allow gestures via click/tap to start and click/tap to end (not just dragging)
 Respond to change in canvas size
