@@ -114,7 +114,11 @@
 		elt.imgElt.offset({left: x, top: y});
 
 		$.each(elt.conns, function (i, conn) {
+			var j;
 			my.DrawCirc.attachStub(info, conn);
+			for (j = conn.conns.length - 1; j >= 0; j -= 1) {
+				my.DrawCirc.attachWire(info, conn, conn.conns[j]);
+			}
 		});
 	};
 
@@ -205,12 +209,16 @@
 
 	my.DrawCirc.showStub = function (info, conn) {
 		if (conn) {
-			conn.stub.show();
-			conn.circ.show();
+			if (conn.conns.length === 0) {
+				conn.stub.show();
+				conn.circ.show();
+			} else if (!conn.input) {
+				conn.circ.show();
+			}
 		}
 	};
 
-	my.DrawCirc.createWire = function (info, conn0, conn1) {
+	my.DrawCirc.createWire = function (info, conn0, conn1, dx0, dy0) {
 		var c0, c1, x0, y0, x1, y1, line;
 		if (conn0.input) {
 			c0 = conn1;
@@ -223,14 +231,41 @@
 		y0 = c0.elt.y + c0.y;
 		x1 = c1.elt.x + c1.x;
 		y1 = c1.elt.y + c1.y;
+		if (typeof dx0 !== 'undefined') {
+			if (c0 === conn0) {
+				x0 += dx0;
+				y0 += dy0;
+			} else {
+				x1 += dx0;
+				y1 += dy0;
+			}
+		}
 		line = info.paper.path('M' + (x0 + c0.dx) + ',' + (y0 + c0.dy) +
 			'L' + x0 + ',' + y0 +
 			'L' + x1 + ',' + y1 +
 			'L' + (x1 + c1.dx) + ',' + (y1 + c1.dy));
+		line.attr('stroke', getColor(info.state && info.state.getValue(c0)));
 		line.attr('stroke-width', WIRE_WIDTH);
 		line.attr('stroke-linecap', 'round');
-		c1.line = line;
-		my.DrawCirc.recolorConnection(info, c0);
+		return line;
+	}
+
+	my.DrawCirc.attachWire = function (info, conn0, conn1) {
+		var line;
+		if (conn0.line) {
+			conn0.line.remove();
+			conn0.line = null;
+		}
+		if (conn1.line) {
+			conn1.line.remove();
+			conn1.line = null;
+		}
+		line = my.DrawCirc.createWire(info, conn0, conn1, 0, 0);
+		if (conn0.input) {
+			conn0.line = line;
+		} else {
+			conn1.line = line;
+		}
 		return line;
 	};
 
@@ -245,6 +280,24 @@
 		}
 		my.DrawCirc.showStub(info, conn0);
 		my.DrawCirc.showStub(info, conn1);
+	};
+
+	my.DrawCirc.hideWire = function (info, conn0, conn1) {
+		if (conn0.line !== null) {
+			conn0.line.hide();
+		}
+		if (conn1.line !== null) {
+			conn1.line.hide();
+		}
+	};
+
+	my.DrawCirc.showWire = function (info, conn0, conn1) {
+		if (conn0.line !== null) {
+			conn0.line.show();
+		}
+		if (conn1.line !== null) {
+			conn1.line.show();
+		}
 	};
 
 	my.DrawCirc.recolorConnection = function (info, conn) {

@@ -206,7 +206,7 @@
 				if (conn0.input) {
 					for (j = conn0.conns.length - 1; j >= 0; j -= 1) {
 						conn1 = conn0.conns[j];
-						my.DrawCirc.createWire(self, conn0, conn1);
+						my.DrawCirc.attachWire(self, conn0, conn1);
 					}
 				}
 			}
