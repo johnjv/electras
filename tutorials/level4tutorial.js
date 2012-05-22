@@ -100,7 +100,3 @@ var two_connections_made = [
   test_sensor(3, 'chocolate', 4),
   test_OR(4, 3, 2, '')
 ]
-
-
-
-//catch cases when the lightbulb is filled but the OR outgoing isn't.
