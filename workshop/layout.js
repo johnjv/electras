@@ -35,7 +35,7 @@ var Workshop = {};
 		this.imgHeight = iH;
 		this.conns = connections;
 		this.propagate = propagate;
-		this.poke = function () { return false; }
+		this.poke = function () { return false; };
 		this.updateImage = this.poke;
 		if (options) {
 			if (options.poke) {
@@ -96,10 +96,9 @@ var Workshop = {};
 
 	my.Layout.prototype.removeElement = function (elt) {
 		$.each(elt.conns, function (i, conn) {
-			var j, c1;
+			var j;
 			for (j = conn.conns.length - 1; j >= 0; j -= 1) {
-				c1 = conn.conns[j];
-				removeArray(c1.conns, conn);
+				removeArray(conn.conns[j].conns, conn);
 			}
 		});
 		removeArray(this.elts, elt);

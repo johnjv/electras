@@ -1,13 +1,12 @@
-var Circuit = (function ($) {
+var Circuit = (function ($, Workshop) {
 	"use strict";
 
-	var my = {};
-	var workshop = null;
-
-	var colorNames = 'CRGY';
-	var shapeNames = 'o|-';
-	var colorSensors = [];
-	var shapeSensors = [];
+	var my = {},
+		workshop = null,
+		colorNames = 'CRGY',
+		shapeNames = 'o|-',
+		colorSensors = [],
+		shapeSensors = [];
 
 	(function () {
 		var conns, i, c, sensor;
@@ -201,4 +200,4 @@ var Circuit = (function ($) {
 	};
 
 	return my;
-}(jQuery));
+}(jQuery, Workshop));

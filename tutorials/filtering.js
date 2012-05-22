@@ -1,8 +1,8 @@
 var Filters = (function ($) {
   var my = {}
 
-  my.find_connection = function(element, status, type){
-    return element.connections.filter(function(connection) {return connection_is_match(connection, {connection_type: type, connected_to: status})})[0]
+  my.find_connection = function(element, connected_to, type){
+    return element.connections.filter(function(connection) {return connection_is_match(connection, {connection_type: type, connected_to: connected_to})})[0]
   }
 
   my.filter_elements = function(elements, criterion){ //both criterion and elements are arrays
@@ -15,16 +15,16 @@ var Filters = (function ($) {
     });
     return remaining_elements
   };
-
-  var filter_one_element = function(element, criterion){
-    var accepted = true;
-    $.each(criterion, function(key, value){
-      if (!is_match(element, key, value)){
-        accepted = false;
-      }
-    })
-    return accepted;
-  }
+//
+//  var filter_one_element = function(element, criterion){
+//    var accepted = true;
+//    $.each(criterion, function(key, value){
+//      if (!is_match(element, key, value)){
+//        accepted = false;
+//      }
+//    })
+//    return accepted;
+//  }
 
   var is_match = function(element, key, criteria){
     var i = 0;
@@ -32,7 +32,6 @@ var Filters = (function ($) {
       case 'type': return matches_key(criteria, element.type);
       case 'sensor': return matches_key(criteria, element.type);
       case 'connection_criteria':
-          console.log("connection criteria!", element, criteria)
         var valid_connections = element.connections.filter(function(connection) {return connection_is_match(connection, criteria)}) //feed in the entire hash of connection criteria
         if (valid_connections && valid_connections.length > 0) {return true} else {return false}
       default:
@@ -41,28 +40,37 @@ var Filters = (function ($) {
 
   var connection_is_match = function(connection, criteria){  //'this' is the criterion
     var this_is_a_match = true;
-    console.log("BEGINNING OF CONNECTION MATCH", criteria, connection)
     $.each(criteria, function(connection_key, connection_value) {
-      console.log(connection, connection_key, connection_value)
       switch (connection_key) {
         case 'connection_type':
           if(!matches_key(connection_value, connection.connection_type)){this_is_a_match = false}
           break;
         case 'connected_to':
-          if (connection_value == 'filled') {
-            if (!test_regex('[0-9]+', connection.connected_to)) {this_is_a_match = false}
-          } else if (connection_value == 'empty') {
-            if(!test_regex(('^$', connection.connected_to))) {this_is_a_match = false}
-          } else {
-            if(!matches_key(connection_value, connection.connected_to)){this_is_a_match = false}
-          }
+          var one_matches = false;
+          $.each(connection.connected_to, function(i, link){
+
+            if (test_one_link(link, connection_value)){
+              one_matches = true;
+            }
+          })
+          if (!one_matches) {this_is_a_match = false}
           break;
       }
     });
-
-    console.log('is this a match?', this_is_a_match)
     return this_is_a_match
   }
+
+  var test_one_link = function(link, link_value){
+    if (link_value == 'filled') {
+      if (test_regex('[0-9]+', link)) {return true}
+    } else if (link_value == 'empty') {
+      if(test_regex(('^$', link))) {return true}
+    } else {
+      if(matches_key(link_value, link)){return true}
+    }
+    return false;
+  }
+
 
   var test_regex = function(regex, string) {
     var re = new RegExp(regex)
