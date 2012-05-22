@@ -1,5 +1,5 @@
 var i_mint_chocolate_events = function(){
-  var elements = new Elements(making_first_connection) //getElements();
+  var elements = new Elements(two_connections_made) //getElements();
   var empty_sensors = elements.sensor().empty('outgoing').elements
   var has_incoming_active_or = elements.OR().input('active').exists()
   var or_operators = elements.OR().elements
@@ -28,17 +28,19 @@ var i_mint_chocolate_events = function(){
 
   else if (empty_sensors.length == 2 && has_incoming_active_or){
     //highlight two sensor outgoings
-//    var sensors = elements.sensor('').elements
     highlightSection(empty_sensors[0].connections[0], true)
     highlightSection(empty_sensors[1].connections[0], true)
   }
 
   else if (empty_sensors.length == 1 && elements.OR().empty('incoming').exists()) {
     //highlight the remaining outgoing sensor and incoming OR
+    highlightSection(empty_sensors[0].connections[0], true)
+    highlightSection(Filters.find_connection(or_operators[0], '', 'incoming'), true)
+    createSpeechBubble(empty_sensors[0].connections[0], "Now connect the other...")
   }
 
   else if (empty_sensors.length == 0){
-    //just show a speech bubble
+    createSpeechBubble(or_operators[0].connections[0], "Great!  Now if either mint or chocolate is true, the OR will output true.")
   }
 }
 
@@ -69,3 +71,21 @@ var making_first_connection = [
   test_sensor(3, 'chocolate', ''),
   test_OR(4, 'active', '', '')
 ]
+
+var first_connection_made = [
+  test_lightbulb(''),
+  test_sensor(2, 'mint', 4),
+  test_sensor(3, 'chocolate', ''),
+  test_OR(4, '', 2, '')
+]
+
+var two_connections_made = [
+  test_lightbulb(''),
+  test_sensor(2, 'mint', 4),
+  test_sensor(3, 'chocolate', 4),
+  test_OR(4, 3, 2, '')
+]
+
+
+
+//catch cases when the lightbulb is filled but the OR outgoing isn't.
