@@ -1,5 +1,5 @@
 var not_what_I_mint_events = function(){
-  var elements = new Elements(NOT_incoming_empty) //getElements();
+  var elements = new Elements(wrong_lightbulb_connection) //getElements();
 
   if (!elements.NOT().exists()){
     createSpeechBubble(elements.lightbulb().first_connection(), "We'll be using the NOT operator.  Whatever is put into it comes out the opposite!")
@@ -7,6 +7,12 @@ var not_what_I_mint_events = function(){
 
   else if (elements.NOT() && elements.NOT().elements.length > 1){
     createSpeechBubble(elements.NOT().first_connection(), "We'll only need one NOT operator for this.")
+  }
+
+  else if (elements.lightbulb().input('filled').exists() && !elements.NOT().output('filled').exists()){
+    highlightSection(elements.lightbulb().first_connection(),  true)
+    createSpeechBubble(elements.lightbulb().first_connection(), "The only way you'll be able to solve this is by " +
+        "connecting the lightbulb to the NOT operator.  You may need to erase the current connection.")
   }
 
   else if (elements.NOT().input('empty').exists()){
@@ -43,6 +49,12 @@ var two_NOTs = [
   test_NOT(4, '', '')
 ]
 
+var wrong_lightbulb_connection = [
+  test_lightbulb(2) ,
+  test_sensor(2, 'mint', 1),
+  test_NOT(3, '', '')
+]
+
 var NOT_incoming_empty = [
     test_lightbulb('') ,
     test_sensor(2, 'mint', ''),
@@ -55,5 +67,3 @@ var NOT_incoming_filled = [
   test_sensor(2, 'mint', 3),
   test_NOT(3, 2, '')
 ]
-
-//add in cases that catch when the lightbulb is connected but the NOT outgoing isn't.
