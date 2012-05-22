@@ -15,16 +15,16 @@ var Filters = (function ($) {
     });
     return remaining_elements
   };
-
-  var filter_one_element = function(element, criterion){
-    var accepted = true;
-    $.each(criterion, function(key, value){
-      if (!is_match(element, key, value)){
-        accepted = false;
-      }
-    })
-    return accepted;
-  }
+//
+//  var filter_one_element = function(element, criterion){
+//    var accepted = true;
+//    $.each(criterion, function(key, value){
+//      if (!is_match(element, key, value)){
+//        accepted = false;
+//      }
+//    })
+//    return accepted;
+//  }
 
   var is_match = function(element, key, criteria){
     var i = 0;
@@ -33,7 +33,6 @@ var Filters = (function ($) {
       case 'sensor': return matches_key(criteria, element.type);
       case 'connection_criteria':
         var valid_connections = element.connections.filter(function(connection) {return connection_is_match(connection, criteria)}) //feed in the entire hash of connection criteria
-        console.log("valid connections", valid_connections)
         if (valid_connections && valid_connections.length > 0) {return true} else {return false}
       default:
     }
@@ -45,7 +44,6 @@ var Filters = (function ($) {
       switch (connection_key) {
         case 'connection_type':
           if(!matches_key(connection_value, connection.connection_type)){this_is_a_match = false}
-          console.log(connection_key, connection_value, connection.connection_type, this_is_a_match)
           break;
         case 'connected_to':
           var one_matches = false;
@@ -54,14 +52,11 @@ var Filters = (function ($) {
             if (test_one_link(link, connection_value)){
               one_matches = true;
             }
-            console.log(i, link, criteria, one_matches)
           })
-          console.log(one_matches, this_is_a_match)
           if (!one_matches) {this_is_a_match = false}
           break;
       }
     });
-    console.log(this_is_a_match)
     return this_is_a_match
   }
 
