@@ -14,9 +14,13 @@ var levels = [
 	{sensors: '- | o', tools: ['and', 'or', 'not'], link: 'o'}
 ];
 
+var curLevel = null;
+
 function setLevel(id) {
+	var oldLevel = curLevel;
+	curLevel = levels[id];
 	curState = null;
-	Circuit.levelChanged(null, levels[id]);
+	Circuit.levelChanged(oldLevel, curLevel);
 }
 
 var evaluator = null;
