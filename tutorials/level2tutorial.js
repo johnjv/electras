@@ -32,40 +32,6 @@ var a_bar_walks_into_my_tummy_events = function(){
   }
 }
 
-var test_sensor = function(id, type, connection){
-  return {
-    id: id,
-    type: type + " sensor",
-    connections: [
-      {
-        connection_type: 'outgoing',
-        x: 5,
-        y: 10,
-        width: 50,
-        height: 50,
-        connected_to: connection
-      }
-    ]
-  }
-}
-
-var test_lightbulb = function(connection){
-  return {
-  id: '1',
-  type: 'lightbulb',
-  connections: [
-    {
-      connection_type: 'incoming',
-      x: 5,
-      y: 10,
-      width: 10,
-      height: 10,
-      connected_to: connection
-    }
-  ]
-  }
-}
-
 var start2 = [
     test_lightbulb(''),
     test_sensor(2, 'bar', ''),
@@ -94,3 +60,5 @@ var wrong_one = [
   test_sensor(3, 'stick', ''),
   test_sensor(4, 'ball', '1')
 ]
+
+//change to acommadate eraser

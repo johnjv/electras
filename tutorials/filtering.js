@@ -1,8 +1,8 @@
 var Filters = (function ($) {
   var my = {}
 
-  my.find_connection = function(element, status, type){
-    return element.connections.filter(function(connection) {return connection_is_match(connection, {connection_type: type, connected_to: status})})[0]
+  my.find_connection = function(element, connected_to, type){
+    return element.connections.filter(function(connection) {return connection_is_match(connection, {connection_type: type, connected_to: connected_to})})[0]
   }
 
   my.filter_elements = function(elements, criterion){ //both criterion and elements are arrays
