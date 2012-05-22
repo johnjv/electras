@@ -6,7 +6,8 @@ var Circuit = (function ($, Workshop) {
 		colorNames = 'CRGY',
 		shapeNames = 'o|-',
 		colorSensors = [],
-		shapeSensors = [];
+		shapeSensors = [],
+		elementMap = {};
 
 	(function () {
 		var conns, i, c, sensor;
@@ -22,6 +23,7 @@ var Circuit = (function ($, Workshop) {
 				-60, -25, 50, 50, conns, propagateSensor);
 			sensor.isSensor = true;
 			colorSensors.push(sensor);
+			elementMap[c] = sensor;
 		}
 		for (i = 0; i < shapeNames.length; i += 1) {
 			c = shapeNames.substring(i, i + 1);
@@ -29,7 +31,15 @@ var Circuit = (function ($, Workshop) {
 				-60, -25, 50, 50, conns, propagateSensor);
 			sensor.isSensor = true;
 			shapeSensors.push(sensor);
+			elementMap[c] = sensor;
 		}
+
+		$.each(['in', 'out', 'and', 'or', 'not'], function (i, key) {
+			var val = Workshop.getElementType(key);
+			if (val) {
+				elementMap[key] = val;
+			}
+		});
 	}());
 
 	$(document).ready(function () {
@@ -172,23 +182,31 @@ var Circuit = (function ($, Workshop) {
 	}
 
 	my.levelChanged = function (oldLevel, newLevel) {
-		var layout, outType, outElt, sensors, sourceElt, tools;
+		var layout, outT, outElt, sensors, sourceElt, tools;
 
-		layout = new Workshop.Layout();
-		outType = Workshop.getElementType('out');
-		outElt = new Workshop.Element(outType,
-			workshop.canvas.width() - 10 - outType.imgWidth + outType.imgX,
-			Math.round((workshop.canvas.height() - outType.imgY) / 2.0));
-		layout.addElement(outElt);
-		sourceElt = null;
-		$.each(computeSensors(newLevel.sensors), function (i, sensor) {
-			if (newLevel.link === sensor.type.id) {
-				sourceElt = sensor;
+		if (oldLevel) {
+			oldLevel.circuit = Workshop.stringify(workshop.layout);
+		}
+
+		if (newLevel.circuit) {
+			layout = Workshop.parse(newLevel.circuit, elementMap);
+		} else {
+			layout = new Workshop.Layout();
+			outT = Workshop.getElementType('out');
+			outElt = new Workshop.Element(outT,
+				workshop.canvas.width() - 10 - outT.imgWidth + outT.imgX,
+				Math.round((workshop.canvas.height() - outT.imgY) / 2.0));
+			layout.addElement(outElt);
+			sourceElt = null;
+			$.each(computeSensors(newLevel.sensors), function (i, sensor) {
+				if (newLevel.link === sensor.type.id) {
+					sourceElt = sensor;
+				}
+				layout.addElement(sensor);
+			});
+			if (sourceElt) {
+				layout.addWire(sourceElt.conns[0], outElt.conns[0]);
 			}
-			layout.addElement(sensor);
-		});
-		if (sourceElt) {
-			layout.addWire(sourceElt.conns[0], outElt.conns[0]);
 		}
 		workshop.setLayout(layout);
 		tools = [];
@@ -198,6 +216,10 @@ var Circuit = (function ($, Workshop) {
 		tools.push('eraser');
 		workshop.setTools(tools);
 	};
+
+	my.stringify = function () {
+		return Workshop.stringify(workshop.layout);
+	}
 
 	return my;
 }(jQuery, Workshop));
