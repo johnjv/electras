@@ -25,7 +25,7 @@
 		});
 		return { d2: minD2, conn: minConn };
 	}
-	
+
 	function findElementImage(layout, x, y) {
 		var ret;
 		ret = null;
@@ -43,7 +43,7 @@
 		});
 		return ret;
 	}
-	
+
 	function findElement(layout, x, y) {
 		var ret, bestD2;
 		ret = findElementImage(layout, x, y);
@@ -52,12 +52,12 @@
 		}
 		bestD2 = ERASER_CONNECT * ERASER_CONNECT + 1;
 		$.each(layout.elts, function (i, elt) {
-			var ex, ey, i, dx, dy, d2;
+			var ex, ey, j, dx, dy, d2;
 			ex = x - elt.x;
 			ey = y - elt.y;
-			for (i = elt.conns.length - 1; i >= 0; i -= 1) {
-				dx = elt.conns[i].x - ex;
-				dy = elt.conns[i].y - ey;
+			for (j = elt.conns.length - 1; j >= 0; j -= 1) {
+				dx = elt.conns[j].x - ex;
+				dy = elt.conns[j].y - ey;
 				d2 = dx * dx + dy * dy;
 				if (d2 < bestD2) {
 					bestD2 = d2;
@@ -102,9 +102,9 @@
 		bestD2 = ERASER_CONNECT * ERASER_CONNECT + 1;
 		ret = null;
 		$.each(layout.elts, function (i, elt) {
-			var i, j, c0, c1, x0, y0, x1, y1, d2;
-			for (i = elt.conns.length - 1; i >= 0; i -= 1) {
-				c0 = elt.conns[i];
+			var j, k, c0, c1, x0, y0, x1, y1, d2;
+			for (k = elt.conns.length - 1; k >= 0; k -= 1) {
+				c0 = elt.conns[k];
 				x0 = elt.x + c0.x;
 				y0 = elt.y + c0.y;
 				if (c0.input) {
@@ -146,7 +146,8 @@
 				if (newState) {
 					info.setState(newState.evaluate());
 				} else {
-					// TODO initiate move
+					gest = new my.MoveGesture(info, elt, e);
+					info.setGesture(gest);
 				}
 			}
 		}
@@ -227,6 +228,67 @@
 			my.DrawCirc.removeElement(info, elt);
 		}
 		info.setGesture(null);
+	};
+
+	function computeMovedLines(info, elt, dx, dy) {
+		var drawingElts = [];
+
+		$.each(elt.conns, function (i, conn) {
+			var stub;
+			if (conn.conns.length === 0) {
+				stub = my.DrawCirc.createStub(info, conn, dx, dy);
+				drawingElts.push(stub.circ);
+				drawingElts.push(stub.stub);
+			} else if (!conn.input) {
+				drawingElts.push(my.DrawCirc.createStubCircle(info, conn,
+					dx, dy));
+			}
+			for (i = conn.conns.length - 1; i >= 0; i -= 1) {
+				//TODO
+			}
+		});
+
+		return drawingElts;
+	}
+
+	my.MoveGesture = function (info, elt, e) {
+		this.elt = elt;
+		this.x0 = e.circuitX;
+		this.y0 = e.circuitY;
+		this.drawingElts = computeMovedLines(info, elt, 0, 0);
+		this.dragImg = elt.imgElt;
+		this.offs0 = elt.imgElt.offset();
+		$.each(elt.conns, function (i, conn) {
+			my.DrawCirc.hideStub(info, conn);
+		});
+	};
+
+	my.MoveGesture.prototype.mouseDrag = function (info, e) {
+		var dx, dy, oldElts, newElts;
+		dx = e.circuitX - this.x0;
+		dy = e.circuitY - this.y0;
+		this.dragImg.offset({left: this.offs0.left + dx, top: this.offs0.top + dy});
+		newElts = computeMovedLines(info, this.elt, dx, dy);
+		oldElts = this.drawingElts;
+		this.drawingElts = newElts;
+		$.each(oldElts, function (i, drawingElt) {
+			drawingElt.remove();
+		});
+	};
+
+	my.MoveGesture.prototype.mouseUp = function (info, e) {
+		this.cancel(info);
+		//TODO
+	};
+
+	my.MoveGesture.prototype.cancel = function (info) {
+		this.dragImg.offset(this.offs0);
+		$.each(this.drawingElts, function (i, drawingElt) {
+			drawingElt.remove();
+		});
+		$.each(this.elt.conns, function (i, conn) {
+			my.DrawCirc.showStub(info, conn);
+		});
 	};
 
 	my.WiringGesture = function (info, conn) {

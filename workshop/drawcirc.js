@@ -1,7 +1,8 @@
 (function (my, $) {
 	"use strict";
-	var WIRE_WIDTH = 3;
-	var CONNECT_RADIUS = 3;
+	var WIRE_WIDTH = 3,
+		CONNECT_RADIUS = 3,
+		baseDirectory;
 
 	my.getRelativePath = function (desired) {
 		var cwd, cdirs, ddirs, i, j, ret;
@@ -27,13 +28,13 @@
 			ret += ddirs[i] + '/';
 		}
 		return ret;
-	}
+	};
 
-	var baseDirectory = my.getRelativePath('workshop/resource');
+	baseDirectory = my.getRelativePath('workshop/resource');
 
 	my.getResourcePath = function (filename) {
 		return baseDirectory + filename;
-	}
+	};
 
 	function setterImage(elt) {
 		return function (imgName) {
@@ -42,6 +43,16 @@
 				elt.imgElt.attr('src', newName);
 			}
 		};
+	}
+
+	function getColor(val) {
+		if (typeof val === 'undefined') {
+			return 'black';
+		} else if (val) {
+			return '#0A0';
+		} else {
+			return '#030';
+		}
 	}
 
 	my.DrawCirc = {};
@@ -66,7 +77,7 @@
 			top: offs0.top + elt.y + elt.type.imgY });
 
 		$.each(elt.conns, function (i, conn) {
-			my.DrawCirc.createStub(info, conn);
+			my.DrawCirc.attachStub(info, conn);
 		});
 	};
 
@@ -94,77 +105,108 @@
 	};
 
 	my.DrawCirc.repositionElement = function (info, elt) {
-		var type, offs0, img;
+		var type, offs0, x, y, img;
 
 		type = elt.type;
 		offs0 = info.canvas.offset();
-		elt.imgElt.offset({ left: offs0.left + elt.x + elt.type.imgX,
-			top: offs0.top + elt.y + elt.type.imgY });
+		x = offs0.left + elt.x + elt.type.imgX;
+		y = offs0.top + elt.y + elt.type.imgY;
+		elt.imgElt.offset({left: x, top: y});
 
 		$.each(elt.conns, function (i, conn) {
-			my.DrawCirc.createStub(info, conn);
+			my.DrawCirc.attachStub(info, conn);
 		});
 	};
 
-	my.DrawCirc.createStub = function (info, conn) {
-		var cx, cy, dx, dy;
+	my.DrawCirc.createStubCircle = function (info, conn, dx, dy) {
+		var color, x0, y0, circ;
 
-		if (conn.circ !== null) {
+		color = getColor(info.state && info.state.getValue(conn));
+		x0 = conn.elt.x + conn.x;
+		y0 = conn.elt.y + conn.y;
+		if (typeof dx !== 'undefined') {
+			x0 += dx;
+		}
+		if (typeof dy !== 'undefined') {
+			y0 += dy;
+		}
+		if (conn.input) {
+			circ = info.paper.circle(x0, y0, CONNECT_RADIUS);
+		} else {
+			circ = info.paper.circle(x0, y0, CONNECT_RADIUS);
+			circ.attr('fill', color);
+		}
+		circ.attr('stroke', color);
+		return circ;
+	};
+
+	my.DrawCirc.createStub = function (info, conn, dx, dy) {
+		var color, x0, y0, x1, y1, circ, stub;
+
+		color = getColor(info.state && info.state.getValue(conn));
+		x0 = conn.elt.x + conn.x;
+		y0 = conn.elt.y + conn.y;
+		if (typeof dx !== 'undefined') {
+			x0 += dx;
+		}
+		if (typeof dy !== 'undefined') {
+			y0 += dy;
+		}
+		x1 = x0 + conn.dx;
+		y1 = y0 + conn.dy;
+		if (x1 > x0) {
+			x0 += CONNECT_RADIUS;
+		} else if (x1 < x0) {
+			x0 -= CONNECT_RADIUS;
+		}
+		if (y1 > y0) {
+			y0 += CONNECT_RADIUS;
+		} else if (y1 < y0) {
+			y0 -= CONNECT_RADIUS;
+		}
+		stub = info.paper.path('M' + x0 + ',' + y0
+			+ 'L' + x1 + ',' + y1);
+		stub.attr('stroke-width', WIRE_WIDTH);
+		stub.attr('stroke', color);
+
+		circ = my.DrawCirc.createStubCircle(info, conn, dx, dy);
+
+		return {circ: circ, stub: stub};
+	};
+
+	my.DrawCirc.attachStub = function (info, conn, dx, dy) {
+		var elts;
+
+		if (conn.circ) {
 			conn.circ.remove();
 		}
-		if (conn.stub !== null) {
+		if (conn.stub) {
 			conn.stub.remove();
 		}
 
-		cx = conn.elt.x + conn.x;
-		cy = conn.elt.y + conn.y;
-		dx = cx + conn.dx;
-		dy = cy + conn.dy;
-		if (conn.input) {
-			conn.circ = info.paper.circle(cx, cy, CONNECT_RADIUS);
-		} else {
-			conn.circ = info.paper.circle(cx, cy, CONNECT_RADIUS);
-			conn.circ.attr('fill', 'black');
-		}
-		if (conn.circ !== null) {
-			if (conn.dx > 0) {
-				cx += CONNECT_RADIUS;
-			} else if (conn.dx < 0) {
-				cx -= CONNECT_RADIUS;
-			}
-			if (conn.dy > 0) {
-				cy += CONNECT_RADIUS;
-			} else if (conn.dy < 0) {
-				cy -= CONNECT_RADIUS;
-			}
-		}
-		conn.stub = info.paper.path('M' + cx + ',' + cy
-			+ 'L' + dx + ',' + dy);
-		conn.stub.attr('stroke-width', WIRE_WIDTH);
+		elts = my.DrawCirc.createStub(info, conn, dx, dy);
+		conn.circ = elts.circ;
+		conn.stub = elts.stub;
+
 		if (conn.conns.length > 0) {
 			conn.stub.hide();
 			if (conn.input) {
 				conn.circ.hide();
 			}
 		}
-		my.DrawCirc.recolorConnection(info, conn);
 	};
 
 	my.DrawCirc.hideStub = function (info, conn) {
 		if (conn) {
 			conn.stub.hide();
-			if (conn.circ) {
-				conn.circ.hide();
-			}
+			conn.circ.hide();
 		}
 	};
 
 	my.DrawCirc.showStub = function (info, conn) {
 		if (conn) {
 			conn.stub.show();
-			if (conn.circ) {
-				conn.circ.show();
-			}
+			conn.circ.show();
 		}
 	};
 
@@ -208,11 +250,7 @@
 	my.DrawCirc.recolorConnection = function (info, conn) {
 		var color;
 
-		if (info.state && info.state.getValue(conn)) {
-			color = '#0A0';
-		} else {
-			color = '#030';
-		}
+		color = getColor(info.state && info.state.getValue(conn));
 		if (conn.stub) {
 			conn.stub.attr('stroke', color);
 		}
@@ -239,28 +277,36 @@
 	};
 
 	my.DrawCirc.ghostWireToCoord = function (info, c0, x, y) {
-		var x0, y0, line;
+		var x0, y0, color, line;
 		x0 = c0.elt.x + c0.x;
 		y0 = c0.elt.y + c0.y;
+		color = getColor(info.state && info.state.getValue(c0));
 		line = info.paper.path('M' + (x0 + c0.dx) + ',' + (y0 + c0.dy) +
 			'L' + x0 + ',' + y0 +
 			'L' + x + ',' + y);
-		line.attr('opacity', 0.5);
+		line.attr('stroke', color);
+		line.attr('opacity', 0.3);
 		line.attr('stroke-width', WIRE_WIDTH);
 		return line;
 	};
 
 	my.DrawCirc.ghostWireToConn = function (info, c0, c1) {
-		var x0, y0, x1, y1, line;
+		var x0, y0, x1, y1, color, line;
 		x0 = c0.elt.x + c0.x;
 		y0 = c0.elt.y + c0.y;
 		x1 = c1.elt.x + c1.x;
 		y1 = c1.elt.y + c1.y;
+		if (c0.input) {
+			color = getColor(info.state && info.state.getValue(c1));
+		} else {
+			color = getColor(info.state && info.state.getValue(c0));
+		}
 		line = info.paper.path('M' + (x0 + c0.dx) + ',' + (y0 + c0.dy) +
 			'L' + x0 + ',' + y0 +
 			'L' + x1 + ',' + y1 +
 			'L' + (x1 + c1.dx) + ',' + (y1 + c1.dy));
-		line.attr('opacity', 0.5);
+		line.attr('stroke', color);
+		line.attr('opacity', 0.6);
 		line.attr('stroke-width', WIRE_WIDTH);
 		return line;
 	};

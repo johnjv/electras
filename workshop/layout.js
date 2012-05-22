@@ -35,7 +35,7 @@ var Workshop = {};
 		this.imgHeight = iH;
 		this.conns = connections;
 		this.propagate = propagate;
-		this.poke = function () { return false; }
+		this.poke = function () { return false; };
 		this.updateImage = this.poke;
 		if (options) {
 			if (options.poke) {
