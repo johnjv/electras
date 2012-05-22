@@ -6,7 +6,7 @@ img { position: absolute }
 	font-size: .8em;
 	font-weight: normal;
 	font-family: Helvetica, Arial, sans-serif; 
-	position:relative;
+	position:absolute;
 	padding:2.3em 2.3em;
 	max-width: 200px;
 	margin:1em auto 50px;

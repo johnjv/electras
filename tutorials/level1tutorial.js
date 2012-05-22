@@ -21,9 +21,9 @@ var all_my_chocolates_events = function(){
   else if (elements.sensor('C').output('filled').exists() &&
           elements.lightbulb().input('filled').exists()){
     console.log("the user has connected the two");
-    var lever = getLeverLocation()
-    highlightSection(lever, false);
-    createSpeechBubble(lever, "Click on the lever to test your machine!");
+//    var lever = getLeverLocation()
+//    highlightSection(lever, false);
+//    createSpeechBubble(lever, "Click on the lever to test your machine!");
 
     //here we do something a little hacky... we set a click event on the lever,
     // which sets a timer (how long the checking animation takes to play) to a callback which highlights the chalkboard
