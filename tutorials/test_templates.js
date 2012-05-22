@@ -1,4 +1,5 @@
 var test_sensor = function(id, type, connection){
+  connection = arrayify(connection)
   return {
     id: id,
     type: type + " sensor",
@@ -33,6 +34,7 @@ var test_lightbulb = function(connection){
 }
 
 var test_OR = function(id, incoming1, incoming2, outgoing){
+  outgoing = arrayify(outgoing)
   return {
     id: id,
     type: "OR",
@@ -69,7 +71,7 @@ var test_OR = function(id, incoming1, incoming2, outgoing){
 
 
 var test_NOT = function(id, incoming, outgoing){
-
+  outgoing = arrayify(outgoing)
   return {
     id: id,
     type: "NOT",
@@ -94,3 +96,10 @@ var test_NOT = function(id, incoming, outgoing){
   }
 }
 
+var arrayify = function(input){
+  if(typeof input == 'string' || typeof input == 'number'){
+    return [input]
+  } else {
+    return input
+  }
+}
