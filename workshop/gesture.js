@@ -233,7 +233,7 @@
 		var wire, elt, ports;
 
 		this.dragImg.remove();
-		wire = findWire(info.layout, e.circuitX, e.circuitY, ERASER_CONNECT);
+		wire = my.Wire.find(info.layout, e.circuitX, e.circuitY, ERASER_CONNECT);
 		if (wire !== null) {
 			info.layout.removeWire(wire[0], wire[1]);
 			my.DrawCirc.removeWire(info, wire[0], wire[1]);

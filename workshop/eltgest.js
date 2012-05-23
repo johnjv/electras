@@ -173,8 +173,10 @@
 		legal = isLegalPosition(info, this.elt, dx, dy);
 		if (legal.legal === LEGAL_OK) {
 			opacity = 1.0;
+		} else if (legal.legal === LEGAL_OUT) {
+			opacity = 0.2;
 		} else {
-			opacity = 0.5;
+			opacity = 0.6;
 		}
 		this.dragImg.offset({left: this.offs0.left + dx, top: this.offs0.top + dy});
 		this.dragImg.stop().fadeTo(0, opacity);

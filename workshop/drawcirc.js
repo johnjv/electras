@@ -320,16 +320,22 @@
 		if (port.line) {
 			port.stub.attr('stroke', color);
 		}
-		$.each(port.ports, function (i, c) {
-			if (c.stub) {
-				c.stub.attr('stroke', color);
+		$.each(port.ports, function (i, p) {
+			if (p.stub) {
+				p.stub.attr('stroke', color);
 			}
-			if (c.circ) {
-				c.circ.attr('stroke', color);
+			if (p.circ) {
+				p.circ.attr('stroke', color);
 			}
-			if (c.line) {
-				c.line.attr('stroke', color);
+			if (p.line) {
+				p.line.attr('stroke', color);
 			}
+		});
+	};
+
+	my.DrawCirc.recolorPorts = function (info, elt) {
+		$.each(elt.ports, function (i, port) {
+			my.DrawCirc.recolorPort(info, port);
 		});
 	};
 
