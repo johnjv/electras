@@ -245,14 +245,14 @@ var kludge = new Level({
 //need to edit this to get it down to 4 sensors
 
 var all_levels = [
-    all_my_chocolates,
-    a_bar_walks_into_my_tummy,
+    i_so_blue,
+    its_a_start,
     soyl_not_green,
-    mint_chocolate,
+    flavor_unearthed,
     indecisive,
-    picky,
-    mint_chocolate_returns,
-    classic,
+    anti_twinkle,    
+    a_new_earth,
+    out_on_a_lemon,
     backlash,
     speak_softly_cherry_a_stick,
     botique,
