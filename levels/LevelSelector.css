@@ -4,7 +4,7 @@
 #levelSelect2 { cursor: pointer; position: relative; color: #A30000; margin-left: 65%; margin-right: auto; font-size: 30px; }
 #arrow1, #arrow2{ cursor: pointer; text-align: center;}
 
-img { position: relative; height: 2em; width: 5em;}
+#right1, #left2 { position: relative; height: 2em; width: 5em;}
 #check{ position: relative; height: 1em; width: 1em;}
 
 html, body { background: #38C;
