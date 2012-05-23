@@ -3,15 +3,6 @@ $(document).ready(function(){
 	
 	Placer.place();
 	
-	$("#advanceLevel").click(function(){
-	    //console.log("advance");
-		LevelSelector.advanceLevel(true); // check whether the level was completed or not
-	});
-	
-	$("#showLevels").click(function(){
-		LevelSelector.showSelector(true);			
-	});
-	
 	$("#start").click(function(){
 		updateChalkBoard();
 		startMachine();
@@ -30,7 +21,7 @@ $(document).ready(function(){
 				else if (check === 0){
 					console.log(count + " Push away, mark X");
 					movePuncher();
-					placeFlag();
+					putAFlag();
 			        moveFlag();
 				}
 				else if(check === -1){
@@ -39,7 +30,7 @@ $(document).ready(function(){
 				}
 				else{
 				   console.log(count + " Kept, mark X");
-				   placeFlag();
+				   putAFlag();
 			       moveFlag();
 				}
 				placeCandy(items[count]);
@@ -51,8 +42,6 @@ $(document).ready(function(){
 		}
 		startNext();
 	}
-	
-
 	
 	
 	function getLevelType(){
@@ -148,21 +137,6 @@ $(document).ready(function(){
 		$(flag).animate({
 			height: 'toggle'
 		},3000);
-	}
-
-	
-	function getOrder(){
-		"use strict";
-		var level = LevelSelector.getCurrentLevel();
-		var order = level.orderText;
-		return order;
-		//console.log(order);
-	}
-	
-	function updateChalkBoard(order){
-		"use strict"
-		var orderText = getOrder();
-		$('#order').text(orderText);
 	}
 
 	function movePuncher(){

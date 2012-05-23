@@ -2,10 +2,9 @@ function setUpLevel(){
     $('#levelSelect2').hide();  
     $('#left2').hide(); 
     $('#factory').hide(); 
-    $('#circuit').hide(); 
-    $('#levelInfo').hide();
+    $('#circuit').hide();    
     $('#parts').hide();
-    $('#tutorials').hide();  
+    $('#clipboard').hide();  
     makePage(); 
     addRightClick();
     addLeftClick();
@@ -86,8 +85,11 @@ function addChildClicks(){
              $('#factory').show();
              $('#levelname').html('<b>' + LevelSelector.getCurrentLevel().levelname + '</b>');
              $('#circuit').show();
+             $('#clipboard').show();  
              LevelSelector.setLevel(all_levels[i]);
              updateChalkBoard();
+             updateLevelName();
+             Placer.place();
         });
       });
       
@@ -99,8 +101,11 @@ function addChildClicks(){
              $('#factory').show();
              $('#levelname').html('<b>' + LevelSelector.getCurrentLevel().levelname + '</b>');
              $('#circuit').show();
+             $('#clipboard').show();
              LevelSelector.setLevel(all_levels[i+10]);
              updateChalkBoard();
+             updateLevelName();
+             Placer.place();
         });
     });
 }
@@ -120,8 +125,12 @@ var LevelSelector = (function($) {
         level = change;
         console.log('levelChanged');
         Circuit.levelChanged(temp, level); 
-        FactoryFloor.levelChanged(temp, level);
-        //Tutorials.levelChanged(temp, level);
+        if(level.levelid === 1){
+            $('#prev').hide();
+        }
+        if(level.levelid === 20){
+            $('#advanceLevel').hide();
+        }
     }; 
     
     my.advanceLevel = function(finish){
@@ -134,10 +143,23 @@ var LevelSelector = (function($) {
         else{            
             my.setLevel(all_levels[level.levelid]);
             console.log("We are now on level: " + level.levelid); 
-        }
-        $('#levelname').html('<b>' + LevelSelector.getCurrentLevel().levelname + '</b>');
+        } 
+        $('#prev').show();       
     };
-     
+    
+    my.previousLevel = function(finish){
+        if(finish){ 
+            level.complete = true;
+        }  
+        if(level.levelid === 1){
+            alert("There are no more levels");
+        }
+        else{            
+            my.setLevel(all_levels[level.levelid-2]);
+            console.log("We are now on level: " + level.levelid); 
+        }  
+        $('#advanceLevel').show();      
+    }; 
      
     my.showSelector = function(finish){
         if(finish){
@@ -167,7 +189,10 @@ var LevelSelector = (function($) {
             $('#title').show();
         }
         $('#factory').hide();
-        $('#circuit').hide();            
+        $('#circuit').hide();
+        $('#advanceLevel').show();
+        $('#prev').show();
+        $('#clipboard').hide();            
     };
 
    my.getCurrentLevel = function(){      
