@@ -3,19 +3,20 @@
 	var AUTO_CONNECT_RADIUS = 10,
 		LEGAL_OK = 0,
 		LEGAL_OUT = 1,
-		LEGAL_OVERLAP = 2;
+		LEGAL_OVERLAP = 2,
+		LEGAL_WIRE = 3;
 
 	// Returns an object for which the "legal" key is LEGAL_OK if
 	// location is legal for element, LEGAL_OUT if element goes beyond
 	// canvas bounds, LEGAL_OVERLAP if element overlaps with other
-	// element/wire. The "conns" key represents wires that should
+	// element/wire. The "ports" key represents wires that should
 	// be added since they come very close to the proposed element:
 	// It references an array of two-element arrays, nonempty only
 	// if LEGAL_OK; each two-element array holds first the index of
-	// a connection in the proposed element and second the connection
+	// a port in the proposed element and second the port
 	// to which it should be connected.
 	function isLegalPosition(info, elt, eltDx, eltDy) {
-		var type, x, y, i, conn, ix0, iy0, ix1, iy1, ret, conns;
+		var type, x, y, i, port, ix0, iy0, ix1, iy1, ret, ports;
 		type = elt.type;
 		x = elt.x + eltDx;
 		y = elt.y + eltDy;
@@ -25,17 +26,17 @@
 		iy1 = iy0 + type.imgHeight;
 		if (!info.isInside(ix0, iy0) || !info.isInside(ix1, iy0) ||
 				!info.isInside(ix0, iy1) || !info.isInside(ix1, iy1)) {
-			return {legal: LEGAL_OUT, conns: []};
+			return {legal: LEGAL_OUT, ports: []};
 		}
-		for (i = type.conns.length - 1; i >= 0; i -= 1) {
-			conn = type.conns[i];
-			if (!info.isInside(x + conn.x, y + conn.y)) {
-				return {legal: LEGAL_OUT, conns: []};
+		for (i = type.ports.length - 1; i >= 0; i -= 1) {
+			port = type.ports[i];
+			if (!info.isInside(x + port.x, y + port.y)) {
+				return {legal: LEGAL_OUT, ports: []};
 			}
 		}
 
 		ret = LEGAL_OK;
-		conns = [];
+		ports = [];
 		$.each(info.layout.elts, function (j, other) {
 			var jx0, jy0, jx1, jy1, k, ic, kc, ix, iy, kx, ky, dx, dy, d2;
 			if (other === elt) {
@@ -49,8 +50,8 @@
 				ret = LEGAL_OVERLAP;
 				return false;
 			}
-			for (k = other.conns.length - 1; k >= 0; k -= 1) {
-				kc = other.conns[k];
+			for (k = other.ports.length - 1; k >= 0; k -= 1) {
+				kc = other.ports[k];
 				kx = other.x + kc.x;
 				ky = other.y + kc.y;
 				if (kx >= ix0 && kx < ix1 && ky >= iy0 && ky < iy1) {
@@ -58,16 +59,16 @@
 					return false;
 				}
 			}
-			for (i = elt.conns.length - 1; i >= 0; i -= 1) {
-				ic = elt.conns[i];
+			for (i = elt.ports.length - 1; i >= 0; i -= 1) {
+				ic = elt.ports[i];
 				ix = x + ic.x;
 				iy = y + ic.y;
 				if (ix >= jx0 && ix < jx1 && iy >= jy0 && iy < jy1) {
 					ret = LEGAL_OVERLAP;
 					return false;
 				}
-				for (k = other.conns.length - 1; k >= 0; k -= 1) {
-					kc = other.conns[k];
+				for (k = other.ports.length - 1; k >= 0; k -= 1) {
+					kc = other.ports[k];
 					kx = other.x + kc.x;
 					ky = other.y + kc.y;
 					dx = ix - kx;
@@ -78,65 +79,65 @@
 							ret = LEGAL_OVERLAP;
 							return false;
 						}
-						if ((kc.input && kc.conns.length > 0
-									&& kc.conns[0] !== ic)
-								|| (ic.input && ic.conns.length > 0
-									&& ic.conns[0] !== kc)) {
+						if ((kc.input && kc.ports.length > 0
+									&& kc.ports[0] !== ic)
+								|| (ic.input && ic.ports.length > 0
+									&& ic.ports[0] !== kc)) {
 							ret = LEGAL_OVERLAP;
 							return false;
 						}
-						conns.push([i, kc]);
+						ports.push([i, kc]);
 					}
 				}
 			}
 		});
 		if (ret === LEGAL_OK) {
-			return {legal: ret, conns: conns};
+			return {legal: ret, ports: ports};
 		} else {
-			return {legal: ret, conns: []};
+			return {legal: ret, ports: []};
 		}
 	}
 
-	function computeMovedLines(info, elt, dx, dy, opacity, conns, hidden) {
+	function computeMovedLines(info, elt, dx, dy, opacity, ports, hidden) {
 		var drawingElts = [];
 
-		$.each(elt.conns, function (i, conn) {
+		$.each(elt.ports, function (i, port) {
 			var willConnect, stub, circ, j, line;
 			willConnect = false;
-			for (j = conns.length - 1; j >= 0; j -= 1) {
-				if (conns[j][0] === i) {
+			for (j = ports.length - 1; j >= 0; j -= 1) {
+				if (ports[j][0] === i) {
 					willConnect = true;
 				}
 			}
-			if (conn.conns.length === 0 && !willConnect) {
-				stub = my.DrawCirc.createStub(info, conn, dx, dy);
+			if (port.ports.length === 0 && !willConnect) {
+				stub = my.DrawCirc.createStub(info, port, dx, dy);
 				stub.circ.attr('opacity', opacity);
 				stub.stub.attr('opacity', opacity);
 				drawingElts.push(stub.circ);
 				drawingElts.push(stub.stub);
-			} else if (!conn.input) {
-				circ = my.DrawCirc.createStubCircle(info, conn, dx, dy);
+			} else if (!port.input) {
+				circ = my.DrawCirc.createStubCircle(info, port, dx, dy);
 				circ.attr('opacity', opacity);
 				drawingElts.push(circ);
 			}
-			for (j = conn.conns.length - 1; j >= 0; j -= 1) {
-				line = my.DrawCirc.createWire(info, conn, conn.conns[j],
+			for (j = port.ports.length - 1; j >= 0; j -= 1) {
+				line = my.DrawCirc.createWire(info, port, port.ports[j],
 					dx, dy);
 				line.attr('opacity', opacity);
 				drawingElts.push(line);
 			}
 		});
-		$.each(conns, function (i, conn) {
-			var c0, c1, line;
-			c0 = elt.conns[conn[0]];
-			c1 = conn[1];
-			if (c1.conns.length === 0) {
-				if (c1.input) {
-					hidden.push(c1.circ);
+		$.each(ports, function (i, port) {
+			var p0, p1, line;
+			p0 = elt.ports[port[0]];
+			p1 = port[1];
+			if (p1.ports.length === 0) {
+				if (p1.input) {
+					hidden.push(p1.circ);
 				}
-				hidden.push(c1.stub);
+				hidden.push(p1.stub);
 			}
-			line = my.DrawCirc.createWire(info, c0, c1, dx, dy);
+			line = my.DrawCirc.createWire(info, p0, p1, dx, dy);
 			line.attr('opacity', opacity);
 			drawingElts.push(line);
 		});
@@ -152,11 +153,11 @@
 		this.drawingElts = computeMovedLines(info, elt, 0, 0, [], this.hidden);
 		this.dragImg = elt.imgElt;
 		this.offs0 = elt.imgElt.offset();
-		$.each(elt.conns, function (i, conn) {
+		$.each(elt.ports, function (i, port) {
 			var j;
-			my.DrawCirc.hideStub(info, conn);
-			for (j = conn.conns.length - 1; j >= 0; j -= 1) {
-				my.DrawCirc.hideWire(info, conn, conn.conns[j]);
+			my.DrawCirc.hideStub(info, port);
+			for (j = port.ports.length - 1; j >= 0; j -= 1) {
+				my.DrawCirc.hideWire(info, port, port.ports[j]);
 			}
 		});
 	};
@@ -179,7 +180,7 @@
 		this.dragImg.stop().fadeTo(0, opacity);
 		hidden = [];
 		newElts = computeMovedLines(info, this.elt, dx, dy, opacity,
-			legal.conns, hidden);
+			legal.ports, hidden);
 		$.each(this.hidden, function (i, hideElt) {
 			if ($.inArray(hideElt, hidden) < 0) {
 				hideElt.show();
@@ -197,7 +198,7 @@
 	};
 
 	my.MoveGesture.prototype.mouseUp = function (info, e) {
-		var dx, dy, elt, legal, conns;
+		var dx, dy, elt, legal, ports;
 		$.each(this.hidden, function (i, hideElt) {
 			hideElt.show();
 		});
@@ -214,9 +215,9 @@
 			elt.x += dx;
 			elt.y += dy;
 			my.DrawCirc.repositionElement(info, elt);
-			$.each(legal.conns, function (i, conn) {
-				info.layout.addWire(elt.conns[conn[0]], conn[1]);
-				my.DrawCirc.attachWire(info, elt.conns[conn[0]], conn[1]);
+			$.each(legal.ports, function (i, port) {
+				info.layout.addWire(elt.ports[port[0]], port[1]);
+				my.DrawCirc.attachWire(info, elt.ports[port[0]], port[1]);
 			});
 			this.dragImg = null;
 
@@ -225,13 +226,13 @@
 			});
 			info.circuitChanged();
 		} else if (legal.legal === LEGAL_OUT) {
-			conns = getConnectedConnections(elt);
+			ports = my.getConnectedPorts(elt);
 			info.layout.removeElement(elt);
 			my.DrawCirc.removeElement(info, elt);
 			info.circuitChanged();
-			$.each(conns, function (i, conn) {
-				my.DrawCirc.showStub(info, conn);
-				my.DrawCirc.recolorConnection(info, conn);
+			$.each(ports, function (i, port) {
+				my.DrawCirc.showStub(info, port);
+				my.DrawCirc.recolorPort(info, port);
 			});
 			$.each(this.drawingElts, function (i, drawingElt) {
 				drawingElt.remove();
@@ -254,11 +255,11 @@
 			hideElt.show();
 		});
 		this.hidden = [];
-		$.each(this.elt.conns, function (i, conn) {
+		$.each(this.elt.ports, function (i, port) {
 			var j;
-			my.DrawCirc.showStub(info, conn);
-			for (j = conn.conns.length - 1; j >= 0; j -= 1) {
-				my.DrawCirc.showWire(info, conn, conn.conns[j]);
+			my.DrawCirc.showStub(info, port);
+			for (j = port.ports.length - 1; j >= 0; j -= 1) {
+				my.DrawCirc.showWire(info, port, port.ports[j]);
 			}
 		});
 	};
