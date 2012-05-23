@@ -192,7 +192,8 @@ var LevelSelector = (function($) {
         $('#circuit').hide();
         $('#advanceLevel').show();
         $('#prev').show();
-        $('#clipboard').hide();            
+        $('#clipboard').hide();
+        $('#container').hide();                
     };
 
    my.getCurrentLevel = function(){      

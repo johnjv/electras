@@ -5,7 +5,14 @@ var flavor_unearthed_events = function(){
   var or_operators = elements.OR().elements
   var first_sensor = elements.sensor().first_connection();
 
-  if (or_operators.length < 1){
+
+  if (elements.lightbulb().input('filled').exists() && !elements.OR().output('filled').exists()){
+    highlightSection(elements.lightbulb().first_connection(),  true)
+    createSpeechBubble(first_sensor, "The only way you'll be able to solve this is by " +
+        "connecting the lightbulb to the OR operator.  You may need to erase the current connection.")
+  }
+
+  else if (or_operators.length < 1){
     createSpeechBubble(first_sensor, "This time we'll be using an OR operator.  Go ahead and put one on screen.")
   }
 
@@ -13,14 +20,7 @@ var flavor_unearthed_events = function(){
     createSpeechBubble(first_sensor, "We'll only need one OR operator for this.")
   }
 
-
-  else if (elements.lightbulb().input('filled').exists() && !elements.OR().output('filled').exists()){
-    highlightSection(elements.lightbulb().first_connection(),  true)
-    createSpeechBubble(first_sensor, "The only way you'll be able to solve this is by " +
-        "connecting the lightbulb to the OR operator.  You may need to erase the current connection.")
-  }
-
-  //the next two disappear too soon.  They should accept "active" as well as "empty"
+  //the next two disappear too soon.  They should accept "active" as well as "empty"`
   else if (empty_sensors.length == 2 && !has_incoming_active_or){
     var operator = or_operators[0]
     //this should show both of them
