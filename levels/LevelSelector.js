@@ -84,7 +84,7 @@ function addChildClicks(){
              LevelSelector.setLevel(all_levels[i]);
              $('#factory').show();
              $('#levelname').html('<b>' + LevelSelector.getCurrentLevel().levelname + '</b>');
-             $('#circuit').show(); 
+             $('#circuit').show();
         });
       });
       
@@ -107,8 +107,11 @@ var LevelSelector = (function($) {
     var level = all_levels[0];
     
     $(document).ready(function () {
-       setUpLevel(); 
+       setUpLevel();
     });
+    
+    
+    
 
     my.setLevel = function(change) {
         level = change;
