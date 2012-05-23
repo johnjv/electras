@@ -9,4 +9,6 @@ Allow gestures via click/tap to start and click/tap to end (not just dragging)
 Respond to change in canvas size
 Save edited layouts on disk?
 
+Only size toolbar images once toolbar becomes visible
+
 Electricity animation
