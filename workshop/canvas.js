@@ -199,17 +199,8 @@
 			my.DrawCirc.createElement(self, elt);
 			elt.type.updateImage(elt, self.state);
 		});
-		$.each(layout.elts, function (i, elt) {
-			var port0, port1, k, j;
-			for (k = elt.ports.length - 1; k >= 0; k -= 1) {
-				port0 = elt.ports[k];
-				if (port0.input) {
-					for (j = port0.ports.length - 1; j >= 0; j -= 1) {
-						port1 = port0.ports[j];
-						my.DrawCirc.attachWire(self, port0, port1);
-					}
-				}
-			}
+		layout.forEachWire(function (p0, p1) {
+			my.DrawCirc.attachWire(self, p0, p1);
 		});
 		this.fireChange();
 	};
