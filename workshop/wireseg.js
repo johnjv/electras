@@ -46,7 +46,7 @@
 						p1 = p0.ports[j];
 						x1 = p1.elt.x + p1.x;
 						y1 = p1.elt.y + p1.y;
-						d2 = my.Wire.dist2ToSegment(x, y, x0, y0, x1, y1);
+						d2 = my.Wire.dist2(x, y, x0, y0, x1, y1);
 						if (d2 < bestD2) {
 							bestD2 = d2;
 							ret = [p1, p0];
