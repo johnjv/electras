@@ -82,6 +82,7 @@
 		jqElt.append(canvas);
 
 		this.toolbar = toolbar;
+		this.toolbarEnabled = true;
 		this.canvas = canvas;
 		this.gesture = new my.NullGesture(self);
 		this.paper = raphael(canvas.get(0), canvas.width(), canvas.height());
@@ -96,7 +97,8 @@
 			ex = e.pageX;
 			ey = e.pageY;
 			fixEvent(self, e);
-			if (ey < canvas.offset().top || ex < canvas.offset().left) {
+			if (this.toolbarEnabled && (ey < canvas.offset().top
+					|| ex < canvas.offset().left)) {
 				newGest = null;
 				$('.tool', toolbar).each(function (i, tool) {
 					var elt, offs, dx, dy, typeName, type;
@@ -183,6 +185,10 @@
 		$.each(state.repaintElts, function (id, elt) {
 			elt.type.updateImage(elt, state);
 		});
+	};
+
+	my.Workshop.prototype.setToolbarEnabled = function (value) {
+		this.toolbarEnabled = value;
 	};
 
 	my.Workshop.prototype.setLayout = function (layout) {

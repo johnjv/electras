@@ -3,6 +3,7 @@ var Circuit = (function ($, Workshop) {
 
 	var my = {},
 		workshop = null,
+		invertXform = '',
 		colorNames = 'CRGY',
 		shapeNames = 'o|-',
 		colorSensors = [],
@@ -42,8 +43,27 @@ var Circuit = (function ($, Workshop) {
 		});
 	}());
 
+	function RestoreGesture(xform) {
+		this.xform = xform;
+	}
+
+	RestoreGesture.prototype.mouseDown = function (info, e) {
+		if (this.xform !== '') {
+			$('#circuit').animate({ transform: this.xform }, 1000,
+				function () {
+					info.setGesture(null);
+					info.setToolbarEnabled(true);
+				});
+			this.xform = '';
+		}
+	};
+
+	RestoreGesture.prototype.mouseDrag = function (info, e) { };
+	RestoreGesture.prototype.mouseUp = function (info, e) { };
+	RestoreGesture.prototype.cancel = function (info, e) { };
+
 	$(document).ready(function () {
-		var main;
+		var main, back;
 
 		main = $('#circuit');
 		if (!main.hasClass('circ-container')) {
@@ -55,6 +75,25 @@ var Circuit = (function ($, Workshop) {
 				});
 			}
 		}
+
+		back = $('<img></img>')
+			.attr('src', Workshop.getResourcePath('to-floor.svg'))
+			.css('position', 'absolute')
+			.css('width', '40px')
+			.css('bottom', '10px')
+			.css('left', '8px')
+			.click(function (e) {
+				var xform, invert;
+				e.preventDefault();
+				xform = 'translate(-' + (main.width() * 0.5) +
+					'px, -' + (main.height() * 0.6) + 'px)';
+				main.animate({
+					transform: 'scale(0.5, 0.4)' + xform
+				}, 1000);
+				workshop.setToolbarEnabled(false);
+				workshop.setGesture(new RestoreGesture('scale(1, 1)'));
+			});
+		main.append(back);
 	});
 
 	function Evaluator(layout) {
