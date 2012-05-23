@@ -102,7 +102,7 @@
 				newState = elt.type.poke(elt, x - elt.x, y - elt.y, info.state);
 				if (newState) {
 					info.setState(newState.evaluate());
-				} else {
+				} else if (!elt.isFixed) {
 					gest = new my.MoveGesture(info, elt, e);
 					info.setGesture(gest);
 				}
@@ -213,7 +213,7 @@
 	};
 
 	my.EraseGesture.prototype.mouseDrag = function (info, e) {
-		var offs0, x, y;
+		var offs0, x, y, elt;
 
 		offs0 = info.canvas.offset();
 		x = offs0.left + e.circuitX - 0.3 * 50.0;
@@ -221,7 +221,8 @@
 
 		this.dragImg.offset({left: x, top: y});
 
-		if (findElement(info.layout, e.circuitX, e.circuitY) !== null
+		elt = findElement(info.layout, e.circuitX, e.circuitY);
+		if ((elt != null && !elt.isFixed)
 				|| my.Wire.find(info.layout, e.circuitX, e.circuitY, ERASER_CONNECT)) {
 			$(this.dragImg).stop().fadeTo(0, 1.0);
 		} else {
@@ -241,7 +242,7 @@
 			my.DrawCirc.recolorPorts(info, wire[1]);
 		} else {
 			elt = findElement(info.layout, e.circuitX, e.circuitY);
-			if (elt !== null) {
+			if (elt !== null && !elt.isFixed) {
 				ports = my.getConnectedPorts(elt);
 				info.layout.removeElement(elt);
 				my.DrawCirc.removeElement(info, elt);
