@@ -31,28 +31,77 @@
 		return dx * dx + dy * dy;
 	};
 
+	// Clips a line segment into an axis-aligned box. If the
+	// segment lies entirely outside the box, returns null.
+	// If the segment intersects the box, returns an array of
+	// four numbers giving endpoints of subsegment within box.
+	my.Wire.clip = function (x, y, w, h, x0, y0, x1, y1) {
+		// Liang-Barsky implementation largely taken from
+		// http://www.skytopia.com/project/articles/compsci/clipping.html
+		var dx, dy, tMin, tMax, edge, p, q, r;
+		dx = x1 - x0;
+		dy = y1 - y0;
+		tMin = 0;
+		tMax = 1;
+		for (edge = 0; edge < 4; edge += 1) {
+			if (edge < 2) {
+				if (edge === 0) {
+					p = -dx;
+					q = x0 - x;
+				} else { // edge === 1
+					p = dx;
+					q = (x + w) - x0;
+				}
+			} else {
+				if (edge === 2) {
+					p = -dy;
+					q = y0 - y;
+				} else { // edge === 3
+					p = dy;
+					q = (y + h) - y0;
+				}
+			}
+			if (p === 0) {
+				if (q < 0) {
+					return null; // parallel line outside box
+				}
+			} else if (p < 0) {
+				r = q / p;
+				if (r > tMin) {
+					tMin = r;
+					if (tMin > tMax) {
+						return null;
+					}
+				}
+			} else { // p > 0
+				r = q / p;
+				if (r < tMax) {
+					tMax = r;
+					if (tMin > tMax) {
+						return null;
+					}
+				}
+			}
+		}
+
+		return [x0 + tMin * dx, y0 + tMin * dy,
+			x1 + tMax * dx, y1 + tMax * dy];
+	};
+
 	my.Wire.find = function (layout, x, y, maxDist) {
 		var bestD2, ret;
 		bestD2 = maxDist * maxDist + 1;
 		ret = null;
-		$.each(layout.elts, function (i, elt) {
-			var j, k, p0, p1, x0, y0, x1, y1, d2;
-			for (k = elt.ports.length - 1; k >= 0; k -= 1) {
-				p0 = elt.ports[k];
-				x0 = elt.x + p0.x;
-				y0 = elt.y + p0.y;
-				if (p0.input) {
-					for (j = p0.ports.length - 1; j >= 0; j -= 1) {
-						p1 = p0.ports[j];
-						x1 = p1.elt.x + p1.x;
-						y1 = p1.elt.y + p1.y;
-						d2 = my.Wire.dist2(x, y, x0, y0, x1, y1);
-						if (d2 < bestD2) {
-							bestD2 = d2;
-							ret = [p1, p0];
-						}
-					}
-				}
+		layout.forEachWire(function (p0, p1) {
+			var x0, y0, x1, y1, d2;
+			x0 = p0.elt.x + p0.x;
+			y0 = p0.elt.y + p0.y;
+			x1 = p1.elt.x + p1.x;
+			y1 = p1.elt.y + p1.y;
+			d2 = my.Wire.dist2(x, y, x0, y0, x1, y1);
+			if (d2 < bestD2) {
+				bestD2 = d2;
+				ret = [p1, p0];
 			}
 		});
 		return ret;
