@@ -71,6 +71,19 @@ var Workshop = {};
 		this.type.propagate(this, state);
 	};
 
+	my.Element.prototype.forEachAttachedWire = function (callback) {
+		var j, pj, k, ret;
+		for (j = this.ports.length - 1; j >= 0; j -= 1) {
+			pj = this.ports[j];
+			for (k = pj.ports.length - 1; k >= 0; k -= 1) {
+				ret = callback(pj, pj.ports[k]);
+				if (ret === false) {
+					return false;
+				}
+			}
+		}
+	};
+
 	my.Layout = function () {
 		this.maxEltId = -1;
 		this.maxPortId = -1;
@@ -124,5 +137,36 @@ var Workshop = {};
 	my.Layout.prototype.removeWire = function (port0, port1) {
 		removeArray(port0.ports, port1);
 		removeArray(port1.ports, port0);
+	};
+
+	my.Layout.prototype.forEachWire = function (callback) {
+		var i, elt, j, pj, k, ret;
+		for (i = this.elts.length - 1; i >= 0; i -= 1) {
+			elt = this.elts[i];
+			for (j = elt.ports.length - 1; j >= 0; j -= 1) {
+				pj = elt.ports[j];
+				if (pj.input) {
+					for (k = pj.ports.length - 1; k >= 0; k -= 1) {
+						ret = callback(pj, pj.ports[k]);
+						if (ret === false) {
+							return false;
+						}
+					}
+				}
+			}
+		}
+	};
+
+	my.Layout.prototype.forEachPort = function (callback) {
+		var i, elt, j, pk, k, ret;
+		for (i = this.elts.length - 1; i >= 0; i -= 1) {
+			elt = this.elts[i];
+			for (j = elt.ports.length - 1; j >= 0; j -= 1) {
+				ret = callback(elt.ports[j]);
+				if (ret === false) {
+					return false;
+				}
+			}
+		}
 	};
 }(Workshop, jQuery));
