@@ -97,7 +97,7 @@
 			ex = e.pageX;
 			ey = e.pageY;
 			fixEvent(self, e);
-			if (this.toolbarEnabled && (ey < canvas.offset().top
+			if (self.toolbarEnabled && (ey < canvas.offset().top
 					|| ex < canvas.offset().left)) {
 				newGest = null;
 				$('.tool', toolbar).each(function (i, tool) {
