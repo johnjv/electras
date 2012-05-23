@@ -3,6 +3,15 @@ $(document).ready(function(){
 	
 	Placer.place();
 	
+	$("#advanceLevel").click(function(){
+	    //console.log("advance");
+		LevelSelector.advanceLevel(true); // check whether the level was completed or not
+	});
+	
+	$("#showLevels").click(function(){
+		LevelSelector.showSelector(true);			
+	});
+	
 	$("#start").click(function(){
 		updateChalkBoard();
 		startMachine();
@@ -12,17 +21,19 @@ $(document).ready(function(){
 		var items = createPictures();
 		var count =0;
 		var candies = getLevelType();
+		var flag = $('<img src="../Floor/resource-image/envx.png" id="flag"></img>');
 		
 		function startNext(){
 			if(count < 8) {
 				var check = candies[count].checkCandy();
+				
 				if (check === 1) console.log(count + " Correct");
 			
 				else if (check === 0){
 					console.log(count + " Push away, mark X");
 					movePuncher();
-					putAFlag();
-			        moveFlag();
+					putAFlag(flag);
+			        moveFlag(flag);
 				}
 				else if(check === -1){
 					console.log(count + " Pushed away, correct");
@@ -42,7 +53,6 @@ $(document).ready(function(){
 		}
 		startNext();
 	}
-	
 	
 	function getLevelType(){
 		"use strict";
@@ -113,30 +123,53 @@ $(document).ready(function(){
         return movedCandies;
     }
 	
-	function putAFlag(){
+	function putAFlag(flag){
 		"use strict";
-		var flag = $('<img src="../Floor/resource-image/envx.png" id="flag"></img>');
 		var glove = $('#glove');
 		var flagPos;
 		var body = $('body');
 		flag.width(20);
 		body.append(flag);
-		var x  = glove.offset().left + glove.width()/2.0;
-		var y = glove.offset().top + glove.height();
-		
-		flag.offset({left:x,top:y});
-		console.log(x);
-        console.log(y);
+		$(flag).each(function(){
+			var x  = glove.offset().left + glove.width()/2.0;
+			var y = glove.offset().top + glove.height();
+			flag.offset({left:x,top:y});
+			body.append(flag);
+			console.log(x);
+		    console.log(y);
+		});
+      	//return flag
 	}
 	
-	function moveFlag(){
+	function moveFlag(flag){
 		"use strict";
+		var belt = $('#belt');
+		var glove = $('#glove');
+		var flag = $('#flag');
+		var x = flag.offset().left - belt.offset().left;
+		
 		$("#flag").animate({
-			left:'-=300' // this should be machine.width - arm.left
-		},2000);
-		$(flag).animate({
-			height: 'toggle'
+			left:'-=0' + x
 		},3000);
+			/*$(flag).animate({
+				height: 'toggle'
+			},3000);*/
+		//flag.detach();
+	}
+
+	
+	function getOrder(){
+		"use strict";
+		var level = LevelSelector.getCurrentLevel();
+		var order = level.orderText;
+		return order;
+		//console.log(order);
+	}
+	
+	function updateChalkBoard(order){
+		"use strict"
+		var orderText = getOrder();
+		$('#order').text(orderText);
 	}
 
 	function movePuncher(){
@@ -160,7 +193,7 @@ $(document).ready(function(){
 		for(var i=0; i<movedCandies.length ; i+=1){
 			movedCandies[i].remove();
 			body.append(movedCandies[i]);	
-			movedCandies[i].offset({left:x+ 2*i, top:y});
+			movedCandies[i].offset({left:x + 3*i, top:y});
 		}
 	}
 	
