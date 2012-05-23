@@ -144,63 +144,6 @@
 		return drawingElts;
 	}
 
-	my.AddGesture = function (info, type, e) {
-		var dragImg, x, y;
-
-		this.type = type;
-		this.elt = new my.Element(type, e.circuitX, e.circuitY);
-		my.DrawCirc.createElement(info, this.elt);
-	};
-
-	my.AddGesture.prototype.mouseDrag = function (info, e) {
-		var elt, poffs, legal;
-
-		elt = this.elt;
-		elt.x = e.circuitX;
-		elt.y = e.circuitY;
-		my.DrawCirc.repositionElement(info, elt);
-
-		legal = isLegalPosition(info, elt, 0, 0);
-		if (legal.legal === LEGAL_OK) {
-			$(elt.imgElt).stop().fadeTo(0, 1.0);
-		} else {
-			$(elt.imgElt).stop().fadeTo(0, 0.5);
-		}
-		$.each(elt.conns, function (i, conn) {
-			if (conn.circ !== null) {
-				if (legal.legal === LEGAL_OK) {
-					conn.circ.attr('opacity', 1.0);
-				} else {
-					conn.circ.attr('opacity', 0.5);
-				}
-			}
-			if (conn.stub !== null) {
-				if (legal.legal === LEGAL_OK) {
-					conn.stub.attr('opacity', 1.0);
-				} else {
-					conn.stub.attr('opacity', 0.5);
-				}
-			}
-		});
-	};
-
-	my.AddGesture.prototype.mouseUp = function (info, e) {
-		var elt, legal;
-		elt = this.elt;
-		legal = isLegalPosition(info, elt, 0, 0);
-		if (legal.legal === LEGAL_OK) {
-			info.layout.addElement(elt);
-			$.each(legal.conns, function (i, conn) {
-				info.layout.addWire(elt.conns[conn[0]], conn[1]);
-				my.DrawCirc.attachWire(info, elt.conns[conn[0]], conn[1]);
-			});
-			info.circuitChanged();
-		} else {
-			my.DrawCirc.removeElement(info, elt);
-		}
-		info.setGesture(null);
-	};
-
 	my.MoveGesture = function (info, elt, e) {
 		this.elt = elt;
 		this.x0 = e.circuitX;
@@ -319,4 +262,26 @@
 			}
 		});
 	};
+
+	my.AddGesture = function (info, type, e) {
+		var dragImg, x, y;
+
+		this.elt = new my.Element(type, -100, -100);
+		this.x0 = -100;
+		this.y0 = -100;
+		this.hidden = [];
+		this.drawingElts = [];
+		my.DrawCirc.createElement(info, this.elt);
+		this.dragImg = this.elt.imgElt;
+		this.offs0 = this.elt.imgElt.offset();
+	};
+
+	my.AddGesture.prototype.mouseDrag = my.MoveGesture.prototype.mouseDrag;
+
+	my.AddGesture.prototype.mouseUp = function (info, e) {
+		info.layout.addElement(this.elt);
+		my.MoveGesture.prototype.mouseUp.call(this, info, e);
+	};
+
+	my.AddGesture.prototype.cancel = my.MoveGesture.prototype.cancel;
 }(Workshop, jQuery));
