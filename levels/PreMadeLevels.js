@@ -1,25 +1,25 @@
-var all_my_chocolates = new Level({
-  levelname: 'All my chocolates',  
+var i_so_blue = new Level({
+  levelname: "I'm so blue",
   levelid: 1,
   orderText:  "Give me every chocolate you make!",
-  hint: 'You should connect the chocolate sensor to the lightbulb by clicking on the connectors.',
+  hint: 'You should connect the blue sensor to the lightbulb by clicking on the connectors.',
   sensors:  'C',
   tools: [],
   types:  ['*o'], 
   answers: 'C*',
-  script: 'all_my_chocolates'
+  script: 'i_so_blue'
 });
 
-var a_bar_walks_into_my_tummy = new Level({
-  levelname: 'A bar walks into my tummy',  
+var its_a_start = new Level({
+  levelname: "It's a STARt",
   levelid: 2,
-  orderText: 'I only want bar-shaped candies',
-  hint: "You have some choices.  Remember, bar-shaped candies are rectangular.",
+  orderText: 'I only want star-shaped candies',
+  hint: "You have some choices.  Remember, star-shaped candies are shaped like stars.",
   sensors: '|o-',
   tools: [],
   types: ['C*'],
-  answers: '*-',
-  script: 'a_bar_walks_into_my_tummy'
+  answers: '*|',
+  script: 'its_a_start'
 });
 
 var soyl_not_green = new Level({
@@ -34,25 +34,25 @@ var soyl_not_green = new Level({
   script: 'soyl_not_green'
 });
 
-var mint_chocolate = new Level({
-  levelname: 'Mint chocolate',
+var flavor_unearthed = new Level({
+  levelname: 'Flavor unEARTHed',
   levelid: 4,
-  orderText: 'I want to combine mint candies and chocolate candies into something EXTREMELY delicious.',
+  orderText: 'I want to mix blue candies and green candies like a sugary meeting of sky and field.',
   hint: "This is the OR component.  It takes two inputs and lights up if either of them are on.  Try connecting" +
-      " a green and a brown sensor to it.",
+      " a green and a blue sensor to it.",
   sensors: 'GC',
   tools: ['OR'],
   types: ['*o'],
   answers: 'C*,G*',
-  script: 'mint_chocolate'
+  script: 'flavor_unearthed'
 });
 
 var indecisive = new Level({
   levelname: 'Indecisive',
   levelid: 5,
-  orderText: "I really like cherries, but I'm not sure if it's their flavor or their round shape." +
-      "  Get me some things that are either round OR cherry-flavored, so I can decide.",
-  hint:  "They want things that are round OR cherry-flavored.  This looks similar to what you did in the last level.",
+  orderText: "I really like cherries, but I'm not sure if it's their color or their round shape." +
+      "  Get me some things that are either round OR red, so I can decide.",
+  hint:  "They want things that are round OR red.  This looks similar to what you did in the last level.",
   sensors: 'CRo-',
   tools: ['OR'],
   types: ['**'],
@@ -60,58 +60,59 @@ var indecisive = new Level({
   script: 'indecisive'
 });
 
-var picky = new Level({
-  levelname: 'Picky',
+var anti_twinkle = new Level({
+  levelname: 'Anti Twinkle',
   levelid: 6,
-  orderText: "I don't know what I like, but I know what I don't like:  lemons and sticks.  Don't give me any lemons and don't give me any sticks.",
+  orderText: "I don't know what I like, but I know what I don't like:  yellows and stars.  Don't give me any yellow candies " +
+      "and don't give me any stars.",
   hint: "You'll have to combine an OR with either one or two NOTs.",
   sensors: 'Y|',
   tools: ['OR', 'NOT'],
   types: ['**'],
   answers: 'Co,C-,Ro,R-,Go,G-', 
-  script: 'picky'
+  script: 'anti_twinkle'
 });
 
-var mint_chocolate_returns = new Level({
-  levelname: 'Mint chocolate returns',
+var a_new_earth = new Level({
+  levelname: 'A new earth',
   levelid: 7,
-  orderText: "I only want candies that are mint or chocolate.  I don't care if you got the wrong sensors, you can figure it out!",
+  orderText: "I want candies that are green or blue.  I don't care if you got the wrong sensors, you can figure it out!",
   hint: "Looks like whoever delivers our sensors messed up and gave us the wrong ones!  You'll just have to use your brains to overcome that.",
   sensors: 'YR',
   tools: ['OR', 'NOT'],
   types: ['**'],
   answers: 'C*,G*',
-  script: 'mint_chocolate_returns'
+  script: 'a_new_earth'
 });
 
-var classic = new Level({
-  levelname: 'Classic',
+var out_on_a_lemon = new Level({
+  levelname: 'Out on a LEMON',
   levelid: 8,
-  orderText: "I want chocolate bars.  Not chocolate spheres, or cherry bars, but only things that are chocolate AND bars.",
+  orderText: "I want yellow squares.  Not yellow balls, or red squares, but only things that are yellow AND squares.",
   hint: "The AND operator combines two different sensors, and only lights up it both are true",
-  sensors: 'C-',
+  sensors: 'Y-',
   tools: ['AND'],
   types: ['**'],
-  answers: 'C-',
+  answers: 'Y-',
   script: 'classic'
 });
 
 var backlash = new Level({
   levelname: 'Backlash',
   levelid: 9,
-  orderText: "Oh, that was a disaster!  Now my customers won't take chocolate bars!  I want everything that is NOT a chocolate bar.",
+  orderText: "Oh, that was a disaster!  Now my customers won't take any lemon squares!  I want everything that is NOT a yellow square.",
   hint: "We want the OPPOSITE of last time.  What operator gives you the opposite?",
-  sensors: 'C-',
+  sensors: 'Y-',
   tools: ['AND', 'NOT'],
   types: ['**'],
-  answers: 'Co,C|,R*,G*,Y*',
+  answers: 'Yo,Y|,R*,G*,C*',
   script: 'backlash'
 });
 
 var speak_softly_cherry_a_stick = new Level({
-  levelname: 'Speak softly, cherry a stick',
+  levelname: 'Speak softly, CHERRY a stick',
   levelid: 10,
-  orderText: "I want Cherry bars and Lemon bars.",
+  orderText: "I want red bars and yellow bars.",
   hint: "There are only so many ways to combine these operators and sensors.  Keep trying!",
   sensors: '-RY',
   tools: ['AND', 'OR'],
@@ -124,19 +125,19 @@ var speak_softly_cherry_a_stick = new Level({
 var botique = new Level({
   levelname: 'Botique',  
   levelid: 11,
-  orderText: "I want lemon bars and chocolate balls. But not lemon balls or chocolate bars! "  ,
-  hint: "Make something that finds lemon bars, then something that finds chocolate balls, then combine them.",
-  sensors: 'CY-o',
+  orderText: "I want lemon balls and green squares. But not lemon squares or green balls! "  ,
+  hint: "Make something that finds lemon balls, then something that finds green squares, then combine them.",
+  sensors: 'GY-o',
   tools: ['AND', 'OR'],
   types: ['**'],
-  answers: 'Y-,Co',
+  answers: 'Yo,G-',
   script: 'botique'
 });
 
 var winnowing = new Level({
   levelname: 'Winnowing',  
   levelid: 12,
-  orderText: "I want something cherry or lemon, and I want it in either a ball or a stick shape.",
+  orderText: "I want something red or yellow, and I want it in either a ball or a star shape.",
   hint: "You'll have to combine an AND and two ORs to make this work.",
   sensors: 'YRo|',
   tools: ['AND', 'OR', 'NOT'],
@@ -148,7 +149,7 @@ var winnowing = new Level({
 var gniwonniw = new Level({
   levelname: 'Gniwonniw',
   levelid: 13,
-  orderText: "I want something that is mint or chocolate, and I want it as a bar.",
+  orderText: "I want something that is green or blue, and I want it as a square.",
   hint: "We've got the same tools as last time, but we want the exact opposite.  How do we reverse what the machine is telling us?",
   sensors: 'YRo|',
   tools: ['AND', 'OR', 'NOT'],
@@ -160,20 +161,20 @@ var gniwonniw = new Level({
 var mish_mash = new Level({
   levelname: 'Mishmash',
   levelid: 14,
-  orderText: "We want cherry bars or any ball that isn't chocolate.",
+  orderText: "We want cherry balls or any star that isn't blue.",
   hint: "You'll have to use all of the operators creatively.  Try making a machine that fills the first part of the order, then a machine that fills the second part, then one that combines them.",
   sensors: 'RCo|',
   tools: ['AND', 'OR', 'NOT'],
   types: ['**'],
-  answers: 'R-,Ro,Go,Yo',
+  answers: 'Ro,R|,G|,Y|',
   script: 'mishmash'
 });
 
 var combination = new Level({
   levelname: 'Combination',
   levelid: 15,
-  orderText: "Mint.  ONLY MINT." ,
-  hint:  "There doesn't seem to be a mint sensor.  It looks like we'll have to get the other sensors working together to make up for that.",
+  orderText: "Green.  Only green.." ,
+  hint:  "There doesn't seem to be a green sensor.  It looks like we'll have to get the other sensors working together to make up for that.",
   sensors: 'CRY',
   tools: ['AND', 'OR', 'NOT'],
   types: ['**'],
@@ -184,7 +185,7 @@ var combination = new Level({
 var conditional = new Level({
   levelname: 'Conditional',
   levelid: 16,
-  orderText: "I don't want any chocolates... unless it's a chocolate bar.",
+  orderText: "I don't want any blues... unless it's a blue square.",
   hint: "Each operator gets used EXACTLY once, and one of the sensors gets used more than once.",
   tools: ['AND', 'OR', 'NOT'],
   sensors: 'C-',
@@ -197,7 +198,7 @@ var conditional = new Level({
 var fake_it = new Level({
   levelname: 'Fake it',
   levelid: 17,
-  orderText: "I want chocolate OR mint... oh, and I'll be borrowing your OR operator.  I hope you don't need it.",
+  orderText: "I want blue OR green... oh, and I'll be borrowing your OR operator.  I hope you don't need it.",
   hint: "Oh no!  Whatever will we do?  Somehow you'll have to make an OR operator from the AND and NOT operators.  ",
   tools: ['AND', 'NOT'],
   sensors: 'CG',
@@ -209,8 +210,8 @@ var fake_it = new Level({
 var fake_out = new Level({
   levelname: 'Fake out',
   levelid: 18,
-  orderText: "I want lemon balls!  And your AND operator!",
-  hint: "Wait, hasn't this happened before?  Let's try and solve it the same way as last time.",
+  orderText: "I want yellow balls!  And your AND operator!",
+  hint: "Wait, hasn't this happened before?  Let's try and solve it a similar way as last time.",
   tools: ['OR', 'NOT'],
   sensors: 'Yo',
   types: ['**'],
@@ -221,7 +222,7 @@ var fake_out = new Level({
 var stop_gap = new Level({
   levelname: 'Stop gap',
   levelid: 19,
-  orderText: "I'll take anything not mint... and I'll take your NOT operator too!",
+  orderText: "I'll take anything not green... and I'll take your NOT operator too!",
   hint: "",
   tools: ['AND', 'OR'],
   sensors: 'CGRY',
@@ -233,12 +234,12 @@ var stop_gap = new Level({
 var kludge = new Level({
   levelname: 'Kludge',
   levelid: 20,
-  orderText: "I want chocolate balls and sticks that aren't mint.  By the way, I'm loving that NOT operator, I hope you don't need it back!",
+  orderText: "I want stars that aren't mint, and anything chocolate.  By the way, I'm loving that NOT operator, I hope you don't need it back!",
   hint: "When they said 'and', it's a trick of the English language.  In our world, that means OR.  Anything we let pass will be a chocolate bar OR a stick that isn't mint.",
   tools: ['AND', 'OR'],
-  sensors: '|RYCo',
+  sensors: '|RYC',
   types: ['**'],
-  answers: 'Co,C|,R|,Y|',
+  answers: 'C*,R|,Y|',
   script: 'kludge'
 });
 //need to edit this to get it down to 4 sensors
