@@ -1,5 +1,5 @@
 
-var a_bar_walks_into_my_tummy_events = function(){
+var its_a_start_events = function(){
   var elements = new Elements(Circuit.getElements())
   var lightbulb_in = elements.lightbulb().first_connection()
   var empty_sensors = elements.sensor().empty().elements
@@ -10,7 +10,7 @@ var a_bar_walks_into_my_tummy_events = function(){
       console.log(sensor)
         highlightSection(Filters.find_connection(sensor,'empty',false), true)
     })
-    createSpeechBubble(empty_sensors[0].connections[0], "Candies can have 3 shapes: round(o), stick(|), and bar(-)");
+    createSpeechBubble(empty_sensors[0].connections[0], "Candies can have 3 shapes: ball, star, and square.");
   }
 
   else if (elements.sensor('-').active_connection().exists() &&
@@ -33,30 +33,30 @@ var a_bar_walks_into_my_tummy_events = function(){
 
 var start2 = [
     test_lightbulb(''),
-    test_sensor(2, 'bar', ''),
-    test_sensor(3, 'stick', ''),
+    test_sensor(2, 'square', ''),
+    test_sensor(3, 'star', ''),
     test_sensor(4, 'ball', '')
 ]
 
-var bar_selected = [
+var square_selected = [
   test_lightbulb(''),
-  test_sensor(2, 'bar', 'active'),
-  test_sensor(3, 'stick', ''),
+  test_sensor(2, 'square', 'active'),
+  test_sensor(3, 'star', ''),
   test_sensor(4, 'ball', '')
 ]
 
-var stick_selected = [
+var star_selected = [
   test_lightbulb(''),
-  test_sensor(2, 'bar', ''),
-  test_sensor(3, 'stick', 'active'),
+  test_sensor(2, 'square', ''),
+  test_sensor(3, 'star', 'active'),
   test_sensor(4, 'ball', '')
 ]
 
 
 var wrong_one = [
   test_lightbulb('4'),
-  test_sensor(2, 'bar', ''),
-  test_sensor(3, 'stick', ''),
+  test_sensor(2, 'square', ''),
+  test_sensor(3, 'star', ''),
   test_sensor(4, 'ball', '1')
 ]
 

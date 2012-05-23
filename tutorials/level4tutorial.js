@@ -1,4 +1,4 @@
-var i_mint_chocolate_events = function(){
+var flavor_unearthed = function(){
   var elements = new Elements(Circuit.getElements())
   var empty_sensors = elements.sensor().output('empty').elements
   var has_incoming_active_or = elements.OR().input('active').exists()
@@ -47,56 +47,56 @@ var i_mint_chocolate_events = function(){
   }
 
   else if (empty_sensors.length == 0){
-    createSpeechBubble(or_operators[0].connects[0], "Great!  Now if either mint or chocolate is true, the OR will output true.")
+    createSpeechBubble(or_operators[0].connects[0], "Great!  Now if either green or blue is true, the OR will output true.")
   }
 }
 
 var start4 = [
     test_lightbulb(''),
-    test_sensor(2, 'mint', ''),
-    test_sensor(3, 'chocolate', '')
+    test_sensor(2, 'green', ''),
+    test_sensor(3, 'blue', '')
 ]
 
 var one_empty_OR = [
   test_lightbulb(''),
-  test_sensor(2, 'mint', ''),
-  test_sensor(3, 'chocolate', ''),
+  test_sensor(2, 'green', ''),
+  test_sensor(3, 'blue', ''),
   test_OR(4, '', '', '')
 ]
 
 var two_ORs = [
   test_lightbulb(''),
-  test_sensor(2, 'mint', ''),
-  test_sensor(3, 'chocolate', ''),
+  test_sensor(2, 'green', ''),
+  test_sensor(3, 'blue', ''),
   test_OR(4, '', '', ''),
   test_OR(5, '', '', '')
 ]
 
 var wrong_lightbulb_connection = [
   test_lightbulb(2) ,
-  test_sensor(2, 'mint', 1),
-  test_sensor(3, 'chocolate', ''),
+  test_sensor(2, 'green', 1),
+  test_sensor(3, 'blue', ''),
   test_OR(3, '', '', '')
 ]
 
 
 var making_first_connection = [
   test_lightbulb(''),
-  test_sensor(2, 'mint', ''),
-  test_sensor(3, 'chocolate', ''),
+  test_sensor(2, 'green', ''),
+  test_sensor(3, 'blue', ''),
   test_OR(4, 'active', '', '')
 ]
 
 var first_connection_made = [
   test_lightbulb(''),
-  test_sensor(2, 'mint', 4),
-  test_sensor(3, 'chocolate', ''),
+  test_sensor(2, 'green', 4),
+  test_sensor(3, 'blue', ''),
   test_OR(4, '', 2, '')
 ]
 
 var two_connections_made = [
   test_lightbulb(''),
-  test_sensor(2, 'mint', 4),
-  test_sensor(3, 'chocolate', 4),
+  test_sensor(2, 'green', 4),
+  test_sensor(3, 'blue', 4),
   test_OR(4, 3, 2, '')
 ]
