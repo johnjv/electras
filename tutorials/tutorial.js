@@ -7,11 +7,13 @@ Tutorial = {};
 		"use strict";
 		var timer = window.setInterval(function(){
 		    $("img.highlighter").each(function(){
-		    		$(this).css("opacity", "0");
+		    		//$(this).css("opacity", "0");
+		    		$(this).fadeOut(1000, function(){});
 		    	});
 		    window.setTimeout(function(){
 		    $("img.highlighter").each(function(){
-		    		$(this).css("opacity", "1");
+		    		//$(this).css("opacity", "1");
+		    		$(this).fadeIn(1600, function(){});
 		    	});
 		    }, 1000);
 		}, interval);
@@ -20,25 +22,26 @@ Tutorial = {};
 	/*highlight an element's section*/
 	my.highlightSection = function(x, y, width, height, isCircular){
 		"use strict";
+		var highlightDiv = $('<div class = "highlight"></div>');
+		var body = $('body');
+		body.append(highlightDiv);
+		highlightDiv.offset({left: x, top: y});
+		highlightDiv.width(width);
+		highlightDiv.height(height);
+		var imageUrl;
 		if(isCircular){
-			var circHighlighter = $('<img src = "../tutorials/circ_highlighter.svg" class = "highlighter" onmousedown = "return false"></img>');
-			circHighlighter.width(width);
-			circHighlighter.height(height);
-			circHighlighter.offset({left: x, top: y});
-			var body = $('body');
-			body.append(circHighlighter);
+			imageUrl = ('../tutorials/circ_highlighter.png');
+			highlightDiv.css('background-image', 'url(' + imageUrl + ')');
+			highlightDiv.css('background-size', '100% 100%');
+			highlightDiv.css('background-repeat' ,'no-repeat');
 		}else{
-			var circHighlighter = $('<img src = "../tutorials/rect_highlighter.png" class = "highlighter" onmousedown = "return false"></img>');
-			circHighlighter.width(width);
-			circHighlighter.height(height);
-			circHighlighter.offset({left: x, top: y});
-			var body = $('body');
-			body.append(circHighlighter);
+			imageUrl = encodeURI('../tutorials/rect_highlighter.svg');
+			highlightDiv.css('background-image', 'url(' + imageUrl + ')');
+			highlightDiv.css('background-size', '100%');
+			highlightDiv.css('background-repeat' ,'no-repeat');
 		}
-		$('.highlighter').each(function(){
-			$(this).css("z-index", "-1");
-		});
 		blink(3000, 1000);
+		
 	}
 
 	/*create temporary speech bubble*/
@@ -90,7 +93,7 @@ Tutorial = {};
 			bubbleContainer.text(text);
 			bubbleContainer.offset({left: x, top: y});
 		}
-		bubbleContainer.draggable();
+		bubbleContainer.draggable({scroll: false, containment: $('body')});
 		$('div#container').css('opacity', '.8');
 	}
 
