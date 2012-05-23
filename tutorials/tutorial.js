@@ -56,7 +56,7 @@ Tutorial = {};
 
 	/*if you need to remove the highlighter*/
 	my.unhighlightSection = function(){
-		$('img.highlighter').each(function(){
+		$('div.highlight').each(function(){
 			$(this).remove();
 		});
 		$('div#container').remove();
