@@ -2,32 +2,32 @@
 	"use strict";
 	var toolTypes = {
 		'and': new my.ElementType('and', 'gateand', -60, -25, 50, 50, [
-				new my.Connection(false, 0, 0, -10, 0),
-				new my.Connection(true, -70, -20, 10, 0),
-				new my.Connection(true, -70,  20, 10, 0)
+				new my.Port(false, 0, 0, -10, 0),
+				new my.Port(true, -70, -20, 10, 0),
+				new my.Port(true, -70,  20, 10, 0)
 			], function (elt, state) {
-				state.setValue(elt.conns[0],
-					state.getValue(elt.conns[1]) && state.getValue(elt.conns[2]));
+				state.setValue(elt.ports[0],
+					state.getValue(elt.ports[1]) && state.getValue(elt.ports[2]));
 			}),
 		'or': new my.ElementType('or', 'gateor', -60, -25, 50, 50, [
-				new my.Connection(false, 0, 0, -10, 0),
-				new my.Connection(true, -70, -20, 10, 0),
-				new my.Connection(true, -70,  20, 10, 0)
+				new my.Port(false, 0, 0, -10, 0),
+				new my.Port(true, -70, -20, 10, 0),
+				new my.Port(true, -70,  20, 10, 0)
 			], function (elt, state) {
-				state.setValue(elt.conns[0],
-					state.getValue(elt.conns[1]) || state.getValue(elt.conns[2]));
+				state.setValue(elt.ports[0],
+					state.getValue(elt.ports[1]) || state.getValue(elt.ports[2]));
 			}),
 		'not': new my.ElementType('not', 'gatenot', -40, -15, 30, 20, [
-				new my.Connection(false, 0, 0, -10, 0),
-				new my.Connection(true, -50, 0, 10, 0)
+				new my.Port(false, 0, 0, -10, 0),
+				new my.Port(true, -50, 0, 10, 0)
 			], function (elt, state) {
-				state.setValue(elt.conns[0], !state.getValue(elt.conns[1]));
+				state.setValue(elt.ports[0], !state.getValue(elt.ports[1]));
 			}),
 		'in': new my.ElementType('in', 'switch0', -60, -25, 50, 50, [
-				new my.Connection(false, 0, 0, -10, 0)
+				new my.Port(false, 0, 0, -10, 0)
 			], function (elt, state) {
 				var val = state.eltStates[elt.id] || false;
-				state.setValue(elt.conns[0], val);
+				state.setValue(elt.ports[0], val);
 			}, {
 				poke: function (elt, x, y, state) {
 					if (x >= -45 && x <= -25 && y >= -15 && y <= 15) {
@@ -45,12 +45,12 @@
 				}
 			}),
 		'out': new my.ElementType('out', 'output0', -30, -60, 50, 50, [
-				new my.Connection(true, 0, 0, 0, -10)
+				new my.Port(true, 0, 0, 0, -10)
 			], function (elt, state) {
-				state.setState(elt, state.getValue(elt.conns[0]));
+				state.setState(elt, state.getValue(elt.ports[0]));
 			}, {
 				updateImage: function (elt, state) {
-					if (state.getValue(elt.conns[0])) {
+					if (state.getValue(elt.ports[0])) {
 						elt.setImage('output1');
 					} else {
 						elt.setImage('output0');
@@ -177,8 +177,8 @@
 		self = this;
 		state = this.state.evaluate();
 		self.state = state;
-		$.each(state.repaintConns, function (id, conn) {
-			my.DrawCirc.recolorConnection(self, conn);
+		$.each(state.repaintPorts, function (id, port) {
+			my.DrawCirc.recolorPort(self, port);
 		});
 		$.each(state.repaintElts, function (id, elt) {
 			elt.type.updateImage(elt, state);
@@ -200,13 +200,13 @@
 			elt.type.updateImage(elt, self.state);
 		});
 		$.each(layout.elts, function (i, elt) {
-			var conn0, conn1, k, j;
-			for (k = elt.conns.length - 1; k >= 0; k -= 1) {
-				conn0 = elt.conns[k];
-				if (conn0.input) {
-					for (j = conn0.conns.length - 1; j >= 0; j -= 1) {
-						conn1 = conn0.conns[j];
-						my.DrawCirc.attachWire(self, conn0, conn1);
+			var port0, port1, k, j;
+			for (k = elt.ports.length - 1; k >= 0; k -= 1) {
+				port0 = elt.ports[k];
+				if (port0.input) {
+					for (j = port0.ports.length - 1; j >= 0; j -= 1) {
+						port1 = port0.ports[j];
+						my.DrawCirc.attachWire(self, port0, port1);
 					}
 				}
 			}
@@ -219,11 +219,11 @@
 		self = this;
 		this.state = state;
 		$.each(this.layout.elts, function (i, elt) {
-			var j, conn;
+			var j, port;
 			elt.type.updateImage(elt, state);
-			for (j = 0; j < elt.conns.length; j += 1) {
-				conn = elt.conns[j];
-				my.DrawCirc.recolorConnection(self, conn);
+			for (j = 0; j < elt.ports.length; j += 1) {
+				port = elt.ports[j];
+				my.DrawCirc.recolorPort(self, port);
 			}
 		});
 	};
@@ -263,23 +263,18 @@
 				type = toolTypes[tool];
 				toolbar.append($('<img></img>')
 					.addClass('tool')
+					.width(type.imgWidth * 0.8)
 					.attr('src', my.getResourcePath(type.imgName + '.png'))
 					.attr('type', type.id));
 			} else if (tool === 'eraser') {
 				toolbar.append($('<img></img>')
 					.addClass('tool')
+					.width(50 * 0.8)
 					.attr('src', my.getResourcePath('eraser.png'))
 					.attr('type', 'eraser'));
 			} else if (tool !== '') {
 				console.log('unknown tool type "' + tool + '"'); //OK
 			}
-		});
-
-		toolbar.imagesLoaded(function () {
-			$('.tool').each(function () {
-				var elt = $(this);
-				elt.width(elt.width() * 0.2);
-			});
 		});
 	};
 }(Workshop, jQuery, Raphael, multidrag));

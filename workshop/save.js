@@ -2,7 +2,7 @@
 	"use strict";
 
 	my.stringify = function (layout) {
-		var ret, ids, i, elt, cur, j, ci, co, k, sep;
+		var ret, ids, i, elt, cur, j, pi, po, k, sep;
 
 		ids = {};
 		for (i = layout.elts.length - 1; i >= 0; i -= 1) {
@@ -20,15 +20,15 @@
 			}
 			cur += elt.type.id + elt.x + ',' + elt.y;
 			sep = ':';
-			for (j = 0; j < elt.conns.length; j += 1) {
-				ci = elt.conns[j];
-				if (ci.input) {
-					if (ci.conns.length === 0) {
+			for (j = 0; j < elt.ports.length; j += 1) {
+				pi = elt.ports[j];
+				if (pi.input) {
+					if (pi.ports.length === 0) {
 						cur += sep;
 					} else {
-						co = ci.conns[0];
-						cur += sep + ids['i' + co.elt.id];
-						k = $.inArray(co, co.elt.conns);
+						po = pi.ports[0];
+						cur += sep + ids['i' + po.elt.id];
+						k = $.inArray(po, po.elt.ports);
 						if (k !== 0) {
 							cur += '.' + k;
 						}
@@ -43,13 +43,13 @@
 	};
 
 	my.parse = function (str, typeLookup) {
-		var layout, i, j, k, descs, parts, reComp, comps, conns,
-			comp, conn, part, comp1;
+		var layout, i, j, k, descs, parts, reComp, comps, ports,
+			comp, port, part, comp1;
 		layout = new my.Layout();
 		descs = str.split(';');
 		reComp = /^([^0-9]+)([0-9]+),([0-9]+)(:[0-9,.]*)?$/;
 		comps = {};
-		conns = {};
+		ports = {};
 		for (i = 0; i < descs.length; i += 1) {
 			parts = reComp.exec(descs[i]);
 			if (parts === null) {
@@ -66,18 +66,18 @@
 				console.log('unknown part ID "' + parts[1] + '"'); //OK
 			}
 			if (parts[4] && parts[4].length > 0) {
-				conns[i] = parts[4];
+				ports[i] = parts[4];
 			}
 		}
 
-		for (i in conns) {
-			if (conns.hasOwnProperty(i) && i in comps) {
+		for (i in ports) {
+			if (ports.hasOwnProperty(i) && i in comps) {
 				comp = comps[i];
-				parts = conns[i].split(',');
+				parts = ports[i].split(',');
 				k = 0;
-				for (j = 0; j < comp.conns.length; j += 1) {
-					conn = comp.conns[j];
-					if (conn.input) {
+				for (j = 0; j < comp.ports.length; j += 1) {
+					port = comp.ports[j];
+					if (port.input) {
 						if (k === 0) {
 							part = parts[k].substring(1);
 						} else {
@@ -87,7 +87,7 @@
 						if (part.length > 0) {
 							comp1 = comps[parseInt(part, 10)];
 							if (comp1) {
-								layout.addWire(conn, comp1.conns[0]);
+								layout.addWire(port, comp1.ports[0]);
 							}
 						}
 					}

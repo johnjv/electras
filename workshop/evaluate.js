@@ -1,14 +1,14 @@
 (function (my, $) {
 	"use strict";
-	function getValue(conn, trues) {
-		if (conn.input) {
-			if (conn.conns.length === 0) {
+	function getValue(port, trues) {
+		if (port.input) {
+			if (port.ports.length === 0) {
 				return false;
 			} else {
-				return trues.hasOwnProperty(conn.conns[0].id);
+				return trues.hasOwnProperty(port.ports[0].id);
 			}
 		} else {
-			return trues.hasOwnProperty(conn.id);
+			return trues.hasOwnProperty(port.id);
 		}
 	}
 
@@ -28,7 +28,7 @@
 		this.layout = layout;
 		this.trues = trues;
 		this.eltStates = eltStates;
-		this.repaintConns = {};
+		this.repaintPorts = {};
 		this.repaintElts = {};
 	}
 
@@ -50,8 +50,8 @@
 		return this.eltStates[elt.id];
 	};
 
-	State.prototype.getValue = function (conn) {
-		return getValue(conn, this.trues);
+	State.prototype.getValue = function (port) {
+		return getValue(port, this.trues);
 	};
 
 	State.prototype.setState = function (elt, value) {
@@ -67,13 +67,13 @@
 		}
 	};
 
-	State.prototype.setValue = function (conn, val) {
+	State.prototype.setValue = function (port, val) {
 		if (isFrozen(this)) {
 			throw new Error('state is frozen');
-		} else if (conn.input) {
+		} else if (port.input) {
 			throw new Error('Cannot set value for input');
 		} else {
-			this.sets.push({conn: conn, val: val});
+			this.sets.push({port: port, val: val});
 		}
 	};
 
@@ -82,7 +82,7 @@
 	}
 
 	State.prototype.evaluate = function () {
-		var trues, eltStates, state, dirty, iters, anyDirty, id, conns, i, j, set;
+		var trues, eltStates, state, dirty, iters, anyDirty, id, ports, i, j, set;
 
 		trues = copyShallow(this.trues);
 		eltStates = copyShallow(this.eltStates);
@@ -107,17 +107,17 @@
 			dirty = {};
 			for (i = 0; i < state.sets.length; i += 1) {
 				set = state.sets[i];
-				if (getValue(set.conn, trues) !== set.val) {
-					state.repaintConns[set.conn.id] = set.conn;
+				if (getValue(set.port, trues) !== set.val) {
+					state.repaintPorts[set.port.id] = set.port;
 					if (set.val) {
-						trues[set.conn.id] = 1;
+						trues[set.port.id] = 1;
 					} else {
-						delete trues[set.conn.id];
+						delete trues[set.port.id];
 					}
 
-					conns = set.conn.conns;
-					for (j = 0; j < conns.length; j += 1) {
-						dirty[conns[j].elt.id] = conns[j].elt;
+					ports = set.port.ports;
+					for (j = 0; j < ports.length; j += 1) {
+						dirty[ports[j].elt.id] = ports[j].elt;
 					}
 				}
 			}

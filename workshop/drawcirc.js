@@ -76,28 +76,28 @@
 		img.offset({ left: offs0.left + elt.x + elt.type.imgX,
 			top: offs0.top + elt.y + elt.type.imgY });
 
-		$.each(elt.conns, function (i, conn) {
-			my.DrawCirc.attachStub(info, conn);
+		$.each(elt.ports, function (i, port) {
+			my.DrawCirc.attachStub(info, port);
 		});
 	};
 
 	my.DrawCirc.removeElement = function (info, elt) {
-		$.each(elt.conns, function (i, conn) {
+		$.each(elt.ports, function (i, port) {
 			var j;
-			if (conn.circ !== null) {
-				conn.circ.remove();
+			if (port.circ !== null) {
+				port.circ.remove();
 			}
-			if (conn.stub !== null) {
-				conn.stub.remove();
+			if (port.stub !== null) {
+				port.stub.remove();
 			}
-			if (conn.line !== null) {
-				conn.line.remove();
+			if (port.line !== null) {
+				port.line.remove();
 			}
-			for (j = conn.conns.length - 1; j >= 0; j -= 1) {
-				if (conn.conns[j].line !== null) {
-					conn.conns[j].line.remove();
-					conn.conns[j].line = null;
-					my.DrawCirc.showStub(info, conn.conns[j]);
+			for (j = port.ports.length - 1; j >= 0; j -= 1) {
+				if (port.ports[j].line !== null) {
+					port.ports[j].line.remove();
+					port.ports[j].line = null;
+					my.DrawCirc.showStub(info, port.ports[j]);
 				}
 			}
 		});
@@ -113,28 +113,28 @@
 		y = offs0.top + elt.y + elt.type.imgY;
 		elt.imgElt.offset({left: x, top: y});
 
-		$.each(elt.conns, function (i, conn) {
+		$.each(elt.ports, function (i, port) {
 			var j;
-			my.DrawCirc.attachStub(info, conn);
-			for (j = conn.conns.length - 1; j >= 0; j -= 1) {
-				my.DrawCirc.attachWire(info, conn, conn.conns[j]);
+			my.DrawCirc.attachStub(info, port);
+			for (j = port.ports.length - 1; j >= 0; j -= 1) {
+				my.DrawCirc.attachWire(info, port, port.ports[j]);
 			}
 		});
 	};
 
-	my.DrawCirc.createStubCircle = function (info, conn, dx, dy) {
+	my.DrawCirc.createStubCircle = function (info, port, dx, dy) {
 		var color, x0, y0, circ;
 
-		color = getColor(info.state && info.state.getValue(conn));
-		x0 = conn.elt.x + conn.x;
-		y0 = conn.elt.y + conn.y;
+		color = getColor(info.state && info.state.getValue(port));
+		x0 = port.elt.x + port.x;
+		y0 = port.elt.y + port.y;
 		if (typeof dx !== 'undefined') {
 			x0 += dx;
 		}
 		if (typeof dy !== 'undefined') {
 			y0 += dy;
 		}
-		if (conn.input) {
+		if (port.input) {
 			circ = info.paper.circle(x0, y0, CONNECT_RADIUS);
 		} else {
 			circ = info.paper.circle(x0, y0, CONNECT_RADIUS);
@@ -144,20 +144,20 @@
 		return circ;
 	};
 
-	my.DrawCirc.createStub = function (info, conn, dx, dy) {
+	my.DrawCirc.createStub = function (info, port, dx, dy) {
 		var color, x0, y0, x1, y1, circ, stub;
 
-		color = getColor(info.state && info.state.getValue(conn));
-		x0 = conn.elt.x + conn.x;
-		y0 = conn.elt.y + conn.y;
+		color = getColor(info.state && info.state.getValue(port));
+		x0 = port.elt.x + port.x;
+		y0 = port.elt.y + port.y;
 		if (typeof dx !== 'undefined') {
 			x0 += dx;
 		}
 		if (typeof dy !== 'undefined') {
 			y0 += dy;
 		}
-		x1 = x0 + conn.dx;
-		y1 = y0 + conn.dy;
+		x1 = x0 + port.dx;
+		y1 = y0 + port.dy;
 		if (x1 > x0) {
 			x0 += CONNECT_RADIUS;
 		} else if (x1 < x0) {
@@ -173,66 +173,66 @@
 		stub.attr('stroke-width', WIRE_WIDTH);
 		stub.attr('stroke', color);
 
-		circ = my.DrawCirc.createStubCircle(info, conn, dx, dy);
+		circ = my.DrawCirc.createStubCircle(info, port, dx, dy);
 
 		return {circ: circ, stub: stub};
 	};
 
-	my.DrawCirc.attachStub = function (info, conn, dx, dy) {
+	my.DrawCirc.attachStub = function (info, port, dx, dy) {
 		var elts;
 
-		if (conn.circ) {
-			conn.circ.remove();
+		if (port.circ) {
+			port.circ.remove();
 		}
-		if (conn.stub) {
-			conn.stub.remove();
+		if (port.stub) {
+			port.stub.remove();
 		}
 
-		elts = my.DrawCirc.createStub(info, conn, dx, dy);
-		conn.circ = elts.circ;
-		conn.stub = elts.stub;
+		elts = my.DrawCirc.createStub(info, port, dx, dy);
+		port.circ = elts.circ;
+		port.stub = elts.stub;
 
-		if (conn.conns.length > 0) {
-			conn.stub.hide();
-			if (conn.input) {
-				conn.circ.hide();
+		if (port.ports.length > 0) {
+			port.stub.hide();
+			if (port.input) {
+				port.circ.hide();
 			}
 		}
 	};
 
-	my.DrawCirc.hideStub = function (info, conn) {
-		if (conn) {
-			conn.stub.hide();
-			conn.circ.hide();
+	my.DrawCirc.hideStub = function (info, port) {
+		if (port) {
+			port.stub.hide();
+			port.circ.hide();
 		}
 	};
 
-	my.DrawCirc.showStub = function (info, conn) {
-		if (conn) {
-			if (conn.conns.length === 0) {
-				conn.stub.show();
-				conn.circ.show();
-			} else if (!conn.input) {
-				conn.circ.show();
+	my.DrawCirc.showStub = function (info, port) {
+		if (port) {
+			if (port.ports.length === 0) {
+				port.stub.show();
+				port.circ.show();
+			} else if (!port.input) {
+				port.circ.show();
 			}
 		}
 	};
 
-	my.DrawCirc.createWire = function (info, conn0, conn1, dx0, dy0) {
-		var c0, c1, x0, y0, x1, y1, line;
-		if (conn0.input) {
-			c0 = conn1;
-			c1 = conn0;
+	my.DrawCirc.createWire = function (info, port0, port1, dx0, dy0) {
+		var p0, p1, x0, y0, x1, y1, line;
+		if (port0.input) {
+			p0 = port1;
+			p1 = port0;
 		} else {
-			c0 = conn0;
-			c1 = conn1;
+			p0 = port0;
+			p1 = port1;
 		}
-		x0 = c0.elt.x + c0.x;
-		y0 = c0.elt.y + c0.y;
-		x1 = c1.elt.x + c1.x;
-		y1 = c1.elt.y + c1.y;
+		x0 = p0.elt.x + p0.x;
+		y0 = p0.elt.y + p0.y;
+		x1 = p1.elt.x + p1.x;
+		y1 = p1.elt.y + p1.y;
 		if (typeof dx0 !== 'undefined') {
-			if (c0 === conn0) {
+			if (p0 === port0) {
 				x0 += dx0;
 				y0 += dy0;
 			} else {
@@ -240,87 +240,87 @@
 				y1 += dy0;
 			}
 		}
-		line = info.paper.path('M' + (x0 + c0.dx) + ',' + (y0 + c0.dy) +
+		line = info.paper.path('M' + (x0 + p0.dx) + ',' + (y0 + p0.dy) +
 			'L' + x0 + ',' + y0 +
 			'L' + x1 + ',' + y1 +
-			'L' + (x1 + c1.dx) + ',' + (y1 + c1.dy));
-		line.attr('stroke', getColor(info.state && info.state.getValue(c0)));
+			'L' + (x1 + p1.dx) + ',' + (y1 + p1.dy));
+		line.attr('stroke', getColor(info.state && info.state.getValue(p0)));
 		line.attr('stroke-width', WIRE_WIDTH);
 		line.attr('stroke-linecap', 'round');
 		return line;
 	}
 
-	my.DrawCirc.attachWire = function (info, conn0, conn1) {
+	my.DrawCirc.attachWire = function (info, port0, port1) {
 		var line;
-		if (conn0.line) {
-			conn0.line.remove();
-			conn0.line = null;
+		if (port0.line) {
+			port0.line.remove();
+			port0.line = null;
 		}
-		if (conn1.line) {
-			conn1.line.remove();
-			conn1.line = null;
+		if (port1.line) {
+			port1.line.remove();
+			port1.line = null;
 		}
-		line = my.DrawCirc.createWire(info, conn0, conn1, 0, 0);
-		if (conn0.input) {
-			conn0.line = line;
-			conn0.circ.hide();
+		line = my.DrawCirc.createWire(info, port0, port1, 0, 0);
+		if (port0.input) {
+			port0.line = line;
+			port0.circ.hide();
 		} else {
-			conn1.line = line;
-			conn1.circ.hide();
+			port1.line = line;
+			port1.circ.hide();
 		}
-		conn0.stub.hide();
-		conn1.stub.hide();
+		port0.stub.hide();
+		port1.stub.hide();
 		return line;
 	};
 
-	my.DrawCirc.removeWire = function (info, conn0, conn1) {
-		if (conn0.line !== null) {
-			conn0.line.remove();
-			conn0.line = null;
+	my.DrawCirc.removeWire = function (info, port0, port1) {
+		if (port0.line !== null) {
+			port0.line.remove();
+			port0.line = null;
 		}
-		if (conn1.line !== null) {
-			conn1.line.remove();
-			conn1.line = null;
+		if (port1.line !== null) {
+			port1.line.remove();
+			port1.line = null;
 		}
-		my.DrawCirc.showStub(info, conn0);
-		my.DrawCirc.showStub(info, conn1);
+		my.DrawCirc.showStub(info, port0);
+		my.DrawCirc.showStub(info, port1);
 	};
 
-	my.DrawCirc.hideWire = function (info, conn0, conn1) {
-		if (conn0.line !== null) {
-			conn0.line.hide();
+	my.DrawCirc.hideWire = function (info, port0, port1) {
+		if (port0.line !== null) {
+			port0.line.hide();
 		}
-		if (conn1.line !== null) {
-			conn1.line.hide();
-		}
-	};
-
-	my.DrawCirc.showWire = function (info, conn0, conn1) {
-		if (conn0.line !== null) {
-			conn0.line.show();
-		}
-		if (conn1.line !== null) {
-			conn1.line.show();
+		if (port1.line !== null) {
+			port1.line.hide();
 		}
 	};
 
-	my.DrawCirc.recolorConnection = function (info, conn) {
+	my.DrawCirc.showWire = function (info, port0, port1) {
+		if (port0.line !== null) {
+			port0.line.show();
+		}
+		if (port1.line !== null) {
+			port1.line.show();
+		}
+	};
+
+	my.DrawCirc.recolorPort = function (info, port) {
 		var color;
 
-		color = getColor(info.state && info.state.getValue(conn));
-		if (conn.stub) {
-			conn.stub.attr('stroke', color);
+		color = getColor(info.state && info.state.getValue(port));
+		if (port.stub) {
+			port.stub.attr('stroke', color);
 		}
-		if (conn.circ) {
-			conn.circ.attr('stroke', color);
-			if (!conn.input) {
-				conn.circ.attr('fill', color);
+		if (port.circ) {
+			port.circ.attr('stroke', color);
+			if (!port.input) {
+				port.circ.attr('fill', color);
 			}
 		}
-		if (conn.line) {
-			conn.stub.attr('stroke', color);
+		if (port.line) {
+			port.stub.attr('stroke', color);
 		}
-		$.each(conn.conns, function (i, c) {
+		$.each(port.ports, function (i, c) {
 			if (c.stub) {
 				c.stub.attr('stroke', color);
 			}
@@ -333,12 +333,12 @@
 		});
 	};
 
-	my.DrawCirc.ghostWireToCoord = function (info, c0, x, y) {
+	my.DrawCirc.ghostWireToCoord = function (info, p0, x, y) {
 		var x0, y0, color, line;
-		x0 = c0.elt.x + c0.x;
-		y0 = c0.elt.y + c0.y;
-		color = getColor(info.state && info.state.getValue(c0));
-		line = info.paper.path('M' + (x0 + c0.dx) + ',' + (y0 + c0.dy) +
+		x0 = p0.elt.x + p0.x;
+		y0 = p0.elt.y + p0.y;
+		color = getColor(info.state && info.state.getValue(p0));
+		line = info.paper.path('M' + (x0 + p0.dx) + ',' + (y0 + p0.dy) +
 			'L' + x0 + ',' + y0 +
 			'L' + x + ',' + y);
 		line.attr('stroke', color);
@@ -347,21 +347,21 @@
 		return line;
 	};
 
-	my.DrawCirc.ghostWireToConn = function (info, c0, c1) {
+	my.DrawCirc.ghostWireToPort = function (info, p0, p1) {
 		var x0, y0, x1, y1, color, line;
-		x0 = c0.elt.x + c0.x;
-		y0 = c0.elt.y + c0.y;
-		x1 = c1.elt.x + c1.x;
-		y1 = c1.elt.y + c1.y;
-		if (c0.input) {
-			color = getColor(info.state && info.state.getValue(c1));
+		x0 = p0.elt.x + p0.x;
+		y0 = p0.elt.y + p0.y;
+		x1 = p1.elt.x + p1.x;
+		y1 = p1.elt.y + p1.y;
+		if (p0.input) {
+			color = getColor(info.state && info.state.getValue(p1));
 		} else {
-			color = getColor(info.state && info.state.getValue(c0));
+			color = getColor(info.state && info.state.getValue(p0));
 		}
-		line = info.paper.path('M' + (x0 + c0.dx) + ',' + (y0 + c0.dy) +
+		line = info.paper.path('M' + (x0 + p0.dx) + ',' + (y0 + p0.dy) +
 			'L' + x0 + ',' + y0 +
 			'L' + x1 + ',' + y1 +
-			'L' + (x1 + c1.dx) + ',' + (y1 + c1.dy));
+			'L' + (x1 + p1.dx) + ',' + (y1 + p1.dy));
 		line.attr('stroke', color);
 		line.attr('opacity', 0.6);
 		line.attr('stroke-width', WIRE_WIDTH);
