@@ -31,7 +31,7 @@ var Placer = {};
 		var belt = $('img#belt');
 		var body = $('body');
 		var box = $('img#box');
-		belt.width(body.width() - box.offset().left - box.width());
+		belt.width(body.width() - box.offset().left - box.width() + box.width()/4.0);
 		belt.height(box.height());
 		belt.css("float", "right");
 		//console.log(box.offset().left);
@@ -49,7 +49,7 @@ var Placer = {};
 		var dropper = $('img#dropper');
 		var body = $('body');
 		var belt = $('img#belt');
-		var space = (belt.height() - dropper.height())/2.0; 
+		//var space = (belt.height() - dropper.height())/2.0; 
 		dropper.height(belt.height());
 		dropper.width(belt.width()/10);
 		var x =belt.offset().left + belt.width() - dropper.width();
@@ -69,7 +69,7 @@ var Placer = {};
 		var x =(belt.width() * (0.6)) + belt.offset().left ;
 		var y =body.height() * (0.5) - punchingBox.height();
 		punchingBox.width(belt.width() /6.0);
-		punchingBox.height(belt.height()/6.0);
+		punchingBox.height(belt.height()/2.0);
 		punchingBox.offset({left: x , top: y});
 		
 		//console.log(x);
@@ -84,7 +84,7 @@ var Placer = {};
 		var punchingBox = $('img#punchingbox')
 		glove.height(belt.height()/2.0);
 		var x = (punchingBox.width() - glove.width())/2.0 + punchingBox.offset().left;
-		var y =punchingBox.offset().top + punchingBox.height()/4.0;
+		var y =punchingBox.offset().top + punchingBox.height()/3.0;
 		
 		glove.offset({left: x , top: y});
 		//console.log(x);
