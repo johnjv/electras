@@ -1,6 +1,6 @@
 
 
-var all_my_chocolates_events = function(){
+var i_so_blue_events = function(){
   var elements = new Elements(Circuit.getElements())
 
   if (elements.sensor('C').output('empty').exists() &&

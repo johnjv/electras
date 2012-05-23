@@ -9,7 +9,7 @@ function Level(level){
 	this.types = level.types;    	
 	this.script = level.script;
 	this.answers = level.answers; 
-	this.complete = false;
+	this.complete = false;	
 }
  
 Level.prototype.analyze = function (){
