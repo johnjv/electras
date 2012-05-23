@@ -21,7 +21,7 @@ var flavor_unearthed_events = function(){
   }
 
   //the next two disappear too soon.  They should accept "active" as well as "empty"`
-  else if (empty_sensors.length == 2 && !has_incoming_active_or){
+  else if (empty_sensors.length == 2 || (empty_sensors.length == 1 && elements.sensor().active_connection().exists())){
     var operator = or_operators[0]
     //this should show both of them
     var input = operator.connects[0]
@@ -32,16 +32,16 @@ var flavor_unearthed_events = function(){
         highlightSection(connection, true)
       }
     })
-    createSpeechBubble(first_sensor, "this operator has two inputs.  Select one.") ;
+    createSpeechBubble(first_sensor, "this operator has two inputs.  Select one and attach it to a sensor.") ;
   }
 
-  else if (empty_sensors.length == 2 && has_incoming_active_or){
-    //highlight two sensor outgoings
-    highlightSection(empty_sensors[0].connects[0], true)
-    highlightSection(empty_sensors[1].connects[0], true)
-  }
+//  else if (empty_sensors.length == 2 && has_incoming_active_or){
+//    //highlight two sensor outgoings
+//    highlightSection(empty_sensors[0].connects[0], true)
+//    highlightSection(empty_sensors[1].connects[0], true)
+//  }
 
-  else if (empty_sensors.length == 1 && elements.OR().empty('incoming').exists()) {
+  else if (empty_sensors.length == 1 || elements.sensor().active_connection().exists()) {
     //highlight the remaining outgoing sensor and incoming OR
     highlightSection(empty_sensors[0].connects[0], true)
     highlightSection(Filters.find_connection(or_operators[0], '', true), true)
