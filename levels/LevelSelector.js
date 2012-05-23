@@ -2,9 +2,8 @@ function setUpLevel(){
     $('#levelSelect2').hide();  
     $('#left2').hide(); 
     $('#factory').hide(); 
-    $('#circuit').hide();    
-    $('#parts').hide();
-    $('#clipboard').hide();  
+    $('#circuit').hide(); 
+    $('#levelInfo').hide();  
     makePage(); 
     addRightClick();
     addLeftClick();
@@ -21,7 +20,7 @@ function addRightClick(){
            }, 1000, function() {              
         }); 
          $('#levelSelect1').hide();
-         $(this).hide();    
+         $('#right1').hide();    
          $('#levelSelect2').show();
          $('#left2').show();
     });
@@ -40,7 +39,7 @@ function addLeftClick(){
         $('#levelSelect1').show();        
         $('#right1').show();        
         $('#levelSelect2').hide();        
-        $(this).hide();
+        $('#left2').hide();
     });
 }
 
@@ -69,7 +68,7 @@ function checkFinish(level, id){
     var  j = 0;   
     html = '<tr id = "row' + (id) + '"><td id=" level' + (id) + '"><b>' + (id) + '. <u>' + level.levelname + '</u></b></td></tr>';        
     if(level.complete){ 
-        check = '<img src = "../levels/images/checkmark.png" id = "check">';   
+        check = '<img src = "images/checkmark.png" id = "check">';   
         html = '<tr id = "row' + (id) + '"><td id=" level' + (id) + '"><b>' + (id) + '. <u>' + level.levelname + '</u></b>' + check + '</td></tr>';
     }        
     return html;
@@ -82,13 +81,10 @@ function addChildClicks(){
              $('#levelSelect1').hide();
              $('#right1').hide(); 
              $('#title').hide();
+             LevelSelector.setLevel(all_levels[i]);
              $('#factory').show();
              $('#levelname').html('<b>' + LevelSelector.getCurrentLevel().levelname + '</b>');
              $('#circuit').show();
-             $('#clipboard').show();  
-             LevelSelector.setLevel(all_levels[i]);
-             updateChalkBoard();
-             updateLevelName();
              Placer.place();
         });
       });
@@ -98,13 +94,10 @@ function addChildClicks(){
              $('#levelSelect2').hide();  
              $('#left2').hide(); 
              $('#title').hide(); 
+             LevelSelector.setLevel(all_levels[i+10]);
              $('#factory').show();
              $('#levelname').html('<b>' + LevelSelector.getCurrentLevel().levelname + '</b>');
-             $('#circuit').show();
-             $('#clipboard').show();
-             LevelSelector.setLevel(all_levels[i+10]);
-             updateChalkBoard();
-             updateLevelName();
+             $('#circuit').show(); 
              Placer.place();
         });
     });
@@ -116,21 +109,15 @@ var LevelSelector = (function($) {
     var level = all_levels[0];
     
     $(document).ready(function () {
-       setUpLevel(); 
+       setUpLevel();
     });
+    
+    
+    
 
     my.setLevel = function(change) {
-        var temp;
-        temp = level;
         level = change;
-        console.log('levelChanged');
-        Circuit.levelChanged(temp, level); 
-        if(level.levelid === 1){
-            $('#prev').hide();
-        }
-        if(level.levelid === 20){
-            $('#advanceLevel').hide();
-        }
+        console.log(level);
     }; 
     
     my.advanceLevel = function(finish){
@@ -140,26 +127,13 @@ var LevelSelector = (function($) {
         if(level.levelid >= all_levels.length){
             alert("There are no more levels");
         }
-        else{            
-            my.setLevel(all_levels[level.levelid]);
+        else{
+            level = all_levels[level.levelid];
             console.log("We are now on level: " + level.levelid); 
-        } 
-        $('#prev').show();       
-    };
-    
-    my.previousLevel = function(finish){
-        if(finish){ 
-            level.complete = true;
-        }  
-        if(level.levelid === 1){
-            alert("There are no more levels");
         }
-        else{            
-            my.setLevel(all_levels[level.levelid-2]);
-            console.log("We are now on level: " + level.levelid); 
-        }  
-        $('#advanceLevel').show();      
-    }; 
+        $('#levelname').html('<b>' + LevelSelector.getCurrentLevel().levelname + '</b>');
+    };
+     
      
     my.showSelector = function(finish){
         if(finish){
@@ -189,14 +163,11 @@ var LevelSelector = (function($) {
             $('#title').show();
         }
         $('#factory').hide();
-        $('#circuit').hide();
-        $('#advanceLevel').show();
-        $('#prev').show();
-        $('#clipboard').hide();
-        $('#container').hide();                
+        $('#circuit').hide();     
     };
 
-   my.getCurrentLevel = function(){      
+   my.getCurrentLevel = function(){
+      console.log(level);      
       return level;
     };
     return my;

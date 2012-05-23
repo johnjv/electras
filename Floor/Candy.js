@@ -30,7 +30,7 @@ Candy.prototype.setCandyPicture = function(){
 	if(candy[1] === '-')
 	    num[1] = '2';
 	
-	var picture = $("<img src=../Floor/resource-image/candy" + num[0]+ num[1] + ".png></img>");
+	var picture = $("<img src=../Floor/resource-image/candy" + num[0]+ num[1] + ".png class='candy'></img>");
 	return picture;
 };
 
