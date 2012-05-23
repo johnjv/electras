@@ -10,5 +10,11 @@ html, body { background: #EDE275; width: 100%; height: 100%; margin: 0px; paddin
 
 #check{ position: relative; height: 1em; width: 1em;}
 
+#clipboard{ position: absolute; margin-left: 45%; margin-right: auto;}
+
+#hint{margin-left: auto;}
+
+#levelname{margin-left: auto;}
+
 
 
