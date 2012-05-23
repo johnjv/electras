@@ -17,15 +17,25 @@ $(document).ready(function(){
 		LevelSelector.showSelector(true);			
 	});
 	
+	$("#start").click(function(){
+		updateChalkBoard();
+		startMachine();
+	});
+	
+	$("#tip").click(function(){
+		$('#clipboard').show();		
+	});
+	
 	$("#hint").click(function(){
 		console.log("show hint here");
 	});
 });	
+
 	
-function updateChalkBoard(){
+function updateChalkBoard(order){
 	"use strict"
 	var level = LevelSelector.getCurrentLevel();
-	$('#order').text(level.orderText);
+	$('#order').text("Order: " + level.orderText);
 }	
 
 function getHint(){
@@ -35,5 +45,5 @@ function getHint(){
 
 function updateLevelName(){
     var level = LevelSelector.getCurrentLevel();
-    $('#levelname').text(level.levelname);
+    $('#levelname').text(level.levelid + ". " + level.levelname);
 }   
