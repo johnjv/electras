@@ -16,27 +16,30 @@ html, body { width: 100%;
 
 #dropper{
 	position: absolute;
-	z-index: 2;
+	z-index: 3;
 }
 
 #punchingbox{
 	position: absolute;
-	z-index:4;
+	z-index:5;
 }
 
 #glove{
 	position: absolute;
-	z-index:3;
+	z-index:4;
 }
 
 #chalkboard{
 	position: absolute;
 }
 
-#order{
-    resize: none;
-    rows: 3;
-    columns: 5;
+.candy{
+	position: absolute;
+	z-index:2;
 }
 
+#flag{
+	position: absolute;
+	z-index:6;
+}
 

@@ -1,193 +1,239 @@
 $(document).ready(function(){
-	"use strict";
-	Placer.placing();	
+	"use strict";	
+	
+	Placer.place();
+	
+	$("#advanceLevel").click(function(){
+	    //console.log("advance");
+		LevelSelector.advanceLevel(true); // check whether the level was completed or not
+	});
 	
 	$("#showLevels").click(function(){
 		LevelSelector.showSelector(true);			
-	});	
+	});
 	
-	$("#advanceLevel").click(function(){	    
-		LevelSelector.advanceLevel(true);
+	$("#start").click(function(){
 		updateChalkBoard();
-	});
-	
-	$("#start").click(function(){		
 		startMachine();
-		var box = $('#box');
-		var boxPos = box.offset();
-		console.log(boxPos.left + " and " + boxPos.top);
 	});
 	
-	$(window).resize(function() {
-		Placer.placing();
-	});
-});
+	function startMachine(){
+		var items = createPictures();
+		var count =0;
+		var candies = getLevelType();
 		
-function startMachine(){
-	var items = createPictures();
-	var count =0;
-	var candies = getLevelType();
+		function startNext(){
+			if(count < 8) {
+				var check = candies[count].checkCandy();
+				if (check === 1) console.log(count + " Correct");
+			
+				else if (check === 0){
+					console.log(count + " Push away, mark X");
+					movePuncher();
+					placeFlag();
+			        moveFlag();
+				}
+				else if(check === -1){
+					console.log(count + " Pushed away, correct");
+					movePuncher();
+				}
+				else{
+				   console.log(count + " Kept, mark X");
+				   placeFlag();
+			       moveFlag();
+				}
+				placeCandy(items[count]);
+				moveCandy(items[count]);
+				count++; 
+			
+				setTimeout(startNext, 3000);
+			}
+		}
+		startNext();
+	}
 	
-	function startNext(){
-		if(count < 8) {
-			var check = candies[count].checkCandy();
-			if (check === 1) console.log(count + " Correct");
-			
-			else if (check === 0){
-			    console.log(count + " Push away, mark X");
-			    moveArm();
-			    var flag = placeFlag();
-	            moveFlag(flag);
-			}
-			else if(check === -1){
-			    console.log(count + " Pushed away, correct");
-			    moveArm();
-			}
-			else{
-			   console.log(count + " Kept, mark X");
-			   var flag = placeFlag();
-	           moveFlag(flag);
-			}
-			placeCandy(items[count]);
-		    moveCandy(items[count]);
-			count++; 
-			
-			setTimeout(startNext, 3000);
+
+	
+	
+	function getLevelType(){
+		"use strict";
+		var level;
+		level = LevelSelector.getCurrentLevel();
+		var typeInfo = new Array();		
+		var analyze = level.analyze();
+		//console.log(analyze);
+		
+		for (var i=0; i < 8 ; i+=1){
+			var type = analyze[i].type;
+			var levelSays = analyze[i].levelSays;
+			var circuitSays = analyze[i].circuitSays.accept;
+		 	typeInfo[i] = new Candy(type, levelSays,circuitSays);
+		}
+		return typeInfo;
+	}
+	
+	function createPictures(){
+		var picArray = [];
+		var candyInfo = getLevelType();	
+		for (var j = 0; j < candyInfo.length;j+=1){	
+			var candyName = candyInfo[j].type;	    
+			picArray[j] = candyInfo[j].picture;
+		}
+		//console.log(picArray);
+		return picArray;
+	}
+	
+	function placeCandy(candyPic){
+		"use strict";
+		var dropper, candyPos, items;
+        candyPic.width(20);
+        var body = $('body');
+        body.append(candyPic);
+        var dropper = $("#dropper");
+        $(candyPic).each(function(){
+        	var x = dropper.offset().left;
+        	var y = dropper.offset().top + dropper.height()/2.0 - candyPic.height()/2.0;
+       	 	candyPic.offset({left:x , top:y});
+        	body.append(candyPic);
+        	//console.log("just added");
+        });
+             
+    }
+    var count =0;
+    var movedCandies = [];
+    
+    function moveCandy(candyPic){
+    	"use strict";
+    	var belt = $('#belt');
+    	var box = $('#box');
+    	var dropper = $('#dropper');
+    	var posleft = belt.width() - dropper.width();
+    	var posdown = box.width()/2.0;
+    	movedCandies.push(candyPic);
+  
+    	
+    	$(candyPic).animate({
+        	left: '-=' + posleft
+        }, 3000); 
+        $(candyPic).animate({
+        	left: '-=' + (posdown-count),
+        	width: '-=10',
+        	
+        }, 1500); 
+        count+=10;
+        return movedCandies;
+    }
+	
+	function putAFlag(){
+		"use strict";
+		var flag = $('<img src="../Floor/resource-image/envx.png" id="flag"></img>');
+		var glove = $('#glove');
+		var flagPos;
+		var body = $('body');
+		flag.width(20);
+		body.append(flag);
+		var x  = glove.offset().left + glove.width()/2.0;
+		var y = glove.offset().top + glove.height();
+		
+		flag.offset({left:x,top:y});
+		console.log(x);
+        console.log(y);
+	}
+	
+	function moveFlag(){
+		"use strict";
+		$("#flag").animate({
+			left:'-=300' // this should be machine.width - arm.left
+		},2000);
+		$(flag).animate({
+			height: 'toggle'
+		},3000);
+	}
+
+	
+	function getOrder(){
+		"use strict";
+		var level = LevelSelector.getCurrentLevel();
+		var order = level.orderText;
+		return order;
+		//console.log(order);
+	}
+	
+	function updateChalkBoard(order){
+		"use strict"
+		var orderText = getOrder();
+		$('#order').text(orderText);
+	}
+
+	function movePuncher(){
+		var belt = $('#belt');
+		$('#glove').animate({top: '+=0' + belt.height()/5.0}, 1500);
+		$('#glove').animate({top: '-=0' + belt.height()/5.0}, 1000);
+	}
+	
+	function stopMovingPuncher(){
+		$('#glove').stop();
+	}
+	
+	
+	function changeCandyPos(){
+		"use strict";
+		var box = $("#box");
+		var body = $('body');
+		var x = box.offset().left + box.width()/2.0;
+		var y = box.offset().top + box.width()/2.0;
+		
+		for(var i=0; i<movedCandies.length ; i+=1){
+			movedCandies[i].remove();
+			body.append(movedCandies[i]);	
+			movedCandies[i].offset({left:x+ 2*i, top:y});
 		}
 	}
-	startNext();
-}
-
-function getLevelType(){
-	"use strict";
-	var level;
-	level = LevelSelector.getCurrentLevel();
-	var typeInfo = new Array();		
-	var analyze = level.analyze();
 	
-	for (var i=0; i < 8 ; i+=1){
-		var type = analyze[i].type;
-		var levelSays = analyze[i].levelSays;
-		var circuitSays = analyze[i].circuitSays.accept;
-	 	typeInfo[i] = new Candy(type, levelSays,circuitSays);
-	}
-	return typeInfo;
-}
+	var FactoryFloor = (function($) {
+		"use strict";
+		var my = {}; 
 
-function createPictures(){
-	var picArray = [];
-	var candyInfo = getLevelType();	
-	for (var j = 0; j < candyInfo.length;j+=1){	
-		var candyName = candyInfo[j].type;	    
-		picArray[j] = candyInfo[j].picture;
-	}
-	return picArray;
-}
+		my.levelChanged = function(oldLevel, newLevel) {
+			level = newLevel;
+			updateChalkBoard();
+		};
 
-function placeCandy(candyPic){
-	"use strict";
-	var machine, candyPos, items;
-    candyPic.width(20);
-    machine = $('#machine');
-    machine.append(candyPic);
-    $(candyPic).each(function(){
-    	candyPos = candyPic.offset();
-    	candyPos.left += machine.width();
-    	candyPos.top += machine.height()/2 - 350; 
-   	 	candyPic.offset(candyPos);
-   	 	
-    });  
-}
+		my.getleverLocation = function(){
+			"use strict";
+			var leverLocation, leverPos;
+			leverPos = $("#lever").offset();
+			leverLocation = new Object();
+			leverLocation.x = leverPos.left;
+			leverLocation.y = leverPos.top;
+			leverLocation.width = $("#lever").width();
+			leverlocation.height = $("#lever").height();         
+			return leverLocation;                
+		};
 
-function placeFlag(){
-	"use strict";
-	var flag, puncher, machine, flagPos;
-	flag = $('<img src="../Floor/resource-image/envx.png"></img>');
-	puncher = $('#candypuncher');
-	machine = $('#machine');
-	flag.width(20);
-	machine.append(flag);
-	$(flag).each(function(){
-    	flagPos = flag.offset();
-    	flagPos.left += machine.width(); 
-    	flagPos.top += machine.height()/2 - 320; 
-   	 	flag.offset(flagPos);
-    });
-    return flag
-}
+		my.getAdvanceLocation = function(){
+			"use strict";
+			var advanceLocation, advancePos;
+			advancePos = $("#advanceLevel").offset();
+			advanceLocation = new Object();
+			advanceLocation.x = advancePos.left;
+			advanceLocation.y = advancePos.top;
+			advanceLocation.width = $("#advanceLevel").width();
+			advanceLocation.height = $("#advanceLevel").height();
+			return advanceLocation;
+		};
+		
+		return my;
+		
+		}(jQuery));
+		
+	$(window).resize(function() {
+		count = 0;
+		Placer.place();
+		changeCandyPos();
+		stopMovingPuncher();
+	});
 
-function getOrder(){
-	"use strict";
-	var level = LevelSelector.getCurrentLevel();
-	var order = level.orderText;
-	return order;
-	console.log(order);
-}
+});
 
-function updateChalkBoard(order){
-	"use strict"
-	var orderText = getOrder();
-	$('#order').text(orderText);
-}
 
-function moveCandy(candyPic){
-	"use strict";    	
-	$(candyPic).animate({
-    	left: '-=300'
-    }, 3000); 
-    $(candyPic).animate({
-    	left: '-=70',
-    	width: '-=10',
-    }, 3000); 
-}
-
-function moveFlag(flag){
-	"use strict";
-	$(flag).animate({
-		left:'-=300' 
-	},3000);
-	$(flag).animate({
-		height: 'toggle'
-	},3000);
-}
-
-function moveArm(){
-	$('#candypuncher').animate({top: '+=5%'}, 1500);
-	$('#candypuncher').animate({top: '-=5%'}, 1000);
-}
-
-var FactoryFloor = (function($) {
-    "use strict";
-    var my = {}; 
-
-    my.levelChanged = function(oldLevel, newLevel) {
-	    level = newLevel;
-	    updateChalkBoard();
-    };
-
-    my.getleverLocation = function(){
-	    "use strict";
-	    var leverLocation, leverPos;
-	    leverPos = $("#lever").offset();
-	    leverLocation = new Object();
-	    leverLocation.x = leverPos.left;
-	    leverLocation.y = leverPos.top;
-	    leverLocation.width = $("#lever").width();
-	    leverlocation.height = $("#lever").height();         
-	    return leverLocation;                
-    };
-
-    my.getAdvanceLocation = function(){
-	    "use strict";
-	    var advanceLocation, advancePos;
-	    advancePos = $("#advanceLevel").offset();
-	    advanceLocation = new Object();
-	    advanceLocation.x = advancePos.left;
-	    advanceLocation.y = advancePos.top;
-	    advanceLocation.width = $("#advanceLevel").width();
-	    advanceLocation.height = $("#advanceLevel").height();
-	    return advanceLocation;
-    };
-    
-    return my;
-}(jQuery));
