@@ -227,6 +227,7 @@
 		x = e.circuitX;
 		y = e.circuitY;
 		best = findConnection(info.layout, x, y);
+		console.log('null down', best.conn, info.layout, x, y);
 		if (best.conn) {
 			if (best.conn.input && best.conn.conns.length > 0) {
 				info.showMessage('Input cannot be connected twice');
