@@ -1,0 +1,80 @@
+<html>
+<head>
+
+  <link type="text/css" rel="stylesheet" href="highlighter.css">
+
+  <title>Electra's Workshop</title>
+
+  <link rel="stylesheet" href="../levels/LevelSelector.css" type="text/css">
+  <link rel="stylesheet" href="../workshop/workshop.css" type="text/css"/>
+  <link rel="stylesheet" href="../Floor/FactoryFloor.css" type="text/css">
+  <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, width=device-width">
+</head>
+<body>
+
+<div id="circuit"></div>
+
+<div id = "LevelSelector">
+  <h1 id = "title">Please Select a Level!</h1>
+  <table id = "levelSelect1"><tbody id = "levels1"></tbody></table>
+  <div id = "arrow1"><img src = "../levels/images/right.svg" id = "right1"></div>
+  <table id = "levelSelect2"><tbody id = "levels2"></tbody></table>
+  <div id = "arrow2"><img src = "../levels/images/left.svg" id = "left2"></div>
+</div>
+
+<div id="factory">
+  <div id = "parts">
+    <img src="../Floor/resource-image/belt.png" id="belt">
+    <img src="../Floor/resource-image/box.png" id="box">
+    <img src="../Floor/resource-image/dropper.png" id="dropper">
+    <img src="../Floor/resource-image/punchingbox.png" id="punchingbox">
+    <img src="../Floor/resource-image/glove.png" id="glove"></div>
+  <textarea readonly id="order" readonly="readonly" cols="40" rows="5"></textarea>
+  <div id = "editLevels"><button id="advanceLevel">Advance</button><button id="showLevels">Show Levels</button></div>
+  <button id="start">Start</button>
+</div>
+<script type = "text/javascript"  src="../Floor/Candy.js"></script>
+<script type = "text/javascript"  src="../Floor/FactoryFloor.js"></script>
+<script type = "text/javascript"  src="../Floor/floor.js"></script>
+
+
+<script src="../lib/jquery-1.7.1.js"></script>
+<script src="../lib/raphael.js"></script>
+<script src="../lib/imagesloaded.js"></script>
+<script src="../lib/multidrag.js"></script>
+<script src="../workshop/layout.js"></script>
+<script src="../workshop/save.js"></script>
+<script src="../workshop/evaluate.js"></script>
+<script src="../workshop/drawcirc.js"></script>
+<script src="../workshop/wireseg.js"></script>
+<script src="../workshop/gesture.js"></script>
+<script src="../workshop/eltgest.js"></script>
+<script src="../workshop/canvas.js"></script>
+<script src="../workshop/circuit.js"></script>
+<script src="../workshop/test.js"></script>
+
+<script type = "text/javascript"  src="../levels/SequenceItem.js"></script>
+<script type = "text/javascript"  src="../levels/Level.js"></script>
+<script type = "text/javascript"  src="../levels/PreMadeLevels.js"></script>
+<script type = "text/javascript"  src="../levels/LevelSelector.js"></script>
+
+<script src="jquery-ui-1.8.20.custom.min.js"></script>
+<script src="tutorial.js"></script>
+<script src="filtering.js"></script>
+<script src="convenience_operators.js"></script>
+<script src="level1tutorial.js"></script>
+<script src="level2tutorial.js"></script>
+<script src="level3tutorial.js"></script>
+<script src="level4tutorial.js"></script>
+<script src="level6tutorial.js"></script>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+//    $('#circuit').show()
+
+    LevelSelector.showSelector()
+//    Circuit.levelChanged('', its_a_start)
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+html, body { width: 100%; 
+			 height: 100%;
+    		 margin: 0px; 
+    		 padding-right: 0px;
+}
+
+#box{
+	position: absolute;
+	z-index:0;
+}
+
+#belt{
+	position: absolute;
+	z-index: 1;
+}
+
+#dropper{
+	position: absolute;
+	z-index: 2;
+}
+
+#punchingbox{
+	position: absolute;
+	z-index:4;
+}
+
+#glove{
+	position: absolute;
+	z-index:3;
+}
+
+#chalkboard{
+	position: absolute;
+}
+
+#order{
+    resize: none;
+    rows: 3;
+    columns: 5;
+}
+
+

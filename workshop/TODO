@@ -1,0 +1,12 @@
+Prevent moving component atop existing wire (or so wire crosses connection)
+Prevent adding component atop existing wire
+Prevent adding wire that crosses another connection
+Prevent moving fixed components
+
+Allow gestures via click/tap to start and click/tap to end (not just dragging)
+Respond to change in canvas size
+Save edited layouts on disk?
+
+Only size toolbar images once toolbar becomes visible
+
+Electricity animation
