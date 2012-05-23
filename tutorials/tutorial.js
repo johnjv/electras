@@ -96,6 +96,7 @@ Tutorial = {};
 
   var call_script = function(script_name){
     try {
+      $('#container').hide()
       eval(script_name + "_events()")
 //      console.log("called ", script_name, "_events()")
     } catch (ReferenceError) {

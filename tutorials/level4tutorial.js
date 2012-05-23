@@ -3,22 +3,24 @@ var flavor_unearthed_events = function(){
   var empty_sensors = elements.sensor().output('empty').elements
   var has_incoming_active_or = elements.OR().input('active').exists()
   var or_operators = elements.OR().elements
+  var first_sensor = elements.sensor().first_connection();
 
   if (or_operators.length < 1){
-    createSpeechBubble(elements.lightbulb().first_connection(), "This time we'll be using an OR operator.  Go ahead and put one on screen.")
+    createSpeechBubble(first_sensor, "This time we'll be using an OR operator.  Go ahead and put one on screen.")
   }
 
   else if (or_operators.length > 1){
-    createSpeechBubble(or_operators[0].connects[0], "We'll only need one OR operator for this.")
+    createSpeechBubble(first_sensor, "We'll only need one OR operator for this.")
   }
 
 
   else if (elements.lightbulb().input('filled').exists() && !elements.OR().output('filled').exists()){
     highlightSection(elements.lightbulb().first_connection(),  true)
-    createSpeechBubble(elements.lightbulb().first_connection(), "The only way you'll be able to solve this is by " +
+    createSpeechBubble(first_sensor, "The only way you'll be able to solve this is by " +
         "connecting the lightbulb to the OR operator.  You may need to erase the current connection.")
   }
 
+  //the next two disappear too soon.  They should accept "active" as well as "empty"
   else if (empty_sensors.length == 2 && !has_incoming_active_or){
     var operator = or_operators[0]
     //this should show both of them
@@ -30,7 +32,7 @@ var flavor_unearthed_events = function(){
         highlightSection(connection, true)
       }
     })
-    createSpeechBubble(input, "this operator has two inputs.  Select one.") ;
+    createSpeechBubble(first_sensor, "this operator has two inputs.  Select one.") ;
   }
 
   else if (empty_sensors.length == 2 && has_incoming_active_or){
@@ -43,11 +45,11 @@ var flavor_unearthed_events = function(){
     //highlight the remaining outgoing sensor and incoming OR
     highlightSection(empty_sensors[0].connects[0], true)
     highlightSection(Filters.find_connection(or_operators[0], '', true), true)
-    createSpeechBubble(empty_sensors[0].connects[0], "Now connect the other...")
+    createSpeechBubble(first_sensor, "Now connect the other...")
   }
 
   else if (empty_sensors.length == 0){
-    createSpeechBubble(or_operators[0].connects[0], "Great!  Now if either green or blue is true, the OR will output true.")
+    createSpeechBubble(first_sensor, "Great!  Now if either green or blue is true, the OR will output true.")
   }
 }
 //
