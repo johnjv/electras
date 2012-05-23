@@ -97,16 +97,17 @@ Tutorial = {};
   var call_script = function(script_name){
     try {
       eval(script_name + "_events()")
+//      console.log("called ", script_name, "_events()")
     } catch (ReferenceError) {
-      //this is called if you cannot find _events()
+//      console.log("tried but failed to call ", script_name, "_events().  ")//this is called if you cannot find _events()
+//      console.log("The error:", ReferenceError)
     }
-    console.log("called ", script_name, "_events()")
   }
 
   my.circuitChanged = function(){
-    console.log("calling level")
+//    console.log("calling level")
     var script = LevelSelector.getCurrentLevel().script
-    console.log("the script is", script)
+//    console.log("the script is", script)
     call_script(script)
   }
 }(Tutorial, jQuery));

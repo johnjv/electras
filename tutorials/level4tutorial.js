@@ -1,4 +1,4 @@
-var flavor_unearthed = function(){
+var flavor_unearthed_events = function(){
   var elements = new Elements(Circuit.getElements())
   var empty_sensors = elements.sensor().output('empty').elements
   var has_incoming_active_or = elements.OR().input('active').exists()

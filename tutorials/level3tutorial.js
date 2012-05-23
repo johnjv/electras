@@ -1,17 +1,21 @@
 var soyl_not_green_events = function(){
-  var elements = new Elements(Circuit.getElements())
+  console.log("In here.");
+  var elements = new Elements(Circuit.getElements());
+  console.log(elements);
+  var first_sensor = elements.sensor().first_connection();
+
 
   if (!elements.NOT().exists()){
-    createSpeechBubble(elements.lightbulb().first_connection(), "We'll be using the NOT operator.  Whatever is put into it comes out the opposite!")
+    createSpeechBubble(first_sensor, "We'll be using the NOT operator.  Whatever is put into it comes out the opposite!")
   }
 
   else if (elements.NOT() && elements.NOT().elements.length > 1){
-    createSpeechBubble(elements.NOT().first_connection(), "We'll only need one NOT operator for this.")
+    createSpeechBubble(first_sensor, "We'll only need one NOT operator for this.")
   }
 
   else if (elements.lightbulb().input('filled').exists() && !elements.NOT().output('filled').exists()){
     highlightSection(elements.lightbulb().first_connection(),  true)
-    createSpeechBubble(elements.lightbulb().first_connection(), "The only way you'll be able to solve this is by " +
+    createSpeechBubble(first_sensor, "The only way you'll be able to solve this is by " +
         "connecting the lightbulb to the NOT operator.  You may need to erase the current connection.")
   }
 
@@ -22,7 +26,7 @@ var soyl_not_green_events = function(){
     var sensor_output = Filters.find_connection(elements.sensor('G').elements[0], 'empty', false)
     highlightSection(operator_input, true)
     highlightSection(sensor_output, true)
-    createSpeechBubble(operator_input, "Great!  Now connect the green sensor to the input of the NOT operator") ;
+    createSpeechBubble(first_sensor, "Great!  Now connect the green sensor to the input of the NOT operator") ;
   }
 
   else if (elements.NOT().input('filled').exists() &&
@@ -32,7 +36,7 @@ var soyl_not_green_events = function(){
     var lightbulb_input = elements.lightbulb().first_connection()
     highlightSection(operator_output, true)
     highlightSection(lightbulb_input, true)
-    createSpeechBubble(operator_output, "Now just finish it off.")
+    createSpeechBubble(first_sensor, "Now just finish it off.")
   }
 }
 

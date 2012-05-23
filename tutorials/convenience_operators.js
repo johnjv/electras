@@ -20,17 +20,23 @@ var Elements = function(elements){
   this.sensor = function(type){
     if (type == null) {
       var all_sensors = []
-      console.log(all_sensors)
-
-      all_sensors.push(Filters.filter_elements(this.elements, {type: '-'})[0])
-      all_sensors.push(Filters.filter_elements(this.elements, {type: '^\\|$'})[0])
-      console.log(all_sensors)
-      all_sensors.push(Filters.filter_elements(this.elements, {type: '^o$'})[0])
-      console.log(all_sensors)
+      var sensor_types = ['-', '^\\|$', '^o$', 'C', 'Y', 'R', 'G']
+      var elements = this.elements
+      $.each(sensor_types, function(i, sensor){
+        var new_sensor_array = filter_one_sensor_type(elements, sensor);
+        var new_sensor = new_sensor_array[0]
+        if (new_sensor){
+          all_sensors.push(new_sensor)
+        }
+      })
       return new Elements(all_sensors)
     } else {
       return new Elements(Filters.filter_elements(this.elements, {type: type}))
     }
+  }
+
+  var filter_one_sensor_type = function(elements, regex) {
+    return Filters.filter_elements(elements, {type: regex})
   }
 
   this.output = function(connectedTo){

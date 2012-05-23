@@ -242,7 +242,6 @@ var kludge = new Level({
   answers: 'C*,R|,Y|',
   script: 'kludge'
 });
-//need to edit this to get it down to 4 sensors
 
 var all_levels = [
     i_so_blue,
