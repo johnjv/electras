@@ -1,4 +1,4 @@
-var not_what_I_mint_events = function(){
+var soyl_not_green_events = function(){
   var elements = new Elements(Circuit.getElements())
 
   if (!elements.NOT().exists()){
@@ -19,10 +19,10 @@ var not_what_I_mint_events = function(){
     console.log('made it to the third choice', elements.NOT().input('empty'))
     var operator_input = Filters.find_connection(elements.NOT().elements[0], 'empty', true)//find_incoming(elements.NOT().input('empty'), 'empty')
     console.log('OPERATOR INPUT', operator_input)
-    var sensor_output = Filters.find_connection(elements.sensor('mint').elements[0], 'empty', false)
+    var sensor_output = Filters.find_connection(elements.sensor('G').elements[0], 'empty', false)
     highlightSection(operator_input, true)
     highlightSection(sensor_output, true)
-    createSpeechBubble(operator_input, "Great!  Now connect the mint sensor to the input of the NOT operator") ;
+    createSpeechBubble(operator_input, "Great!  Now connect the green sensor to the input of the NOT operator") ;
   }
 
   else if (elements.NOT().input('filled').exists() &&
@@ -39,31 +39,31 @@ var not_what_I_mint_events = function(){
 
 var start3 = [
   test_lightbulb(''),
-  test_sensor(2, 'mint', '')
+  test_sensor(2, 'green', '')
 ]
 
 var two_NOTs = [
   test_lightbulb(),
-  test_sensor(2, 'mint', ''),
+  test_sensor(2, 'green', ''),
   test_NOT(3, '', ''),
   test_NOT(4, '', '')
 ]
 
 var wrong_lightbulb_connection = [
   test_lightbulb(2) ,
-  test_sensor(2, 'mint', 1),
+  test_sensor(2, 'green', 1),
   test_NOT(3, '', '')
 ]
 
 var NOT_incoming_empty = [
     test_lightbulb('') ,
-    test_sensor(2, 'mint', ''),
+    test_sensor(2, 'green', ''),
     test_NOT(3, '', '')
 ]
 
 
 var NOT_incoming_filled = [
   test_lightbulb('') ,
-  test_sensor(2, 'mint', 3),
+  test_sensor(2, 'green', 3),
   test_NOT(3, 2, '')
 ]

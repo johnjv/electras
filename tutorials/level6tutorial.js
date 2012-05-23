@@ -1,4 +1,5 @@
-var picky_events = function(){
+var anti_twinkle_events = function(){
+
   var elements = new Elements(Circuit.getElements())
 
   if(elements.OR().exists() && elements.NOT().exists()){
@@ -10,16 +11,16 @@ var picky_events = function(){
 
 var not_quite = [
   test_lightbulb(''),
-  test_sensor(2, 'lemon', ''),
-  test_sensor(3, 'stick', ''),
+  test_sensor(2, 'yellow', ''),
+  test_sensor(3, 'star', ''),
   test_OR(4, '', '', '')
 ]
 
 
 var everything_got = [
   test_lightbulb(''),
-  test_sensor(2, 'lemon', ''),
-  test_sensor(3, 'stick', ''),
+  test_sensor(2, 'yellow', ''),
+  test_sensor(3, 'star', ''),
   test_OR(4, '', '', ''),
   test_NOT(5, '', '')
 ]
