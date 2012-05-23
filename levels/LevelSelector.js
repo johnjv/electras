@@ -118,6 +118,7 @@ var LevelSelector = (function($) {
         var temp;
         temp = level;
         level = change;
+        console.log('levelChanged');
         Circuit.levelChanged(temp, level); 
         FactoryFloor.levelChanged(temp, level);
         //Tutorials.levelChanged(temp, level);
