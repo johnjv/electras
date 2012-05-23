@@ -18,10 +18,19 @@ var Elements = function(elements){
   }
 
   this.sensor = function(type){
-//    if (type == null) {
-//      type = 'sensor'
-//    }
-    return new Elements(Filters.filter_elements(this.elements, {type: type}))
+    if (type == null) {
+      var all_sensors = []
+      console.log(all_sensors)
+
+      all_sensors.push(Filters.filter_elements(this.elements, {type: '-'})[0])
+      all_sensors.push(Filters.filter_elements(this.elements, {type: '^\\|$'})[0])
+      console.log(all_sensors)
+      all_sensors.push(Filters.filter_elements(this.elements, {type: '^o$'})[0])
+      console.log(all_sensors)
+      return new Elements(all_sensors)
+    } else {
+      return new Elements(Filters.filter_elements(this.elements, {type: type}))
+    }
   }
 
   this.output = function(connectedTo){
@@ -41,15 +50,15 @@ var Elements = function(elements){
   }
 
   this.OR = function(){
-    return new Elements(Filters.filter_elements(this.elements, {type: 'OR'}))
+    return new Elements(Filters.filter_elements(this.elements, {type: 'or'}))
   }
 
   this.AND = function(){
-    return new Elements(Filters.filter_elements(this.elements, {type: 'AND'}))
+    return new Elements(Filters.filter_elements(this.elements, {type: 'and'}))
   }
 
   this.NOT = function(){
-    return new Elements(Filters.filter_elements(this.elements, {type: 'NOT'}))
+    return new Elements(Filters.filter_elements(this.elements, {type: 'not'}))
   }
 
   this.first_connection = function(){

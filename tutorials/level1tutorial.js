@@ -11,7 +11,7 @@ var i_so_blue_events = function(){
   else if (elements.sensor('C').active_connection().exists() &&
           elements.lightbulb().input('empty').exists()){
     //since lightbulbs only have one connection point, and it has been confirmed that it is empty, it is safe to go directly to it with first_connection
-    var lightbulb_in = elements.lightbulb().first_connection()
+    var lightbulb_in = elements.sensor('C').first_connection()
     highlightSection(lightbulb_in, true);
     createSpeechBubble(lightbulb_in, "Good job!  Now connect it to the lightbulb!");
   }

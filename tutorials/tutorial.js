@@ -47,7 +47,7 @@ Tutorial = {};
 		var bubbleContainer = $('<div id = "container"></div>');
 		$('body').append(bubbleContainer);
 		bubbleContainer.text(text);
-		bubbleContainer .offset({left: target.x + target.r, top: target.y + target.r});
+		bubbleContainer.offset({left: target.x + target.r, top: target.y + target.r});
 		bubbleContainer.css('opacity', '0');
 	}
 
@@ -95,7 +95,11 @@ Tutorial = {};
 	}
 
   var call_script = function(script_name){
-    eval(script_name + "_events()")
+    try {
+      eval(script_name + "_events()")
+    } catch (ReferenceError) {
+      //this is called if you cannot find _events()
+    }
     console.log("called ", script_name, "_events()")
   }
 
