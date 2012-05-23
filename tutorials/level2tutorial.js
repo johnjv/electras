@@ -1,8 +1,9 @@
-
 var its_a_start_events = function(){
+  console.log("starting")
   var elements = new Elements(Circuit.getElements())
   var lightbulb_in = elements.lightbulb().first_connection()
   var empty_sensors = elements.sensor().empty().elements
+  console.log('hello', elements)
 
   if (empty_sensors && empty_sensors.length == 3) {
     $.each(empty_sensors, function(i, sensor){
@@ -31,33 +32,31 @@ var its_a_start_events = function(){
   }
 }
 
-var start2 = [
-    test_lightbulb(''),
-    test_sensor(2, 'square', ''),
-    test_sensor(3, 'star', ''),
-    test_sensor(4, 'ball', '')
-]
-
-var square_selected = [
-  test_lightbulb(''),
-  test_sensor(2, 'square', 'active'),
-  test_sensor(3, 'star', ''),
-  test_sensor(4, 'ball', '')
-]
-
-var star_selected = [
-  test_lightbulb(''),
-  test_sensor(2, 'square', ''),
-  test_sensor(3, 'star', 'active'),
-  test_sensor(4, 'ball', '')
-]
-
-
-var wrong_one = [
-  test_lightbulb('4'),
-  test_sensor(2, 'square', ''),
-  test_sensor(3, 'star', ''),
-  test_sensor(4, 'ball', '1')
-]
-
-//change to acommadate eraser
+//var start2 = [
+//    test_lightbulb(''),
+//    test_sensor(2, 'square', ''),
+//    test_sensor(3, 'star', ''),
+//    test_sensor(4, 'ball', '')
+//]
+//
+//var square_selected = [
+//  test_lightbulb(''),
+//  test_sensor(2, 'square', 'active'),
+//  test_sensor(3, 'star', ''),
+//  test_sensor(4, 'ball', '')
+//]
+//
+//var star_selected = [
+//  test_lightbulb(''),
+//  test_sensor(2, 'square', ''),
+//  test_sensor(3, 'star', 'active'),
+//  test_sensor(4, 'ball', '')
+//]
+//
+//
+//var wrong_one = [
+//  test_lightbulb('4'),
+//  test_sensor(2, 'square', ''),
+//  test_sensor(3, 'star', ''),
+//  test_sensor(4, 'ball', '1')
+//]

@@ -21,14 +21,14 @@ Tutorial = {};
 	my.highlightSection = function(x, y, width, height, isCircular){
 		"use strict";
 		if(isCircular){
-			var circHighlighter = $('<img src = "circ_highlighter.svg" class = "highlighter" onmousedown = "return false"></img>');
+			var circHighlighter = $('<img src = "../tutorials/circ_highlighter.svg" class = "highlighter" onmousedown = "return false"></img>');
 			circHighlighter.width(width);
 			circHighlighter.height(height);
 			circHighlighter.offset({left: x, top: y});
 			var body = $('body');
 			body.append(circHighlighter);
 		}else{
-			var circHighlighter = $('<img src = "rect_highlighter.png" class = "highlighter" onmousedown = "return false"></img>');
+			var circHighlighter = $('<img src = "../tutorials/rect_highlighter.png" class = "highlighter" onmousedown = "return false"></img>');
 			circHighlighter.width(width);
 			circHighlighter.height(height);
 			circHighlighter.offset({left: x, top: y});
@@ -96,10 +96,13 @@ Tutorial = {};
 
   var call_script = function(script_name){
     eval(script_name + "_events()")
+    console.log("called ", script_name, "_events()")
   }
 
   my.circuitChanged = function(){
+    console.log("calling level")
     var script = LevelSelector.getCurrentLevel().script
+    console.log("the script is", script)
     call_script(script)
   }
 }(Tutorial, jQuery));

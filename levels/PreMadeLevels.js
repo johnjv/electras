@@ -1,7 +1,7 @@
 var i_so_blue = new Level({
   levelname: "I'm so blue",
   levelid: 1,
-  orderText:  "Give me every chocolate you make!",
+  orderText:  "Give me every blue candy you make!",
   hint: 'You should connect the blue sensor to the lightbulb by clicking on the connectors.',
   sensors:  'C',
   tools: [],

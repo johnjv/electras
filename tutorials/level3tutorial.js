@@ -36,34 +36,34 @@ var soyl_not_green_events = function(){
   }
 }
 
-
-var start3 = [
-  test_lightbulb(''),
-  test_sensor(2, 'green', '')
-]
-
-var two_NOTs = [
-  test_lightbulb(),
-  test_sensor(2, 'green', ''),
-  test_NOT(3, '', ''),
-  test_NOT(4, '', '')
-]
-
-var wrong_lightbulb_connection = [
-  test_lightbulb(2) ,
-  test_sensor(2, 'green', 1),
-  test_NOT(3, '', '')
-]
-
-var NOT_incoming_empty = [
-    test_lightbulb('') ,
-    test_sensor(2, 'green', ''),
-    test_NOT(3, '', '')
-]
-
-
-var NOT_incoming_filled = [
-  test_lightbulb('') ,
-  test_sensor(2, 'green', 3),
-  test_NOT(3, 2, '')
-]
+//
+//var start3 = [
+//  test_lightbulb(''),
+//  test_sensor(2, 'green', '')
+//]
+//
+//var two_NOTs = [
+//  test_lightbulb(),
+//  test_sensor(2, 'green', ''),
+//  test_NOT(3, '', ''),
+//  test_NOT(4, '', '')
+//]
+//
+//var wrong_lightbulb_connection = [
+//  test_lightbulb(2) ,
+//  test_sensor(2, 'green', 1),
+//  test_NOT(3, '', '')
+//]
+//
+//var NOT_incoming_empty = [
+//    test_lightbulb('') ,
+//    test_sensor(2, 'green', ''),
+//    test_NOT(3, '', '')
+//]
+//
+//
+//var NOT_incoming_filled = [
+//  test_lightbulb('') ,
+//  test_sensor(2, 'green', 3),
+//  test_NOT(3, 2, '')
+//]

@@ -83,11 +83,11 @@ function addChildClicks(){
              $('#levelSelect1').hide();
              $('#right1').hide(); 
              $('#title').hide();
-             LevelSelector.setLevel(all_levels[i]);
              $('#factory').show();
-             $('#levelname').html('<b>' + LevelSelector.getCurrentLevel().levelname + '</b>');
-             $('#circuit').show(); 
-             updateChalkBoard();
+          $('#levelname').html('<b>' + LevelSelector.getCurrentLevel().levelname + '</b>');
+          $('#circuit').show();
+          LevelSelector.setLevel(all_levels[i]);
+          updateChalkBoard();
         });
       });
       
@@ -96,11 +96,11 @@ function addChildClicks(){
              $('#levelSelect2').hide();  
              $('#left2').hide(); 
              $('#title').hide(); 
-             LevelSelector.setLevel(all_levels[i+10]);
              $('#factory').show();
-             $('#levelname').html('<b>' + LevelSelector.getCurrentLevel().levelname + '</b>');
-             $('#circuit').show(); 
-             updateChalkBoard();
+           $('#levelname').html('<b>' + LevelSelector.getCurrentLevel().levelname + '</b>');
+           $('#circuit').show();
+           LevelSelector.setLevel(all_levels[i+10]);
+           updateChalkBoard();
         });
     });
 }

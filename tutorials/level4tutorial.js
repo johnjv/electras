@@ -50,53 +50,53 @@ var flavor_unearthed = function(){
     createSpeechBubble(or_operators[0].connects[0], "Great!  Now if either green or blue is true, the OR will output true.")
   }
 }
-
-var start4 = [
-    test_lightbulb(''),
-    test_sensor(2, 'green', ''),
-    test_sensor(3, 'blue', '')
-]
-
-var one_empty_OR = [
-  test_lightbulb(''),
-  test_sensor(2, 'green', ''),
-  test_sensor(3, 'blue', ''),
-  test_OR(4, '', '', '')
-]
-
-var two_ORs = [
-  test_lightbulb(''),
-  test_sensor(2, 'green', ''),
-  test_sensor(3, 'blue', ''),
-  test_OR(4, '', '', ''),
-  test_OR(5, '', '', '')
-]
-
-var wrong_lightbulb_connection = [
-  test_lightbulb(2) ,
-  test_sensor(2, 'green', 1),
-  test_sensor(3, 'blue', ''),
-  test_OR(3, '', '', '')
-]
-
-
-var making_first_connection = [
-  test_lightbulb(''),
-  test_sensor(2, 'green', ''),
-  test_sensor(3, 'blue', ''),
-  test_OR(4, 'active', '', '')
-]
-
-var first_connection_made = [
-  test_lightbulb(''),
-  test_sensor(2, 'green', 4),
-  test_sensor(3, 'blue', ''),
-  test_OR(4, '', 2, '')
-]
-
-var two_connections_made = [
-  test_lightbulb(''),
-  test_sensor(2, 'green', 4),
-  test_sensor(3, 'blue', 4),
-  test_OR(4, 3, 2, '')
-]
+//
+//var start4 = [
+//    test_lightbulb(''),
+//    test_sensor(2, 'green', ''),
+//    test_sensor(3, 'blue', '')
+//]
+//
+//var one_empty_OR = [
+//  test_lightbulb(''),
+//  test_sensor(2, 'green', ''),
+//  test_sensor(3, 'blue', ''),
+//  test_OR(4, '', '', '')
+//]
+//
+//var two_ORs = [
+//  test_lightbulb(''),
+//  test_sensor(2, 'green', ''),
+//  test_sensor(3, 'blue', ''),
+//  test_OR(4, '', '', ''),
+//  test_OR(5, '', '', '')
+//]
+//
+//var wrong_lightbulb_connection = [
+//  test_lightbulb(2) ,
+//  test_sensor(2, 'green', 1),
+//  test_sensor(3, 'blue', ''),
+//  test_OR(3, '', '', '')
+//]
+//
+//
+//var making_first_connection = [
+//  test_lightbulb(''),
+//  test_sensor(2, 'green', ''),
+//  test_sensor(3, 'blue', ''),
+//  test_OR(4, 'active', '', '')
+//]
+//
+//var first_connection_made = [
+//  test_lightbulb(''),
+//  test_sensor(2, 'green', 4),
+//  test_sensor(3, 'blue', ''),
+//  test_OR(4, '', 2, '')
+//]
+//
+//var two_connections_made = [
+//  test_lightbulb(''),
+//  test_sensor(2, 'green', 4),
+//  test_sensor(3, 'blue', 4),
+//  test_OR(4, 3, 2, '')
+//]

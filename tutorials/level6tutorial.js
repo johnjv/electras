@@ -9,18 +9,19 @@ var anti_twinkle_events = function(){
   }
 }
 
-var not_quite = [
-  test_lightbulb(''),
-  test_sensor(2, 'yellow', ''),
-  test_sensor(3, 'star', ''),
-  test_OR(4, '', '', '')
-]
-
-
-var everything_got = [
-  test_lightbulb(''),
-  test_sensor(2, 'yellow', ''),
-  test_sensor(3, 'star', ''),
-  test_OR(4, '', '', ''),
-  test_NOT(5, '', '')
-]
+//
+//var not_quite = [
+//  test_lightbulb(''),
+//  test_sensor(2, 'yellow', ''),
+//  test_sensor(3, 'star', ''),
+//  test_OR(4, '', '', '')
+//]
+//
+//
+//var everything_got = [
+//  test_lightbulb(''),
+//  test_sensor(2, 'yellow', ''),
+//  test_sensor(3, 'star', ''),
+//  test_OR(4, '', '', ''),
+//  test_NOT(5, '', '')
+//]
