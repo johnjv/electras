@@ -32,32 +32,3 @@ var its_a_start_events = function(){
         "Grab the eraser and click on the wire to give us a nice clean slate to work with.");
   }
 }
-
-//var start2 = [
-//    test_lightbulb(''),
-//    test_sensor(2, 'square', ''),
-//    test_sensor(3, 'star', ''),
-//    test_sensor(4, 'ball', '')
-//]
-//
-//var square_selected = [
-//  test_lightbulb(''),
-//  test_sensor(2, 'square', 'active'),
-//  test_sensor(3, 'star', ''),
-//  test_sensor(4, 'ball', '')
-//]
-//
-//var star_selected = [
-//  test_lightbulb(''),
-//  test_sensor(2, 'square', ''),
-//  test_sensor(3, 'star', 'active'),
-//  test_sensor(4, 'ball', '')
-//]
-//
-//
-//var wrong_one = [
-//  test_lightbulb('4'),
-//  test_sensor(2, 'square', ''),
-//  test_sensor(3, 'star', ''),
-//  test_sensor(4, 'ball', '1')
-//]
