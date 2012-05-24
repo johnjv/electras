@@ -235,11 +235,11 @@ var Circuit = (function ($, Workshop) {
 			outElt = new Workshop.Element(outT,
 				workshop.canvas.width() - 10 - outT.imgWidth + outT.imgX,
 				Math.round((workshop.canvas.height() - outT.imgY) / 2.0));
-			outElt.isFixed = true;
+			outElt.isFrozen = true;
 			layout.addElement(outElt);
 			sourceElt = null;
 			$.each(computeSensors(newLevel.sensors), function (i, sensor) {
-				sensor.isFixed = true;
+				sensor.isFrozen = true;
 				if (newLevel.link === sensor.type.id) {
 					sourceElt = sensor;
 				}

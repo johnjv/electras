@@ -1,7 +1,6 @@
 (function (my, $) {
 	"use strict";
 	var AUTO_CONNECT_RADIUS = 10,
-		PORT_WIRE_SEP = 15,
 		LEGAL_OK = 0,
 		LEGAL_OUT = 1,
 		LEGAL_OVERLAP = 2,
@@ -17,7 +16,7 @@
 	// a port in the proposed element and second the port
 	// to which it should be connected.
 	function isLegalPosition(info, elt, eltDx, eltDy) {
-		var type, x, y, i, port, ix0, iy0, ix1, iy1, ret, ports;
+		var type, x, y, i, port, ix0, iy0, ix1, iy1, ret, ports, maxD2;
 		ret = LEGAL_OK;
 		type = elt.type;
 		x = elt.x + eltDx;
@@ -112,6 +111,7 @@
 
 		// Check whether the image overlaps an existing wire and
 		// whether any of the moved ports get too close to a wire
+		maxD2 = my.PORT_WIRE_SEP * my.PORT_WIRE_SEP;
 		info.layout.forEachWire(function (p0, p1) {
 			var x0, y0, x1, y1, i, pi, d2, isect;
 			if (p0.elt === elt || p1.elt === elt) {
@@ -130,7 +130,7 @@
 			for (i = elt.ports.length - 1; i >= 0; i -= 1) {
 				pi = elt.ports[i];
 				d2 = my.Wire.dist2(x + pi.x, y + pi.y, x0, y0, x1, y1);
-				if (d2 <= PORT_WIRE_SEP * PORT_WIRE_SEP) {
+				if (d2 <= maxD2) {
 					ret = LEGAL_OVERLAP;
 					return false;
 				}
@@ -174,7 +174,7 @@
 						yi += eltDy;
 					}
 					d2 = my.Wire.dist2(xi, yi, x0, y0, x1, y1);
-					if (d2 <= PORT_WIRE_SEP * PORT_WIRE_SEP) {
+					if (d2 <= maxD2) {
 						ret = LEGAL_OVERLAP;
 						return false;
 					}

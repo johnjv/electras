@@ -203,7 +203,9 @@
 	my.DrawCirc.hideStub = function (info, port) {
 		if (port) {
 			port.stub.hide();
-			port.circ.hide();
+			if (port.input) {
+				port.circ.hide();
+			}
 		}
 	};
 
@@ -211,10 +213,8 @@
 		if (port) {
 			if (port.ports.length === 0) {
 				port.stub.show();
-				port.circ.show();
-			} else if (!port.input) {
-				port.circ.show();
 			}
+			port.circ.show();
 		}
 	};
 
@@ -339,7 +339,7 @@
 		});
 	};
 
-	my.DrawCirc.ghostWireToCoord = function (info, p0, x, y) {
+	my.DrawCirc.ghostWireToCoord = function (info, p0, x, y, opacity) {
 		var x0, y0, color, line;
 		x0 = p0.elt.x + p0.x;
 		y0 = p0.elt.y + p0.y;
@@ -348,12 +348,12 @@
 			'L' + x0 + ',' + y0 +
 			'L' + x + ',' + y);
 		line.attr('stroke', color);
-		line.attr('opacity', 0.3);
+		line.attr('opacity', opacity);
 		line.attr('stroke-width', WIRE_WIDTH);
 		return line;
 	};
 
-	my.DrawCirc.ghostWireToPort = function (info, p0, p1) {
+	my.DrawCirc.ghostWireToPort = function (info, p0, p1, opacity) {
 		var x0, y0, x1, y1, color, line;
 		x0 = p0.elt.x + p0.x;
 		y0 = p0.elt.y + p0.y;
@@ -369,7 +369,7 @@
 			'L' + x1 + ',' + y1 +
 			'L' + (x1 + p1.dx) + ',' + (y1 + p1.dy));
 		line.attr('stroke', color);
-		line.attr('opacity', 0.6);
+		line.attr('opacity', opacity);
 		line.attr('stroke-width', WIRE_WIDTH);
 		return line;
 	};
