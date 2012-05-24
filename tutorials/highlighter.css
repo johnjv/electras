@@ -1,8 +1,7 @@
 html, body {width: 100%; height: 100%;
-	margin: 0; overflow: hidden }
+	margin: 0; overflow: hidden;
+}
 	
-img.highlighter { position: absolute }
-
 #container {
 	font-size: .8em;
 	font-weight: normal;

@@ -3,13 +3,14 @@ Tutorial = {};
 
 (function(my, $){
 	"use strict";
-	var highlight = false;
+	var highlightId = 0;
 	
 	function blink(){
 		"use strict";
+		var curId = highlightId;
 	    $(".highlight").each(function(){
 	    		$(this).fadeOut(1000, function(){
-	    			if(highlight){
+	    			if(highlightId === curId){
 	    				$(this).fadeIn(1600, function(){
 	    					blink();
 	    				});
@@ -21,7 +22,7 @@ Tutorial = {};
 	my.highlightSections = function(parameters){
 		"use strict";
 		Tutorial.unhighlightSection();
-		highlight = true;
+		highlightId += 1;
 		$.each(parameters, function(index, parameter){
 			var highlightDiv = $('<div class = "highlight"></div>');
 			var body = $('body');
@@ -58,7 +59,7 @@ Tutorial = {};
 	my.highlightSection = function(x, y, width, height, isCircular){
 		"use strict";
 		Tutorial.unhighlightSection();
-		highlight = true;
+		highlightId += 1;
 		var highlightDiv = $('<div class = "highlight"></div>');
 		var body = $('body');
 		body.append(highlightDiv);
@@ -101,7 +102,7 @@ Tutorial = {};
 
 	/*if you need to remove the highlighter*/
 	my.unhighlightSection = function(){
-		highlight = false;	
+		highlightId += 1;	
 		$('div.highlight').each(function(){
 			$(this).remove();
 		});
