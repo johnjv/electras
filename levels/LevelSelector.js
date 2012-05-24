@@ -16,7 +16,8 @@ function addRightClick(){
         $( "#levelSelect1:first" ).animate({
            'marginLeft' : "-=25%"
            }, 1000, function() {     
-        });                  
+        });    
+                      
         $( "#levelSelect2:first" ).animate({
            'marginLeft' : "-=25%"             
            }, 1000, function() {              
@@ -85,11 +86,9 @@ function addChildClicks(){
              $('#title').hide();
              $('#factory').show();             
              $('#circuit').show();                                 
-             $('#cliptip').show();
-             //$('#clipboard').show();  
-             LevelSelector.setLevel(all_levels[i]);
-             updateChalkBoard();
-             updateLevelName();
+             $('#cliptip').show();             
+             LevelSelector.setLevel(all_levels[i]);   
+             $('#page' + LevelSelector.getCurrentLevel().levelid).show();          
              Placer.place();
         });
       });
@@ -103,8 +102,7 @@ function addChildClicks(){
              $('#circuit').show();  
              $('#cliptip').show();             
              LevelSelector.setLevel(all_levels[i+10]);
-             updateChalkBoard();
-             updateLevelName();
+             $('#page' + LevelSelector.getCurrentLevel().levelid).show();       
              Placer.place();
         });
     });
@@ -181,10 +179,12 @@ var LevelSelector = (function($) {
             $('#title').show();
         }
         $('#factory').hide();
-        $('#circuit').hide();                 
+        $('#circuit').hide();
+        $('#clipboard').css('bottom', '-57%');                 
         $('#clipboard').hide();        
         $('#cliptip').hide();     
         $('#container').hide();
+        $('#page' + LevelSelector.getCurrentLevel().levelid).hide(); 
                        
     };
 
