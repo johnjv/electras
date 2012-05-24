@@ -49,7 +49,7 @@ Tutorial = {};
 				$(under).trigger(e);
 			});
 			blink(3000, 1000);
-		}
+		})
 	}
 
 	/*highlight an element's section*/
