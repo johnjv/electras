@@ -16,7 +16,8 @@
 	// a port in the proposed element and second the port
 	// to which it should be connected.
 	function isLegalPosition(info, elt, eltDx, eltDy) {
-		var type, x, y, i, port, ix0, iy0, ix1, iy1, ret, ports, maxD2;
+		var type, x, y, i, port, ix0, iy0, ix1, iy1, ret, ports, maxD2,
+			pfor, prev;
 		ret = LEGAL_OK;
 		type = elt.type;
 		x = elt.x + eltDx;
@@ -182,11 +183,35 @@
 			});
 		});
 
-		if (ret === LEGAL_OK) {
-			return {legal: ret, ports: ports};
-		} else {
+		if (ret !== LEGAL_OK) {
 			return {legal: ret, ports: []};
 		}
+
+		// See if any loops would be created by added wires
+		if (ports.length > 0) {
+			pfor = {};
+			prev = {};
+			$.each(ports, function (i, p) {
+				var p1, e1;
+				p1 = p[1];
+				e1 = p1.elt;
+				if (p1.input) {
+					e1.findElementsForward(pfor);
+					elt.findElementsBackward(prev);
+				} else {
+					e1.findElementsBackward(prev);
+					elt.findElementsForward(pfor);
+				}
+			});
+			$.each(prev, function (id, elt) {
+				if (pfor.hasOwnProperty(id)) {
+					ret = LEGAL_OVERLAP;
+					return false;
+				}
+			});
+		}
+
+		return {legal: ret, ports: ports};
 	}
 
 	function computeMovedLines(info, elt, dx, dy, opacity, ports, hidden) {
