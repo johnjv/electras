@@ -3,6 +3,8 @@
 	var ERASER_CONNECT = 15,
 		CONNECT_RADIUS = 15;
 
+	my.PORT_WIRE_SEP = 15;
+
 	function findPort(layout, x, y) {
 		var minD2, minPort;
 
@@ -102,7 +104,7 @@
 				newState = elt.type.poke(elt, x - elt.x, y - elt.y, info.state);
 				if (newState) {
 					info.setState(newState.evaluate());
-				} else if (!elt.isFixed) {
+				} else if (!elt.isFrozen) {
 					gest = new my.MoveGesture(info, elt, e);
 					info.setGesture(gest);
 				}
@@ -113,6 +115,59 @@
 	my.NullGesture.prototype.mouseDrag = function (info, e) { };
 
 	my.NullGesture.prototype.mouseUp = function (info, e) { };
+
+	function isWireLegal(layout, p0, p1) {
+		var x0, y0, x1, y1, maxD2, ret;
+
+		if (p0 === p1) {
+			return '';
+		} else if (p0.elt === p1.elt) {
+			return 'Cannot connect element to itself';
+		} else if (p1.input && p1.ports.length > 0) {
+			return 'Input cannot be connected twice';
+		} else if (p0.input && p1.input) {
+			return 'Cannot connect inputs';
+		} else if (!p0.input && !p1.input) {
+			return 'Cannot connect outputs';
+		}
+
+		x0 = p0.elt.x + p0.x;
+		y0 = p0.elt.y + p0.y;
+		x1 = p1.elt.x + p1.x;
+		y1 = p1.elt.y + p1.y;
+
+		maxD2 = my.PORT_WIRE_SEP * my.PORT_WIRE_SEP;
+		ret = null;
+		layout.forEachPort(function (p) {
+			var xp, yp, d2;
+			if (p !== p0 && p !== p1) {
+				xp = p.elt.x + p.x;
+				yp = p.elt.y + p.y;
+				d2 = my.Wire.dist2(xp, yp, x0, y0, x1, y1);
+				if (d2 <= maxD2) {
+					ret = 'Wire cannot be near connection';
+					return false;
+				}
+			}
+		});
+		if (ret !== null) {
+			return ret;
+		}
+
+		$.each(layout.elts, function (i, elt) {
+			var ix, iy, iw, ih, clip;
+			ix = elt.x + elt.type.imgX;
+			iy = elt.y + elt.type.imgY;
+			iw = elt.type.imgWidth;
+			ih = elt.type.imgHeight;
+			clip = my.Wire.clip(ix, iy, iw, ih, x0, y0, x1, y1);
+			if (clip !== null) {
+				ret = 'Wire cannot cross element';
+				return false;
+			}
+		});
+		return ret;
+	}
 
 	my.WiringGesture = function (info, port) {
 		this.port0 = port;
@@ -132,47 +187,52 @@
 	};
 
 	my.WiringGesture.prototype.mouseDrag = function (info, e) {
-		var p0, p1old, p1, line;
+		var p0, p1old, p1cand, p1, line, legal, change;
+
 		p0 = this.port0;
-		p1old = this.port1;
-		p1 = findPort(info.layout, e.circuitX, e.circuitY).port;
-		if (p1) {
-			if (p0 === p1) {
-				p1 = null; // self-connection - do not show message
-			} else if (p0.elt === p1.elt) {
+		p1old = this.candPort1;
+		p1cand = findPort(info.layout, e.circuitX, e.circuitY).port;
+
+		if (p1cand === null) {
+			change = true;
+			p1 = null;
+		} else if (p1cand === p1old) {
+			change = false;
+			p1 = this.port1;
+		} else {
+			change = true;
+			legal = isWireLegal(info.layout, p0, p1cand);
+			if (legal === null) {
+				p1 = p1cand;
+			} else {
 				p1 = null;
-				info.showMessage('Cannot connect element to itself');
-			} else if (p1.input && p1.ports.length > 0) {
-				p1 = null;
-				info.showMessage('Input cannot be connected twice');
-			} else if (p0.input && p1.input) {
-				p1 = null;
-				info.showMessage('Cannot connect inputs');
-			} else if (!p0.input && !p1.input) {
-				p1 = null;
-				info.showMessage('Cannot connect outputs');
+				if (legal !== '') {
+					info.showMessage(legal);
+				}
 			}
 		}
-		if (p1 !== p1old) {
-			if (this.line) {
-				this.line.remove();
-			}
-			my.DrawCirc.showStub(info, p1old);
-
+		if (change) {
+			this.candPort1 = p1cand;
 			this.port1 = p1;
 
-			if (p1) {
-				my.DrawCirc.hideStub(info, p1);
-				this.line = my.DrawCirc.ghostWireToPort(info, p0, p1);
-			}
-		}
-		if (p1 === null) {
 			line = this.line;
 			if (line) {
 				line.remove();
 			}
-			this.line = my.DrawCirc.ghostWireToCoord(info, p0,
-				e.circuitX, e.circuitY);
+			if (p1old && p1old !== p0) {
+				my.DrawCirc.showStub(info, p1old);
+			}
+			if (p1cand) {
+				my.DrawCirc.hideStub(info, p1cand);
+				if (p1 === p1cand) {
+					this.line = my.DrawCirc.ghostWireToPort(info, p0, p1cand, 0.75);
+				} else {
+					this.line = my.DrawCirc.ghostWireToPort(info, p0, p1cand, 0.3);
+				}
+			} else {
+				this.line = my.DrawCirc.ghostWireToCoord(info, p0,
+					e.circuitX, e.circuitY, 0.3);
+			}
 		}
 	};
 
@@ -188,17 +248,19 @@
 			}
 			info.layout.addWire(p0, p1);
 			info.circuitChanged();
-			my.DrawCirc.attachWire(info, p0, p1);
 			my.DrawCirc.showStub(info, p0);
-			if (this.line) {
-				this.line.remove();
-				this.line = null;
-			}
+			my.DrawCirc.showStub(info, p1);
+			my.DrawCirc.attachWire(info, p0, p1);
 			this.port0 = null;
 			this.port1 = null;
 		} else {
-			my.DrawCirc.showStub(info, p0);
+			if (this.candPort1) {
+				my.DrawCirc.showStub(info, this.candPort1);
+			}
+		}
+		if (this.line) {
 			this.line.remove();
+			this.line = null;
 		}
 		info.setGesture(null);
 	};
@@ -222,7 +284,7 @@
 		this.dragImg.offset({left: x, top: y});
 
 		elt = findElement(info.layout, e.circuitX, e.circuitY);
-		if ((elt != null && !elt.isFixed)
+		if ((elt != null && !elt.isFrozen)
 				|| my.Wire.find(info.layout, e.circuitX, e.circuitY, ERASER_CONNECT)) {
 			$(this.dragImg).stop().fadeTo(0, 1.0);
 		} else {
@@ -242,7 +304,7 @@
 			my.DrawCirc.recolorPorts(info, wire[1]);
 		} else {
 			elt = findElement(info.layout, e.circuitX, e.circuitY);
-			if (elt !== null && !elt.isFixed) {
+			if (elt !== null && !elt.isFrozen) {
 				ports = my.getConnectedPorts(elt);
 				info.layout.removeElement(elt);
 				my.DrawCirc.removeElement(info, elt);
