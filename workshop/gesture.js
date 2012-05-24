@@ -116,7 +116,7 @@
 
 	my.NullGesture.prototype.mouseUp = function (info, e) { };
 
-	function isWireLegal(layout, p0, p1) {
+	function isWireLegal(layout, p0, p1, connected) {
 		var x0, y0, x1, y1, maxD2, ret;
 
 		if (p0 === p1) {
@@ -129,6 +129,8 @@
 			return 'Cannot connect inputs';
 		} else if (!p0.input && !p1.input) {
 			return 'Cannot connect outputs';
+		} else if (connected.hasOwnProperty(p1.elt.id)) {
+			return 'Cannot create loop among elements';
 		}
 
 		x0 = p0.elt.x + p0.x;
@@ -174,6 +176,7 @@
 		this.port1 = null;
 		this.line = my.DrawCirc.ghostWireToCoord(info, port,
 			port.elt.x + port.dx, port.elt.y + port.dy);
+		this.connected = port.elt.findElements(!port.input);
 		my.DrawCirc.hideStub(info, port);
 	};
 
@@ -201,7 +204,7 @@
 			p1 = this.port1;
 		} else {
 			change = true;
-			legal = isWireLegal(info.layout, p0, p1cand);
+			legal = isWireLegal(info.layout, p0, p1cand, this.connected);
 			if (legal === null) {
 				p1 = p1cand;
 			} else {

@@ -1,5 +1,3 @@
-Error message before loop is introduced into circuit
-
 Show message when user is doing something illegal
 Show messages during move/add element
 Show messages when moving/deleting frozen element

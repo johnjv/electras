@@ -84,6 +84,37 @@ var Workshop = {};
 		}
 	};
 
+	my.Element.prototype.findElements = function (traverseInput, addTo) {
+		var found, fringe, elt, j, pj, k, ek;
+		found = addTo || {};
+		found[this.id] = this;
+		fringe = [this];
+		while (fringe.length > 0) {
+			elt = fringe.pop();
+			for (j = elt.ports.length - 1; j >= 0; j -= 1) {
+				pj = elt.ports[j];
+				if (pj.input === traverseInput) {
+					for (k = pj.ports.length - 1; k >= 0; k -= 1) {
+						ek = pj.ports[k].elt;
+						if (!found.hasOwnProperty(ek.id)) {
+							found[ek.id] = ek;
+							fringe.push(ek);
+						}
+					}
+				}
+			}
+		}
+		return found;
+	};
+
+	my.Element.prototype.findElementsForward = function (addTo) {
+		return this.findElements(false, addTo);
+	};
+
+	my.Element.prototype.findElementsBackward = function (addTo) {
+		return this.findElements(true, addTo);
+	};
+
 	my.Layout = function () {
 		this.maxEltId = -1;
 		this.maxPortId = -1;

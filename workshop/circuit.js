@@ -98,9 +98,7 @@ var Circuit = (function ($, Workshop) {
 					left: '-=' + (main.width() * 0.3) + 'px',
 					top: '-=' + (main.width() * 0.2) + 'px',
 					borderWidth: '4px'
-				}, 1000, function () {
-					console.log(main.offset().left, main.offset().top)
-				});
+				}, 1000);
 				workshop.setToolbarEnabled(false);
 				workshop.setGesture(new RestoreGesture('scale(1, 1)'));
 			});
@@ -281,7 +279,6 @@ var Circuit = (function ($, Workshop) {
 		self.width(par.width());
 		self.height(par.height());
 		workshop.paper.setSize(par.width(), par.height());
-		console.log('windowResized', par.width(), par.height());
 	}
 
 	return my;
