@@ -35,7 +35,7 @@ Tutorial = {};
 			highlightDiv.css('background-size', '100% 100%');
 			highlightDiv.css('background-repeat' ,'no-repeat');
 		}else{
-			imageUrl = encodeURI('../tutorials/rect_highlighter.svg');
+			imageUrl = encodeURI('../tutorials/rect_highlighter.png');
 			highlightDiv.css('background-image', 'url(' + imageUrl + ')');
 			highlightDiv.css('background-size', '100%');
 			highlightDiv.css('background-repeat' ,'no-repeat');
