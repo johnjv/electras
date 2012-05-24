@@ -1,7 +1,7 @@
 $(document).ready(function(){
 	"use strict";
 	
-	$("#advanceLevel").click(function(){
+	$("#next").click(function(){
 		LevelSelector.advanceLevel(true); 
 		updateChalkBoard();
 		updateLevelName();
@@ -23,7 +23,12 @@ $(document).ready(function(){
 	});
 	
 	$("#tip").click(function(){
-		$('#clipboard').show();		
+		$('#clipboard').show();	
+		$('#clipboard').animate({
+           'bottom' : "+=45%"
+           }, 1000, function() {     
+        }); 
+        $('#cliptip').hide();   	
 	});
 	
 	$("#hint").click(function(){
