@@ -49,7 +49,12 @@ var Circuit = (function ($, Workshop) {
 
 	RestoreGesture.prototype.mouseDown = function (info, e) {
 		if (this.xform !== '') {
-			$('#circuit').animate({ transform: this.xform }, 1000,
+			$('#circuit').animate({
+				transform: 'scale(1)',
+				left: 0,
+				top: 0,
+				borderWidth: 0
+			}, 1000,
 				function () {
 					info.setGesture(null);
 					info.setToolbarEnabled(true);
@@ -86,10 +91,16 @@ var Circuit = (function ($, Workshop) {
 				var xform, invert;
 				e.preventDefault();
 				xform = 'translate(-' + (main.width() * 0.5) +
-					'px, -' + (main.height() * 0.6) + 'px)';
+					'px, -' + (main.height() * 0.75) + 'px)';
+				main.css('border-width', 2);
 				main.animate({
-					transform: 'scale(0.5, 0.4)' + xform
-				}, 1000);
+					transform: 'scale(0.3, 0.25)',
+					left: '-=' + (main.width() * 0.3) + 'px',
+					top: '-=' + (main.width() * 0.2) + 'px',
+					borderWidth: '4px'
+				}, 1000, function () {
+					console.log(main.offset().left, main.offset().top)
+				});
 				workshop.setToolbarEnabled(false);
 				workshop.setGesture(new RestoreGesture('scale(1, 1)'));
 			});
@@ -260,6 +271,17 @@ var Circuit = (function ($, Workshop) {
 
 	my.stringify = function () {
 		return Workshop.stringify(workshop.layout);
+	}
+
+	my.windowResized = function () {
+		var par, self;
+		
+		self = $('#circuit');
+		par = self.parent();
+		self.width(par.width());
+		self.height(par.height());
+		workshop.paper.setSize(par.width(), par.height());
+		console.log('windowResized', par.width(), par.height());
 	}
 
 	return my;

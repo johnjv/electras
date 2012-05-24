@@ -213,8 +213,12 @@
 		if (port) {
 			if (port.ports.length === 0) {
 				port.stub.show();
+				port.circ.show();
+			} else {
+				if (!port.input) {
+					port.circ.show();
+				}
 			}
-			port.circ.show();
 		}
 	};
 

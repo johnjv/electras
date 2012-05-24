@@ -1,5 +1,8 @@
 div.circ-container {
 	position: relative;
+	border-style: solid;
+	border-color: #282;
+	border-width: 0;
 }
 
 div.circ-toolbar {

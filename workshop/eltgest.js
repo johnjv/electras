@@ -246,7 +246,8 @@
 		this.offs0 = elt.imgElt.offset();
 		$.each(elt.ports, function (i, port) {
 			var j;
-			my.DrawCirc.hideStub(info, port);
+			port.stub.hide();
+			port.circ.hide();
 			for (j = port.ports.length - 1; j >= 0; j -= 1) {
 				my.DrawCirc.hideWire(info, port, port.ports[j]);
 			}
