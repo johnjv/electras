@@ -119,9 +119,7 @@ Tutorial = {};
   }
 
   my.circuitChanged = function(){
-//    console.log("calling level")
     var script = LevelSelector.getCurrentLevel().script
-//    console.log("the script is", script)
     call_script(script)
   }
 }(Tutorial, jQuery));

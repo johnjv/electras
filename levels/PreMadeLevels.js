@@ -94,7 +94,7 @@ var out_on_a_lemon = new Level({
   tools: ['and'],
   types: ['**'],
   answers: 'Y-',
-  script: 'classic'
+  script: 'out_on_a_lemon'
 });
 
 var backlash = new Level({
