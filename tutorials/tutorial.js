@@ -3,25 +3,26 @@ Tutorial = {};
 
 (function(my, $){
 	"use strict";
-	function blink(interval){
+	var highlight = false;
+	
+	function blink(){
 		"use strict";
-		var timer = window.setInterval(function(){
-		    $("img.highlighter").each(function(){
-		    		//$(this).css("opacity", "0");
-		    		$(this).fadeOut(1000, function(){});
-		    	});
-		    window.setTimeout(function(){
-		    $("img.highlighter").each(function(){
-		    		//$(this).css("opacity", "1");
-		    		$(this).fadeIn(1600, function(){});
-		    	});
-		    }, 1000);
-		}, interval);
+	    $(".highlight").each(function(){
+	    		$(this).fadeOut(1000, function(){
+	    			if(highlight){
+	    				$(this).fadeIn(1600, function(){
+	    					blink();
+	    				});
+	    			}
+	    		});
+	    	});	
 	}
 
 	/*highlight an element's section*/
 	my.highlightSection = function(x, y, width, height, isCircular){
 		"use strict";
+		Tutorial.unhighlightSection();
+		highlight = true;
 		var highlightDiv = $('<div class = "highlight"></div>');
 		var body = $('body');
 		body.append(highlightDiv);
@@ -40,6 +41,14 @@ Tutorial = {};
 			highlightDiv.css('background-size', '100%');
 			highlightDiv.css('background-repeat' ,'no-repeat');
 		}
+		highlightDiv.on('click mousedown mouseup mousemove touchstart touchmove touchend', function(e){
+			var elt, under;
+			elt = $(e.target);
+			elt.hide();
+			under = document.elementFromPoint(e.pageX, e.pageY);
+			elt.show();
+			$(under).trigger(e);
+		});
 		blink(3000, 1000);
 		
 	}
@@ -56,6 +65,7 @@ Tutorial = {};
 
 	/*if you need to remove the highlighter*/
 	my.unhighlightSection = function(){
+		highlight = false;	
 		$('div.highlight').each(function(){
 			$(this).remove();
 		});
