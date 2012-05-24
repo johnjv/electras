@@ -1,4 +1,5 @@
 Error message before loop is introduced into circuit
+In moving element, output ports' circles are still visible
 
 Show message when user is doing something illegal
 Show messages during move/add element
