@@ -17,6 +17,40 @@ Tutorial = {};
 	    		});
 	    	});	
 	}
+	
+	my.highlightSections = function(parameters){
+		Tutorial.unhighlightSection();
+		highlight = true;
+		$.each(parameters, function(index, parameter){
+			var highlightDiv = $('<div class = "highlight"></div>');
+			var body = $('body');
+			body.append(highlightDiv);
+			highlightDiv.offset({left: parameter.x, top: parameter.y});
+			highlightDiv.width(parameter.width);
+			highlightDiv.height(parameter.height);
+			var imageUrl;
+			if(parameter.isCircular){
+				imageUrl = ('../tutorials/circ_highlighter.png');
+				highlightDiv.css('background-image', 'url(' + imageUrl + ')');
+				highlightDiv.css('background-size', '100% 100%');
+				highlightDiv.css('background-repeat' ,'no-repeat');
+			}else{
+				imageUrl = encodeURI('../tutorials/rect_highlighter.png');
+				highlightDiv.css('background-image', 'url(' + imageUrl + ')');
+				highlightDiv.css('background-size', '100%');
+				highlightDiv.css('background-repeat' ,'no-repeat');
+			}
+			highlightDiv.on('click mousedown mouseup mousemove touchstart touchmove touchend', function(e){
+				var elt, under;
+				elt = $(e.target);
+				elt.hide();
+				under = document.elementFromPoint(e.pageX, e.pageY);
+				elt.show();
+				$(under).trigger(e);
+			});
+			blink(3000, 1000);
+		}
+	}
 
 	/*highlight an element's section*/
 	my.highlightSection = function(x, y, width, height, isCircular){
