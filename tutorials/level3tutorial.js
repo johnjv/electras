@@ -1,7 +1,5 @@
 var soyl_not_green_events = function(){
-  console.log("In here.");
   var elements = new Elements(Circuit.getElements());
-  console.log(elements);
   var first_sensor = elements.sensor().first_connection();
 
 
@@ -12,30 +10,37 @@ var soyl_not_green_events = function(){
   }
 
   else if (!elements.NOT().exists()){
+    Tutorial.unhighlightSection()
     createSpeechBubble(first_sensor, "We'll be using the NOT operator.  Whatever is put into it comes out the opposite!")
   }
 
   else if (elements.NOT() && elements.NOT().elements.length > 1){
+    Tutorial.unhighlightSection()
     createSpeechBubble(first_sensor, "We'll only need one NOT operator for this.")
   }
 
   else if (elements.NOT().input('empty').exists()){
-    console.log('made it to the third choice', elements.NOT().input('empty'))
-    var operator_input = Filters.find_connection(elements.NOT().elements[0], 'empty', true)//find_incoming(elements.NOT().input('empty'), 'empty')
-    console.log('OPERATOR INPUT', operator_input)
-    var sensor_output = Filters.find_connection(elements.sensor('G').elements[0], 'empty', false)
-    highlightSection(operator_input, true)
-    highlightSection(sensor_output, true)
+    //must find a way to capture the INPUT, not the OUTPUT
+    var operator_input = Filters.find_connection(elements.NOT().elements[0], 'empty', 'input')//find_incoming(elements.NOT().input('empty'), 'empty')
+    var sensor_output = Filters.find_connection(elements.sensor('G').elements[0], 'empty', 'output')
+    highlightSections([make_parametric(operator_input, true), make_parametric(sensor_output, true)])
+//    highlightSection(operator_input, true)
+//    highlightSection(sensor_output, true)
     createSpeechBubble(first_sensor, "Great!  Now connect the green sensor to the input of the NOT operator") ;
   }
 
   else if (elements.NOT().input('filled').exists() &&
       (elements.NOT().output('empty').exists() || elements.lightbulb().input('empty').exists())) {
     //if the first part of the operator is filled in, but either the outgoing part of the NOT operator or the incoming part of the lightbulb is still empty
-    var operator_output = Filters.find_connection(elements.NOT().output('empty').elements[0], 'empty', false)
+    var operator_output = Filters.find_connection(elements.NOT().output('empty').elements[0], 'empty', 'output')
     var lightbulb_input = elements.lightbulb().first_connection()
-    highlightSection(operator_output, true)
-    highlightSection(lightbulb_input, true)
+    highlightSections([make_parametric(operator_output, true), make_parametric(lightbulb_input, true)])
+//    highlightSection(operator_output, true)
+//    highlightSection(lightbulb_input, true)
     createSpeechBubble(first_sensor, "Now just finish it off.")
+  }
+
+  else {
+    Tutorial.unhighlightSection()
   }
 }

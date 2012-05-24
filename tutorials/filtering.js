@@ -2,6 +2,12 @@ var Filters = (function ($) {
   var my = {}
 
   my.find_connection = function(element, connectedTo, type){
+    if(type == 'input') {
+      type = true
+    } else if (type == 'output') {
+      type = false
+    }
+    console.log(element, connectedTo, type)
     return element.connects.filter(function(connection) {return connection_is_match(connection, {connection_type: type, connectedTo: connectedTo})})[0]
   }
 
@@ -15,16 +21,6 @@ var Filters = (function ($) {
     });
     return remaining_elements
   };
-//
-//  var filter_one_element = function(element, criterion){
-//    var accepted = true;
-//    $.each(criterion, function(key, value){
-//      if (!is_match(element, key, value)){
-//        accepted = false;
-//      }
-//    })
-//    return accepted;
-//  }
 
   var is_match = function(element, key, criteria){
     var i = 0;
@@ -44,6 +40,7 @@ var Filters = (function ($) {
       switch (connection_key) {
         case 'input':
           if(connection_value != connection.input){this_is_a_match = false}
+          console.log(connection_value, connection, this_is_a_match)
           break;
         case 'connectedTo':
           var one_matches = false;
@@ -58,6 +55,7 @@ var Filters = (function ($) {
           break;
       }
     });
+    console.log("what connection_is_match returns:  ", connection, criteria, this_is_a_match)
     return this_is_a_match
   }
 
@@ -93,8 +91,23 @@ var Filters = (function ($) {
 //shortcuts and standins
 
 var highlightSection = function(highlighted, isCircular){
-  Tutorial.highlightSection(highlighted.x - highlighted.r, highlighted.y - highlighted.r, highlighted.r * 2, highlighted.r * 2, isCircular)
-  console.log("highlighting: ", highlighted.x, highlighted.y, highlighted.r, highlighted.r, isCircular)
+  var params = make_parametric(highlighted, isCircular)
+  Tutorial.highlightSections([params])
+}
+
+var make_parametric = function(highlighted, isCircular){
+  params = {}
+  params.x = highlighted.x - highlighted.r
+  params.y = highlighted.y - highlighted.r
+  params.height = highlighted.r * 2
+  params.width = highlighted.r * 2
+  params.isCircular = isCircular
+  return params
+}
+
+var highlightSections = function(params){
+  Tutorial.highlightSections(params)
+  console.log("highlighting multiple sections with params: ", params)
 }
 
 var createSpeechBubble = function(hightlighted, text) {
