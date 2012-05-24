@@ -19,6 +19,7 @@ Tutorial = {};
 	}
 	
 	my.highlightSections = function(parameters){
+		"use strict";
 		Tutorial.unhighlightSection();
 		highlight = true;
 		$.each(parameters, function(index, parameter){
@@ -49,8 +50,9 @@ Tutorial = {};
 				$(under).trigger(e);
 			});
 			blink(3000, 1000);
-		})
+		});
 	}
+	
 
 	/*highlight an element's section*/
 	my.highlightSection = function(x, y, width, height, isCircular){
