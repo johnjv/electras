@@ -59,6 +59,8 @@
 			})
 	};
 
+	var ERROR_CIRCLE_RADIUS = 10;
+
 	var ERR_MESSAGES = {
 		connect_inputs: 'Cannot connect inputs',
 		connect_outputs: 'Cannot connect outputs',
@@ -91,20 +93,20 @@
 		var self, toolbar, canvas, errContainer, name, gesture, info;
 
 		self = this;
-		jqElt.addClass('circ-container');
-		toolbar = $('<div></div>').addClass('circ-toolbar');
-		canvas = $('<div></div>').addClass('circ-canvas');
-		errContainer = $('<div></div>').addClass('circ-error');
+		jqElt.addClass('circ_container');
+		toolbar = $('<div></div>').addClass('circ_toolbar');
+		canvas = $('<div></div>').addClass('circ_canvas');
+		errContainer = $('<div></div>').addClass('circ_error_parent');
 		jqElt.append(toolbar);
 		jqElt.append(canvas);
-		jqElt.append($('<div></div>').addClass('circ-error-container')
+		jqElt.append($('<div></div>').addClass('circ_error_grandparent')
 			.append(errContainer));
 		this.toolbar = toolbar;
 		this.toolbarEnabled = true;
 		this.canvas = canvas;
 		this.errContainer = errContainer;
 		this.errElt = null;
-		this.errText = '';
+		this.errCircs = [];
 		this.gesture = new my.NullGesture(self);
 		this.paper = raphael(canvas.get(0), canvas.width(), canvas.height());
 		this.layout = new my.Layout();
@@ -254,14 +256,15 @@
 
 	my.Workshop.prototype.hideError = function () {
 		this.showError(null, null);
-	}
+	};
 
-	my.Workshop.prototype.showError = function (msg, loc) {
-		var oldElt, i, key, text, oldText, errElt;
+	my.Workshop.prototype.showError = function (msg, locs) {
+		var oldElt, i, key, text, oldText, errElt, circs;
 
 		oldElt = this.errElt;
 
 		if (msg === null || msg === '') {
+			this.setErrorCircles([]);
 			if (oldElt) {
 				this.errElt = null;
 				oldElt.stop().fadeOut(100, function () {
@@ -289,7 +292,7 @@
 			oldText = oldElt.text();
 		}
 		if (text !== oldText) {
-			errElt = $('<span></span>').addClass('circ-error').text(text).hide();
+			errElt = $('<span></span>').addClass('circ_error').text(text).hide();
 			this.errElt = errElt;
 			this.errContainer.append(errElt);
 			if (oldText === '') {
@@ -300,6 +303,41 @@
 					errElt.fadeIn(100);
 				});
 			}
+		}
+
+		if (locs !== null) {
+			if (locs[0].length) {
+				this.setErrorCircles(locs);
+			} else {
+				this.setErrorCircles([locs]);
+			}
+		}
+	};
+
+	my.Workshop.prototype.setErrorCircles = function (locs) {
+		var r, circs, max, num, offs0, i, loc, x, y, circ;
+		r = ERROR_CIRCLE_RADIUS;
+		circs = this.errCircs;
+		max = circs.length;
+		num = locs.length;
+		offs0 = this.canvas.offset();
+		for (i = 0; i < num; i += 1) {
+			loc = locs[i];
+			x = offs0.left + loc[0] - r;
+			y = offs0.top + loc[1] - r;
+			if (i < max) {
+				circs[i].offset({left: x, top: y}).show();
+			} else {
+				circ = ($('<img></img>').fadeTo(0, 0.5)
+					.attr('src', my.getResourcePath('err-circ.svg'))
+					.addClass('error_circle')
+					.width(2 * r).offset({left: x, top: y}));
+				this.canvas.append(circ);
+				circs.push(circ);
+			}
+		}
+		for (; i < max; i += 1) {
+			circs[i].hide();
 		}
 	};
 

@@ -85,7 +85,7 @@
 		}
 
 		return [x0 + tMin * dx, y0 + tMin * dy,
-			x1 + tMax * dx, y1 + tMax * dy];
+			x0 + tMax * dx, y0 + tMax * dy];
 	};
 
 	my.Wire.midpoint = function (locs, y0, x1, y1) {
