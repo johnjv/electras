@@ -1,11 +1,11 @@
-div.circ-container {
+div.circ_container {
 	position: relative;
 	border-style: solid;
 	border-color: #282;
 	border-width: 0;
 }
 
-div.circ-toolbar {
+div.circ_toolbar {
 	position: absolute;
 	background-color: #FFB;
 	width: 58px;
@@ -15,7 +15,7 @@ div.circ-toolbar {
 	text-align: center;
 }
 
-div.circ-canvas {
+div.circ_canvas {
 	position: relative;
 	border-left: solid 2px #282;
 	margin-left: 58px;
@@ -26,20 +26,20 @@ div.circ-canvas {
 	background-color: white;
 }
 
-div.circ-error-container {
+div.circ_error_grandparent {
 	position: absolute;
 	top: 0px;
 	left: 0px;
 	width: 100%;
 }
 
-div.circ-error {
+div.circ_error_parent {
 	margin-left: 58px;
 	text-align: center;
 	margin-top: 1em;
 }
 
-span.circ-error {
+span.circ_error {
 	background-color: rgba(17, 68, 14, 0.4);
 	border: solid 2px rgba(17, 68, 14, 0.5);
 	padding: 0.5em 1em;
@@ -58,4 +58,9 @@ img.tool {
 
 img.on_canvas {
 	position: absolute;
+}
+
+img.error_circle {
+	position: absolute;
+	z-index: 1;
 }
