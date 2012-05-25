@@ -15,25 +15,25 @@ console.log(sensor)
         params.push(parametric_thing)
     })
     highlightSections(params)
-    createSpeechBubble(first_sensor, getText(2, 1));
+    createSpeechBubble(first_sensor, getBubble(2, 1));
   }
 
   else if (elements.sensor('-').active_connection().exists() &&
             elements.lightbulb().empty().exists()) {
     highlightSection(lightbulb_in, true);
-    createSpeechBubble(first_sensor, getText(2, 2));
+    createSpeechBubble(first_sensor, getBubble(2, 2));
   }
 
   else if (elements.sensor().active_connection().exists() &&
            elements.lightbulb().empty().exists()){
     Tutorial.unhighlightSection()
-    createSpeechBubble(first_sensor, getText(2, 3));
+    createSpeechBubble(first_sensor, getBubble(2, 3));
   }
 
   else if (elements.lightbulb().input('filled').exists() &&
           elements.sensor('-').empty().exists()) {
     Tutorial.unhighlightSection()
-    createSpeechBubble(first_sensor, getText(2, 4));
+    createSpeechBubble(first_sensor, getBubble(2, 4));
   }
 
   else {

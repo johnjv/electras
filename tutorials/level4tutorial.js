@@ -7,17 +7,17 @@ var flavor_unearthed_events = function(){
 
   if (elements.lightbulb().input('filled').exists() && !elements.OR().output('filled').exists()){
     highlightSection(elements.lightbulb().first_connection(),  true)
-    createSpeechBubble(first_sensor, getText(4,1))
+    createSpeechBubble(first_sensor, getBubble(4,1))
   }
 
   else if (or_operators.length < 1){
     Tutorial.unhighlightSection()
-    createSpeechBubble(first_sensor, getText(4,2))
+    createSpeechBubble(first_sensor, getBubble(4,2))
   }
 
   else if (or_operators.length > 1){
     Tutorial.unhighlightSection()
-    createSpeechBubble(first_sensor, getText(4,3))
+    createSpeechBubble(first_sensor, getBubble(4,3))
   }
 
   else if (empty_sensors.length == 2 || (empty_sensors.length == 1 && elements.sensor().active_connection().exists())){
@@ -31,19 +31,19 @@ var flavor_unearthed_events = function(){
         highlightSection(connection, true)
       }
     })
-    createSpeechBubble(first_sensor, getText(4,4)) ;
+    createSpeechBubble(first_sensor, getBubble(4,4)) ;
   }
 
   else if ((empty_sensors && empty_sensors.length == 1) || elements.sensor().active_connection().exists()) {
     //highlight the remaining outgoing sensor and incoming OR
     try {highlightSection(empty_sensors[0].connects[0], true)} catch(e){} //try because it might be active
     highlightSection(Filters.find_connection(or_operators[0], '', true), true)
-    createSpeechBubble(first_sensor, getText(4,5))
+    createSpeechBubble(first_sensor, getBubble(4,5))
   }
 
   else if (empty_sensors.length == 0){
     Tutorial.unhighlightSection()
-    createSpeechBubble(first_sensor, getText(4,6))
+    createSpeechBubble(first_sensor, getBubble(4,6))
   }
 
   else {
