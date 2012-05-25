@@ -1,0 +1,10 @@
+var anti_twinkle_events = function(){
+
+  var elements = new Elements(Circuit.getElements())
+
+  if(elements.OR().exists() && elements.NOT().exists()){
+    //do nothing
+  } else {
+    createSpeechBubble(elements.sensor().first_connection(), getText(6,1))
+  }
+}
