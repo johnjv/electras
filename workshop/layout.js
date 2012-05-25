@@ -89,7 +89,8 @@ var Workshop = {};
 		}
 	};
 
-	my.Element.prototype.findElements = function (traverseInput, addTo) {
+	my.Element.prototype.findElements = function (traverseInput, addTo,
+			mapTo) {
 		var found, fringe, elt, j, pj, k, ek;
 		found = addTo || {};
 		found[this.id] = this;
@@ -102,7 +103,11 @@ var Workshop = {};
 					for (k = pj.ports.length - 1; k >= 0; k -= 1) {
 						ek = pj.ports[k].elt;
 						if (!found.hasOwnProperty(ek.id)) {
-							found[ek.id] = ek;
+							if (mapTo) {
+								found[ek.id] = mapTo;
+							} else {
+								found[ek.id] = ek;
+							}
 							fringe.push(ek);
 						}
 					}
@@ -112,12 +117,12 @@ var Workshop = {};
 		return found;
 	};
 
-	my.Element.prototype.findElementsForward = function (addTo) {
-		return this.findElements(false, addTo);
+	my.Element.prototype.findElementsForward = function (addTo, mapTo) {
+		return this.findElements(false, addTo, mapTo);
 	};
 
-	my.Element.prototype.findElementsBackward = function (addTo) {
-		return this.findElements(true, addTo);
+	my.Element.prototype.findElementsBackward = function (addTo, mapTo) {
+		return this.findElements(true, addTo, mapTo);
 	};
 
 	my.Layout = function () {

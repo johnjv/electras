@@ -3,12 +3,12 @@
 	var AUTO_CONNECT_RADIUS = 10,
 		LEGAL_OK = 0,
 		LEGAL_OUT = 1,
-		LEGAL_OVERLAP = 2,
+		LEGAL_REJECT = 2,
 		LEGAL_WIRE = 3;
 
 	// Returns an object for which the "legal" key is LEGAL_OK if
 	// location is legal for element, LEGAL_OUT if element goes beyond
-	// canvas bounds, LEGAL_OVERLAP if element overlaps with other
+	// canvas bounds, LEGAL_REJECT if element overlaps with other
 	// element/wire. The "ports" key represents wires that should
 	// be added since they come very close to the proposed element:
 	// It references an array of two-element arrays, nonempty only
@@ -16,8 +16,8 @@
 	// a port in the proposed element and second the port
 	// to which it should be connected.
 	function isLegalPosition(info, elt, eltDx, eltDy) {
-		var type, x, y, i, port, ix0, iy0, ix1, iy1, ret, ports, maxD2,
-			pfor, prev;
+		var type, x, y, i, port, ix0, iy0, ix1, iy1, ret, retErr, retLoc,
+			ports, maxD2, pfor, prev;
 		ret = LEGAL_OK;
 		type = elt.type;
 		x = elt.x + eltDx;
@@ -40,10 +40,12 @@
 		}
 
 		if (ret !== LEGAL_OK) {
-			return {legal: ret, ports: []};
+			return {legal: ret, ports: [], err: null, loc: null};
 		}
 
 		ports = [];
+		retErr = null;
+		retLoc = null;
 		$.each(info.layout.elts, function (j, other) {
 			var jx0, jy0, jx1, jy1, k, ip, kp, ix, iy, kx, ky, dx, dy, d2;
 			if (other === elt) {
@@ -55,7 +57,9 @@
 			jy1 = jy0 + other.type.imgHeight;
 			if (ix0 < jx1 && jx0 < ix1 && iy0 < jy1 && jy0 < iy1) {
 				// other's image intersects with this image
-				ret = LEGAL_OVERLAP;
+				retErr = 'circ.err.element_on_element';
+				retLoc = [(Math.max(ix0, jx0) + Math.max(ix1, jx1)) / 2,
+					(Math.max(iy0, jy0) + Math.max(iy1, jy1)) / 2];
 				return false;
 			}
 			for (k = other.ports.length - 1; k >= 0; k -= 1) {
@@ -64,7 +68,8 @@
 				ky = other.y + kp.y;
 				if (kx >= ix0 && kx < ix1 && ky >= iy0 && ky < iy1) {
 					// other's port intersects with this image
-					ret = LEGAL_OVERLAP;
+					retErr = 'circ.err.port_on_element';
+					retLoc = [kx, ky];
 					return false;
 				}
 			}
@@ -74,7 +79,8 @@
 				iy = y + ip.y;
 				if (ix >= jx0 && ix < jx1 && iy >= jy0 && iy < jy1) {
 					// this element's port intersects with other's image
-					ret = LEGAL_OVERLAP;
+					retErr = 'circ.err.port_on_element';
+					retLoc = [ix, iy];
 					return false;
 				}
 				for (k = other.ports.length - 1; k >= 0; k -= 1) {
@@ -89,15 +95,25 @@
 						// port to be automatically connected
 						if (kp.input === ip.input) {	
 							// ports incompatible (both inputs/both outputs)
-							ret = LEGAL_OVERLAP;
+							retLoc = [[ix, iy], [kx, ky]];
+							if (kp.input) {
+								retErr = 'circ.err.connect_inputs';
+							} else {
+								retErr = 'circ.err.connect_outputs';
+							}
 							return false;
 						}
-						if ((kp.input && kp.ports.length > 0
-									&& kp.ports[0] !== ip)
-								|| (ip.input && ip.ports.length > 0
-									&& ip.ports[0] !== kp)) {
-							// the input port is already connected
-							ret = LEGAL_OVERLAP;
+						if (kp.input && kp.ports.length > 0
+									&& kp.ports[0] !== ip) {
+							// the destination port is already connected
+							retErr = 'circ.err.double_input';
+							retLoc = [kx, ky];
+							return false;
+						} else if (ip.input && ip.ports.length > 0
+									&& ip.ports[0] !== kp) {
+							// the source port is already connected
+							retErr = 'circ.err.double_input';
+							retLoc = [ix, iy];
 							return false;
 						}
 						ports.push([i, kp]);
@@ -106,8 +122,8 @@
 			}
 		});
 
-		if (ret !== LEGAL_OK) {
-			return {legal: ret, ports: []};
+		if (retErr !== null) {
+			return {legal: LEGAL_REJECT, err: retErr, loc: retLoc};
 		}
 
 		// Check whether the image overlaps an existing wire and
@@ -125,21 +141,23 @@
 			isect = my.Wire.clip(ix0, iy0, type.imgWidth, type.imgHeight,
 				x0, y0, x1, y1);
 			if (isect !== null) {
-				ret = LEGAL_OVERLAP;
+				retErr = 'circ.err.element_on_wire';
+				retLoc = my.Wire.midpoint(isect);
 				return false;
 			}
 			for (i = elt.ports.length - 1; i >= 0; i -= 1) {
 				pi = elt.ports[i];
 				d2 = my.Wire.dist2(x + pi.x, y + pi.y, x0, y0, x1, y1);
 				if (d2 <= maxD2) {
-					ret = LEGAL_OVERLAP;
+					retErr = 'circ.err.port_on_wire';
+					retLoc = [x + pi.x, y + pi.y];
 					return false;
 				}
 			}
 		});
 
-		if (ret !== LEGAL_OK) {
-			return {legal: ret, ports: []};
+		if (retErr !== null) {
+			return {legal: LEGAL_REJECT, err: retErr, loc: retLoc};
 		}
 
 		// Check whether moved wires cross over any images or get too
@@ -161,7 +179,8 @@
 				isect = my.Wire.clip(jx, jy, other.type.imgWidth,
 					other.type.imgHeight, x0, y0, x1, y1);
 				if (isect !== null) {
-					ret = LEGAL_OVERLAP;
+					retErr = 'circ.err.element_on_wire';
+					retLoc = my.Wire.midpoint(isect);
 					return false;
 				}
 			});
@@ -176,15 +195,16 @@
 					}
 					d2 = my.Wire.dist2(xi, yi, x0, y0, x1, y1);
 					if (d2 <= maxD2) {
-						ret = LEGAL_OVERLAP;
+						retErr = 'circ.err.port_on_wire';
+						retLoc = [xi, yi];
 						return false;
 					}
 				}
 			});
 		});
 
-		if (ret !== LEGAL_OK) {
-			return {legal: ret, ports: []};
+		if (retErr !== null) {
+			return {legal: LEGAL_REJECT, err: retErr, loc: retLoc};
 		}
 
 		// See if any loops would be created by added wires
@@ -192,26 +212,32 @@
 			pfor = {};
 			prev = {};
 			$.each(ports, function (i, p) {
-				var p1, e1;
+				var p1, e1, p1Loc;
 				p1 = p[1];
 				e1 = p1.elt;
+				p1Loc = p1.getLocation();
 				if (p1.input) {
-					e1.findElementsForward(pfor);
-					elt.findElementsBackward(prev);
+					e1.findElementsForward(pfor, p1Loc);
+					elt.findElementsBackward(prev, p1Loc);
 				} else {
-					e1.findElementsBackward(prev);
-					elt.findElementsForward(pfor);
+					e1.findElementsBackward(prev, p1Loc);
+					elt.findElementsForward(pfor, p1Loc);
 				}
 			});
-			$.each(prev, function (id, elt) {
-				if (pfor.hasOwnProperty(id)) {
-					ret = LEGAL_OVERLAP;
+			$.each(prev, function (id, prevLoc) {
+				if (pfor.hasOwnProperty(id) && parseInt(id, 10) !== elt.id) {
+					retErr = 'circ.err.connect_loop';
+					retLoc = [prevLoc, pfor[id]];
 					return false;
 				}
 			});
 		}
 
-		return {legal: ret, ports: ports};
+		if (retErr !== null) {
+			return {legal: LEGAL_REJECT, err: retErr, loc: retLoc};
+		}
+
+		return {legal: LEGAL_OK, ports: ports};
 	}
 
 	function computeMovedLines(info, elt, dx, dy, opacity, ports, hidden) {
@@ -290,16 +316,19 @@
 		legal = isLegalPosition(info, this.elt, dx, dy);
 		if (legal.legal === LEGAL_OK) {
 			opacity = 1.0;
+			info.hideError();
 		} else if (legal.legal === LEGAL_OUT) {
 			opacity = 0.2;
+			info.hideError();
 		} else {
 			opacity = 0.6;
+			info.showError(legal.err, legal.loc);
 		}
 		this.dragImg.offset({left: this.offs0.left + dx, top: this.offs0.top + dy});
 		this.dragImg.stop().fadeTo(0, opacity);
 		hidden = [];
 		newElts = computeMovedLines(info, this.elt, dx, dy, opacity,
-			legal.ports, hidden);
+			legal.ports || [], hidden);
 		$.each(this.hidden, function (i, hideElt) {
 			if ($.inArray(hideElt, hidden) < 0) {
 				hideElt.show();
@@ -327,6 +356,7 @@
 		elt = this.elt;
 		legal = isLegalPosition(info, elt, dx, dy);
 		if (legal.legal === LEGAL_OK) {
+			info.hideError();
 			if (this.dragImg === null) {
 				info.setGesture(null);
 				return;
@@ -345,6 +375,7 @@
 			});
 			info.circuitChanged();
 		} else if (legal.legal === LEGAL_OUT) {
+			info.hideError();
 			ports = my.getConnectedPorts(elt);
 			info.layout.removeElement(elt);
 			my.DrawCirc.removeElement(info, elt);
@@ -357,6 +388,7 @@
 				drawingElt.remove();
 			});
 		} else {
+			info.showError(legal.err, legal.loc);
 			this.cancel(info);
 		}
 		info.setGesture(null);

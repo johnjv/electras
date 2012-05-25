@@ -120,7 +120,9 @@
 
 	my.NullGesture.prototype.mouseDrag = function (info, e) { };
 
-	my.NullGesture.prototype.mouseUp = function (info, e) { };
+	my.NullGesture.prototype.mouseUp = function (info, e) {
+		info.hideError();
+	};
 
 	function isWireLegal(layout, p0, p1, connected) {
 		var x0, y0, x1, y1, maxD2, ret, retp;
@@ -213,6 +215,7 @@
 		p1cand = findPort(info.layout, e.circuitX, e.circuitY).port;
 
 		if (p1cand === null) {
+			info.hideError();
 			change = true;
 			p1 = null;
 		} else if (p1cand === p1old) {
@@ -222,11 +225,14 @@
 			change = true;
 			legal = isWireLegal(info.layout, p0, p1cand, this.connected);
 			if (legal.ok) {
+				info.hideError();
 				p1 = p1cand;
 			} else {
 				p1 = null;
 				if (legal.err) {
 					info.showError(legal.err, legal.loc);
+				} else {
+					info.hideError();
 				}
 			}
 		}
@@ -294,20 +300,35 @@
 	};
 
 	my.EraseGesture.prototype.mouseDrag = function (info, e) {
-		var offs0, x, y, elt;
+		var offs0, ex, ey, x, y, elt, w;
+
+		ex = e.circuitX;
+		ey = e.circuitY;
 
 		offs0 = info.canvas.offset();
-		x = offs0.left + e.circuitX - 0.3 * 50.0;
-		y = offs0.top + e.circuitY - 50;
+		x = offs0.left + ex - 0.3 * 50.0;
+		y = offs0.top + ey - 50;
 
 		this.dragImg.offset({left: x, top: y});
 
-		elt = findElement(info.layout, e.circuitX, e.circuitY);
-		if ((elt != null && !elt.isFrozen)
-				|| my.Wire.find(info.layout, e.circuitX, e.circuitY, ERASER_CONNECT)) {
-			$(this.dragImg).stop().fadeTo(0, 1.0);
+		elt = findElement(info.layout, ex, ey);
+		if (elt !== null) {
+			if (elt.isFrozen) {
+				info.showError('circ.err.remove_frozen');
+				$(this.dragImg).stop().fadeTo(0, 0.5);
+			} else {
+				info.hideError();
+				$(this.dragImg).stop().fadeTo(0, 1.0);
+			}
 		} else {
-			$(this.dragImg).stop().fadeTo(0, 0.5);
+			w = my.Wire.find(info.layout, ex, ey, ERASER_CONNECT);
+			if (w !== null) {
+				info.hideError();
+				$(this.dragImg).stop().fadeTo(0, 1.0);
+			} else {
+				info.hideError();
+				$(this.dragImg).stop().fadeTo(0, 0.5);
+			}
 		}
 	};
 
@@ -319,6 +340,7 @@
 		this.dragImg.remove();
 		wire = my.Wire.find(info.layout, x, y, ERASER_CONNECT);
 		if (wire !== null) {
+			info.hideError();
 			info.layout.removeWire(wire[0], wire[1]);
 			my.DrawCirc.removeWire(info, wire[0], wire[1]);
 			info.circuitChanged();
@@ -329,6 +351,7 @@
 				if (elt.isFrozen) {
 					info.showError('circ.err.remove_frozen', [x, y]);
 				} else {
+					info.hideError();
 					ports = my.getConnectedPorts(elt);
 					info.layout.removeElement(elt);
 					my.DrawCirc.removeElement(info, elt);
