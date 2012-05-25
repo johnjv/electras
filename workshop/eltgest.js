@@ -58,8 +58,8 @@
 			if (ix0 < jx1 && jx0 < ix1 && iy0 < jy1 && jy0 < iy1) {
 				// other's image intersects with this image
 				retErr = 'circ.err.element_on_element';
-				retLoc = [(Math.max(ix0, jx0) + Math.max(ix1, jx1)) / 2,
-					(Math.max(iy0, jy0) + Math.max(iy1, jy1)) / 2];
+				retLoc = [(Math.max(ix0, jx0) + Math.min(ix1, jx1)) / 2,
+					(Math.max(iy0, jy0) + Math.min(iy1, jy1)) / 2];
 				return false;
 			}
 			for (k = other.ports.length - 1; k >= 0; k -= 1) {
