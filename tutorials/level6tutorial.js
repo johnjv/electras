@@ -5,6 +5,6 @@ var anti_twinkle_events = function(){
   if(elements.OR().exists() && elements.NOT().exists()){
     //do nothing
   } else {
-    createSpeechBubble(elements.sensor().first_connection(), getText(6,1))
+    createSpeechBubble(elements.sensor().first_connection(), getBubble(6,1))
   }
 }
