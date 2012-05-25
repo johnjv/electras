@@ -88,6 +88,14 @@
 			x1 + tMax * dx, y1 + tMax * dy];
 	};
 
+	my.Wire.midpoint = function (locs, y0, x1, y1) {
+		if (locs.length && locs.length === 4) {
+			return [(locs[0] + locs[2]) / 2, (locs[1] + locs[3]) / 2];
+		} else {
+			return [(locs + x1) / 2, (y0 + y1) / 2];
+		}
+	}
+
 	my.Wire.find = function (layout, x, y, maxDist) {
 		var bestD2, ret;
 		bestD2 = maxDist * maxDist + 1;

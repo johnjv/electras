@@ -92,7 +92,8 @@
 		best = findPort(info.layout, x, y);
 		if (best.port) {
 			if (best.port.input && best.port.ports.length > 0) {
-				info.showMessage('Input cannot be connected twice');
+				info.showError('circ.err.double_input',
+					best.port.getLocation());
 			} else {
 				gest = new my.WiringGesture(info, best.port);
 				info.setGesture(gest);
@@ -104,12 +105,17 @@
 				newState = elt.type.poke(elt, x - elt.x, y - elt.y, info.state);
 				if (newState) {
 					info.setState(newState.evaluate());
-				} else if (!elt.isFrozen) {
-					gest = new my.MoveGesture(info, elt, e);
-					info.setGesture(gest);
+				} else {
+					if (elt.isFrozen) {
+						info.showError('circ.err.move_frozen', [x, y]);
+					} else {
+						gest = new my.MoveGesture(info, elt, e);
+						info.setGesture(gest);
+					}
 				}
 			}
 		}
+
 	};
 
 	my.NullGesture.prototype.mouseDrag = function (info, e) { };
@@ -117,20 +123,25 @@
 	my.NullGesture.prototype.mouseUp = function (info, e) { };
 
 	function isWireLegal(layout, p0, p1, connected) {
-		var x0, y0, x1, y1, maxD2, ret;
+		var x0, y0, x1, y1, maxD2, ret, retp;
 
 		if (p0 === p1) {
-			return '';
-		} else if (p0.elt === p1.elt) {
-			return 'Cannot connect element to itself';
-		} else if (p1.input && p1.ports.length > 0) {
-			return 'Input cannot be connected twice';
+			return { ok: false, err: null, loc: null };
 		} else if (p0.input && p1.input) {
-			return 'Cannot connect inputs';
+			return { ok: false, err: 'circ.err.connect_inputs',
+				loc: [p0.getLocation(), p1.getLocation()] };
 		} else if (!p0.input && !p1.input) {
-			return 'Cannot connect outputs';
+			return { ok: false, err: 'circ.err.connect_outputs',
+				loc: [p0.getLocation(), p1.getLocation()] };
+		} else if (p0.elt === p1.elt) {
+			return { ok: false, err: 'circ.err.connect_self',
+				loc: [p0.getLocation(), p1.getLocation()] };
 		} else if (connected.hasOwnProperty(p1.elt.id)) {
-			return 'Cannot create loop among elements';
+			return { ok: false, err: 'circ.err.connect_loop',
+				loc: [p0.getLocation(), p1.getLocation()] };
+		} else if (p1.input && p1.ports.length > 0) {
+			return { ok: false, err: 'circ.err.double_input',
+				loc: p1.getLocation() };
 		}
 
 		x0 = p0.elt.x + p0.x;
@@ -147,13 +158,14 @@
 				yp = p.elt.y + p.y;
 				d2 = my.Wire.dist2(xp, yp, x0, y0, x1, y1);
 				if (d2 <= maxD2) {
-					ret = 'Wire cannot be near connection';
+					ret = 'circ.err.port_on_wire';
+					retp = [xp, yp];
 					return false;
 				}
 			}
 		});
 		if (ret !== null) {
-			return ret;
+			return { ok: false, err: ret, loc: retp };
 		}
 
 		$.each(layout.elts, function (i, elt) {
@@ -164,11 +176,15 @@
 			ih = elt.type.imgHeight;
 			clip = my.Wire.clip(ix, iy, iw, ih, x0, y0, x1, y1);
 			if (clip !== null) {
-				ret = 'Wire cannot cross element';
+				ret = 'circ.err.element_on_wire';
+				retp = my.Wire.midpoint(clip);
 				return false;
 			}
 		});
-		return ret;
+		if (ret !== null) {
+			return { ok: false, err: ret, loc: retp };
+		}
+		return { ok: true };
 	}
 
 	my.WiringGesture = function (info, port) {
@@ -205,12 +221,12 @@
 		} else {
 			change = true;
 			legal = isWireLegal(info.layout, p0, p1cand, this.connected);
-			if (legal === null) {
+			if (legal.ok) {
 				p1 = p1cand;
 			} else {
 				p1 = null;
-				if (legal !== '') {
-					info.showMessage(legal);
+				if (legal.err) {
+					info.showError(legal.err, legal.loc);
 				}
 			}
 		}
@@ -296,26 +312,32 @@
 	};
 
 	my.EraseGesture.prototype.mouseUp = function (info, e) {
-		var wire, elt, ports;
+		var x, y, wire, elt, ports;
 
+		x = e.circuitX;
+		y = e.circuitY;
 		this.dragImg.remove();
-		wire = my.Wire.find(info.layout, e.circuitX, e.circuitY, ERASER_CONNECT);
+		wire = my.Wire.find(info.layout, x, y, ERASER_CONNECT);
 		if (wire !== null) {
 			info.layout.removeWire(wire[0], wire[1]);
 			my.DrawCirc.removeWire(info, wire[0], wire[1]);
 			info.circuitChanged();
 			my.DrawCirc.recolorPorts(info, wire[1]);
 		} else {
-			elt = findElement(info.layout, e.circuitX, e.circuitY);
-			if (elt !== null && !elt.isFrozen) {
-				ports = my.getConnectedPorts(elt);
-				info.layout.removeElement(elt);
-				my.DrawCirc.removeElement(info, elt);
-				info.circuitChanged();
-				$.each(ports, function (i, port) {
-					my.DrawCirc.showStub(info, port);
-					my.DrawCirc.recolorPort(info, port);
-				});
+			elt = findElement(info.layout, x, y);
+			if (elt !== null) {
+				if (elt.isFrozen) {
+					info.showError('circ.err.remove_frozen', [x, y]);
+				} else {
+					ports = my.getConnectedPorts(elt);
+					info.layout.removeElement(elt);
+					my.DrawCirc.removeElement(info, elt);
+					info.circuitChanged();
+					$.each(ports, function (i, port) {
+						my.DrawCirc.showStub(info, port);
+						my.DrawCirc.recolorPort(info, port);
+					});
+				}
 			}
 		}
 		info.setGesture(null);
