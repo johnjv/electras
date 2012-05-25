@@ -5,7 +5,7 @@ var i_so_blue_events = function(){
   if (elements.sensor('C').output('empty').exists() &&
       elements.lightbulb().input('empty').exists()){
     highlightSection(blue_sensor_connection, true)
-    createSpeechBubble(blue_sensor_connection, "We must tell the machine what to do.  Click on the sensor to start laying down wire.")
+    createSpeechBubble(blue_sensor_connection, getText(1, 1))
   }
 
   else if (elements.sensor('C').active_connection().exists() &&
@@ -13,7 +13,7 @@ var i_so_blue_events = function(){
     //since lightbulbs only have one connection point, and it has been confirmed that it is empty, it is safe to go directly to it with first_connection
     var lightbulb_in = elements.lightbulb().first_connection()
     highlightSection(lightbulb_in, true);
-    createSpeechBubble(blue_sensor_connection, "Good job!  Now connect it to the lightbulb!");
+    createSpeechBubble(blue_sensor_connection, getText(1, 2));
   }
 
   else if (elements.sensor('C').output('filled').exists() &&
@@ -23,7 +23,7 @@ var i_so_blue_events = function(){
 //    waiting on FactorFloor to expose getLeverLocation()
 //    var level = FactoryFloor.getLeverLocation()
 //    highlightSection(lever, false);
-//    createSpeechBubble(blue_sensor_connection, "Click on the lever to test your machine!");
+//    createSpeechBubble(blue_sensor_connection, getText(1, 3));
 
 //    do we need to deal with the clipboard here, or will it pop up on its own?
 //    var advance_location = getAdvanceLocation();

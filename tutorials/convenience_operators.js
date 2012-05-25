@@ -74,3 +74,9 @@ var Elements = function(elements){
   return this
 
 }
+
+var getText = function(tutNumber, bubbleNumber){
+  var command = '#translations #'+language+' .tutorial' + tutNumber + ' .' + bubbleNumber
+  console.log(command)
+  return $('#translations #'+language+' .tutorial' + tutNumber + ' .bubble' + bubbleNumber).text()
+}

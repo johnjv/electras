@@ -7,39 +7,46 @@ var out_on_a_lemon_events = function(){
 
   if (elements.lightbulb().input('filled').exists() && !elements.AND().output('filled').exists()){
     highlightSection(elements.lightbulb().first_connection(),  true)
-    createSpeechBubble(first_sensor, "The only way you'll be able to solve this is by " +
-        "connecting the lightbulb to the AND operator.  You may need to erase the current connection.")
+    createSpeechBubble(first_sensor, getText(8,1))
   }
 
   else if (and_operators.length < 1){
-    createSpeechBubble(first_sensor, "This time we'll be using an AND operator.  Go ahead and put one on screen.")
+    Tutorial.unhighlightSection()
+    createSpeechBubble(first_sensor, getText(8,2))
   }
 
   else if (and_operators.length > 1){
-    createSpeechBubble(first_sensor, "We'll only need one AND operator for this.")
+    Tutorial.unhighlightSection()
+    createSpeechBubble(first_sensor, getText(8,3))
   }
 
   else if (empty_sensors.length == 2 || (empty_sensors.length == 1 && elements.sensor().active_connection().exists())){
     var operator = and_operators[0]
     //this should show both of them
     var input = operator.connects[0]
+    Tutorial.unhighlightSection()
     $.each(operator.connects,function(i, connection){
       if (connection.input){
         input = connection
         highlightSection(connection, true)
       }
     })
-    createSpeechBubble(first_sensor, "this operator has two inputs.  Select one and attach it to a sensor.") ;
+    createSpeechBubble(first_sensor, getText(8,4)) ;
   }
 
   else if ((empty_sensors && empty_sensors.length == 1) || elements.sensor().active_connection().exists()) {
     //highlight the remaining outgoing sensor and incoming AND
     try {highlightSection(empty_sensors[0].connects[0], true)} catch(e){} //try because it might be active
     highlightSection(Filters.find_connection(and_operators[0], '', true), true)
-    createSpeechBubble(first_sensor, "Now connect the other...")
+    createSpeechBubble(first_sensor, getText(8,5))
   }
 
   else if (empty_sensors.length == 0){
-    createSpeechBubble(first_sensor, "Great!  Now if yellow AND square are both true, the AND will output true.")
+    Tutorial.unhighlightSection()
+    createSpeechBubble(first_sensor, getText(8,6))
+  }
+
+  else {
+    Tutorial.unhighlightSection()
   }
 }

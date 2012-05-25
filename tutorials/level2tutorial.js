@@ -15,26 +15,25 @@ console.log(sensor)
         params.push(parametric_thing)
     })
     highlightSections(params)
-    createSpeechBubble(first_sensor, "Candies can have 3 shapes: ball, star, and square.");
+    createSpeechBubble(first_sensor, getText(2, 1));
   }
 
   else if (elements.sensor('-').active_connection().exists() &&
             elements.lightbulb().empty().exists()) {
     highlightSection(lightbulb_in, true);
-    createSpeechBubble(first_sensor, "Good choice!  Now click on the lightbulb just like last time.");
+    createSpeechBubble(first_sensor, getText(2, 2));
   }
 
   else if (elements.sensor().active_connection().exists() &&
            elements.lightbulb().empty().exists()){
     Tutorial.unhighlightSection()
-    createSpeechBubble(first_sensor, 'With great power comes great responsibility.');
+    createSpeechBubble(first_sensor, getText(2, 3));
   }
 
   else if (elements.lightbulb().input('filled').exists() &&
           elements.sensor('-').empty().exists()) {
     Tutorial.unhighlightSection()
-    createSpeechBubble(first_sensor, "Uh oh!  Someone connected this wrong!  " +
-        "Grab the eraser and click on the wire to give us a nice clean slate to work with.");
+    createSpeechBubble(first_sensor, getText(2, 4));
   }
 
   else {
