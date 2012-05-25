@@ -139,7 +139,6 @@
 			return { ok: false, err: 'circ.err.connect_self',
 				loc: [p0.getLocation(), p1.getLocation()] };
 		} else if (connected.hasOwnProperty(p1.elt.id)) {
-			console.log('loop', p0, p1);
 			return { ok: false, err: 'circ.err.connect_loop',
 				loc: [p0.getLocation(), p1.getLocation()] };
 		} else if (p1.input && p1.ports.length > 0) {
@@ -225,7 +224,6 @@
 		} else {
 			change = true;
 			legal = isWireLegal(info.layout, p0, p1cand, this.connected);
-			console.log('legal', legal);
 			if (legal.ok) {
 				info.hideError();
 				p1 = p1cand;
