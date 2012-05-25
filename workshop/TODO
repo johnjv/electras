@@ -1,8 +1,9 @@
 Respond to change in canvas size
 Allow gestures via click/tap to start and click/tap to end (not just dragging)
 Error message when wires are basically parallel and overlap
-No error about when adding an element whose input adjoins an already-connected output.
 Internationalization
 
 Electricity animation
 Save edited layouts on disk?
+
+Naming switches through long-taps

@@ -1,6 +1,6 @@
 (function (my, $) {
 	"use strict";
-	var AUTO_CONNECT_RADIUS = 10,
+	var AUTO_CONNECT_RADIUS = 15,
 		LEGAL_OK = 0,
 		LEGAL_OUT = 1,
 		LEGAL_REJECT = 2,
@@ -17,7 +17,7 @@
 	// to which it should be connected.
 	function isLegalPosition(info, elt, eltDx, eltDy) {
 		var type, x, y, i, port, ix0, iy0, ix1, iy1, ret, retErr, retLoc,
-			ports, maxD2, pfor, prev;
+			ports, maxD2, pfor, prev, portsConnectedTo;
 		ret = LEGAL_OK;
 		type = elt.type;
 		x = elt.x + eltDx;
@@ -26,6 +26,7 @@
 		iy0 = y + type.imgY;
 		ix1 = ix0 + type.imgWidth;
 		iy1 = iy0 + type.imgHeight;
+		portsConnectedTo = {};
 		if (!info.isInside(ix0, iy0) || !info.isInside(ix1, iy0) ||
 				!info.isInside(ix0, iy1) || !info.isInside(ix1, iy1)) {
 			ret = LEGAL_OUT;
@@ -117,6 +118,7 @@
 							return false;
 						}
 						ports.push([i, kp]);
+						portsConnectedTo[kp.id] = i;
 					}
 				}
 			}
@@ -145,13 +147,19 @@
 				retLoc = my.Wire.midpoint(isect);
 				return false;
 			}
+
 			for (i = elt.ports.length - 1; i >= 0; i -= 1) {
 				pi = elt.ports[i];
 				d2 = my.Wire.dist2(x + pi.x, y + pi.y, x0, y0, x1, y1);
 				if (d2 <= maxD2) {
-					retErr = 'circ.err.port_on_wire';
-					retLoc = [x + pi.x, y + pi.y];
-					return false;
+					// If port i will be connected to the wire's endpoint,
+					// don't worry that the port is close to the wire
+					if (portsConnectedTo[p0.id] !== i
+							&& portsConnectedTo[p1.id] !== i) {
+						retErr = 'circ.err.port_on_wire';
+						retLoc = [x + pi.x, y + pi.y];
+						return false;
+					}
 				}
 			}
 		});
