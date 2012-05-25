@@ -1,10 +1,7 @@
-Show message when user is doing something illegal
-Show messages during move/add element
-Show messages when moving/deleting frozen element
 Respond to change in canvas size
 Allow gestures via click/tap to start and click/tap to end (not just dragging)
-Circle offending point when user is doing something illegal
 Error message when wires are basically parallel and overlap
+No error about when adding an element whose input adjoins an already-connected output.
 Internationalization
 
 Electricity animation
