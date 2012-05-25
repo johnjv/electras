@@ -5,17 +5,17 @@ var soyl_not_green_events = function(){
 
   if (elements.lightbulb().input('filled').exists() && !elements.NOT().output('filled').exists()){
     highlightSection(elements.lightbulb().first_connection(),  true)
-    createSpeechBubble(first_sensor, getText(3, 1))
+    createSpeechBubble(first_sensor, getBubble(3, 1))
   }
 
   else if (!elements.NOT().exists()){
     Tutorial.unhighlightSection()
-    createSpeechBubble(first_sensor, getText(3,2))
+    createSpeechBubble(first_sensor, getBubble(3,2))
   }
 
   else if (elements.NOT() && elements.NOT().elements.length > 1){
     Tutorial.unhighlightSection()
-    createSpeechBubble(first_sensor, getText(3,3))
+    createSpeechBubble(first_sensor, getBubble(3,3))
   }
 
   else if (elements.NOT().input('empty').exists()){
@@ -25,7 +25,7 @@ var soyl_not_green_events = function(){
     highlightSections([make_parametric(operator_input, true), make_parametric(sensor_output, true)])
 //    highlightSection(operator_input, true)
 //    highlightSection(sensor_output, true)
-    createSpeechBubble(first_sensor, getText(3,4)) ;
+    createSpeechBubble(first_sensor, getBubble(3,4)) ;
   }
 
   else if (elements.NOT().input('filled').exists() &&
@@ -36,7 +36,7 @@ var soyl_not_green_events = function(){
     highlightSections([make_parametric(operator_output, true), make_parametric(lightbulb_input, true)])
 //    highlightSection(operator_output, true)
 //    highlightSection(lightbulb_input, true)
-    createSpeechBubble(first_sensor, getText(3,5))
+    createSpeechBubble(first_sensor, getBubble(3,5))
   }
 
   else {
