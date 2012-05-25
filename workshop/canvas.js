@@ -65,8 +65,12 @@
 		connect_self: 'Cannot connect element to itself',
 		connect_loop: 'Cannot create loop',
 		double_input: 'Input can have only one connection',
+
 		port_on_wire: 'Port cannot be near wire',
+		port_on_element: 'Port cannot overlap element',
 		element_on_wire: 'Wire cannot cross element',
+		element_on_element: 'Elements cannot overlap',
+
 		move_frozen: 'Element is frozen and cannot be moved',
 		remove_frozen: 'Element is frozen and cannot be removed',
 	};
@@ -84,18 +88,23 @@
 	};
 
 	my.Workshop = function (jqElt, tools) {
-		var self, toolbar, canvas, name, gesture, info;
+		var self, toolbar, canvas, errContainer, name, gesture, info;
 
 		self = this;
 		jqElt.addClass('circ-container');
 		toolbar = $('<div></div>').addClass('circ-toolbar');
 		canvas = $('<div></div>').addClass('circ-canvas');
+		errContainer = $('<div></div>').addClass('circ-error');
 		jqElt.append(toolbar);
 		jqElt.append(canvas);
-
+		jqElt.append($('<div></div>').addClass('circ-error-container')
+			.append(errContainer));
 		this.toolbar = toolbar;
 		this.toolbarEnabled = true;
 		this.canvas = canvas;
+		this.errContainer = errContainer;
+		this.errElt = null;
+		this.errText = '';
 		this.gesture = new my.NullGesture(self);
 		this.paper = raphael(canvas.get(0), canvas.width(), canvas.height());
 		this.layout = new my.Layout();
@@ -243,8 +252,25 @@
 		return x >= 0 && y >= 0 && x < canvas.width() && y < canvas.height();
 	};
 
+	my.Workshop.prototype.hideError = function () {
+		this.showError(null, null);
+	}
+
 	my.Workshop.prototype.showError = function (msg, loc) {
-		var i, key;
+		var oldElt, i, key, text, oldText, errElt;
+
+		oldElt = this.errElt;
+
+		if (msg === null || msg === '') {
+			if (oldElt) {
+				this.errElt = null;
+				oldElt.stop().fadeOut(100, function () {
+					oldElt.remove();
+				});
+			}
+			return;
+		}
+
 		i = msg.lastIndexOf('.');
 		if (i >= 0) {
 			key = msg.substring(i + 1);
@@ -252,9 +278,28 @@
 			key = msg;
 		}
 		if (ERR_MESSAGES.hasOwnProperty(key)) {
-			console.log(ERR_MESSAGES[key]); //OK
+			text = ERR_MESSAGES[key];
 		} else {
-			console.log(msg); //OK
+			text = msg;
+		}
+		// console.log(text, loc); //OK
+		if (oldElt === null) {
+			oldText = '';
+		} else {
+			oldText = oldElt.text();
+		}
+		if (text !== oldText) {
+			errElt = $('<span></span>').addClass('circ-error').text(text).hide();
+			this.errElt = errElt;
+			this.errContainer.append(errElt);
+			if (oldText === '') {
+				errElt.fadeIn(100);
+			} else {
+				oldElt.stop().fadeOut(100, function () {
+					oldElt.remove();
+					errElt.fadeIn(100);
+				});
+			}
 		}
 	};
 

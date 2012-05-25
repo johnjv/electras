@@ -5,7 +5,7 @@ var Tutorial = {};
 Tutorial.circuitChanged = function () {
 	var eval;
 	eval = Circuit.getEvaluator();
-	console.log(Circuit.getElements(), eval.evaluate('Ro').accept); //OK
+	// console.log(Circuit.getElements(), eval.evaluate('Ro').accept); //OK
 };
 
 var levels = [
