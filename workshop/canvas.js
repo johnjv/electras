@@ -315,28 +315,30 @@
 	};
 
 	my.Workshop.prototype.setErrorCircles = function (locs) {
-		var r, circs, max, num, offs0, i, loc, x, y, circ;
+		var r, circs, numOld, num, offs0, i, loc, x, y, circ;
+		console.log('locs', locs);
 		r = ERROR_CIRCLE_RADIUS;
 		circs = this.errCircs;
-		max = circs.length;
+		numOld = circs.length;
 		num = locs.length;
 		offs0 = this.canvas.offset();
 		for (i = 0; i < num; i += 1) {
 			loc = locs[i];
 			x = offs0.left + loc[0] - r;
 			y = offs0.top + loc[1] - r;
-			if (i < max) {
-				circs[i].offset({left: x, top: y}).show();
+			if (i < numOld) {
+				circs[i].show().offset({left: x, top: y});
 			} else {
 				circ = ($('<img></img>').fadeTo(0, 0.5)
 					.attr('src', my.getResourcePath('err-circ.svg'))
 					.addClass('error_circle')
-					.width(2 * r).offset({left: x, top: y}));
+					.width(2 * r));
 				this.canvas.append(circ);
+				circ.offset({left: x, top: y});
 				circs.push(circ);
 			}
 		}
-		for (; i < max; i += 1) {
+		for (; i < numOld; i += 1) {
 			circs[i].hide();
 		}
 	};
