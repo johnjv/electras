@@ -25,6 +25,11 @@ var Workshop = {};
 		this.line = null; // graphical connecting line - only applicable if input
 	};
 
+	my.Port.prototype.getLocation = function () {
+		var elt = this.elt;
+		return [elt.x + this.x, elt.y + this.y];
+	}
+
 	my.ElementType = function (id, imgName, iX, iY, iW, iH, ports,
 			propagate, options) {
 		this.id = id; // string: and/or/not/R/G/Y/C/o/-/|/output

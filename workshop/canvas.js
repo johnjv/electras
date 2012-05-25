@@ -59,6 +59,18 @@
 			})
 	};
 
+	var ERR_MESSAGES = {
+		connect_inputs: 'Cannot connect inputs',
+		connect_outputs: 'Cannot connect outputs',
+		connect_self: 'Cannot connect element to itself',
+		connect_loop: 'Cannot create loop',
+		double_input: 'Input can have only one connection',
+		port_on_wire: 'Port cannot be near wire',
+		element_on_wire: 'Wire cannot cross element',
+		move_frozen: 'Element is frozen and cannot be moved',
+		remove_frozen: 'Element is frozen and cannot be removed',
+	};
+
 	function fixEvent(workshop, e) {
 		var poffs;
 		poffs = workshop.canvas.offset();
@@ -231,8 +243,19 @@
 		return x >= 0 && y >= 0 && x < canvas.width() && y < canvas.height();
 	};
 
-	my.Workshop.prototype.showMessage = function (msg) {
-		console.log(msg); //OK
+	my.Workshop.prototype.showError = function (msg, loc) {
+		var i, key;
+		i = msg.lastIndexOf('.');
+		if (i >= 0) {
+			key = msg.substring(i + 1);
+		} else {
+			key = msg;
+		}
+		if (ERR_MESSAGES.hasOwnProperty(key)) {
+			console.log(ERR_MESSAGES[key]); //OK
+		} else {
+			console.log(msg); //OK
+		}
 	};
 
 	my.Workshop.prototype.setGesture = function (value) {
