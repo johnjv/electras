@@ -316,7 +316,6 @@
 
 	my.Workshop.prototype.setErrorCircles = function (locs) {
 		var r, circs, numOld, num, offs0, i, loc, x, y, circ;
-		console.log('locs', locs);
 		r = ERROR_CIRCLE_RADIUS;
 		circs = this.errCircs;
 		numOld = circs.length;
