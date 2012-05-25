@@ -26,7 +26,8 @@ var Workshop = {};
 	};
 
 	my.Port.prototype.getLocation = function () {
-		var elt = this.elt;
+		var elt, x, y;
+		elt = this.elt;
 		return [elt.x + this.x, elt.y + this.y];
 	}
 
