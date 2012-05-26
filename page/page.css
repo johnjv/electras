@@ -23,7 +23,7 @@ html, body {
 	background-color: white;
 	opacity: 1;
 	padding: 50px;
-	border: solid 1px gray;
+	border-bottom: solid 4px gray;
 	height: 100%;
 	width: 100%;
 	overflow: hidden;
