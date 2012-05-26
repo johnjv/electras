@@ -269,7 +269,7 @@ var Circuit = (function ($, Workshop) {
 
 	my.stringify = function () {
 		return Workshop.stringify(workshop.layout);
-	}
+	};
 
 	my.windowResized = function () {
 		var par, self;
@@ -279,7 +279,7 @@ var Circuit = (function ($, Workshop) {
 		self.width(par.width());
 		self.height(par.height());
 		workshop.paper.setSize(par.width(), par.height());
-	}
+	};
 
 	return my;
 }(jQuery, Workshop));

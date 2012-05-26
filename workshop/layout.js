@@ -29,7 +29,7 @@ var Workshop = {};
 		var elt, x, y;
 		elt = this.elt;
 		return [elt.x + this.x, elt.y + this.y];
-	}
+	};
 
 	my.ElementType = function (id, imgName, iX, iY, iW, iH, ports,
 			propagate, options) {

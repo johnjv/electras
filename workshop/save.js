@@ -13,7 +13,7 @@
 		ret = '';
 		for (i = 0; i < layout.elts.length; i += 1) {
 			elt = layout.elts[i];
-			if (i == 0) {
+			if (i === 0) {
 				cur = '';
 			} else {
 				cur = ';';

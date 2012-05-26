@@ -42,7 +42,7 @@ function configureLetterbox(jqElt, widthToHeight, resizeCallback, options) {
 				width: w,
 				height: h,
 				left: x0,
-				top: y0,
+				top: y0
 			}, time * 5, function () {
 				jqElt.css('border-top-width', bh);
 				jqElt.css('border-bottom-width', bh);

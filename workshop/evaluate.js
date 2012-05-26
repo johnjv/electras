@@ -79,7 +79,7 @@
 
 	State.prototype.follows = function (state) {
 		return this.previous === state;
-	}
+	};
 
 	State.prototype.evaluate = function () {
 		var trues, eltStates, state, dirty, iters, anyDirty, id, ports, i, j, set;
@@ -128,5 +128,5 @@
 
 	my.newInitialState = function (layout) {
 		return new State(null, layout, {}, {}).evaluate();
-	}
+	};
 }(Workshop, jQuery));

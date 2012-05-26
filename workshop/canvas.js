@@ -74,7 +74,7 @@
 		element_on_element: 'Elements cannot overlap',
 
 		move_frozen: 'Element is frozen and cannot be moved',
-		remove_frozen: 'Element is frozen and cannot be removed',
+		remove_frozen: 'Element is frozen and cannot be removed'
 	};
 
 	function fixEvent(workshop, e) {

@@ -81,7 +81,7 @@
 			}
 		});
 		return ret;
-	}
+	};
 
 	my.NullGesture = function (info) { };
 
