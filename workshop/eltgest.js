@@ -364,7 +364,6 @@
 		elt = this.elt;
 		legal = isLegalPosition(info, elt, dx, dy);
 		if (legal.legal === LEGAL_OK) {
-			info.hideError();
 			if (this.dragImg === null) {
 				info.setGesture(null);
 				return;
@@ -383,7 +382,6 @@
 			});
 			info.circuitChanged();
 		} else if (legal.legal === LEGAL_OUT) {
-			info.hideError();
 			ports = my.getConnectedPorts(elt);
 			info.layout.removeElement(elt);
 			my.DrawCirc.removeElement(info, elt);
@@ -396,10 +394,10 @@
 				drawingElt.remove();
 			});
 		} else {
-			info.showError(legal.err, legal.loc);
 			this.cancel(info);
 		}
 		info.setGesture(null);
+		info.hideError();
 	};
 
 	my.MoveGesture.prototype.cancel = function (info) {

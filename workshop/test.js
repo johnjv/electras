@@ -3,8 +3,8 @@
 var Tutorial = {};
 
 Tutorial.circuitChanged = function () {
-	var eval;
-	eval = Circuit.getEvaluator();
+	var evaluator;
+	evaluator = Circuit.getEvaluator();
 	// console.log(Circuit.getElements(), eval.evaluate('Ro').accept); //OK
 };
 
@@ -78,7 +78,7 @@ function configureLetterbox(jqElt, widthToHeight, resizeCallback, options) {
 				width: w,
 				height: h,
 				left: x0,
-				top: y0,
+				top: y0
 			}, time * 5, function () {
 				jqElt.css('border-top-width', bh);
 				jqElt.css('border-bottom-width', bh);

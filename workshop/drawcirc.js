@@ -252,7 +252,7 @@
 		line.attr('stroke-width', WIRE_WIDTH);
 		line.attr('stroke-linecap', 'round');
 		return line;
-	}
+	};
 
 	my.DrawCirc.attachWire = function (info, port0, port1) {
 		var line;

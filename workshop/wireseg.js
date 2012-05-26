@@ -94,7 +94,7 @@
 		} else {
 			return [(locs + x1) / 2, (y0 + y1) / 2];
 		}
-	}
+	};
 
 	my.Wire.find = function (layout, x, y, maxDist) {
 		var bestD2, ret;
