@@ -225,19 +225,21 @@
 
 		self = this;
 		$('img', this.canvas).remove();
-		this.paper.clear();
+		this.paper.repaintAfter(function () {
+			self.paper.clear();
 
-		this.layout = layout;
-		this.state = my.newInitialState(layout);
+			self.layout = layout;
+			self.state = my.newInitialState(layout);
 
-		$.each(layout.elts, function (i, elt) {
-			my.DrawCirc.createElement(self, elt);
-			elt.type.updateImage(elt, self.state);
+			$.each(layout.elts, function (i, elt) {
+				my.DrawCirc.createElement(self, elt);
+				elt.type.updateImage(elt, self.state);
+			});
+			layout.forEachWire(function (p0, p1) {
+				my.DrawCirc.attachWire(self, p0, p1);
+			});
 		});
-		layout.forEachWire(function (p0, p1) {
-			my.DrawCirc.attachWire(self, p0, p1);
-		});
-		this.fireChange();
+		self.fireChange();
 	};
 
 	my.Workshop.prototype.setState = function (state) {

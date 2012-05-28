@@ -24,24 +24,48 @@ var raphwrap = (function (Raphael, $) {
 		return elt;
 	}
 
+	var KNOWN_ATTRS = { stroke: 'strokeStyle', fill: 'fillStyle',
+		strokeWidth: 'lineWidth', opacity: 'globalAlpha' };
+
 	function CanvasElt() { }
+
+	CanvasElt.prototype.init = function (wrap, attrs) {
+		var self, key;
+		this.wrap = wrap;
+		this.attrs = attrs;
+		this.shown = true;
+		self = this;
+		for (key in attrs) {
+			if (attrs.hasOwnProperty(key)) {
+				if (KNOWN_ATTRS.hasOwnProperty(key)) {
+					self[key] = attrs[key];
+				} else {
+					console.log('Unknown attribute "' + key + '"'); //OK
+				}
+			}
+		}
+	}
 
 	CanvasElt.prototype.attr = function (key, val) {
 		var curVal;
 
-		curVal = this.attrs[key];
-		if (curVal !== val) {
-			this.attrs[key] = val;
-			this.wrap.dirty = true;
+		if (KNOWN_ATTRS.hasOwnProperty(key)) {
+			curVal = this[key];
+			if (curVal !== val) {
+				this[key] = val;
+				this.wrap.dirty = true;
+			}
+		} else {
+			console.log('Unknown attribute "' + key + '"'); //OK
 		}
 	};
 
 	CanvasElt.prototype.show = function () {
-		this.attr('shown', false);
+		this.shown = true;
 	};
 
-	CanvasElt.prototype.show = function () {
-		this.attr('shown', true);
+	CanvasElt.prototype.hide = function () {
+		this.shown = false;
 	};
 
 	CanvasElt.prototype.remove = function () {
@@ -55,45 +79,74 @@ var raphwrap = (function (Raphael, $) {
 		this.wrap.dirty = true;
 	}
 
+	CanvasElt.prototype.paint = function (ctx) {
+		var key;
+		if (this.shown) {
+			ctx.save();
+			for (key in KNOWN_ATTRS) {
+				if (KNOWN_ATTRS.hasOwnProperty(key) &&
+						this.hasOwnProperty(key)) {
+					ctx[KNOWN_ATTRS[key]] = this[key];
+				}
+			}
+			if (this.fill) {
+				ctx.beginPath();
+				this.tracePath(ctx);
+				ctx.fill();
+			}
+			if (!this.fill || this.stroke) {
+				ctx.beginPath();
+				this.tracePath(ctx);
+				ctx.stroke();
+			}
+			ctx.restore();
+		}
+	};
+
 	function CanvasPath(wrap, points, attrs) {
-		this.wrap = wrap;
+		this.init(wrap, attrs);
 		this.points = points;
-		this.attrs = attrs;
-		this.shown = true;
 	}
 
 	CanvasPath.prototype = new CanvasElt();
 
-	CanvasPath.prototype.paint = function (ctx) {
+	CanvasPath.prototype.tracePath = function (ctx) {
 		var pts, i;
-		
 		pts = this.points;
-		ctx.beginPath();
 		ctx.moveTo(pts[0][0], pts[0][1]);
 		for (i = 1; i < pts.length; i += 1) {
 			ctx.lineTo(pts[i][0], pts[i][1]);
 		}
-		ctx.stroke();
+	};
+
+	function CanvasCircle(wrap, x, y, r, attrs) {
+		this.init(wrap, attrs);
+		this.x = x;
+		this.y = y;
+		this.r = r;
 	}
+
+	CanvasCircle.prototype = new CanvasElt();
+
+	CanvasCircle.prototype.tracePath = function (ctx) {
+		ctx.arc(this.x, this.y, this.r, 0, 2 * Math.PI, false);
+	};
 
 	RaphWrap = function (elt, width, height) {
 		var hasSvg, jqElt, canvas;
 		hasSvg = Raphael && (window.SVGAngle ||
 			document.implementation.hasFeature(SVGxml, "1.1"));
-		// hasSvg = false;
 		if (hasSvg) {
 			this.paper = Raphael(elt, width, height);
 		} else {
 			canvas = $('<canvas></canvas>').css('width', width)
 				.css('height', height);
 			if (canvas.get(0).getContext) {
-				console.log('using canvas');
 				this.paper = null;
 				this.canvas = canvas;
 				this.canvasElts = [];
 				$(elt).append(canvas);
 			} else {
-				console.log('rejecting canvas');
 				this.paper = Raphael(elt, width, height);
 			}
 		}
@@ -125,7 +178,7 @@ var raphwrap = (function (Raphael, $) {
 		if (paper) {
 			return setAttrs(paper.circle(x, y, r), attrs);
 		} else {
-			circ = new CanvasPath(this, [[x, y], [x + r, y]], attrs);
+			circ = new CanvasCircle(this, x, y, r, attrs);
 			this.canvasElts.push(circ);
 			this.dirty = true;
 			return circ;
@@ -133,14 +186,19 @@ var raphwrap = (function (Raphael, $) {
 	};
 
 	RaphWrap.prototype.setSize = function (width, height) {
-		var paper;
+		var paper, canvas;
 
 		paper = this.paper;
 		if (paper) {
 			paper.setSize(width, height);
 		} else {
-			this.canvas.width(width).height(height);
-			this.dirty = true;
+			canvas = this.canvas;
+			if (canvas) {
+				canvas.width(width).height(height);
+				canvas.get(0).setAttribute('width', width);
+				canvas.get(0).setAttribute('height', height);
+				this.dirty = true;
+			}
 		}
 	};
 
@@ -172,9 +230,7 @@ var raphwrap = (function (Raphael, $) {
 			elts = this.canvasElts;
 			numElts = elts.length;
 			for (i = 0; i < numElts; i += 1) {
-				if (elts[i].shown) {
-					elts[i].paint(context);
-				}
+				elts[i].paint(context);
 			}
 		}
 	};
