@@ -1,9 +1,4 @@
-$(document).ready(function(){
-	"use strict";	
-	
-	Placer.place();
-	$("#tally").hide();
-	$("#start").click(function(){
+$("#start").click(function(){
 		updateChalkBoard();
 		startMachine();
 		$("#tally").show();
@@ -109,13 +104,12 @@ $(document).ready(function(){
 		"use strict";
 		var candyPic = candy.picture;
 		candyPic.width(40);
-        var body = $('body');
+        var factory = $('#factory');
         var dropper = $("#dropper");
-    	var x = dropper.offset().left;
-    	var y = dropper.offset().top + dropper.height()/2.0 - candyPic.height()/2.0;
-    	
-   	 	candyPic.offset({left:x , top:y});
-    	body.append(candyPic);
+    	var x = dropper.position().left;
+    	var y = dropper.position().top + dropper.height()/2.0 - candyPic.height()/2.0;
+   	 	candyPic.css('left', x).css('top', y);
+    	factory.append(candyPic);
     }
     
     function moveCandy(candy){
@@ -125,14 +119,15 @@ $(document).ready(function(){
     	var belt = $('#belt');
     	var box = $('#box');
     	var dropper = $('#dropper');
-    	var body = $('body');
     	var glove = $("#glove");
     	var trash = $("#trash");
+    	var factory = $('#factory');
+    	var punchingBox = $('#punchingbox');
     	
     	if(candy.checkCandy() === -1) {
-    		posleft = body.width() - glove.offset().left - glove.width();
-			posdown = trash.offset().top - candyPic.offset().top; 
-			$(candyPic).animate({left:'-=' + posleft},3000, movePuncher());
+    		posleft = glove.position().left;
+			posdown = trash.position().top - candyPic.position().top; 
+			$(candyPic).animate({left:posleft},3000, movePuncher());
 			$(candyPic).animate({top:'+=' + posdown, width: '-=40' },1500);
     	}
     	
@@ -149,7 +144,7 @@ $(document).ready(function(){
 		"use strict";
 		var glove = $('#glove');
 		var flagPos;
-		var body = $('body');
+		var body = $('#main_container');
 		flag.width(20);
 		var x  = glove.offset().left + glove.width()/2.0;
 		var y = glove.offset().top + glove.height();
@@ -195,7 +190,6 @@ $(document).ready(function(){
 		$('#glove').stop();
 	}
 
-});
 
 var FactoryFloor = (function($) {
 		"use strict";
@@ -231,11 +225,14 @@ var FactoryFloor = (function($) {
 		};
 		
 		my.windowResized = function () {
-            var par, self;
-	        self = $('#factory');
-	        par = self.parent();
-	        self.width(par.width());
-	        self.height(par.height());
+            var par;
+	        par = $('#main_container');
+	        console.log(par.width(), par.height(), $('#factoryParent').offset());
+	        $('#factoryParent').width(par.width()).height(par.height());
+	        $('#factory').width(par.width()).height(par.height());
+	        $('#factoryParent').offset(par.offset());
+	        console.log(par.width(), par.height(), $('#factoryParent').offset());
+	        Placer.place();
 	    };  
 	    
 		return my;		
