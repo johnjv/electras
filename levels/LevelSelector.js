@@ -30,7 +30,6 @@ var LevelSelector = (function($) {
 	    par = self.parent();
 	    self.width(par.width());
 	    self.height(par.height());
-	    //workshop.paper.setSize(par.width(), par.height());
 	};
     
     return my;
