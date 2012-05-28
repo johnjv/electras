@@ -253,3 +253,4 @@ $(document).ready(function(){
         clipPos.top = container.width() * 0.1;
         clipboard.css('left', clipPos.left).css('top', clipPos.top);                
     }
+         */

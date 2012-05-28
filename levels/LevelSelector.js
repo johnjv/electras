@@ -30,7 +30,7 @@ var LevelSelector = (function($) {
 	    self.width(par.width());
 	    self.height(par.height());
 	    console.log("here");
-	    resizeClipboard();
+//	    resizeClipboard();
 	};
     
     return my;
