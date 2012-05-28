@@ -104,14 +104,14 @@
 							}
 							return false;
 						}
-						if (kp.input && kp.ports.length > 0
-									&& kp.ports[0] !== ip) {
+						if (kp.input && kp.ports.length > 0 &&
+								kp.ports[0] !== ip) {
 							// the destination port is already connected
 							retErr = 'circ.err.double_input';
 							retLoc = [kx, ky];
 							return false;
-						} else if (ip.input && ip.ports.length > 0
-									&& ip.ports[0] !== kp) {
+						} else if (ip.input && ip.ports.length > 0 &&
+									ip.ports[0] !== kp) {
 							// the source port is already connected
 							retErr = 'circ.err.double_input';
 							retLoc = [ix, iy];
@@ -154,8 +154,8 @@
 				if (d2 <= maxD2) {
 					// If port i will be connected to the wire's endpoint,
 					// don't worry that the port is close to the wire
-					if (portsConnectedTo[p0.id] !== i
-							&& portsConnectedTo[p1.id] !== i) {
+					if (portsConnectedTo[p0.id] !== i &&
+							portsConnectedTo[p1.id] !== i) {
 						retErr = 'circ.err.port_on_wire';
 						retLoc = [x + pi.x, y + pi.y];
 						return false;

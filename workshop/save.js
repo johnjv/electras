@@ -53,8 +53,8 @@
 		for (i = 0; i < descs.length; i += 1) {
 			parts = reComp.exec(descs[i]);
 			if (parts === null) {
-				console.log('component ' + i + ' "' + comps[i] //OK
-					+ '" does not match regex');
+				console.log('component ' + i + ' "' + comps[i] + //OK
+					'" does not match regex');
 				continue;
 			}
 			if (typeLookup.hasOwnProperty(parts[1])) {

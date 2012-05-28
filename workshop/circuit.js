@@ -278,7 +278,7 @@ var Circuit = (function ($, Workshop) {
 		par = self.parent();
 		self.width(par.width());
 		self.height(par.height());
-		workshop.paper.setSize(par.width(), par.height());
+		workshop.setSize(par.width(), par.height());
 	};
 
 	return my;
