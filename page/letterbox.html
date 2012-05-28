@@ -14,20 +14,22 @@
 <div id="main_container">
     <div id="circuit"></div>
     
+    <div id="factoryParent">
     <div id = "factory">
 		<img src="../Floor/resource-image/belt.png" id="belt">
 		<img src="../Floor/resource-image/box.png" id="box">
 		<img src="../Floor/resource-image/dropper.png" id="dropper">
-		<img src="../Floor/resource-image/punchingbox.png" id="punchingbox">
+		<img src="../Floor/resource-image/punchingbox.png" id="punchingbox">		
 		<img src="../Floor/resource-image/glove.png" id="glove">
 		<img src="../Floor/resource-image/trash.png" id="trash">
- 			<table id="tally">
-			 	<tr><td></td></tr>
-			 	<tr><td class ="fcol">Circuit Says</td></tr>
-			 	<tr><td class = "fcol">Level Says</td></tr>
-			 	<tr><td></td></tr>
- 			</table>
- 		<button id="start">Start</button>
+ 		<table id="tally">
+		 	<tr id="frow"><td></td></tr>
+		 	<tr id="srow"><td class ="fcol">Circuit Says</td></tr>
+		 	<tr id="trow"><td class = "fcol">Level Says</td></tr>
+		 	<tr id="forow"><td></td></tr>
+ 		</table>
+ 		<button id="start">Start</button> 		
+   </div>
    </div>
      
     <div id = "cliptip">
@@ -88,12 +90,12 @@
 <script type = "text/javascript"  src="../workshop/circuit.js"></script>     
 <script type = "text/javascript"  src="../levels/SequenceItem.js"></script>
 <script type = "text/javascript"  src="../levels/Level.js"></script>
-<script type = "text/javascript"  src="../levels/PreMadeLevels.js"></script>  
+<script type = "text/javascript"  src="../levels/PreMadeLevels.js"></script> 
+<script type = "text/javascript"  src="../levels/Clipboard.js"></script> 
 <script type = "text/javascript"  src="../levels/LevelSelector.js"></script>
 <script type = "text/javascript"  src="../Floor/Candy.js"></script> 
 <script type = "text/javascript"  src="../Floor/FactoryFloor.js"></script>
 <script type = "text/javascript"  src="../Floor/floor.js"></script>
-<script type = "text/javascript"  src="../levels/Clipboard.js"></script>
 <script type = "text/javascript"  src="../tutorials/jquery-ui-1.8.20.custom.min.js"></script>
 <script type = "text/javascript"  src="../tutorials/tutorial.js"></script>
 <script type = "text/javascript"  src="../tutorials/filtering.js"></script>

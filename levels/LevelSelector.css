@@ -2,6 +2,7 @@ html, body { background: #EDE275; width: 100%; height: 100%; margin: 0px; paddin
 #check{ position: relative; height: 1em; width: 1em;}
 
 #clipboard{ position: absolute; margin-left: 40%; margin-right: auto; max-width: 350px; min-width: 350px; width: 350px; bottom: 0%; }
+/*#clipboard{ position: absolute;}*/
 #cliptip{ position: absolute; margin-left: 40%; margin-right: auto; bottom: 0%;}
 #clipOrder{position: relative; border: solid 2px black; top: -500px; right: -40px; overflow: hidden; max-height: 365px; max-width: 325px; min-height: 365px; height: auto !important}
 #hintText{position: relative; height: 100px; margin-left: auto; top: -500px; max-width: 325px;}

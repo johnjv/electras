@@ -207,7 +207,8 @@ $(document).ready(function(){
                 $('#hint').fadeTo('slow', '1');
                 $('#showLevels').fadeTo('slow', '1');
                 $('#prev').fadeTo('slow', '1');
-                Placer.place();                 
+                Placer.place(); 
+                $('#factory').show();                
             });
         });
         
@@ -219,7 +220,36 @@ $(document).ready(function(){
                 $('#showLevels').fadeTo('slow', '1');
                 $('#prev').fadeTo('slow', '1');
                 Placer.place();
+                $('#factory').show();
+                
             });   
         });
     }
+
 });	
+/*
+ function resizeClipboard(){
+        "use strict";
+        var clip = $('img#clip');
+        var clipboard = $('#clipboard');
+        var container = $('#main_container');
+        var clipPos = clipboard.position();
+        clip.width(container.width() * 0.3);
+        clip.height(container.height() * 0.5);
+        clipPos.left = container.width() * 0.4;
+        clipPos.top = container.width() * 0.1;
+        clipboard.css('left', clipPos.left).css('top', clipPos.top);                
+    } 
+    
+  function resizeClipboard(){
+        "use strict";
+        var clip = $('img#clip');
+        var clipboard = $('#clipboard');
+        var container = $('#main_container');
+        var clipPos = clipboard.position();
+        clip.width(container.width() * 0.3);
+        clip.height(container.height() * 0.5);
+        clipPos.left = container.width() * 0.4;
+        clipPos.top = container.width() * 0.1;
+        clipboard.css('left', clipPos.left).css('top', clipPos.top);                
+    }
