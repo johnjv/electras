@@ -3,6 +3,7 @@ function Candy(type, levelSays, circuitSays){
 	this.picture = this.setCandyPicture();
 	this.levelSays = levelSays;
 	this.circuitSays = circuitSays;
+	this.src = this.getPicSource();
 }
 
 Candy.prototype.getCandyType = function(){
@@ -33,6 +34,32 @@ Candy.prototype.setCandyPicture = function(){
 	var picture = $("<img src=../Floor/resource-image/candy" + num[0]+ num[1] + ".png class='candy'></img>");
 	return picture;
 };
+
+Candy.prototype.getPicSource = function(){
+		"use strict";
+	var candy;
+	candy = this.type;
+	candy = $.trim(candy);
+	var num =  new Array();
+	if(candy[0] === 'C')
+	    num[0] = '0';
+	else if(candy[0] === 'R')
+	    num[0] = '1';
+	else if(candy[0] === 'G')
+	    num[0] = '2';
+	else if(candy[0] === 'Y')
+	    num[0] = '3';
+	if(candy[1] === 'o')
+	    num[1] = '0';
+	if(candy[1] === '|')
+	    num[1] = '1';
+	if(candy[1] === '-')
+	    num[1] = '2';
+	
+	var src = "<img src=../Floor/resource-image/candy" + num[0]+ num[1] + ".png class='srcCandy'></img>";
+	return src;
+};
+
 
 Candy.prototype.checkCandy = function(){
 	"use strict";

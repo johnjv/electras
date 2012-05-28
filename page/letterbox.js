@@ -60,7 +60,10 @@ function configureLetterbox(jqElt, widthToHeight, resizeCallback, options) {
 $(document).ready(function () {
 	main = $('#main_container');
 	configureLetterbox(main, 1.5, function () {
+	    Circuit.windowResized(); 
+	    LevelSelector.windowResized();
+	    //FactoryFloor.windowResized();
 		console.log('resized', main.offset().left, main.offset().top,
 			main.width(), main.height(), main.width() / main.height());
-	}, { border: 3 });
+	}, { border: 3 });	 
 });

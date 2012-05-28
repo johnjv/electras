@@ -1,195 +1,37 @@
-function setUpLevel(){
-    $('#levelSelect2').hide();  
-    $('#left2').hide(); 
-    $('#factory').hide(); 
-    $('#circuit').hide();    
-    $('#parts').hide();
-    $('#clipboard').hide();
-    $('#cliptip').hide();    
-    makePage(); 
-    addRightClick();
-    addLeftClick();
-}
-        
-function addRightClick(){
-    $('#right1').click(function(){      
-        $( "#levelSelect1:first" ).animate({
-           'marginLeft' : "-=25%"
-           }, 1000, function() {     
-        });    
-                      
-        $( "#levelSelect2:first" ).animate({
-           'marginLeft' : "-=25%"             
-           }, 1000, function() {              
-        }); 
-         $('#levelSelect1').hide();
-         $(this).hide();    
-         $('#levelSelect2').show();
-         $('#left2').show();
-    });
-}
-  
-function addLeftClick(){            
-    $('#left2').click(function(){        
-        $( "#levelSelect1:first" ).animate({
-           'marginLeft' : "+=25%"
-           }, 1000, function() {
-        });
-        $( "#levelSelect2:first" ).animate({
-           'marginLeft' : "+=25%"
-           }, 1000, function() {   
-        });
-        $('#levelSelect1').show();        
-        $('#right1').show();        
-        $('#levelSelect2').hide();        
-        $(this).hide();
-    });
-}
-
-function makePage() {    
-    var i = 0;
-    var html; 
-    var levels = [];
-    $("#levels1").children().remove();
-    $("#levels2").children().remove();
-    level = all_levels;    
-    for(i = 0; i < level.length; i+=1){
-        html = checkFinish(level[i], i+1);
-        if(i <= 9){
-            $('#levelSelect1').append(html);      
-        }
-        else if(9 < i & i <=19){
-            $('#levelSelect2').append(html);
-        }
-   }
-    addChildClicks();          
-}    
-
-function checkFinish(level, id){
-    "use strict";
-    var html, check;
-    var  j = 0;   
-    html = '<tr id = "row' + (id) + '"><td id=" level' + (id) + '"><b>' + (id) + '. <u>' + level.levelname + '</u></b></td></tr>';        
-    if(level.complete){ 
-        check = '<img src = "../levels/images/checkmark.png" id = "check">';   
-        html = '<tr id = "row' + (id) + '"><td id=" level' + (id) + '"><b>' + (id) + '. <u>' + level.levelname + '</u></b>' + check + '</td></tr>';
-    }        
-    return html;
-}
-
-function addChildClicks(){
-    "use strict";
-    $('#levels1').children().each(function(i, child) {
-        $(child).click( function(){
-             $('#levelSelect1').hide();
-             $('#right1').hide(); 
-             $('#title').hide();
-             $('#factory').show();             
-             $('#circuit').show();                                 
-             $('#cliptip').show();             
-             LevelSelector.setLevel(all_levels[i]);   
-             $('#page' + LevelSelector.getCurrentLevel().levelid).show();          
-             Placer.place();
-        });
-      });
-      
-    $('#levels2').children().each(function(i, child) {        
-         $(child).click( function(){                                    
-             $('#levelSelect2').hide();  
-             $('#left2').hide(); 
-             $('#title').hide(); 
-             $('#factory').show();             
-             $('#circuit').show();  
-             $('#cliptip').show();             
-             LevelSelector.setLevel(all_levels[i+10]);
-             $('#page' + LevelSelector.getCurrentLevel().levelid).show();       
-             Placer.place();
-        });
-    });
-}
-
 var LevelSelector = (function($) {
     "use strict";
     var my = {};                 
     var level = all_levels[0];
-    
-    $(document).ready(function () {
-       setUpLevel(); 
-    });
+    var pagenumber = 0;
 
     my.setLevel = function(change) {
         var temp;
         temp = level;
         level = change;
-        Circuit.levelChanged(temp, level); 
-        
+        Circuit.levelChanged(temp, level);         
     }; 
     
-    my.advanceLevel = function(finish){
-        if(finish){ 
-            level.complete = true;
-        }  
-        if(level.levelid >= all_levels.length){
-            my.showSelector(finish);            
-        }
-        else{            
-            my.setLevel(all_levels[level.levelid]);            
-        } 
-        $('#prev').show();               
-    };
-    
-    my.previousLevel = function(finish){
-        if(finish){ 
-            level.complete = true;
-        }  
-        if(level.levelid === 1){
-           my.showSelector(finish);           
-        }
-        else{            
-            my.setLevel(all_levels[level.levelid-2]);
-        }  
-        $('#next').show();               
+    my.setPage = function(change) {
+        pagenumber = change;        
     }; 
-     
-    my.showSelector = function(finish){
-        if(finish){
-            level.complete = true;
-        }        
-        makePage();    
-        if(level.levelid <= 10){
-         $( "#levelSelect1:first" ).animate({
-           'marginLeft' : "40%"
-           });
-         $( "#levelSelect2:first" ).animate({
-           'marginLeft' : "65%"
-            });  
-            $('#levelSelect1').show();            
-            $('#right1').show();
-            $('#title').show();
-        }
-        else if(level.levelid > 10 & level.levelid <= 20 ){
-        $( "#levelSelect1:first" ).animate({
-           'marginLeft' : "15%"
-           });         
-        $( "#levelSelect2:first" ).animate({
-           'marginLeft' : "40%"
-            });
-            $('#levelSelect2').show();            
-            $('#left2').show();
-            $('#title').show();
-        }
-        $('#factory').hide();
-        $('#circuit').hide();
-        $('#clipboard').css('bottom', '-57%');                 
-        $('#clipboard').hide();        
-        $('#cliptip').hide();     
-        $('#container').hide();
-        $('#page' + LevelSelector.getCurrentLevel().levelid).hide(); 
-                       
-    };
 
-   my.getCurrentLevel = function(){      
+   my.getCurrentLevel = function(){     
       return level;
     };
+    
+   my.getCurrentPage = function(){
+      return pagenumber;
+    };
+    
+    
+    my.windowResized = function () {
+        var par, self;
+	    self = $('#clipboard');
+	    par = self.parent();
+	    self.width(par.width());
+	    self.height(par.height());
+	    //workshop.paper.setSize(par.width(), par.height());
+	};
+    
     return my;
 }(jQuery));
