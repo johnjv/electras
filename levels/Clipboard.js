@@ -185,7 +185,7 @@ function addLevelClicks(){
             $('#showLevels').fadeTo('slow', '1');
             $('#prev').fadeTo('slow', '1');
             $('#return').fadeTo('slow', '1');
-            $('#factory').show();
+//            $('#factory').show();
             Placer.place();
         });   
     });
@@ -201,7 +201,7 @@ function addLevelClicks(){
             $('#showLevels').fadeTo('slow', '1');
             $('#prev').fadeTo('slow', '1');
             $('#return').fadeTo('slow', '1');
-            $('#factory').show();
+//            $('#factory').show();
             Placer.place();
         });   
     });
