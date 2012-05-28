@@ -2,23 +2,22 @@ var Placer = {};
 (function(my, $){
 	
 	my.place = function(){
-		
 		placeBox();
 		placeBelt();
 		placeDropper();
 		placePunchingBox();
 		placeGlove();
-		
+		placeTrash();
 	}
 
 	function placeBox(){
 		"use strict";
 		var box = $('img#box');
-		var body = $('body');
+		var body = $('#main_container');
 		var boxPos = box.offset();
 		box.height(body.height() * 0.3);
 		box.width(box.height());
-		var x =body.width() * (0.1);
+		var x =body.width() * (0.2);
 		var y =body.height() * (0.5);
 		box.offset({left: x , top: y});
 		
@@ -29,7 +28,7 @@ var Placer = {};
 	function placeBelt(){
 		"use strict";
 		var belt = $('img#belt');
-		var body = $('body');
+		var body = $('#main_container');
 		var box = $('img#box');
 		belt.width(body.width() - box.offset().left - box.width() + box.width()/4.0);
 		belt.height(box.height());
@@ -38,7 +37,7 @@ var Placer = {};
 		//console.log(box.width());
 		
 		var x = box.offset().left + box.width() - box.width()/4.0;
-		var y =body.height() * (0.5);
+		var y = body.height() * (0.5);
 		belt.offset({left: x , top: y});
 		//console.log(x);
 		//console.log(y);
@@ -47,7 +46,7 @@ var Placer = {};
 	function placeDropper(){
 		"use strict";
 		var dropper = $('img#dropper');
-		var body = $('body');
+		var body = $('#main_container');
 		var belt = $('img#belt');
 		//var space = (belt.height() - dropper.height())/2.0; 
 		dropper.height(belt.height());
@@ -64,7 +63,7 @@ var Placer = {};
 	function placePunchingBox(){
 		"use strict";
 		var punchingBox = $('img#punchingbox');
-		var body = $('body');
+		var body = $('#main_container');
 		var belt = $('img#belt');
 		var x =(belt.width() * (0.6)) + belt.offset().left ;
 		var y =body.height() * (0.5) - punchingBox.height();
@@ -92,7 +91,20 @@ var Placer = {};
 		
 	}
 	
-	
+	function placeTrash(){
+		"use strict";
+		var trash = $("img#trash");
+		var punchingBox = $("img#punchingbox");
+		var belt = $("img#belt");
+		var body = $('#main_container');
+		trash.height(punchingBox.height());
+		trash.width(punchingBox.width());
+		var x = punchingBox.offset().left;
+		var y = body.height() * 0.8;
+		
+		trash.offset({left:x , top: y});
+		
+	}
 }(Placer, jQuery));
 
 

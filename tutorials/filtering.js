@@ -7,7 +7,7 @@ var Filters = (function ($) {
     } else if (type == 'output') {
       type = false
     }
-//    console.log(element, connectedTo, type)
+    //console.log(element, connectedTo, type)
     return element.connects.filter(function(connection) {return connection_is_match(connection, {connection_type: type, connectedTo: connectedTo})})[0]
   }
 
@@ -40,7 +40,7 @@ var Filters = (function ($) {
       switch (connection_key) {
         case 'input':
           if(connection_value != connection.input){this_is_a_match = false}
-//          console.log(connection_value, connection, this_is_a_match)
+          //console.log(connection_value, connection, this_is_a_match)
           break;
         case 'connectedTo':
           var one_matches = false;
@@ -55,7 +55,7 @@ var Filters = (function ($) {
           break;
       }
     });
-//    console.log("what connection_is_match returns:  ", connection, criteria, this_is_a_match)
+    //console.log("what connection_is_match returns:  ", connection, criteria, this_is_a_match)
     return this_is_a_match
   }
 
@@ -107,12 +107,12 @@ var make_parametric = function(highlighted, isCircular){
 
 var highlightSections = function(params){
   Tutorial.highlightSections(params)
-//  console.log("highlighting multiple sections with params: ", params)
+  //console.log("highlighting multiple sections with params: ", params)
 }
 
 var createSpeechBubble = function(hightlighted, text) {
   Tutorial.placeBubble(hightlighted, text)
-//  console.log("creating speech bubble: ", hightlighted.x, hightlighted.y, text);
+  //console.log("creating speech bubble: ", hightlighted.x, hightlighted.y, text);
 }
 
 var getLeverLocation = function(){

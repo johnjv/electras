@@ -2,65 +2,77 @@ $(document).ready(function(){
 	"use strict";	
 	
 	Placer.place();
-	
-	$("#advanceLevel").click(function(){
-	    //console.log("advance");
-		LevelSelector.advanceLevel(true); // check whether the level was completed or not
-	});
-	
-	$("#showLevels").click(function(){
-		LevelSelector.showSelector(true);			
-	});
-	
+	$("#tally").hide();
 	$("#start").click(function(){
 		updateChalkBoard();
 		startMachine();
+		$("#tally").show();
 	});
 	
 	function startMachine(){
-		var items = createPictures();
 		var count =0;
 		var candies = getLevelType();
 		var flag = $('<img src="../Floor/resource-image/envx.png" id="flag"></img>');
-		
+	
 		function startNext(){
+			
+			
 			if(count < 8) {
 				var check = candies[count].checkCandy();
-				
-				if (check === 1) console.log(count + " Correct");
-			
-				else if (check === 0){
-					console.log(count + " Push away, mark X");
-					movePuncher();
+				var levelMark = false;
+				var circuitMark = false;
+				if (check === 1) {
+					placeCandy(candies[count]);
+					moveCandy(candies[count]);
+					levelMark = true;
+					circuitMark = true;
+				}
+
+				if (check === 0){
+					placeCandy(candies[count]);
+					moveCandy(candies[count]);
+					levelMark = true;
+					circuitMark = false;
+					//movePuncher();
 					putAFlag(flag);
-			        moveFlag(flag);
+					moveFlag(flag);
+					
 				}
 				else if(check === -1){
-					console.log(count + " Pushed away, correct");
-					movePuncher();
+					// move to trash
+					//movePuncher();
+					placeCandy(candies[count]);
+					moveCandy(candies[count]);
+					levelMark = false;
+					circuitMark = false;
 				}
 				else{
-				   console.log(count + " Kept, mark X");
-				   putAFlag();
-			       moveFlag();
+					placeCandy(candies[count]);
+					moveCandy(candies[count]);
+					levelMark = false;
+					circuitMark = true;
+					console.log(count + " Kept, mark X");
+					putAFlag(flag);
+					moveFlag(flag);
 				}
-				placeCandy(items[count]);
-				moveCandy(items[count]);
+				
+				insertCandyIntoTally(candies[count].src);
+				insertInfoIntoTally(circuitMark,levelMark);
 				count++; 
-			
+	
 				setTimeout(startNext, 3000);
 			}
 		}
 		startNext();
 	}
 	
+	
 	function getLevelType(){
 		"use strict";
 		var level;
 		level = LevelSelector.getCurrentLevel();
-		var typeInfo = new Array();		
 		var analyze = level.analyze();
-		//console.log(analyze);
+		var typeInfo = new Array();	
 		
 		for (var i=0; i < 8 ; i+=1){
 			var type = analyze[i].type;
@@ -71,56 +83,66 @@ $(document).ready(function(){
 		return typeInfo;
 	}
 	
-	function createPictures(){
-		var picArray = [];
-		var candyInfo = getLevelType();	
-		for (var j = 0; j < candyInfo.length;j+=1){	
-			var candyName = candyInfo[j].type;	    
-			picArray[j] = candyInfo[j].picture;
-		}
-		//console.log(picArray);
-		return picArray;
+	function insertCandyIntoTally(picture){
+		"use strict";
+		$("#frow").append("<td class='upperrow'>" + picture + "</td>");
 	}
 	
-	function placeCandy(candyPic){
+	function insertInfoIntoTally(circuitSays, levelSays){
 		"use strict";
-		var dropper, candyPos, items;
-        candyPic.width(20);
+		var xflag = '<img src="../Floor/resource-image/envx.png" id="xflag"></img>';
+		var checkmark = '<img src="../Floor/resource-image/checkmark.png" id="checkmark"></img>';
+		
+		
+		if(circuitSays) { $("#srow").append("<td>" + checkmark + "</td>");}
+		else { $("#srow").append("<td>" + xflag + "</td>");}
+		
+		if(levelSays) { $("#trow").append("<td>" + checkmark + "</td>");}
+		else { $("#trow").append("<td>" + xflag + "</td>"); }
+		
+		if(levelSays === circuitSays) { $("#forow").append("<td>" + checkmark + "</td>");}
+		else { $("#forow").append("<td>" + xflag + "</td>"); }
+	}
+	
+	
+	function placeCandy(candy){
+		"use strict";
+		var candyPic = candy.picture;
+		candyPic.width(40);
         var body = $('body');
-        body.append(candyPic);
         var dropper = $("#dropper");
-        $(candyPic).each(function(){
-        	var x = dropper.offset().left;
-        	var y = dropper.offset().top + dropper.height()/2.0 - candyPic.height()/2.0;
-       	 	candyPic.offset({left:x , top:y});
-        	body.append(candyPic);
-        	//console.log("just added");
-        });
-             
+    	var x = dropper.offset().left;
+    	var y = dropper.offset().top + dropper.height()/2.0 - candyPic.height()/2.0;
+    	
+   	 	candyPic.offset({left:x , top:y});
+    	body.append(candyPic);
     }
-    var count =0;
-    var movedCandies = [];
     
-    function moveCandy(candyPic){
+    function moveCandy(candy){
     	"use strict";
+    	var posleft, posdown;
+    	var candyPic = candy.picture;
     	var belt = $('#belt');
     	var box = $('#box');
     	var dropper = $('#dropper');
-    	var posleft = belt.width() - dropper.width();
-    	var posdown = box.width()/2.0;
-    	movedCandies.push(candyPic);
-  
+    	var body = $('body');
+    	var glove = $("#glove");
+    	var trash = $("#trash");
     	
-    	$(candyPic).animate({
-        	left: '-=' + posleft
-        }, 3000); 
-        $(candyPic).animate({
-        	left: '-=' + (posdown-count),
-        	width: '-=10',
-        	
-        }, 1500); 
-        count+=10;
-        return movedCandies;
+    	if(candy.checkCandy() === -1) {
+    		posleft = body.width() - glove.offset().left - glove.width();
+			posdown = trash.offset().top - candyPic.offset().top; 
+			$(candyPic).animate({left:'-=' + posleft},3000, movePuncher());
+			$(candyPic).animate({top:'+=' + posdown, width: '-=40' },1500);
+    	}
+    	
+    	else {
+    		posleft = belt.width() - dropper.width();
+    		posdown = box.width()/3.0;
+    		$(candyPic).animate({left: '-=' + posleft}, 3000); 
+    		$(candyPic).animate({left: '-=' + (posdown),width: '-=40'}, 1500); 
+        	//$(candyPic).hide(1500);
+       }
     }
 	
 	function putAFlag(flag){
@@ -129,16 +151,11 @@ $(document).ready(function(){
 		var flagPos;
 		var body = $('body');
 		flag.width(20);
+		var x  = glove.offset().left + glove.width()/2.0;
+		var y = glove.offset().top + glove.height();
+		flag.offset({left:x,top:y});
 		body.append(flag);
-		$(flag).each(function(){
-			var x  = glove.offset().left + glove.width()/2.0;
-			var y = glove.offset().top + glove.height();
-			flag.offset({left:x,top:y});
-			body.append(flag);
-			console.log(x);
-		    console.log(y);
-		});
-      	//return flag
+		
 	}
 	
 	function moveFlag(flag){
@@ -148,15 +165,10 @@ $(document).ready(function(){
 		var flag = $('#flag');
 		var x = flag.offset().left - belt.offset().left;
 		
-		$("#flag").animate({
-			left:'-=0' + x
-		},3000);
-			/*$(flag).animate({
-				height: 'toggle'
-			},3000);*/
-		//flag.detach();
+		$("#flag").animate({left:'-=0' + x},3000);
+		$("#flag").hide(3000);
 	}
-
+	
 	
 	function getOrder(){
 		"use strict";
@@ -173,31 +185,19 @@ $(document).ready(function(){
 	}
 
 	function movePuncher(){
-		var belt = $('#belt');
-		$('#glove').animate({top: '+=0' + belt.height()/5.0}, 1500);
-		$('#glove').animate({top: '-=0' + belt.height()/5.0}, 1000);
+		var belt = $('#belt'); 
+		$('#glove').animate({top: '+=0' + belt.height()/3.0}, 3000);
+		$('#glove').animate({top: '-=0' + belt.height()/3.0}, 600);
+		console.log("punch");
 	}
 	
 	function stopMovingPuncher(){
 		$('#glove').stop();
 	}
-	
-	
-	function changeCandyPos(){
-		"use strict";
-		var box = $("#box");
-		var body = $('body');
-		var x = box.offset().left + box.width()/2.0;
-		var y = box.offset().top + box.width()/2.0;
-		
-		for(var i=0; i<movedCandies.length ; i+=1){
-			movedCandies[i].remove();
-			body.append(movedCandies[i]);	
-			movedCandies[i].offset({left:x + 3*i, top:y});
-		}
-	}
-	
-	var FactoryFloor = (function($) {
+
+});
+
+var FactoryFloor = (function($) {
 		"use strict";
 		var my = {}; 
 
@@ -230,17 +230,15 @@ $(document).ready(function(){
 			return advanceLocation;
 		};
 		
-		return my;
-		
+		my.windowResized = function () {
+            var par, self;
+	        self = $('#factory');
+	        par = self.parent();
+	        self.width(par.width());
+	        self.height(par.height());
+	    };  
+	    
+		return my;		
 		}(jQuery));
-		
-	$(window).resize(function() {
-		count = 0;
-		Placer.place();
-		changeCandyPos();
-		stopMovingPuncher();
-	});
-
-});
 
 
