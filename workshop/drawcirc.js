@@ -135,12 +135,12 @@
 			y0 += dy;
 		}
 		if (port.input) {
-			circ = info.paper.circle(x0, y0, CONNECT_RADIUS);
+			circ = info.paper.circle(x0, y0, CONNECT_RADIUS,
+				{ stroke: color });
 		} else {
-			circ = info.paper.circle(x0, y0, CONNECT_RADIUS);
-			circ.attr('fill', color);
+			circ = info.paper.circle(x0, y0, CONNECT_RADIUS,
+				{ stroke: color, fill: color });
 		}
-		circ.attr('stroke', color);
 		return circ;
 	};
 
@@ -168,10 +168,8 @@
 		} else if (y1 < y0) {
 			y0 -= CONNECT_RADIUS;
 		}
-		stub = info.paper.path('M' + x0 + ',' + y0
-			+ 'L' + x1 + ',' + y1);
-		stub.attr('stroke-width', WIRE_WIDTH);
-		stub.attr('stroke', color);
+		stub = info.paper.path([[x0, y0], [x1, y1]],
+			{ stroke: color, strokeWidth: WIRE_WIDTH });
 
 		circ = my.DrawCirc.createStubCircle(info, port, dx, dy);
 
@@ -244,13 +242,10 @@
 				y1 += dy0;
 			}
 		}
-		line = info.paper.path('M' + (x0 + p0.dx) + ',' + (y0 + p0.dy) +
-			'L' + x0 + ',' + y0 +
-			'L' + x1 + ',' + y1 +
-			'L' + (x1 + p1.dx) + ',' + (y1 + p1.dy));
-		line.attr('stroke', getColor(info.state && info.state.getValue(p0)));
-		line.attr('stroke-width', WIRE_WIDTH);
-		line.attr('stroke-linecap', 'round');
+		line = info.paper.path([[x0 + p0.dx, y0 + p0.dy], [x0, y0],
+			[x1, y1], [x1 + p1.dx, y1 + p1.dy]],
+			{ stroke: getColor(info.state && info.state.getValue(p0)),
+				strokeWidth: WIRE_WIDTH });
 		return line;
 	};
 
@@ -344,16 +339,12 @@
 	};
 
 	my.DrawCirc.ghostWireToCoord = function (info, p0, x, y, opacity) {
-		var x0, y0, color, line;
+		var x0, y0, col, line;
 		x0 = p0.elt.x + p0.x;
 		y0 = p0.elt.y + p0.y;
-		color = getColor(info.state && info.state.getValue(p0));
-		line = info.paper.path('M' + (x0 + p0.dx) + ',' + (y0 + p0.dy) +
-			'L' + x0 + ',' + y0 +
-			'L' + x + ',' + y);
-		line.attr('stroke', color);
-		line.attr('opacity', opacity);
-		line.attr('stroke-width', WIRE_WIDTH);
+		col = getColor(info.state && info.state.getValue(p0));
+		line = info.paper.path([[x0 + p0.dx, y0 + p0.dy], [x0, y0], [x, y]],
+			{ stroke: col, opacity: opacity, strokeWidth: WIRE_WIDTH });
 		return line;
 	};
 
@@ -368,13 +359,9 @@
 		} else {
 			color = getColor(info.state && info.state.getValue(p0));
 		}
-		line = info.paper.path('M' + (x0 + p0.dx) + ',' + (y0 + p0.dy) +
-			'L' + x0 + ',' + y0 +
-			'L' + x1 + ',' + y1 +
-			'L' + (x1 + p1.dx) + ',' + (y1 + p1.dy));
-		line.attr('stroke', color);
-		line.attr('opacity', opacity);
-		line.attr('stroke-width', WIRE_WIDTH);
+		line = info.paper.path([[x0 + p0.dx, y0 + p0.dy], [x0, y0],
+			[x1, y1], [x1 + p1.dx, y1 + p1.dy]],
+			{ stroke: color, opacity: opacity, strokeWidth: WIRE_WIDTH });
 		return line;
 	};
 }(Workshop, jQuery));

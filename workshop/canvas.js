@@ -381,4 +381,4 @@
 			}
 		});
 	};
-}(Workshop, jQuery, Raphael, multidrag));
+}(Workshop, jQuery, raphwrap, multidrag));
