@@ -35,7 +35,9 @@ $(document).ready(function(){
                $('#showLevels').fadeTo('slow', '0.5');
             }
             else if(num === 22){
-               $('#next').fadeTo('slow', '0.5');            
+               $('#next').fadeTo('slow', '0.5');
+               LevelSelector.setLevel(all_levels[num-3]);
+               //add a place here that shows the credits option!            
             } 
             else{
                 $('#circuit').show();            
@@ -105,31 +107,56 @@ $(document).ready(function(){
         return level.hint;
     }
 
-    function transitionNext(src, dst) {
-	    var dist;
-	    src.css('z-index', 2);
-	    dst.css('z-index', 1);
-	    dst.css('top', 0);
-	    dst.show();
-	    dist = $('#clipOrder').height();
-	    src.height(dist);
-	    src.stop().animate({ top: -dist + 'px' }, 1000, function () {
-		    src.hide();
-	    });
-    }
+   function positionPage(page) {
+		var vpad, hpad;
+		vpad = page.innerHeight() - page.height();
+		hpad = page.innerWidth() - page.width();
+		page.height(page.parent().height() - vpad);
+		page.width(page.parent().width() - hpad);
+		page.css('top', '-' + page.css('border-top-width'));
+		page.css('left', '-' + page.css('border-left-width'));
+		page.css('transform', 'scale(1)');
+	}
+	
+	function transitionCut(src, dst) {
+		positionPage(dst);
+		dst.show();
+		if (src) {
+			src.hide();
+		}
+	};
 
-    function transitionPrev(src, dst) {
-	    var dist;
-	    src.css('z-index', 1);
-	    dst.css('z-index', 2);
-	    dist = $('#clipOrder').height();
-	    dst.height(dist);
-	    dst.css('top', -dist + 'px');
-	    dst.show();
-	    dst.stop().animate({ top: '0px' }, 1000, function () {
-		    src.hide();
-	    });
-    } 
+	function transitionNext (src, dst) {
+		var d = Math.floor(dst.parent().height() / 2);
+		src.css('z-index', 52);
+		dst.css('z-index', 51);
+		positionPage(dst);
+		dst.show();
+		src.stop().animate({
+			top: '-=' + d + 'px',
+			transform: 'scale(1, 0.01)'
+		}, 1000, function () {
+			src.hide();
+			src.css('z-index', 0);
+		});
+		console.log('brk');
+	};
+
+	function transitionPrev(src, dst) {
+		var d = Math.floor(dst.parent().height() / 2);
+		src.css('z-index', 51);
+		dst.css('z-index', 52);
+		positionPage(dst);
+		dst.css('top', '-=' + d + 'px');
+		dst.css('transform', 'scale(1, 0.01)');
+		dst.show();
+		dst.stop().animate({
+			top: '+=' + d + 'px',
+			transform: 'scale(1)'
+		}, 1000, function () {
+			src.hide();
+		});
+	}; 
 
     function setUpLevel(){ 
         Placer.place();     
@@ -180,10 +207,11 @@ $(document).ready(function(){
                 $('#hint').fadeTo('slow', '1');
                 $('#showLevels').fadeTo('slow', '1');
                 $('#prev').fadeTo('slow', '1');
-                $('#return').fadeTo('slow', '1');            
-                Placer.place();
-            });   
+                Placer.place(); 
+                $('#factory').show();                
+            });
         });
+        
         $('#tbody2').children().each(function(i, child){                                     
             $(child).click(function(){
                 goToPage(i + 13);
@@ -191,9 +219,37 @@ $(document).ready(function(){
                 $('#hint').fadeTo('slow', '1');
                 $('#showLevels').fadeTo('slow', '1');
                 $('#prev').fadeTo('slow', '1');
-                $('#return').fadeTo('slow', '1');            
                 Placer.place();
+                $('#factory').show();
+                
             });   
         });
     }
+
 });	
+/*
+ function resizeClipboard(){
+        "use strict";
+        var clip = $('img#clip');
+        var clipboard = $('#clipboard');
+        var container = $('#main_container');
+        var clipPos = clipboard.position();
+        clip.width(container.width() * 0.3);
+        clip.height(container.height() * 0.5);
+        clipPos.left = container.width() * 0.4;
+        clipPos.top = container.width() * 0.1;
+        clipboard.css('left', clipPos.left).css('top', clipPos.top);                
+    } 
+    
+  function resizeClipboard(){
+        "use strict";
+        var clip = $('img#clip');
+        var clipboard = $('#clipboard');
+        var container = $('#main_container');
+        var clipPos = clipboard.position();
+        clip.width(container.width() * 0.3);
+        clip.height(container.height() * 0.5);
+        clipPos.left = container.width() * 0.4;
+        clipPos.top = container.width() * 0.1;
+        clipboard.css('left', clipPos.left).css('top', clipPos.top);                
+    }

@@ -9,71 +9,59 @@ var Placer = {};
 		placeGlove();
 		placeTrash();
 	}
+	
+	function moveTo(elt, x, y) {
+		elt.css('left', x).css('top', y);
+	}
 
 	function placeBox(){
 		"use strict";
 		var box = $('img#box');
-		var body = $('#main_container');
+		var container = $('#factory');
 		var boxPos = box.offset();
-		box.height(body.height() * 0.3);
+		box.height(container.height() * 0.3);
 		box.width(box.height());
-		var x =body.width() * (0.2);
-		var y =body.height() * (0.5);
-		box.offset({left: x , top: y});
-		
-		//console.log(x);
-		//console.log(y);
+		var x =container.width() * (0.1);
+		var y =container.height() * (0.3);
+		moveTo(box, x, y);
+		console.log('box at', x, y);
 	}
 
 	function placeBelt(){
 		"use strict";
 		var belt = $('img#belt');
-		var body = $('#main_container');
+		var container = $('#factory');
 		var box = $('img#box');
-		belt.width(body.width() - box.offset().left - box.width() + box.width()/4.0);
+		belt.width(container.width() - box.position().left - box.width() + box.width()/4.0);
 		belt.height(box.height());
-		belt.css("float", "right");
-		//console.log(box.offset().left);
-		//console.log(box.width());
-		
-		var x = box.offset().left + box.width() - box.width()/4.0;
-		var y = body.height() * (0.5);
-		belt.offset({left: x , top: y});
-		//console.log(x);
-		//console.log(y);
+		var x = box.position().left + box.width() - box.width()/4.0;
+		var y = container.height() * (0.3);
+		moveTo(belt,x,y);
 	}
 	
 	function placeDropper(){
 		"use strict";
 		var dropper = $('img#dropper');
-		var body = $('#main_container');
+		var container = $('#factory');
 		var belt = $('img#belt');
-		//var space = (belt.height() - dropper.height())/2.0; 
 		dropper.height(belt.height());
 		dropper.width(belt.width()/10);
-		var x =belt.offset().left + belt.width() - dropper.width();
-		var y =body.height() * (0.5); //+ space;
-		dropper.offset({left: x , top: y});
-		
-		//console.log(x);
-		//console.log(y);
-		
+		var x =belt.position().left + belt.width() - dropper.width();
+		var y =container.height() * (0.3); 
+		moveTo(dropper,x,y);
 	}
 	
 	function placePunchingBox(){
 		"use strict";
 		var punchingBox = $('img#punchingbox');
-		var body = $('#main_container');
+		var container = $('#factory');
 		var belt = $('img#belt');
-		var x =(belt.width() * (0.6)) + belt.offset().left ;
-		var y =body.height() * (0.5) - punchingBox.height();
 		punchingBox.width(belt.width() /6.0);
 		punchingBox.height(belt.height()/2.0);
-		punchingBox.offset({left: x , top: y});
+		var x = belt.position().left + belt.width()/2.0 ;
+		var y =container.height() * (0.3) - punchingBox.height();
 		
-		//console.log(x);
-		//console.log(y);
-		
+		moveTo(punchingBox,x,y);
 	}
 	
 	function placeGlove(){
@@ -82,13 +70,10 @@ var Placer = {};
 		var belt = $('img#belt');
 		var punchingBox = $('img#punchingbox')
 		glove.height(belt.height()/2.0);
-		var x = (punchingBox.width() - glove.width())/2.0 + punchingBox.offset().left;
-		var y =punchingBox.offset().top + punchingBox.height()/3.0;
+		var x = (punchingBox.width() - glove.width())/2.0 + punchingBox.position().left;
+		var y =punchingBox.position().top + punchingBox.height()/3.0;
 		
-		glove.offset({left: x , top: y});
-		//console.log(x);
-		//console.log(y);
-		
+		moveTo(glove,x,y);
 	}
 	
 	function placeTrash(){
@@ -96,13 +81,13 @@ var Placer = {};
 		var trash = $("img#trash");
 		var punchingBox = $("img#punchingbox");
 		var belt = $("img#belt");
-		var body = $('#main_container');
+		var container = $('#factory');
 		trash.height(punchingBox.height());
 		trash.width(punchingBox.width());
-		var x = punchingBox.offset().left;
-		var y = body.height() * 0.8;
-		
-		trash.offset({left:x , top: y});
+		var x = punchingBox.position().left;
+		var y = container.height() * 0.8;
+
+		moveTo(trash,x,y);
 		
 	}
 }(Placer, jQuery));

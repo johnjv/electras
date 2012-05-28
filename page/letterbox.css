@@ -11,3 +11,8 @@ html, body {
 	border-style: solid;
 	border-color: #282;
 }
+
+.welcolor{
+    height: 2em;
+    width: 2em;
+}
