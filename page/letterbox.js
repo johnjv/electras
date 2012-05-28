@@ -62,7 +62,7 @@ $(document).ready(function () {
 	configureLetterbox(main, 1.5, function () {
 	    Circuit.windowResized(); 
 	    LevelSelector.windowResized();
-	    //FactoryFloor.windowResized();
+	    FactoryFloor.windowResized();
 		console.log('resized', main.offset().left, main.offset().top,
 			main.width(), main.height(), main.width() / main.height());
 	}, { border: 3 });	 

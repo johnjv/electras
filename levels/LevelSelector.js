@@ -23,14 +23,14 @@ var LevelSelector = (function($) {
       return pagenumber;
     };
     
-    
     my.windowResized = function () {
         var par, self;
 	    self = $('#clipboard');
 	    par = self.parent();
 	    self.width(par.width());
 	    self.height(par.height());
-	    //workshop.paper.setSize(par.width(), par.height());
+	    console.log("here");
+	    resizeClipboard();
 	};
     
     return my;
