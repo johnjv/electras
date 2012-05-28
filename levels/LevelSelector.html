@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <title>Electra's Candy Shop</title>
+   <link rel="stylesheet" href="../levels/LevelSelector.css" type="text/css">   
+   <link rel="stylesheet" href="../workshop/workshop.css" type="text/css"/>
+   <link rel="stylesheet" href="../Floor/FactoryFloor.css" type="text/css">
+   <link rel="stylesheet" href="../tutorials/highlighter.css" type="text/css">
+  <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, width=device-width">
+ </head>
+
+ <body>
+<div id="circuit"></div>
+
+<div id="translations" hidden="hidden">
+  <div id="EN">
+    <span class="factory_floor">
+
+    </span>
+    <span class="menu">
+
+    </span>
+  <span class="tutorial1">
+    <span class="order"></span>
+    <span class="hint"></span>
+    <span class="bubble1">We must tell the machine what to do.  Click on the sensor to start laying down wire.</span>
+    <span class="bubble2">Good job!  Now connect it to the lightbulb!</span>
+    <span class="bubble3">Click on the lever to test your machine!</span>
+  </span>
+  <span class="tutorial2">
+    <span class="order"></span>
+    <span class="hint"></span>
+    <span class="bubble1">Candies can have 3 shapes: ball, star, and square.</span>
+    <span class="bubble2">Good choice!  Now click on the lightbulb just like last time.</span>
+    <span class="bubble3">With great power comes great responsibility.</span>
+    <span class="bubble4">Uh oh!  Someone connected this wrong! Grab the eraser and click on the wire to give us a nice clean slate to work with.</span>
+  </span>
+  <span class="tutorial3">
+    <span class="order"></span>
+    <span class="hint"></span>
+    <span class="bubble1">The only way you'll be able to solve this is by connecting the lightbulb to the NOT operator.  You may need to erase the current connection.</span>
+    <span class="bubble2">We'll be using the NOT operator.  Whatever is put into it comes out the opposite!</span>
+    <span class="bubble3">We'll only need one NOT operator for this.</span>
+    <span class="bubble4">Great!  Now connect the green sensor to the input of the NOT operator</span>
+    <span class="bubble5">Now just finish it off.</span>
+  </span>
+  <span class="tutorial4">
+    <span class="order"></span>
+    <span class="hint"></span>
+    <span class="bubble1">The only way you'll be able to solve this is by connecting the lightbulb to the OR operator.  You may need to erase the current connection.</span>
+    <span class="bubble2">This time we'll be using an OR operator.  Go ahead and put one on screen.</span>
+    <span class="bubble3">We'll only need one OR operator for this.</span>
+    <span class="bubble4">This operator has two inputs.  Select one and attach it to a sensor.</span>
+    <span class="bubble5">Now connect the other...</span>
+    <span class="bubble6">Great!  Now if either green or blue is true, the OR will output true.</span>
+  </span>
+  <span class="tutorial5">
+    <span class="order"></span>
+    <span class="hint"></span>
+  </span>
+  <span class="tutorial6">
+    <span class="order"></span>
+    <span class="hint"></span>
+    <span class="bubble1">You'll need both an OR and a NOT to solve this.</span>
+  </span>
+  <span class="tutorial7">
+    <span class="order"></span>
+    <span class="hint"></span>
+  </span>
+  <span class="tutorial8">
+    <span class="order"></span>
+    <span class="hint"></span>
+    <span class="bubble1">The only way you'll be able to solve this is by connecting the lightbulb to the AND operator.  You may need to erase the current connection.</span>
+    <span class="bubble2">This time we'll be using an AND operator.  Go ahead and put one on screen.</span>
+    <span class="bubble3">We'll only need one AND operator for this.</span>
+    <span class="bubble4">This operator has two inputs.  Select one and attach it to a sensor.</span>
+    <span class="bubble5">Now connect the other...</span>
+    <span class="bubble6">Great!  Now if yellow AND square are both true, the AND will output true.</span>
+  </span>
+  <span class="tutorial9">
+    <span class="order"></span>
+    <span class="hint"></span>
+  </span>
+  <span class="tutorial10">
+    <span class="order"></span>
+    <span class="hint"></span>
+  </span>
+  <span class="tutorial11">
+    <span class="order"></span>
+    <span class="hint"></span>
+  </span>
+  <span class="tutorial12">
+    <span class="order"></span>
+    <span class="hint"></span>
+  </span>
+  <span class="tutorial13">
+    <span class="order"></span>
+    <span class="hint"></span>
+  </span>
+  <span class="tutorial14">
+    <span class="order"></span>
+    <span class="hint"></span>
+  </span>
+  <span class="tutorial15">
+    <span class="order"></span>
+    <span class="hint"></span>
+  </span>
+  <span class="tutorial16">
+    <span class="order"></span>
+    <span class="hint"></span>
+  </span>
+  <span class="tutorial17">
+    <span class="order"></span>
+    <span class="hint"></span>
+  </span>
+  <span class="tutorial18">
+    <span class="order"></span>
+    <span class="hint"></span>
+  </span>
+  <span class="tutorial19">
+    <span class="order"></span>
+    <span class="hint"></span>
+  </span>
+  <span class="tutorial20">
+    <span class="order"></span>
+    <span class="hint"></span>
+  </span>
+
+  </div>
+
+<div id="FR">
+  <span class="tutorial1">
+    <span class="bubble1">Another language!</span>
+    <span class="bubble2">We should translate things</span>
+    <span class="bubble3">Yes, translate.</span>
+  </span>
+  <span class="tutorial2">
+    <span class="bubble1">Candies can have 3 shapes: ball, star, and square.</span>
+    <span class="bubble2">Good choice!  Now click on the lightbulb just like last time.</span>
+    <span class="bubble3">With great power comes great responsibility.</span>
+    <span class="bubble4">Uh oh!  Someone connected this wrong! Grab the eraser and click on the wire to give us a nice clean slate to work with.</span>
+  </span>
+  <span class="tutorial3">
+    <span class="bubble1">The only way you'll be able to solve this is by connecting the lightbulb to the NOT operator.  You may need to erase the current connection.</span>
+    <span class="bubble2">We'll be using the NOT operator.  Whatever is put into it comes out the opposite!</span>
+    <span class="bubble3">We'll only need one NOT operator for this.</span>
+    <span class="bubble4">Great!  Now connect the green sensor to the input of the NOT operator</span>
+    <span class="bubble5">Now just finish it off.</span>
+  </span>
+  <span class="tutorial4">
+    <span class="bubble1">The only way you'll be able to solve this is by connecting the lightbulb to the OR operator.  You may need to erase the current connection.</span>
+    <span class="bubble2">This time we'll be using an OR operator.  Go ahead and put one on screen.</span>
+    <span class="bubble3">We'll only need one OR operator for this.</span>
+    <span class="bubble4">This operator has two inputs.  Select one and attach it to a sensor.</span>
+    <span class="bubble5">Now connect the other...</span>
+    <span class="bubble6">Great!  Now if either green or blue is true, the OR will output true.</span>
+  </span>
+  <span class="tutorial6">
+    <span class="bubble1">You'll need both an OR and a NOT to solve this.</span>
+  </span>
+  <span class="tutorial8">
+    <span class="bubble1">The only way you'll be able to solve this is by connecting the lightbulb to the AND operator.  You may need to erase the current connection.</span>
+    <span class="bubble2">This time we'll be using an AND operator.  Go ahead and put one on screen.</span>
+    <span class="bubble3">We'll only need one AND operator for this.</span>
+    <span class="bubble4">This operator has two inputs.  Select one and attach it to a sensor.</span>
+    <span class="bubble5">Now connect the other...</span>
+    <span class="bubble6">Great!  Now if yellow AND square are both true, the AND will output true.</span>
+  </span>
+</div>
+</div>
+ 
+ <div id = "LevelSelector">
+     <h1 id = "title">Please Select a Level!</h1>
+     <table id = "levelSelect1"><tbody id = "levels1"></tbody></table>
+     <div id = "arrow1"><img src = "../levels/images/right.svg" id = "right1"></div>
+     <table id = "levelSelect2"><tbody id = "levels2"></tbody></table>
+     <div id = "arrow2"><img src = "../levels/images/left.svg" id = "left2"></div>
+ </div>
+
+ <div id="factory">
+    <div id = "parts">
+	    <img src="../Floor/resource-image/belt.png" id="belt">
+	    <img src="../Floor/resource-image/box.png" id="box">
+	    <img src="../Floor/resource-image/dropper.png" id="dropper">
+	    <img src="../Floor/resource-image/punchingbox.png" id="punchingbox">
+	    <img src="../Floor/resource-image/glove.png" id="glove">
+	</div>	
+ </div>
+ 
+<div id = "cliptip">
+    <img src = "../levels/images/clipboard-top.png" id = "tip">
+</div> 
+
+<div id = "clipboard">
+    <img src = "../levels/images/clipboard.png" id = "clip">
+    <div id = "clipOrder"></div>
+    <div id = "clipButtons">
+        <div><button id = "hint">Hint</button></div>
+        <div id = "editLevels"><img src = "../levels/images/left.png" id = "prev"><button id="showLevels">Show Levels</button><img src = "../levels/images/right.png" id = "next"><img src = "../levels/images/down.png" id = "return"></div>
+    </div>
+</div>
+
+    
+  <script type = "text/javascript"  src="../lib/jquery-1.7.1.js"></script>
+  <script type = "text/javascript"  src="../lib/jquery.transform2d.js"></script>
+  <script type = "text/javascript"  src="../lib/raphael.js"></script>
+  <script type = "text/javascript"  src="../lib/imagesloaded.js"></script>
+  <script type = "text/javascript"  src="../lib/multidrag.js"></script>
+  
+  <script type = "text/javascript"  src="../workshop/layout.js"></script>
+  <script type = "text/javascript"  src="../workshop/evaluate.js"></script>
+  <script type = "text/javascript"  src="../workshop/drawcirc.js"></script>
+  <script type = "text/javascript"  src="../workshop/wireseg.js"></script>
+  <script type = "text/javascript"  src="../workshop/save.js"></script>
+  <script type = "text/javascript"  src="../workshop/eltgest.js"></script>
+  <script type = "text/javascript"  src="../workshop/gesture.js"></script>
+  <script type = "text/javascript"  src="../workshop/canvas.js"></script>
+  <script type = "text/javascript"  src="../workshop/circuit.js"></script>     
+  <script type = "text/javascript"  src="../levels/SequenceItem.js"></script>
+  <script type = "text/javascript"  src="../levels/Level.js"></script>
+  <script type = "text/javascript"  src="../levels/PreMadeLevels.js"></script>  
+  <script type = "text/javascript"  src="../levels/LevelSelector.js"></script>
+  <script type = "text/javascript"  src="../Floor/Candy.js"></script> 
+  <script type = "text/javascript"  src="../Floor/FactoryFloor.js"></script>
+  <script type = "text/javascript"  src="../Floor/floor.js"></script>
+  <script type = "text/javascript"  src="../levels/Clipboard.js"></script>
+  <script type = "text/javascript"  src="../tutorials/jquery-ui-1.8.20.custom.min.js"></script>
+  <script type = "text/javascript"  src="../tutorials/tutorial.js"></script>
+  <script type = "text/javascript"  src="../tutorials/filtering.js"></script>
+  <script type = "text/javascript"  src="../tutorials/convenience_operators.js"></script>
+  <script type = "text/javascript"  src="../tutorials/level3tutorial.js"></script>
+  <script type = "text/javascript"  src="../tutorials/level1tutorial.js"></script>
+  <script type = "text/javascript"  src="../tutorials/level2tutorial.js"></script>
+  <script type = "text/javascript"  src="../tutorials/level4tutorial.js"></script>
+  <script type = "text/javascript"  src="../tutorials/level6tutorial.js"></script>
+  <script type = "text/javascript"  src="../tutorials/level8tutorial.js"></script>
+  <script type = 'text/javascript' src="../tutorials/language_switcher.js"></script>
+
+ </body>
+</html> 
