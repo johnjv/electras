@@ -5,17 +5,27 @@
 		baseDirectory;
 
 	my.getRelativePath = function (desired) {
-		var cwd, cdirs, ddirs, i, j, ret;
-		if (!self || !self.location || !self.location.href) {
+		var browser, cwd, cdirs, ddirs, i, j, ret;
+		browser = self;
+		if (!browser || !browser.location || !browser.location.href) {
 			return '';
 		}
-		cwd = self.location.href;
+		cwd = browser.location.href;
 		i = cwd.indexOf('electras/');
 		if (i >= 0) {
 			cwd = cwd.substring(i + 'electras/'.length);
 		}
 		cdirs = cwd.split('/');
 		ddirs = desired.split('/');
+		if (i < 0) {
+			for (j = 0; j < cdirs.length; j += 1) {
+				if (cdirs[j] === ddirs[0]) {
+					cdirs.splice(0, j + 1);
+					ddirs.splice(0, 1);
+					break;
+				}
+			}
+		}
 		j = 0;
 		while (j < cdirs.length && j < ddirs.length && cdirs[j] === ddirs[j]) {
 			j += 1;

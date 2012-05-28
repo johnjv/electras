@@ -36,9 +36,9 @@
 			ex = x - elt.x;
 			ey = y - elt.y;
 			type = elt.type;
-			if (ex >= type.imgX && ey >= type.imgY
-					&& ex < type.imgX + type.imgWidth
-					&& ey < type.imgY + type.imgHeight) {
+			if (ex >= type.imgX && ey >= type.imgY &&
+					ex < type.imgX + type.imgWidth &&
+					ey < type.imgY + type.imgHeight) {
 				ret = elt;
 				return false;
 			}

@@ -120,8 +120,8 @@
 			ex = e.pageX;
 			ey = e.pageY;
 			fixEvent(self, e);
-			if (self.toolbarEnabled && (ey < canvas.offset().top
-					|| ex < canvas.offset().left)) {
+			if (self.toolbarEnabled && (ey < canvas.offset().top ||
+					ex < canvas.offset().left)) {
 				newGest = null;
 				$('.tool', toolbar).each(function (i, tool) {
 					var elt, offs, dx, dy, typeName, type;
@@ -129,8 +129,8 @@
 					offs = elt.offset();
 					dx = ex - offs.left;
 					dy = ey - offs.top;
-					if (dx >= 0 && dy >= 0 && dx < elt.width()
-							&& dy < elt.height()) {
+					if (dx >= 0 && dy >= 0 && dx < elt.width() &&
+							dy < elt.height()) {
 						typeName = elt.attr('type');
 						if (toolTypes.hasOwnProperty(typeName)) {
 							newGest = new my.AddGesture(self,
@@ -387,6 +387,12 @@
 			} else if (tool !== '') {
 				console.log('unknown tool type "' + tool + '"'); //OK
 			}
+		});
+	};
+
+	my.Workshop.prototype.setSize = function (width, height) {
+		this.paper.paintAfter(function () {
+			this.paper.setSize(width, height);
 		});
 	};
 }(Workshop, jQuery, raphwrap, multidrag));

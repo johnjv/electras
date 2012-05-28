@@ -44,7 +44,7 @@ var raphwrap = (function (Raphael, $) {
 				}
 			}
 		}
-	}
+	};
 
 	CanvasElt.prototype.attr = function (key, val) {
 		var curVal;
@@ -77,7 +77,7 @@ var raphwrap = (function (Raphael, $) {
 			}
 		}
 		this.wrap.dirty = true;
-	}
+	};
 
 	CanvasElt.prototype.paint = function (ctx) {
 		var key;
@@ -151,7 +151,7 @@ var raphwrap = (function (Raphael, $) {
 			}
 		}
 		this.dirty = false;
-	}
+	};
 
 	RaphWrap.prototype.path = function (points, attrs) {
 		var paper, path, i;
@@ -237,5 +237,5 @@ var raphwrap = (function (Raphael, $) {
 
 	return function (jqElt, width, height) {
 		return new RaphWrap(jqElt, width, height);
-	}
+	};
 }(Raphael || {}, jQuery));
