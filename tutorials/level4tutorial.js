@@ -22,9 +22,6 @@ var flavor_unearthed_events = function(){
 
   else if (empty_sensors.length == 2 || (empty_sensors.length == 1 && elements.sensor().active_connection().exists())){
     var operator = or_operators[0]
-    //this should show both of them
-    var input = operator.connects[0]
-    Tutorial.unhighlightSection()
     $.each(operator.connects,function(i, connection){
       if (connection.input){
         input = connection
@@ -35,9 +32,9 @@ var flavor_unearthed_events = function(){
   }
 
   else if ((empty_sensors && empty_sensors.length == 1) || elements.sensor().active_connection().exists()) {
-    //highlight the remaining outgoing sensor and incoming OR
+//    highlight the remaining outgoing sensor and incoming OR
     try {highlightSection(empty_sensors[0].connects[0], true)} catch(e){} //try because it might be active
-    highlightSection(Filters.find_connection(or_operators[0], '', true), true)
+    highlightSection(Filters.find_connection(or_operators[0], 'empty', true), true)
     createSpeechBubble(first_sensor, getBubble(4,5))
   }
 

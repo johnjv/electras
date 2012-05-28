@@ -2,7 +2,6 @@ var Translator = (function ($) {
   var returns = {}
 
   var current_language = 'EN'
-//  var languages = ['EN', 'FR', 'ES']
   var current_texts = {}
   var listeners = []
 
