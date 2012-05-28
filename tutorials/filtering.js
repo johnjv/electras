@@ -7,8 +7,7 @@ var Filters = (function ($) {
     } else if (type == 'output') {
       type = false
     }
-    //console.log(element, connectedTo, type)
-    return element.connects.filter(function(connection) {return connection_is_match(connection, {connection_type: type, connectedTo: connectedTo})})[0]
+    return element.connects.filter(function(connection) {return connection_is_match(connection, {input: type, connectedTo: connectedTo})})[0]
   }
 
   my.filter_elements = function(elements, criterion){ //both criterion and elements are arrays
@@ -40,7 +39,6 @@ var Filters = (function ($) {
       switch (connection_key) {
         case 'input':
           if(connection_value != connection.input){this_is_a_match = false}
-          //console.log(connection_value, connection, this_is_a_match)
           break;
         case 'connectedTo':
           var one_matches = false;
@@ -55,7 +53,6 @@ var Filters = (function ($) {
           break;
       }
     });
-    //console.log("what connection_is_match returns:  ", connection, criteria, this_is_a_match)
     return this_is_a_match
   }
 
@@ -91,11 +88,11 @@ var Filters = (function ($) {
 //shortcuts and standins
 
 var highlightSection = function(highlighted, isCircular){
-  var params = make_parametric(highlighted, isCircular)
+  var params = parametric_to_square(highlighted, isCircular)
   Tutorial.highlightSections([params])
 }
 
-var make_parametric = function(highlighted, isCircular){
+var parametric_to_square = function(highlighted, isCircular){
   params = {}
   params.x = highlighted.x - highlighted.r
   params.y = highlighted.y - highlighted.r

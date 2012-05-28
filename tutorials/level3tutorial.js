@@ -22,7 +22,7 @@ var soyl_not_green_events = function(){
     //must find a way to capture the INPUT, not the OUTPUT
     var operator_input = Filters.find_connection(elements.NOT().elements[0], 'empty', 'input')//find_incoming(elements.NOT().input('empty'), 'empty')
     var sensor_output = Filters.find_connection(elements.sensor('G').elements[0], 'empty', 'output')
-    highlightSections([make_parametric(operator_input, true), make_parametric(sensor_output, true)])
+    highlightSections([parametric_to_square(operator_input, true), parametric_to_square(sensor_output, true)])
 //    highlightSection(operator_input, true)
 //    highlightSection(sensor_output, true)
     createSpeechBubble(first_sensor, getBubble(3,4)) ;
@@ -33,7 +33,7 @@ var soyl_not_green_events = function(){
     //if the first part of the operator is filled in, but either the outgoing part of the NOT operator or the incoming part of the lightbulb is still empty
     var operator_output = Filters.find_connection(elements.NOT().output('empty').elements[0], 'empty', 'output')
     var lightbulb_input = elements.lightbulb().first_connection()
-    highlightSections([make_parametric(operator_output, true), make_parametric(lightbulb_input, true)])
+    highlightSections([parametric_to_square(operator_output, true), parametric_to_square(lightbulb_input, true)])
 //    highlightSection(operator_output, true)
 //    highlightSection(lightbulb_input, true)
     createSpeechBubble(first_sensor, getBubble(3,5))
