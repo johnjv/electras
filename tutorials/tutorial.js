@@ -144,6 +144,10 @@ Tutorial = {};
 		$('div#container').css('opacity', '.8');
 	}
 
+  var script_hash = {
+
+  }
+
   var call_script = function(script_name){
     try {
       $('#container').hide()
