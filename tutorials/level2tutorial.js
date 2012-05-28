@@ -11,7 +11,7 @@ var its_a_start_events = function(){
     $.each(empty_sensors, function(i, sensor){
 //console.log(sensor)
         var highlighted_thing = Filters.find_connection(sensor,'empty',false)
-        var parametric_thing = make_parametric(highlighted_thing, true)
+        var parametric_thing = parametric_to_square(highlighted_thing, true)
         params.push(parametric_thing)
     })
     highlightSections(params)
