@@ -1,4 +1,4 @@
-(function (my, $, raphael, multidrag) {
+(function (my, $, raphwrap, multidrag) {
 	"use strict";
 	var toolTypes = {
 		'and': new my.ElementType('and', 'gateand', -60, -25, 50, 50, [
@@ -108,7 +108,7 @@
 		this.errElt = null;
 		this.errCircs = [];
 		this.gesture = new my.NullGesture(self);
-		this.paper = raphael(canvas.get(0), canvas.width(), canvas.height());
+		this.paper = raphwrap(canvas.get(0), canvas.width(), canvas.height());
 		this.layout = new my.Layout();
 		this.state = my.newInitialState(this.layout);
 		this.changeListeners = [];
@@ -155,11 +155,13 @@
 				gest = self.gesture;
 			}
 
-			if (gest.mouseDown) {
-				gest.mouseDown(self, e);
-			} else {
-				gest.mouseDrag(self, e);
-			}
+			self.paper.repaintAfter(function () {
+				if (gest.mouseDown) {
+					gest.mouseDown(self, e);
+				} else {
+					gest.mouseDrag(self, e);
+				}
+			});
 			self.fireChange();
 		}
 
@@ -168,7 +170,9 @@
 			e.preventDefault();
 			if (gest) {
 				fixEvent(self, e);
-				gest.mouseDrag(self, e);
+				self.paper.repaintAfter(function () {
+					gest.mouseDrag(self, e);
+				});
 			}
 		};
 
@@ -177,8 +181,10 @@
 			e.preventDefault();
 			if (gest) {
 				fixEvent(self, e);
-				gest.mouseDrag(self, e);
-				gest.mouseUp(self, e);
+				self.paper.repaintAfter(function () {
+					gest.mouseDrag(self, e);
+					gest.mouseUp(self, e);
+				});
 			}
 			self.fireChange();
 		};
