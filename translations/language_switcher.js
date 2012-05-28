@@ -2,12 +2,11 @@ var Translator = (function ($) {
   var returns = {}
 
   var current_language = 'EN'
-  var languages = ['EN', 'FR', 'ES']
+//  var languages = ['EN', 'FR', 'ES']
   var current_texts = {}
   var listeners = []
 
   returns.getText = function(){
-    console.log("the arguments:", arguments)
     var i = 0;
     var text = current_texts;
     while (i < arguments.length){
@@ -26,15 +25,14 @@ var Translator = (function ($) {
     current_language = language_code
 
     current_texts = hashify($('#translations #' + language_code))
-    console.log("About to listen to the listeners", listeners)
-    listeners.forEach(function(listener){
+    $.each(listeners, function(i, listener){
         listener.call()
     })
 
   }
 
   returns.list_languages = function(){
-    return languages
+    return $('#translations').children().map(function(i, child){return child.id})
   }
 
   returns.addListener = function(function_added){
@@ -60,44 +58,3 @@ var Translator = (function ($) {
 $(document).ready(function(){
   Translator.changeLanguage('EN')
 })
-
-//
-//$(document).ready(function(){
-//
-//  $('#circuit').append('<div id="language">' +
-//      '<div class="EN">English</div>' +
-//      '<div class="FR">Francais</div>' +
-//      '<div class="ES">Espanol</div>' +
-//    '</div>')
-//
-//  //add more besides click, like touch
-//  $('#circuit #language').children().on('click', function(event){
-//    var text_html = $('#translations #' + this.className)
-//    text_hash = hashify(text_html)
-//    Tutorial.circuitChanged()
-//  });
-//
-//  text_hash = hashify($('#translations #EN'))
-//});
-
-
-
-//var getBubble = function(tutNumber, bubbleNumber){
-//
-//  var command = ['tutorial' + tutNumber, 'bubble' + bubbleNumber]
-//  return getText(command)
-//}
-
-//var getText = function(param_array){
-//  var text = text_hash
-//  $.each(param_array, function(i, param){
-//    try {
-//    text = text[param]
-//    } catch (e) {
-//      console.log("Error finding ", param, " in", param_array+ ".  The error is ", e)
-//      return null
-//    }
-//  })
-//  return text
-//  //generalized function that grabs arbitrary text of arbitrary depth from
-//}
