@@ -47,7 +47,8 @@ $(document).ready(function(){
             }		
             LevelSelector.setPage(num); 
             $('.hintText').hide();
-	        $('#hint').text("Show Hint");
+            $('#hint').text("Hint");
+	        
 	    }
 	}
 	
@@ -66,20 +67,22 @@ $(document).ready(function(){
 	        }
 	        if(level.complete){
 	            $('#row' + level.levelid).append('<td><img id = "check" src = "../levels/images/checkmark.png"></td>');
-	        }
-	        $('#factory').hide();        
+	        }	                
             $('#cliptip').hide();     
-            $('#container').hide(); 
+            $('#container').hide();            
 	    }
 	});
 	
-	$('#circuit').click(function(){	        
-	    $('#clipboard').animate({bottom: '-=90%'}, 1000, function(){
-	        $('#clipboard').hide();
-	        $('#cliptip').show();	
-	        $('#clipboard').css('bottom', '-90%');
-	    });	
-	         
+	$('#circuit').click(function(){
+	    $('#clipboard').hide();
+        $('#cliptip').show();	
+        $('#clipboard').css('bottom', '-90%');
+	});
+	
+	$('#factoryParent').click(function(){	  
+	    $('#clipboard').hide();
+        $('#cliptip').show();	
+        $('#clipboard').css('bottom', '-90%');
 	});
 	
 	$("#tip").click(function(){
@@ -91,15 +94,15 @@ $(document).ready(function(){
 	
 	$("#hint").click(function(){
 	    if(LevelSelector.getCurrentPage() >= 3){
-	        if($(this).text() === "Show Hint"){		
+	        if($('#hint').text() === "Hint"){
 	            $('.hintText').show();
-	            $(this).text("Hide Hint");
+	            $('#hint').text("Hide");
 	        }
 	        else{
 	            $('.hintText').hide();
-	            $(this).text("Show Hint");
-	        }	
-	    }	
+	            $('#hint').text("Hint");
+	        }
+	    }	    
 	}); 
 
     function getHint(){
@@ -139,7 +142,6 @@ $(document).ready(function(){
 			src.hide();
 			src.css('z-index', 0);
 		});
-		console.log('brk');
 	};
 
 	function transitionPrev(src, dst) {
@@ -160,7 +162,7 @@ $(document).ready(function(){
 
     function setUpLevel(){ 
         Placer.place();     
-        $('#factory').hide();
+        //$('#factory').hide();
         $('#cliptip').hide();
         makePages();
         $('.page').hide();    
@@ -170,7 +172,8 @@ $(document).ready(function(){
         $('#showLevels').fadeTo('slow', '0.5');
         $('#prev').fadeTo('slow', '0.5');
         $('#return').fadeTo('slow', '0.5');
-        $('#hintText').hide();     
+        $('#hintText').hide();  
+        
     }
 
     function makePages() {    
@@ -207,8 +210,10 @@ $(document).ready(function(){
                 $('#hint').fadeTo('slow', '1');
                 $('#showLevels').fadeTo('slow', '1');
                 $('#prev').fadeTo('slow', '1');
-                Placer.place(); 
-                $('#factory').show();                
+                $('#factory').show();     
+                Placer.place();
+                //$('#circuit').hide(); 
+                           
             });
         });
         
@@ -219,14 +224,15 @@ $(document).ready(function(){
                 $('#hint').fadeTo('slow', '1');
                 $('#showLevels').fadeTo('slow', '1');
                 $('#prev').fadeTo('slow', '1');
-                Placer.place();
                 $('#factory').show();
+                Placer.place();
+                //$('#circuit').hide();
                 
             });   
         });
     }
-
 });	
+
 /*
  function resizeClipboard(){
         "use strict";
@@ -234,23 +240,47 @@ $(document).ready(function(){
         var clipboard = $('#clipboard');
         var container = $('#main_container');
         var clipPos = clipboard.position();
-        clip.width(container.width() * 0.3);
-        clip.height(container.height() * 0.5);
+        clip.width(container.width() * 0.25);
+        clip.height(container.height() * 0.54);
         clipPos.left = container.width() * 0.4;
         clipPos.top = container.width() * 0.1;
         clipboard.css('left', clipPos.left).css('top', clipPos.top);                
     } 
     
-  function resizeClipboard(){
-        "use strict";
-        var clip = $('img#clip');
-        var clipboard = $('#clipboard');
-        var container = $('#main_container');
-        var clipPos = clipboard.position();
-        clip.width(container.width() * 0.3);
-        clip.height(container.height() * 0.5);
-        clipPos.left = container.width() * 0.4;
-        clipPos.top = container.width() * 0.1;
-        clipboard.css('left', clipPos.left).css('top', clipPos.top);                
+  function resizeCliporder(){
+        "use strict";      
+        var cliporder = $('#clipOrder');
+        var container = $('img#clip');    
+        var clipPos = cliporder.position();
+        cliporder.width(container.width() * 0.8);
+        cliporder.height(container.height() * 0.7);
+        $('.page').height(container.height() * 0.7);
+        clipPos.left = container.width() * 0.07;
+        clipPos.top = container.height() * 0.15;
+        cliporder.css('left', clipPos.left).css('top', clipPos.top);                
     }
-         */
+    
+    function resizeClipbuttons(){
+       "use strict";
+        var clipbuttons = $('#clipButtons');
+        var left = $('img#prev');
+        var right = $('img#next');        
+        var show = $('#showLevels');
+        var hint = $('#hint');
+        var container = $('img#clip');
+        var clipPos = clipbuttons.position();
+        clipbuttons.width(container.width() * 0.6);
+        clipbuttons.height(container.height() * 0.2);
+        clipPos.left = container.width() * 0.19;
+        clipPos.top = container.height() * 0.87;
+        clipbuttons.css('left', clipPos.left).css('top', clipPos.top);
+        left.css('height', container.height() * 0.02); 
+        left.css('width', container.width() * 0.1); 
+        right.css('height', container.height() * 0.02); 
+        right.css('width', container.width() * 0.1);         
+        show.css('width', container.width() * 0.2);
+        hint.css('width', container.width() * 0.2); 
+        show.css('height', container.height() * 0.05);
+        hint.css('height', container.height() * 0.05); 
+    }
+    */

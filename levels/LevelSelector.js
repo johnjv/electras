@@ -24,13 +24,16 @@ var LevelSelector = (function($) {
     };
     
     my.windowResized = function () {
-        var par, self;
+        var par, self, container, clipPos;
 	    self = $('#clipboard');
-	    par = self.parent();
-	    self.width(par.width());
-	    self.height(par.height());
-	    console.log("here");
-//	    resizeClipboard();
+	    container = $('#main_container');
+	    clipPos = self.position();       
+        clipPos.left = container.width() * 0.4;
+        clipPos.top = container.height() * 0.15;
+        self.css('left', clipPos.left).css('top', clipPos.top);	    
+	    /*resizeClipboard();
+	    resizeCliporder();
+	    resizeClipbuttons();*/
 	};
     
     return my;
