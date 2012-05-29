@@ -89,6 +89,33 @@ Tutorial = {};
 		blink(3000, 1000);
 		
 	}
+	
+	function registerDraggable(){
+		var body, canv, paper, onDrag, onUp;
+
+		body = $('body');
+		canv = $('#container');
+		onDrag = null;
+		onUp = null;
+		onRelease = null;
+
+		function MoveBubble(e) {
+			e.preventDefault();
+			this.offsetDiff = {diffX: e.pageX - canv.offset().left, diffY: e.pageY - canv.offset().top};
+		};
+
+		MoveBubble.prototype.onDrag = function (e) {
+			var newX = e.pageX - this.offsetDiff.diffX;
+			var newY = e.pageY - this.offsetDiff.diffY
+			e.preventDefault();
+			if(newX > 0 && newY > 0 && (newX + canv.outerWidth()) < (body.width()) && (newY + canv.outerHeight()) < body.height()){
+				canv.offset({left: newX, top: newY});
+				this.offsetDiff = {diffX: e.pageX - canv.offset().left, diffY: e.pageY - canv.offset().top};
+			}
+		};
+
+		multidrag.register(canv, MoveBubble);
+	}
 
 	/*create temporary speech bubble*/
 	function createSpeechBubble(target, text){
@@ -140,13 +167,14 @@ Tutorial = {};
 			bubbleContainer.text(text);
 			bubbleContainer.offset({left: x, top: y});
 		}
-		bubbleContainer.draggable({scroll: false, containment: $('body')});
+		//bubbleContainer.draggable({scroll: false, containment: $('body')});
+		registerDraggable();
 		$('div#container').css('opacity', '.8');
 	}
 
-  var script_hash = {
+  //var script_hash = {
 
-  }
+  //}
 
   var call_script = function(script_name){
     try {
