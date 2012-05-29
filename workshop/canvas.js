@@ -313,7 +313,7 @@
 			}
 		}
 
-		if (locs !== null) {
+		if (locs !== null && locs.length >= 0) {
 			if (locs[0].length) {
 				this.setErrorCircles(locs);
 			} else {
