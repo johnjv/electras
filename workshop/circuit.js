@@ -84,10 +84,8 @@ var Circuit = (function ($, Workshop) {
 
 		back = $('<img></img>')
 			.attr('src', Workshop.getResourcePath('to-floor.svg'))
-			.css('position', 'absolute')
-			.css('width', '40px')
-			.css('bottom', '10px')
-			.css('left', '8px')
+			.css({position: 'absolute', width: '40px', bottom: '10px',
+				left: '8px'})
 			.click(function (e) {
 				var xform, invert;
 				e.preventDefault();
