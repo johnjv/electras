@@ -40,7 +40,7 @@
 
 #trash{
 	position: absolute;
-	z-index:6;
+	z-index:-6;
 	background: transparent;
 }
 
@@ -50,14 +50,6 @@
 	left: 80%;
 	top: 80%;
 }
-
-
-
-#chalkboard{
-	position: absolute;
-}
-
-
 
 .srcCandy{
 	width: 20px;
@@ -86,8 +78,8 @@
 #tally{
 	position: absolute;
 	z-index:7;
-	left: 10%;
-	top:70%;
+	left: 60%;
+	top:10%;
 }
 #tally td{
 	/*border-width: 100px;*/
