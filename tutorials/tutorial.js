@@ -97,7 +97,6 @@ Tutorial = {};
 		canv = $('#container');
 		onDrag = null;
 		onUp = null;
-		onRelease = null;
 
 		function MoveBubble(e) {
 			e.preventDefault();
