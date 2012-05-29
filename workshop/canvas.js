@@ -155,7 +155,7 @@
 				gest = self.gesture;
 			}
 
-			self.paper.repaintAfter(function () {
+			self.paper.paintAfter(function () {
 				if (gest.mouseDown) {
 					gest.mouseDown(self, e);
 				} else {
@@ -170,7 +170,7 @@
 			e.preventDefault();
 			if (gest) {
 				fixEvent(self, e);
-				self.paper.repaintAfter(function () {
+				self.paper.paintAfter(function () {
 					gest.mouseDrag(self, e);
 				});
 			}
@@ -181,7 +181,7 @@
 			e.preventDefault();
 			if (gest) {
 				fixEvent(self, e);
-				self.paper.repaintAfter(function () {
+				self.paper.paintAfter(function () {
 					gest.mouseDrag(self, e);
 					gest.mouseUp(self, e);
 				});
@@ -225,7 +225,7 @@
 
 		self = this;
 		$('img', this.canvas).remove();
-		this.paper.repaintAfter(function () {
+		this.paper.paintAfter(function () {
 			self.paper.clear();
 
 			self.layout = layout;
@@ -391,8 +391,10 @@
 	};
 
 	my.Workshop.prototype.setSize = function (width, height) {
-		this.paper.paintAfter(function () {
-			this.paper.setSize(width, height);
+		var paper;
+		paper = this.paper;
+		paper.paintAfter(function () {
+			paper.setSize(width, height);
 		});
 	};
 }(Workshop, jQuery, raphwrap, multidrag));

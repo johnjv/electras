@@ -79,6 +79,7 @@ var Circuit = (function ($, Workshop) {
 						Tutorial.circuitChanged();
 				});
 			}
+			my.workshop = workshop;
 		}
 
 		back = $('<img></img>')
