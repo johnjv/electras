@@ -1,20 +1,28 @@
+
 var Translator = (function ($) {
   var returns = {}
 
   var current_language = 'EN'
   var current_texts = {}
+  var english_texts = {}
   var listeners = []
 
   returns.getText = function(){
     var i = 0;
     var text = current_texts;
     while (i < arguments.length){
-      try {
+      if (text.hasOwnProperty(arguments[i])) {
         text = text[arguments[i]]
-      } catch (e) {
-        console.log("Error finding ", arguments[i-1],  ".  The error is ", e)
-        return null
+      } else {
+        console.log("Error finding ", arguments[i],  ".  The error is ", e,".  Replacing with English text")
+        text = english_texts[arguments[i]]
       }
+//      try {
+//        text = text[arguments[i]]
+//      } catch (e) {
+//        console.log("Error finding ", arguments[i-1],  ".  The error is ", e)
+//        return null
+//      }
       i++;
     }
     return text
@@ -51,9 +59,10 @@ var Translator = (function ($) {
     }
   }
 
+  $(document).ready(function(){
+    Translator.changeLanguage('EN')
+    english_texts = hashify($('#translations #EN'))
+  })
+
   return returns;
 }(jQuery))
-
-$(document).ready(function(){
-  Translator.changeLanguage('EN')
-})

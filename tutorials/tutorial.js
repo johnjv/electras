@@ -93,7 +93,7 @@ Tutorial = {};
 	function registerDraggable(){
 		var body, canv, paper, onDrag, onUp;
 
-		body = $('body');
+		body = $('#circuit');
 		canv = $('#container');
 		onDrag = null;
 		onUp = null;
@@ -113,7 +113,9 @@ Tutorial = {};
 			}
 		};
 
+    console.log("We're about to register it!!!")
 		multidrag.register(canv, MoveBubble);
+    console.log("We registered it")
 	}
 
 	/*create temporary speech bubble*/
