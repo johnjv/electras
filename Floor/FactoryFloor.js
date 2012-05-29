@@ -7,7 +7,7 @@ $("#start").click(function(){
 	function startMachine(){
 		var count =0;
 		var candies = getLevelType();
-		var flag = $('<img src="../Floor/resource-image/envx.png" id="flag"></img>');
+		var flag = $('<img src="../Floor/resource-image/envx.png" id="flag">');
 	
 		function startNext(){
 			
@@ -85,8 +85,8 @@ $("#start").click(function(){
 	
 	function insertInfoIntoTally(circuitSays, levelSays){
 		"use strict";
-		var xflag = '<img src="../Floor/resource-image/envx.png" id="xflag"></img>';
-		var checkmark = '<img src="../Floor/resource-image/checkmark.png" id="checkmark"></img>';
+		var xflag = '<img src="../Floor/resource-image/envx.png" id="xflag">';
+		var checkmark = '<img src="../Floor/resource-image/checkmark.png" id="checkmark">';
 		
 		
 		if(circuitSays) { $("#srow").append("<td>" + checkmark + "</td>");}
@@ -208,7 +208,7 @@ var FactoryFloor = (function($) {
 			leverLocation.x = leverPos.left;
 			leverLocation.y = leverPos.top;
 			leverLocation.width = $("#lever").width();
-			leverlocation.height = $("#lever").height();
+			leverLocation.height = $("#lever").height();
 			return leverLocation;                
 		};
 
