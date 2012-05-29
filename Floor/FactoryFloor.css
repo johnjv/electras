@@ -1,0 +1,111 @@
+#factoryParent {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+}
+
+#factory{
+	position: relative;
+}
+
+#box{
+	position: absolute;
+	z-index:0;
+}
+
+#belt{
+	position: absolute;
+	z-index: 1;
+}
+
+.candy{
+	position: absolute;
+	z-index:2;
+}
+
+#dropper{
+	position: absolute;
+	z-index: 3;
+}
+
+#glove{
+	position: absolute;
+	z-index:4;
+}
+
+#punchingbox{
+	position: absolute;
+	z-index:5;
+}
+
+#trash{
+	position: absolute;
+	z-index:6;
+	background: transparent;
+}
+
+#start{
+	position: absolute;
+	z-index:10;
+	left: 80%;
+	top: 80%;
+}
+
+
+
+#chalkboard{
+	position: absolute;
+}
+
+
+
+.srcCandy{
+	width: 20px;
+	position: absolute;
+}
+
+#flag{
+	position: absolute;
+	z-index:8;
+}
+#order{
+	position: absolute;
+	z-index:7;
+}
+
+#xflag{
+	position: absolute;
+	width: 20px;
+}
+
+#checkmark{
+	position: absolute;
+	width: 20px;
+}
+
+#tally{
+	position: absolute;
+	z-index:7;
+	left: 10%;
+	top:70%;
+}
+#tally td{
+	/*border-width: 100px;*/
+	border-style: inset;
+	padding: 10px;
+	border-width: 0px;
+	width: 25px;
+	height: 25px;
+	vertical-align: middle;
+	empty-cells: hide;
+}
+
+.fcol{
+	background-color: #C0C0C0;
+	vertical-align: middle;
+	white-space: nowrap;
+}
+
+.upperrow{
+	border-top: solid;
+}
