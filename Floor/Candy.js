@@ -64,7 +64,7 @@ Candy.prototype.getPicSource = function(){
 Candy.prototype.checkCandy = function(){
 	"use strict";
 	var value;
-	if(this.circuitSays === false) {
+	if(this.circuitSays.accept === false) {
 		if(this.levelSays) {
 			value = 0;
 			console.log("This candy should not be accepted by machine, but the level says it should, pushed away and marked with an X");
