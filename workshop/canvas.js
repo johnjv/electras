@@ -61,22 +61,6 @@
 
 	var ERROR_CIRCLE_RADIUS = 10;
 
-	var ERR_MESSAGES = {
-		connect_inputs: 'Cannot connect inputs',
-		connect_outputs: 'Cannot connect outputs',
-		connect_self: 'Cannot connect element to itself',
-		connect_loop: 'Cannot create loop',
-		double_input: 'Input can have only one connection',
-
-		port_on_wire: 'Port cannot be near wire',
-		port_on_element: 'Port cannot overlap element',
-		element_on_wire: 'Wire cannot cross element',
-		element_on_element: 'Elements cannot overlap',
-
-		move_frozen: 'Element is frozen and cannot be moved',
-		remove_frozen: 'Element is frozen and cannot be removed'
-	};
-
 	function fixEvent(workshop, e) {
 		var poffs;
 		poffs = workshop.canvas.offset();
@@ -105,6 +89,7 @@
 		this.toolbarEnabled = true;
 		this.canvas = canvas;
 		this.errContainer = errContainer;
+		this.errMsg = null;
 		this.errElt = null;
 		this.errCircs = [];
 		this.gesture = new my.NullGesture(self);
@@ -191,6 +176,18 @@
 
 		multidrag.register(jqElt, GestureHandler);
 
+		Translator.addListener(function () {
+			var errMsg, errElt, text;
+			errMsg = self.errMsg;
+			errElt = self.errElt;
+			if (errMsg !== null && errElt !== null) {
+				text = Translator.getText('circuit', errMsg);
+				if (text === null) {
+					text = errMsg;
+				}
+				errElt.text(text);
+			}
+		});
 	};
 
 	my.Workshop.prototype.addChangeListener = function (listener) {
@@ -275,6 +272,7 @@
 			this.setErrorCircles([]);
 			if (oldElt) {
 				this.errElt = null;
+				this.errMsg = null;
 				oldElt.stop().fadeOut(100, function () {
 					oldElt.remove();
 				});
@@ -282,18 +280,10 @@
 			return;
 		}
 
-		i = msg.lastIndexOf('.');
-		if (i >= 0) {
-			key = msg.substring(i + 1);
-		} else {
-			key = msg;
-		}
-		if (ERR_MESSAGES.hasOwnProperty(key)) {
-			text = ERR_MESSAGES[key];
-		} else {
+		text = Translator.getText('circuit', msg);
+		if (text === null) {
 			text = msg;
 		}
-		// console.log(text, loc); //OK
 		if (oldElt === null) {
 			oldText = '';
 		} else {
@@ -302,6 +292,7 @@
 		if (text !== oldText) {
 			errElt = $('<span></span>').addClass('circ_error').text(text).hide();
 			this.errElt = errElt;
+			this.errMsg = msg;
 			this.errContainer.append(errElt);
 			if (oldText === '') {
 				errElt.fadeIn(100);
@@ -313,12 +304,14 @@
 			}
 		}
 
-		if (locs !== null && locs.length >= 0) {
+		if (typeof locs !== 'undefined' && locs !== null && locs.length >= 0) {
 			if (locs[0].length) {
 				this.setErrorCircles(locs);
 			} else {
 				this.setErrorCircles([locs]);
 			}
+		} else {
+			this.setErrorCircles([]);
 		}
 	};
 
