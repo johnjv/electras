@@ -58,7 +58,7 @@
 			jy1 = jy0 + other.type.imgHeight;
 			if (ix0 < jx1 && jx0 < ix1 && iy0 < jy1 && jy0 < iy1) {
 				// other's image intersects with this image
-				retErr = 'circ.err.element_on_element';
+				retErr = 'err_element_on_element';
 				retLoc = [(Math.max(ix0, jx0) + Math.min(ix1, jx1)) / 2,
 					(Math.max(iy0, jy0) + Math.min(iy1, jy1)) / 2];
 				return false;
@@ -69,7 +69,7 @@
 				ky = other.y + kp.y;
 				if (kx >= ix0 && kx < ix1 && ky >= iy0 && ky < iy1) {
 					// other's port intersects with this image
-					retErr = 'circ.err.port_on_element';
+					retErr = 'err_port_on_element';
 					retLoc = [kx, ky];
 					return false;
 				}
@@ -80,7 +80,7 @@
 				iy = y + ip.y;
 				if (ix >= jx0 && ix < jx1 && iy >= jy0 && iy < jy1) {
 					// this element's port intersects with other's image
-					retErr = 'circ.err.port_on_element';
+					retErr = 'err_port_on_element';
 					retLoc = [ix, iy];
 					return false;
 				}
@@ -98,22 +98,22 @@
 							// ports incompatible (both inputs/both outputs)
 							retLoc = [[ix, iy], [kx, ky]];
 							if (kp.input) {
-								retErr = 'circ.err.connect_inputs';
+								retErr = 'err_connect_inputs';
 							} else {
-								retErr = 'circ.err.connect_outputs';
+								retErr = 'err_connect_outputs';
 							}
 							return false;
 						}
 						if (kp.input && kp.ports.length > 0 &&
 								kp.ports[0] !== ip) {
 							// the destination port is already connected
-							retErr = 'circ.err.double_input';
+							retErr = 'err_double_input';
 							retLoc = [kx, ky];
 							return false;
 						} else if (ip.input && ip.ports.length > 0 &&
 									ip.ports[0] !== kp) {
 							// the source port is already connected
-							retErr = 'circ.err.double_input';
+							retErr = 'err_double_input';
 							retLoc = [ix, iy];
 							return false;
 						}
@@ -143,7 +143,7 @@
 			isect = my.Wire.clip(ix0, iy0, type.imgWidth, type.imgHeight,
 				x0, y0, x1, y1);
 			if (isect !== null) {
-				retErr = 'circ.err.element_on_wire';
+				retErr = 'err_element_on_wire';
 				retLoc = my.Wire.midpoint(isect);
 				return false;
 			}
@@ -156,7 +156,7 @@
 					// don't worry that the port is close to the wire
 					if (portsConnectedTo[p0.id] !== i &&
 							portsConnectedTo[p1.id] !== i) {
-						retErr = 'circ.err.port_on_wire';
+						retErr = 'err_port_on_wire';
 						retLoc = [x + pi.x, y + pi.y];
 						return false;
 					}
@@ -187,7 +187,7 @@
 				isect = my.Wire.clip(jx, jy, other.type.imgWidth,
 					other.type.imgHeight, x0, y0, x1, y1);
 				if (isect !== null) {
-					retErr = 'circ.err.element_on_wire';
+					retErr = 'err_element_on_wire';
 					retLoc = my.Wire.midpoint(isect);
 					return false;
 				}
@@ -203,7 +203,7 @@
 					}
 					d2 = my.Wire.dist2(xi, yi, x0, y0, x1, y1);
 					if (d2 <= maxD2) {
-						retErr = 'circ.err.port_on_wire';
+						retErr = 'err_port_on_wire';
 						retLoc = [xi, yi];
 						return false;
 					}
@@ -234,7 +234,7 @@
 			});
 			$.each(prev, function (id, prevLoc) {
 				if (pfor.hasOwnProperty(id) && parseInt(id, 10) !== elt.id) {
-					retErr = 'circ.err.connect_loop';
+					retErr = 'err_connect_loop';
 					retLoc = [prevLoc, pfor[id]];
 					return false;
 				}
