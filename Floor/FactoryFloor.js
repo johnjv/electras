@@ -208,7 +208,7 @@ var FactoryFloor = (function($) {
 			leverLocation.x = leverPos.left;
 			leverLocation.y = leverPos.top;
 			leverLocation.width = $("#lever").width();
-			leverlocation.height = $("#lever").height();         
+			leverlocation.height = $("#lever").height();
 			return leverLocation;                
 		};
 
