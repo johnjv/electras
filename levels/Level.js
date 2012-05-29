@@ -27,7 +27,6 @@ Level.prototype.analyze = function (){
             }	            
         }	              
     levelSays = correct;
-    
     evaluator = Circuit.getEvaluator(); 
     circuitSays =  evaluator.evaluate(sequence[i]);
     sequenceItem = new SequenceItem(sequence[i], levelSays, circuitSays);	   
