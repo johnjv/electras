@@ -301,16 +301,12 @@
 	};
 
 	my.EraseGesture.prototype.mouseDrag = function (info, e) {
-		var offs0, ex, ey, x, y, elt, w;
+		var offs0, ex, ey, elt, w;
 
 		ex = e.circuitX;
 		ey = e.circuitY;
 
-		offs0 = info.canvas.offset();
-		x = offs0.left + ex - 0.3 * 50.0;
-		y = offs0.top + ey - 50;
-
-		this.dragImg.offset({left: x, top: y});
+		this.dragImg.css({left: ex - 0.3 * 50.0, top: ey - 50});
 
 		elt = findElement(info.layout, ex, ey);
 		if (elt !== null) {

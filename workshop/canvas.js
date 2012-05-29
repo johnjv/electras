@@ -78,7 +78,7 @@
 
 		self = this;
 		jqElt.addClass('circ_container');
-		toolbar = $('<div></div>').addClass('circ_toolbar');
+		toolbar = $('<div></div>').addClass('toolbar');
 		canvas = $('<div></div>').addClass('circ_canvas');
 		errContainer = $('<div></div>').addClass('circ_error_parent');
 		jqElt.append(toolbar);
@@ -97,16 +97,18 @@
 		this.layout = new my.Layout();
 		this.state = my.newInitialState(this.layout);
 		this.changeListeners = [];
+		this.setSize(jqElt.width(), jqElt.height());
 
 		function GestureHandler(e) {
-			var ex, ey, gest, newGest, toolOffs;
+			var ex, ey, gest, newGest, toolOffs, canvOffs;
 
 			e.preventDefault();
 			ex = e.pageX;
 			ey = e.pageY;
 			fixEvent(self, e);
-			if (self.toolbarEnabled && (ey < canvas.offset().top ||
-					ex < canvas.offset().left)) {
+			canvOffs = canvas.offset();
+			if (self.toolbarEnabled && (ey < canvOffs.top ||
+					ex < canvOffs.left)) {
 				newGest = null;
 				$('.tool', toolbar).each(function (i, tool) {
 					var elt, offs, dx, dy, typeName, type;
@@ -316,25 +318,24 @@
 	};
 
 	my.Workshop.prototype.setErrorCircles = function (locs) {
-		var r, circs, numOld, num, offs0, i, loc, x, y, circ;
+		var r, circs, numOld, num, i, loc, x, y, circ;
 		r = ERROR_CIRCLE_RADIUS;
 		circs = this.errCircs;
 		numOld = circs.length;
 		num = locs.length;
-		offs0 = this.canvas.offset();
 		for (i = 0; i < num; i += 1) {
 			loc = locs[i];
-			x = offs0.left + loc[0] - r;
-			y = offs0.top + loc[1] - r;
+			x = loc[0] - r;
+			y = loc[1] - r;
 			if (i < numOld) {
-				circs[i].show().offset({left: x, top: y});
+				circs[i].css({left: x, top: y}).show();
 			} else {
 				circ = ($('<img></img>').fadeTo(0, 0.5)
 					.attr('src', my.getResourcePath('err-circ.svg'))
 					.addClass('error_circle')
-					.width(2 * r));
+					.width(2 * r)
+					.css({left: x, top: y}));
 				this.canvas.append(circ);
-				circ.offset({left: x, top: y});
 				circs.push(circ);
 			}
 		}
@@ -384,10 +385,26 @@
 	};
 
 	my.Workshop.prototype.setSize = function (width, height) {
-		var paper;
+		var toolbar, canvas, paper, canvasX, canvasY;
+		toolbar = this.toolbar;
+		canvas = this.canvas;
 		paper = this.paper;
+		if (width > height) { // toolbar at left side
+			if (!toolbar.hasClass('toolbar_vert')) {
+				toolbar.removeClass('toolbar_horz').addClass('toolbar_vert');
+			}
+			canvasX = Math.min(200, toolbar.outerWidth());
+			canvasY = 0;
+		} else { // toolbar at top
+			if (!toolbar.hasClass('toolbar_horz')) {
+				toolbar.removeClass('toolbar_vert').addClass('toolbar_horz');
+			}
+			canvasX = 0;
+			canvasY = Math.min(200, toolbar.outerHeight());
+		}
+		canvas.css({left: canvasX, top: canvasY});
 		paper.paintAfter(function () {
-			paper.setSize(width, height);
+			paper.setSize(width - canvasX, height - canvasY);
 		});
 	};
 }(Workshop, jQuery, raphwrap, multidrag));

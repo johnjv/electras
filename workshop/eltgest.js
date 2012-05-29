@@ -296,13 +296,17 @@
 	}
 
 	my.MoveGesture = function (info, elt, e) {
+		var imgPos;
+
 		this.elt = elt;
 		this.x0 = e.circuitX;
 		this.y0 = e.circuitY;
 		this.hidden = [];
 		this.drawingElts = computeMovedLines(info, elt, 0, 0, [], this.hidden);
 		this.dragImg = elt.imgElt;
-		this.offs0 = elt.imgElt.offset();
+		imgPos = elt.imgElt.position();
+		this.ix0 = imgPos.left;
+		this.iy0 = imgPos.top;
 		$.each(elt.ports, function (i, port) {
 			var j;
 			port.stub.hide();
@@ -332,7 +336,7 @@
 			opacity = 0.6;
 			info.showError(legal.err, legal.loc);
 		}
-		this.dragImg.offset({left: this.offs0.left + dx, top: this.offs0.top + dy});
+		this.dragImg.css({left: this.ix0 + dx, top: this.iy0 + dy});
 		this.dragImg.stop().fadeTo(0, opacity);
 		hidden = [];
 		newElts = computeMovedLines(info, this.elt, dx, dy, opacity,
@@ -402,7 +406,7 @@
 
 	my.MoveGesture.prototype.cancel = function (info) {
 		if (this.dragImg !== null) {
-			this.dragImg.offset(this.offs0);
+			this.dragImg.css({left: this.ix0, top: this.iy0});
 			this.dragImg.fadeTo(0, 1.0);
 		}
 		$.each(this.drawingElts, function (i, drawingElt) {
@@ -422,7 +426,7 @@
 	};
 
 	my.AddGesture = function (info, type, e) {
-		var dragImg, x, y;
+		var dragImg, imgPos ,x, y;
 
 		this.elt = new my.Element(type, -100, -100);
 		this.x0 = -100;
@@ -430,8 +434,11 @@
 		this.hidden = [];
 		this.drawingElts = [];
 		my.DrawCirc.createElement(info, this.elt);
-		this.dragImg = this.elt.imgElt;
-		this.offs0 = this.elt.imgElt.offset();
+		dragImg = this.elt.imgElt;
+		imgPos = dragImg.position();
+		this.dragImg = dragImg;
+		this.ix0 = imgPos.left;
+		this.iy0 = imgPos.top;
 	};
 
 	my.AddGesture.prototype.mouseDrag = my.MoveGesture.prototype.mouseDrag;
