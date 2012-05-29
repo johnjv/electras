@@ -1,0 +1,19 @@
+html, body { background: #EDE275; width: 100%; height: 100%; margin: 0px; padding-right: 0px; overflow: hidden;}
+#check{ position: relative; height: 1em; width: 1em;}
+
+#clipboard{ position: absolute; margin-left: 40%; margin-right: auto; max-width: 350px; min-width: 350px; width: 350px; bottom: 0%; }
+/*#clipboard{ position: absolute;}*/
+#cliptip{ position: absolute; margin-left: 40%; margin-right: auto; bottom: 0%;}
+#clipOrder{position: relative; border: solid 2px black; top: -500px; right: -40px; overflow: hidden; max-height: 365px; max-width: 325px; min-height: 365px; height: auto !important}
+#hintText{position: relative; height: 100px; margin-left: auto; top: -500px; max-width: 325px;}
+.levelname{padding-bottom: 2em;font-weight:bold;}
+.order{padding-bottom: 2em; font-weight:bold;}
+.hintText{padding-bottom: 2em; font-weight:bold; color: green;}
+
+#prev, #next { position: relative; height: 1em; width: 5em; top: -469px; right: -70px; cursor: pointer;}
+#hint{margin-left: auto; position: relative; top: -470px; right: -157px; cursor: pointer; }
+#showLevels{margin-left: auto; position:relative; top: -469px; right: -70px; cursor: pointer;}
+.page {	position: absolute;	background-color: white; opacity: 1;border: solid 1px gray;overflow: hidden; max-height: 365px; max-width: 325px; min-height: 365px; height: auto !important}
+.rows { position: relative; cursor: pointer; color: #A30000; font-size: 22px;}
+
+
