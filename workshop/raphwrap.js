@@ -61,22 +61,32 @@ var raphwrap = (function (Raphael, $) {
 	};
 
 	CanvasElt.prototype.show = function () {
-		this.shown = true;
+		if (!this.shown) {
+			this.shown = true;
+			this.wrap.dirty = true;
+		}
 	};
 
 	CanvasElt.prototype.hide = function () {
-		this.shown = false;
+		if (this.shown) {
+			this.shown = false;
+			this.wrap.dirty = true;
+		}
 	};
 
 	CanvasElt.prototype.remove = function () {
-		var elts, i;
+		var elts, i, found;
 		elts = this.wrap.canvasElts;
+		found = false;
 		for (i = elts.length; i >= 0; i -= 1) {
 			if (elts[i] === this) {
 				elts.splice(i, 1);
+				found = true;
 			}
 		}
-		this.wrap.dirty = true;
+		if (found) {
+			this.wrap.dirty = true;
+		}
 	};
 
 	CanvasElt.prototype.paint = function (ctx) {
@@ -216,7 +226,7 @@ var raphwrap = (function (Raphael, $) {
 		}
 	};
 
-	RaphWrap.prototype.repaintAfter = function (callback) {
+	RaphWrap.prototype.paintAfter = function (callback) {
 		var canvas, context, elts, numElts, i;
 
 		if (callback) {
