@@ -1,5 +1,4 @@
-$("#start").click(function(){
-		updateChalkBoard();
+$("#start").click(function(){		
 		startMachine();
 		$("#tally").show();
 	});
@@ -196,8 +195,7 @@ var FactoryFloor = (function($) {
 		var my = {}; 
 
 		my.levelChanged = function(oldLevel, newLevel) {
-			level = newLevel;
-			updateChalkBoard();
+			
 		};
 
 		my.getleverLocation = function(){
