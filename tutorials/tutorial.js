@@ -25,7 +25,7 @@ Tutorial = {};
 		highlightId += 1;
 		$.each(parameters, function(index, parameter){
 			var highlightDiv = $('<div class = "highlight"></div>');
-			var body = $('body');
+			var body = $('#circuit');
 			body.append(highlightDiv);
 			highlightDiv.offset({left: parameter.x, top: parameter.y});
 			highlightDiv.width(parameter.width);
@@ -61,7 +61,7 @@ Tutorial = {};
 		Tutorial.unhighlightSection();
 		highlightId += 1;
 		var highlightDiv = $('<div class = "highlight"></div>');
-		var body = $('body');
+		var body = $('#circuit');
 		body.append(highlightDiv);
 		highlightDiv.offset({left: x, top: y});
 		highlightDiv.width(width);
@@ -120,7 +120,7 @@ Tutorial = {};
 	function createSpeechBubble(target, text){
 		"use strict";
 		var bubbleContainer = $('<div id = "container"></div>');
-		$('body').append(bubbleContainer);
+		$('#circuit').append(bubbleContainer);
 		bubbleContainer.text(text);
 		bubbleContainer.offset({left: target.x + target.r, top: target.y + target.r});
 		bubbleContainer.css('opacity', '0');
@@ -162,7 +162,7 @@ Tutorial = {};
 		}
 		if(removed){
 		bubbleContainer = $('<div id = "container"></div>');
-		$('body').append(bubbleContainer);
+		$('#circuit').append(bubbleContainer);
 			bubbleContainer.text(text);
 			bubbleContainer.offset({left: x, top: y});
 		}
