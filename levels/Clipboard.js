@@ -1,17 +1,159 @@
 $(document).ready(function(){
 	"use strict";
 	setUpLevel();
+	var next = $('#next');
+	var prev = $('#prev');
+	var show = $("#showLevels");
+	var circuit = $('#circuit');
+	var factory = $('#factory');
+	var tip = $("#tip");
+	var hint = $("#hint");
+	var credits = $('#credits');
 	
-	$("#next").click(function(event){
-	    goToPage(LevelSelector.getCurrentPage() + 1);       
-    });	
+
+	function Next(e) {
+	    e.preventDefault();
+	};
 	
-	$("#prev").click(function(event){
-	    goToPage(LevelSelector.getCurrentPage() - 1);
-    });    
+	Next.prototype.onRelease = function (e) {
+	    if(e.isTap){
+	        e.preventDefault();
+		    goToPage(LevelSelector.getCurrentPage() + 1);
+		}    
+	};
+    multidrag.register(next, Next);
+	
+	function Prev(e) {
+	    e.preventDefault();
+	};
+		
+	Prev.prototype.onRelease = function (e) {
+	    if(e.isTap){
+	        e.preventDefault();
+		    goToPage(LevelSelector.getCurrentPage() - 1); 
+		}   
+	};
+    multidrag.register(prev, Prev);
+	
+	function ShowLevels(e) {
+	    e.preventDefault();
+	};
+		
+	ShowLevels.prototype.onRelease = function (e) {
+	    if(e.isTap){
+	        e.preventDefault();
+		    var level = LevelSelector.getCurrentLevel();
+	        var page = LevelSelector.getCurrentPage();
+	        if(page > 2){	
+	            if(level.levelid <= 10){
+	                goToPage(1);
+	                LevelSelector.setPage(1);	            
+	            }
+	            else{
+	                goToPage(2);
+	                LevelSelector.setPage(2);
+	            }
+	            if(level.complete){
+	                $('#row' + level.levelid).append('<td><img id = "check" src = "../levels/images/checkmark.png"></td>');
+	            }	                
+                $('#cliptip').hide();     
+                $('#container').hide();            
+	        } 
+	    }  
+	};
+    multidrag.register(show, ShowLevels);
+	
+	function Circ(e) {
+	    e.preventDefault();
+	};
+		
+	Circ.prototype.onRelease = function (e) {
+	    if(e.isTap){
+	        e.preventDefault();
+		    $('#clipboard').hide();
+            $('#cliptip').show();	
+            $('#clipboard').css('bottom', '-90%');
+            Circuit.setInterfaceEnabled(true); 
+        } 
+	};
+    multidrag.register(circuit, Circ);
+	
+	function Factory(e) {
+	    e.preventDefault();
+	};
+		
+	Factory.prototype.onRelease = function (e) {
+	    if(e.isTap){
+	        e.preventDefault();
+		    $('#clipboard').hide();
+            $('#cliptip').show();	
+            $('#clipboard').css('bottom', '-90%');
+        }   
+	};
+    multidrag.register(factory, Factory);
+	
+	function Tip(e) {
+	    e.preventDefault();
+	};
+		
+	Tip.prototype.onRelease = function (e) {
+	    if(e.isTap){
+	        e.preventDefault();
+		    $('#clipboard').show();
+            $('#cliptip').hide();
+	        Circuit.setInterfaceEnabled(false);
+	    }  
+	};
+    multidrag.register(tip, Tip);
+		
+	function Hint(e) {
+	    e.preventDefault();
+	};	
+		
+	Hint.prototype.onRelease = function (e) {
+	    if(e.isTap){
+	        e.preventDefault();
+		    if(LevelSelector.getCurrentPage() >= 3){
+	            if($('#hint').text() === "Hint"){
+	                $('.hintText').show();
+	                $('#hint').text("Hide");
+	            }
+	            else{
+	                $('.hintText').hide();
+	                $('#hint').text("Hint");
+	            }
+	        }
+	    }
+	};
+    multidrag.register(hint, Hint);
+	
+	function Credits(e) {
+	    e.preventDefault();
+	};
+			
+	Credits.prototype.onRelease = function (e) {
+	    if(e.isTap){
+	        e.preventDefault();
+		    Credit.slideDesc();
+            var pagenumber = LevelSelector.getCurrentPage();	    	
+            var page = $('#page' + pagenumber);     
+            transitionNext(page, $('#page23'));
+            $('#hint').fadeTo('slow', '0.5');        
+            $('#circuit').hide();
+            $('#factory').hide();
+            LevelSelector.setPage(23); 
+            $('#clipButtons').hide();         
+	    }
+	};
+    multidrag.register(credits, Credits);
+	
+
+    function getHint(){
+        var level = LevelSelector.getCurrentLevel();
+        return level.hint;
+    }
     
-	
-	function goToPage(num){
+    function goToPage(num){
 	    var pagenumber = LevelSelector.getCurrentPage();	    	
         var page = $('#page' + pagenumber);        
         event.preventDefault();
@@ -58,78 +200,10 @@ $(document).ready(function(){
             LevelSelector.setPage(num); 
             $('.hintText').hide();
             $('#hint').text("Hint");
+            var paper = $('#paper_sound')[0];
+	        paper.play();
 	    }	    
 	}
-	
-	
-	$("#showLevels").click(function(){
-	    var level = LevelSelector.getCurrentLevel();
-	    var page = LevelSelector.getCurrentPage();
-	    if(page > 2){	
-	        if(level.levelid <= 10){
-	            goToPage(1);
-	            LevelSelector.setPage(1);	            
-	        }
-	        else{
-	            goToPage(2);
-	            LevelSelector.setPage(2);
-	        }
-	        if(level.complete){
-	            $('#row' + level.levelid).append('<td><img id = "check" src = "../levels/images/checkmark.png"></td>');
-	        }	                
-            $('#cliptip').hide();     
-            $('#container').hide();            
-	    }
-	});
-	
-	$('#circuit').click(function(){
-	    $('#clipboard').hide();
-        $('#cliptip').show();	
-        $('#clipboard').css('bottom', '-90%');
-        Circuit.setInterfaceEnabled(true);
-	});
-	
-	$('#factory').click(function(){	  
-	    $('#clipboard').hide();
-        $('#cliptip').show();	
-        $('#clipboard').css('bottom', '-90%');
-	});
-	
-	$("#tip").click(function(){
-		$('#clipboard').show();
-        $('#cliptip').hide();
-	    Circuit.setInterfaceEnabled(false);
-	});
-	
-	$("#hint").click(function(){
-	    if(LevelSelector.getCurrentPage() >= 3){
-	        if($('#hint').text() === "Hint"){
-	            $('.hintText').show();
-	            $('#hint').text("Hide");
-	        }
-	        else{
-	            $('.hintText').hide();
-	            $('#hint').text("Hint");
-	        }
-	    }	    
-	}); 
-	
-	$("#credits").click(function(){
-	    Credit.slideDesc();
-	    var pagenumber = LevelSelector.getCurrentPage();	    	
-        var page = $('#page' + pagenumber);     
-        transitionNext(page, $('#page23'));
-        $('#hint').fadeTo('slow', '0.5');        
-        $('#circuit').hide();
-        $('#factory').hide();
-        LevelSelector.setPage(23); 
-        $('#clipButtons').hide();        
-	});
-
-    function getHint(){
-        var level = LevelSelector.getCurrentLevel();
-        return level.hint;
-    }
 
    function positionPage(page) {
 		var vpad, hpad;
@@ -224,32 +298,49 @@ $(document).ready(function(){
         addLevelClicks();       
         $('#levels2').append($('<tr><td id = "credits">Credits</td></tr>')); 
     }
-
+    
     function addLevelClicks(){
-        var page, pagenum;    
-        $('#tbody1').children().each(function(i, child){                                     
-            $(child).click(function(){ 
-                goToPage(i + 3);
-                $('#circuit').show();
-                $('#hint').fadeTo('slow', '1');
-                $('#showLevels').fadeTo('slow', '1');
-                $('#prev').fadeTo('slow', '1');
-                $('#factory').show();     
-                Placer.place();
-            });
+        var page, pagenum,kid1, kid2;
+         
+        $('#tbody1').children().each(function(i, child){           
+            kid1 =  $(child);           
+            function Kid(e){
+                e.preventDefault();
+            }
+            Kid.prototype.onRelease = function(e){
+                if(e.isTap){
+                    e.preventDefault();
+                    goToPage(i + 3);
+                    $('#circuit').show();
+                    $('#hint').fadeTo('slow', '1');
+                    $('#showLevels').fadeTo('slow', '1');
+                    $('#prev').fadeTo('slow', '1');
+                    $('#factory').show();     
+                    Placer.place();
+                }
+            }                                 
+            multidrag.register(kid1,Kid);
         });
         
-        $('#tbody2').children().each(function(i, child){                                     
-            $(child).click(function(){
-                goToPage(i + 13);
-                $('#circuit').show();
-                $('#hint').fadeTo('slow', '1');
-                $('#showLevels').fadeTo('slow', '1');
-                $('#prev').fadeTo('slow', '1');
-                $('#factory').show();
-                Placer.place();
-                
-            });   
+        $('#tbody2').children().each(function(i, child){ 
+             kid2 =  $(child) 
+             function Kid2(e){
+                e.preventDefault();
+            }
+            Kid2.prototype.onRelease = function(e){
+                if(e.isTap){
+                    e.preventDefault();
+                    goToPage(i + 13);
+                    $('#circuit').show();
+                    $('#hint').fadeTo('slow', '1');
+                    $('#showLevels').fadeTo('slow', '1');
+                    $('#prev').fadeTo('slow', '1');
+                    $('#factory').show();    
+                    Placer.place();
+                }
+            }                                 
+            multidrag.register(kid2,Kid2);                                  
+               
         });
     }
 });	
