@@ -306,6 +306,8 @@
 		imgPos = elt.imgElt.position();
 		this.ix0 = imgPos.left;
 		this.iy0 = imgPos.top;
+		this.onDone = 'moveDone';
+		this.onOut = 'moveOut';
 		$.each(elt.ports, function (i, port) {
 			var j;
 			port.stub.hide();
@@ -314,6 +316,7 @@
 				my.DrawCirc.hideWire(info, port, port.ports[j]);
 			}
 		});
+		info.fireChange({type: 'moveStart'});
 	};
 
 	my.MoveGesture.prototype.onDrag = function (info, e) {
@@ -384,6 +387,7 @@
 				drawingElt.remove();
 			});
 			info.circuitChanged();
+			info.fireChange({type: this.onDone});
 		} else if (legal.legal === LEGAL_OUT) {
 			ports = my.getConnectedPorts(elt);
 			info.layout.removeElement(elt);
@@ -396,8 +400,10 @@
 			$.each(this.drawingElts, function (i, drawingElt) {
 				drawingElt.remove();
 			});
+			info.fireChange({type: this.onOut});
 		} else {
 			this.cancel(info);
+			info.fireChange({type: 'canceled'});
 		}
 		info.setGesture(null);
 		info.hideError();
@@ -438,6 +444,9 @@
 		this.dragImg = dragImg;
 		this.ix0 = imgPos.left;
 		this.iy0 = imgPos.top;
+		info.fireChange({type: 'addStart'});
+		this.onDone = 'addDone';
+		this.onOut = 'canceled';
 	};
 
 	my.AddGesture.prototype.onDrag = my.MoveGesture.prototype.onDrag;

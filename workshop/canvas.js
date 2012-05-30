@@ -150,7 +150,6 @@
 					gest.onDrag(self, e);
 				}
 			});
-			self.fireChange();
 		}
 
 		GestureHandler.prototype.onDrag = function (e) {
@@ -174,7 +173,6 @@
 					gest.onRelease(self, e);
 				});
 			}
-			self.fireChange();
 		};
 
 		this.gestures = multidrag.create(GestureHandler).register(jqIface);
@@ -190,16 +188,6 @@
 				}
 				errElt.text(text);
 			}
-		});
-	};
-
-	my.Workshop.prototype.addChangeListener = function (listener) {
-		this.changeListeners.push(listener);
-	};
-
-	my.Workshop.prototype.fireChange = function () {
-		$.each(this.changeListeners, function (i, listener) {
-			listener();
 		});
 	};
 
@@ -239,7 +227,7 @@
 				my.DrawCirc.attachWire(self, p0, p1);
 			});
 		});
-		self.fireChange();
+		self.fireChange({type: 'layoutReplaced'});
 	};
 
 	my.Workshop.prototype.setState = function (state) {
@@ -415,6 +403,18 @@
 			this.gestures.register(this.iface);
 		} else {
 			this.gestures.unregister();
+		}
+	};
+
+	my.Workshop.prototype.addChangeListener = function (listener) {
+		this.changeListeners.push(listener);
+	};
+
+	my.Workshop.prototype.fireChange = function (e) {
+		var ls, i;
+		ls = this.changeListeners;
+		for (i = 0; i < ls.length; i += 1) {
+			ls[i](e);
 		}
 	};
 }(Workshop, jQuery, raphwrap, multidrag, Translator));
