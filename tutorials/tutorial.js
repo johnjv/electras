@@ -52,6 +52,7 @@ Tutorial = {};
 			});
 			blink(3000, 1000);
 		});
+		console.log("highlight");
 	}
 	
 
@@ -91,19 +92,22 @@ Tutorial = {};
 	}
 	
 	function registerDraggable(){
-		var body, canv, paper, onDrag, onUp;
+		var body, canv, onDrag, onUp;
 
 		body = $('#circuit');
 		canv = $('#container');
 		onDrag = null;
-		onUp = null;
-
+		//onUp = null;
 		function MoveBubble(e) {
 			e.preventDefault();
 			this.offsetDiff = {diffX: e.pageX - canv.offset().left, diffY: e.pageY - canv.offset().top};
+			Circuit.setInterfaceEnabled(false, true);
+			console.log("dragged");
 		};
 
 		MoveBubble.prototype.onDrag = function (e) {
+			console.log("dragging");
+			Circuit.setInterfaceEnabled(false);
 			var newX = e.pageX - this.offsetDiff.diffX;
 			var newY = e.pageY - this.offsetDiff.diffY
 			e.preventDefault();
@@ -112,6 +116,9 @@ Tutorial = {};
 				this.offsetDiff = {diffX: e.pageX - canv.offset().left, diffY: e.pageY - canv.offset().top};
 			}
 		};
+		MoveBubble.prototype.onUp = function (e) {
+			Circuit.setInterfaceEnabled(true, true);
+		}
 
     console.log("We're about to register it!!!")
 		multidrag.register(canv, MoveBubble);
@@ -122,7 +129,7 @@ Tutorial = {};
 	function createSpeechBubble(target, text){
 		"use strict";
 		var bubbleContainer = $('<div id = "container"></div>');
-		$('#circuit').append(bubbleContainer);
+		$('#circuit_iface').append(bubbleContainer);
 		bubbleContainer.text(text);
 		bubbleContainer.offset({left: target.x + target.r, top: target.y + target.r});
 		bubbleContainer.css('opacity', '0');
@@ -139,45 +146,30 @@ Tutorial = {};
 	/*add speech bubble*/
 	my.placeBubble = function(target, text){
 		"use strict";
-		if($('#container').length > 0){
-			$('#container').each(function(){
-				$(this).remove();	
-			});
+		var bubbleContainer;
+		if($('#container').length <= 0){
+			createSpeechBubble(target, text);
+			bubbleContainer = $('div#container');
+		}else{
+			bubbleContainer = $('div#container');
+			bubbleContainer.text(text);
 		}
-		createSpeechBubble(target, text);
-		var bubbleContainer = $('div#container');
 		var x = target.x + target.r;
 		var y = target.y + target.r;
-		var otherY = target.y - bubbleContainer.height();
-		var removed = false;
-		if((x + bubbleContainer.width()) > $(document).width()){
-			x = target.offset().left - bubbleContainer.width();
-			removed = true;
-			bubbleContainer.remove();
-		}
-		if((y + bubbleContainer.height()) > $(document).height()){
-			y = otherY;
-			if(!removed){
-				bubbleContainer.remove();
-				removed = true;
-			}
-		}
-		if(removed){
-		bubbleContainer = $('<div id = "container"></div>');
-		$('#circuit').append(bubbleContainer);
-			bubbleContainer.text(text);
+		
+		if((x + bubbleContainer.width()) > $('#circuit').width()){
+			x = $('#circuit').width() - bubbleContainer.width();
 			bubbleContainer.offset({left: x, top: y});
 		}
-		//bubbleContainer.draggable({scroll: false, containment: $('body')});
-		registerDraggable();
+		if((y + bubbleContainer.height()) > $('#circuit').height()){
+			y = $('#circuit').height() - bubbleContainer.height();
+			bubbleContainer.offset({left: x, top: y});
+		}
 		$('div#container').css('opacity', '.8');
+		registerDraggable();
 	}
 
-  //var script_hash = {
-
-  //}
-
-  var call_script = function(script_name){
+	var call_script = function(script_name){
     try {
       $('#container').hide()
       eval(script_name + "_events()")
