@@ -15,10 +15,10 @@ var Credit = {};
 		myHeader.css('background-color', '#f5f3db');
 		myHeader.css('padding', '0.3em 0 0.3em 0');
 		contentDiv.css('text-align', 'center');
-		var odysseyDesc = $('<div class = "credit">Odyssey Project Completed May 2012 at Hendrix College</div>'
-						+ '<div><img src = "../levels/images/hendrix.png" id = "hlogo" height = "20%" width = "50%"></img></div>'
-						+ '<div>Thanks for playing!!</div>');
-						
+		var odysseyDesc = $('<div class = "credit">Odyssey Project Completed May 2012 at Hendrix College</div>'		                					
+						+ '<div>Thanks for playing!!</div>'							
+						+ '<div><img src = "../levels/images/hlogo.png" id = "hlogo" height = "15%" width = "90%"></div>');
+					
 		var circuitDiv = $('<div class = "credits"><table><tbody><tr><th><u>Circuit Editor</u></th></tr>'
 							+ '<tr><td><b>Dr. Carl Burch</b></td></tr></tbody></table>');
 							
@@ -51,7 +51,7 @@ var Credit = {};
 		if(i == divs.length -1){
 	        return;
 	    }	
-		divs[i].delay(5000).animate({
+		divs[i].delay(4000).animate({
 			
 		marginLeft: divs[i].outerWidth()
     		}, 2000, function(){
