@@ -92,7 +92,7 @@
 		best = findPort(info.layout, x, y);
 		if (best.port) {
 			if (best.port.input && best.port.ports.length > 0) {
-				info.showError('circ.err.double_input',
+				info.showError('err_double_input',
 					best.port.getLocation());
 			} else {
 				gest = new my.WiringGesture(info, best.port);
@@ -107,7 +107,7 @@
 					info.setState(newState.evaluate());
 				} else {
 					if (elt.isFrozen) {
-						info.showError('circ.err.move_frozen', [x, y]);
+						info.showError('err_move_frozen', [x, y]);
 					} else {
 						gest = new my.MoveGesture(info, elt, e);
 						info.setGesture(gest);
@@ -130,19 +130,19 @@
 		if (p0 === p1) {
 			return { ok: false, err: null, loc: null };
 		} else if (p0.input && p1.input) {
-			return { ok: false, err: 'circ.err.connect_inputs',
+			return { ok: false, err: 'err_connect_inputs',
 				loc: [p0.getLocation(), p1.getLocation()] };
 		} else if (!p0.input && !p1.input) {
-			return { ok: false, err: 'circ.err.connect_outputs',
+			return { ok: false, err: 'err_connect_outputs',
 				loc: [p0.getLocation(), p1.getLocation()] };
 		} else if (p0.elt === p1.elt) {
-			return { ok: false, err: 'circ.err.connect_self',
+			return { ok: false, err: 'err_connect_self',
 				loc: [p0.getLocation(), p1.getLocation()] };
 		} else if (connected.hasOwnProperty(p1.elt.id)) {
-			return { ok: false, err: 'circ.err.connect_loop',
+			return { ok: false, err: 'err_connect_loop',
 				loc: [p0.getLocation(), p1.getLocation()] };
 		} else if (p1.input && p1.ports.length > 0) {
-			return { ok: false, err: 'circ.err.double_input',
+			return { ok: false, err: 'err_double_input',
 				loc: p1.getLocation() };
 		}
 
@@ -160,7 +160,7 @@
 				yp = p.elt.y + p.y;
 				d2 = my.Wire.dist2(xp, yp, x0, y0, x1, y1);
 				if (d2 <= maxD2) {
-					ret = 'circ.err.port_on_wire';
+					ret = 'err_port_on_wire';
 					retp = [xp, yp];
 					return false;
 				}
@@ -178,7 +178,7 @@
 			ih = elt.type.imgHeight;
 			clip = my.Wire.clip(ix, iy, iw, ih, x0, y0, x1, y1);
 			if (clip !== null) {
-				ret = 'circ.err.element_on_wire';
+				ret = 'err_element_on_wire';
 				retp = my.Wire.midpoint(clip);
 				return false;
 			}
@@ -301,21 +301,17 @@
 	};
 
 	my.EraseGesture.prototype.mouseDrag = function (info, e) {
-		var offs0, ex, ey, x, y, elt, w;
+		var ex, ey, elt, w;
 
 		ex = e.circuitX;
 		ey = e.circuitY;
 
-		offs0 = info.canvas.offset();
-		x = offs0.left + ex - 0.3 * 50.0;
-		y = offs0.top + ey - 50;
-
-		this.dragImg.offset({left: x, top: y});
+		this.dragImg.css({left: ex - 0.3 * 50.0, top: ey - 50});
 
 		elt = findElement(info.layout, ex, ey);
 		if (elt !== null) {
 			if (elt.isFrozen) {
-				info.showError('circ.err.remove_frozen');
+				info.showError('err_remove_frozen');
 				$(this.dragImg).stop().fadeTo(0, 0.5);
 			} else {
 				info.hideError();
@@ -350,7 +346,7 @@
 			elt = findElement(info.layout, x, y);
 			if (elt !== null) {
 				if (elt.isFrozen) {
-					info.showError('circ.err.remove_frozen', [x, y]);
+					info.showError('err_remove_frozen', [x, y]);
 				} else {
 					info.hideError();
 					ports = my.getConnectedPorts(elt);

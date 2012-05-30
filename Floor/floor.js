@@ -22,7 +22,7 @@ var Placer = {};
 		box.height(container.height() * 0.3);
 		box.width(box.height());
 		var x =container.width() * (0.1);
-		var y =container.height() * (0.3);
+		var y =container.height() * (0.5);
 		moveTo(box, x, y);
 		console.log('box at', x, y);
 	}
@@ -35,7 +35,7 @@ var Placer = {};
 		belt.width(container.width() - box.position().left - box.width() + box.width()/4.0);
 		belt.height(box.height());
 		var x = box.position().left + box.width() - box.width()/4.0;
-		var y = container.height() * (0.3);
+		var y = container.height() * (0.5);
 		moveTo(belt,x,y);
 	}
 	
@@ -47,7 +47,7 @@ var Placer = {};
 		dropper.height(belt.height());
 		dropper.width(belt.width()/10);
 		var x =belt.position().left + belt.width() - dropper.width();
-		var y =container.height() * (0.3); 
+		var y =container.height() * (0.5); 
 		moveTo(dropper,x,y);
 	}
 	
@@ -59,7 +59,7 @@ var Placer = {};
 		punchingBox.width(belt.width() /6.0);
 		punchingBox.height(belt.height()/2.0);
 		var x = belt.position().left + belt.width()/2.0 ;
-		var y =container.height() * (0.3) - punchingBox.height();
+		var y =container.height() * (0.5) - punchingBox.height();
 		
 		moveTo(punchingBox,x,y);
 	}

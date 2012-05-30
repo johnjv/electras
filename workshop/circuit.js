@@ -1,9 +1,10 @@
-var Circuit = (function ($, Workshop) {
+var Circuit = (function ($, Workshop, multidrag) {
 	"use strict";
 
 	var my = {},
 		workshop = null,
-		invertXform = '',
+		minimizeIcon = null,
+		minimizeDrag = null,
 		colorNames = 'CRGY',
 		shapeNames = 'o|-',
 		colorSensors = [],
@@ -43,36 +44,54 @@ var Circuit = (function ($, Workshop) {
 		});
 	}());
 
-	function RestoreGesture(xform) {
-		this.xform = xform;
+	function placeMinimizeIcon() {
+		var main, mainOffs;
+
+		main = $('#main_container');
+		mainOffs = main.offset();
+		minimizeIcon.offset({left: mainOffs.left + 8,
+			top: mainOffs.top + main.height() - 10 - 40});
 	}
 
-	RestoreGesture.prototype.mouseDown = function (info, e) {
-		if (this.xform !== '') {
+	function doMinimize() {
+		var main, backDrag;
+
+		my.setMinimizeEnabled(false);
+		main = $('#circuit');
+		main.css('border-width', 4);
+		main.animate({
+			transform: 'scale(0.3, 0.25)',
+			left: '-=' + (main.width() * 0.3) + 'px',
+			top: '-=' + (main.width() * 0.2) + 'px',
+			borderWidth: '4px'
+		}, 1000);
+		workshop.setInterfaceEnabled(false);
+
+		function RestoreHandler() {
+			backDrag.unregister();
 			$('#circuit').animate({
 				transform: 'scale(1)',
 				left: 0,
 				top: 0,
 				borderWidth: 0
-			}, 1000,
-				function () {
-					info.setGesture(null);
-					info.setToolbarEnabled(true);
-				});
-			this.xform = '';
+			}, 1000, function () {
+				workshop.setInterfaceEnabled(true);
+				my.setMinimizeEnabled(true);
+			});
 		}
-	};
 
-	RestoreGesture.prototype.mouseDrag = function (info, e) { };
-	RestoreGesture.prototype.mouseUp = function (info, e) { };
-	RestoreGesture.prototype.cancel = function (info, e) { };
+		RestoreHandler.prototype.onUp = function (e) { };
+
+		backDrag = multidrag.create(RestoreHandler).register(main);
+	}
 
 	$(document).ready(function () {
-		var main, back;
+		var main, iface;
 
 		main = $('#circuit');
+		iface = $('#circuit_iface');
 		if (!main.hasClass('circ-container')) {
-			workshop = new Workshop.Workshop(main);
+			workshop = new Workshop.Workshop(main, iface);
 			workshop.setTools(['and', 'or', 'not', 'in', 'out', 'eraser']);
 			if (typeof Tutorial !== 'undefined' && Tutorial.circuitChanged) {
 				workshop.addChangeListener(function () {
@@ -82,28 +101,28 @@ var Circuit = (function ($, Workshop) {
 			my.workshop = workshop;
 		}
 
-		back = $('<img></img>')
+		minimizeIcon = $('<img></img>')
 			.attr('src', Workshop.getResourcePath('to-floor.svg'))
-			.css('position', 'absolute')
-			.css('width', '40px')
-			.css('bottom', '10px')
-			.css('left', '8px')
-			.click(function (e) {
-				var xform, invert;
+			.css({position: 'absolute', width: '40px'});
+		iface.append(minimizeIcon);
+		placeMinimizeIcon();
+
+		function MinimizeHandler(e) {
+			var offs, x, y;
+
+			offs = minimizeIcon.offset();
+			x = e.pageX - offs.left;
+			y = e.pageY - offs.top;
+			if (x >= 0 && y >= 0 && x < minimizeIcon.width() &&
+					y < minimizeIcon.height()) {
 				e.preventDefault();
-				xform = 'translate(-' + (main.width() * 0.5) +
-					'px, -' + (main.height() * 0.75) + 'px)';
-				main.css('border-width', 2);
-				main.animate({
-					transform: 'scale(0.3, 0.25)',
-					left: '-=' + (main.width() * 0.3) + 'px',
-					top: '-=' + (main.width() * 0.2) + 'px',
-					borderWidth: '4px'
-				}, 1000);
-				workshop.setToolbarEnabled(false);
-				workshop.setGesture(new RestoreGesture('scale(1, 1)'));
-			});
-		main.append(back);
+				doMinimize();
+			}
+		}
+
+		MinimizeHandler.prototype.onUp = function (e) { };
+
+		minimizeDrag = multidrag.create(MinimizeHandler).register(iface);
 	});
 
 	function Evaluator(layout) {
@@ -231,7 +250,7 @@ var Circuit = (function ($, Workshop) {
 	}
 
 	my.levelChanged = function (oldLevel, newLevel) {
-		var layout, outT, outElt, sensors, sourceElt, tools;
+		var layout, outT, outElt, sourceElt, tools;
 
 		if (oldLevel) {
 			oldLevel.circuit = Workshop.stringify(workshop.layout);
@@ -280,7 +299,22 @@ var Circuit = (function ($, Workshop) {
 		self.width(par.width());
 		self.height(par.height());
 		workshop.setSize(par.width(), par.height());
+		placeMinimizeIcon();
+	};
+
+	my.setMinimizeEnabled = function (value) {
+		if (value) {
+			minimizeIcon.fadeIn();
+			minimizeDrag.register($('#circuit_iface'));
+		} else {
+			minimizeIcon.fadeOut();
+			minimizeDrag.unregister();
+		}
+	};
+
+	my.setInterfaceEnabled = function (value) {
+		workshop.setInterfaceEnabled(value);
 	};
 
 	return my;
-}(jQuery, Workshop));
+}(jQuery, Workshop, multidrag));

@@ -26,8 +26,7 @@ var Workshop = {};
 	};
 
 	my.Port.prototype.getLocation = function () {
-		var elt, x, y;
-		elt = this.elt;
+		var elt = this.elt;
 		return [elt.x + this.x, elt.y + this.y];
 	};
 
@@ -160,7 +159,6 @@ var Workshop = {};
 	};
 
 	my.Layout.prototype.addWire = function (port0, port1) {
-		var t;
 		if (port0.input === port1.input) {
 			if (port0.input) {
 				throw new Error('Cannot connect inputs');
@@ -200,7 +198,7 @@ var Workshop = {};
 	};
 
 	my.Layout.prototype.forEachPort = function (callback) {
-		var i, elt, j, pk, k, ret;
+		var i, elt, j, ret;
 		for (i = this.elts.length - 1; i >= 0; i -= 1) {
 			elt = this.elts[i];
 			for (j = elt.ports.length - 1; j >= 0; j -= 1) {
