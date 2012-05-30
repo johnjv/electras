@@ -92,36 +92,32 @@ Tutorial = {};
 	}
 	
 	function registerDraggable(){
-		var body, canv, onDrag, onUp;
-
+		var body, bubble;
 		body = $('#circuit');
-		canv = $('#container');
-		onDrag = null;
-		//onUp = null;
+		bubble = $('#container');
+		
 		function MoveBubble(e) {
 			e.preventDefault();
-			this.offsetDiff = {diffX: e.pageX - canv.offset().left, diffY: e.pageY - canv.offset().top};
+			this.offsetDiff = {diffX: e.pageX - bubble.offset().left, diffY: e.pageY - bubble.offset().top};
 			Circuit.setInterfaceEnabled(false, true);
-			console.log("dragged");
 		};
 
 		MoveBubble.prototype.onDrag = function (e) {
-			console.log("dragging");
-			Circuit.setInterfaceEnabled(false);
+			Circuit.setInterfaceEnabled(false, true);
 			var newX = e.pageX - this.offsetDiff.diffX;
 			var newY = e.pageY - this.offsetDiff.diffY
 			e.preventDefault();
-			if(newX > 0 && newY > 0 && (newX + canv.outerWidth()) < (body.width()) && (newY + canv.outerHeight()) < body.height()){
-				canv.offset({left: newX, top: newY});
-				this.offsetDiff = {diffX: e.pageX - canv.offset().left, diffY: e.pageY - canv.offset().top};
+			if(newX > 0 && newY > 0 && (newX + bubble.outerWidth()) < (body.width()) && (newY + bubble.outerHeight()) < body.height()){
+				bubble.offset({left: newX, top: newY});
+				this.offsetDiff = {diffX: e.pageX - bubble.offset().left, diffY: e.pageY - bubble.offset().top};
 			}
 		};
-		MoveBubble.prototype.onUp = function (e) {
+		MoveBubble.prototype.onRelease = function (e) {
 			Circuit.setInterfaceEnabled(true, true);
 		}
 
     console.log("We're about to register it!!!")
-		multidrag.register(canv, MoveBubble);
+		multidrag.register(bubble, MoveBubble);
     console.log("We registered it")
 	}
 
