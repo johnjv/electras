@@ -3,8 +3,7 @@
 	var AUTO_CONNECT_RADIUS = 15,
 		LEGAL_OK = 0,
 		LEGAL_OUT = 1,
-		LEGAL_REJECT = 2,
-		LEGAL_WIRE = 3;
+		LEGAL_REJECT = 2;
 
 	// Returns an object for which the "legal" key is LEGAL_OK if
 	// location is legal for element, LEGAL_OUT if element goes beyond
@@ -426,7 +425,7 @@
 	};
 
 	my.AddGesture = function (info, type, e) {
-		var dragImg, imgPos ,x, y;
+		var dragImg, imgPos;
 
 		this.elt = new my.Element(type, -100, -100);
 		this.x0 = -100;

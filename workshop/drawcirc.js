@@ -113,7 +113,7 @@
 	};
 
 	my.DrawCirc.repositionElement = function (info, elt) {
-		var type, offs0, x, y, img;
+		var type, x, y;
 
 		type = elt.type;
 		x = elt.x + elt.type.imgX;

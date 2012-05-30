@@ -1,4 +1,4 @@
-(function (my, $, raphwrap, multidrag) {
+(function (my, $, raphwrap, multidrag, Translator) {
 	"use strict";
 	var toolTypes = {
 		'and': new my.ElementType('and', 'gateand', -60, -25, 50, 50, [
@@ -74,7 +74,7 @@
 	};
 
 	my.Workshop = function (jqElt, jqIface, tools) {
-		var self, toolbar, canvas, errContainer, name, gesture, info;
+		var self, toolbar, canvas, errContainer;
 
 		self = this;
 		jqElt.addClass('circ_container');
@@ -101,7 +101,7 @@
 		this.setSize(jqElt.width(), jqElt.height());
 
 		function GestureHandler(e) {
-			var ex, ey, gest, newGest, toolOffs, canvOffs;
+			var ex, ey, gest, newGest, canvOffs;
 
 			e.preventDefault();
 			ex = e.pageX;
@@ -112,7 +112,7 @@
 					ex < canvOffs.left)) {
 				newGest = null;
 				$('.tool', toolbar).each(function (i, tool) {
-					var elt, offs, dx, dy, typeName, type;
+					var elt, offs, dx, dy, typeName;
 					elt = $(tool);
 					offs = elt.offset();
 					dx = ex - offs.left;
@@ -267,7 +267,7 @@
 	};
 
 	my.Workshop.prototype.showError = function (msg, locs) {
-		var oldElt, i, key, text, oldText, errElt, circs;
+		var oldElt, text, oldText, errElt;
 
 		oldElt = this.errElt;
 
@@ -411,7 +411,6 @@
 	};
 
 	my.Workshop.prototype.setInterfaceEnabled = function (value) {
-		console.log('  setInterfaceEnabled', this.gestures.id, value);
 		if (value) {
 			this.iface.show();
 			this.gestures.register(this.iface);
@@ -419,6 +418,5 @@
 			this.iface.hide();
 			this.gestures.unregister();
 		}
-		console.log('  exit setInterfaceEnabled', this.gestures.id, value);
-	}
-}(Workshop, jQuery, raphwrap, multidrag));
+	};
+}(Workshop, jQuery, raphwrap, multidrag, Translator));

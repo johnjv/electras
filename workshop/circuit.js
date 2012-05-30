@@ -1,11 +1,10 @@
-var Circuit = (function ($, Workshop) {
+var Circuit = (function ($, Workshop, multidrag) {
 	"use strict";
 
 	var my = {},
 		workshop = null,
 		minimizeIcon = null,
 		minimizeDrag = null,
-		invertXform = '',
 		colorNames = 'CRGY',
 		shapeNames = 'o|-',
 		colorSensors = [],
@@ -50,7 +49,6 @@ var Circuit = (function ($, Workshop) {
 
 		main = $('#main_container');
 		mainOffs = main.offset();
-		console.log('placeMinimize', mainOffs.left, mainOffs.top);
 		minimizeIcon.offset({left: mainOffs.left + 8,
 			top: mainOffs.top + main.height() - 10 - 40});
 	}
@@ -58,7 +56,6 @@ var Circuit = (function ($, Workshop) {
 	function doMinimize() {
 		var main, backDrag;
 
-		console.log('minimize');
 		my.setMinimizeEnabled(false);
 		main = $('#circuit');
 		main.css('border-width', 4);
@@ -71,7 +68,6 @@ var Circuit = (function ($, Workshop) {
 		workshop.setInterfaceEnabled(false);
 
 		function RestoreHandler() {
-			console.log('restore');
 			backDrag.unregister();
 			$('#circuit').animate({
 				transform: 'scale(1)',
@@ -254,7 +250,7 @@ var Circuit = (function ($, Workshop) {
 	}
 
 	my.levelChanged = function (oldLevel, newLevel) {
-		var layout, outT, outElt, sensors, sourceElt, tools;
+		var layout, outT, outElt, sourceElt, tools;
 
 		if (oldLevel) {
 			oldLevel.circuit = Workshop.stringify(workshop.layout);
@@ -314,11 +310,11 @@ var Circuit = (function ($, Workshop) {
 			minimizeIcon.fadeOut();
 			minimizeDrag.unregister();
 		}
-	}
+	};
 
 	my.setInterfaceEnabled = function (value) {
 		workshop.setInterfaceEnabled(value);
-	}
+	};
 
 	return my;
-}(jQuery, Workshop));
+}(jQuery, Workshop, multidrag));

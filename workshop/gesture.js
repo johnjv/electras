@@ -301,7 +301,7 @@
 	};
 
 	my.EraseGesture.prototype.mouseDrag = function (info, e) {
-		var offs0, ex, ey, elt, w;
+		var ex, ey, elt, w;
 
 		ex = e.circuitX;
 		ey = e.circuitY;
