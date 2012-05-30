@@ -144,10 +144,10 @@
 			}
 
 			self.paper.paintAfter(function () {
-				if (gest.mouseDown) {
-					gest.mouseDown(self, e);
+				if (gest.onDown) {
+					gest.onDown(self, e);
 				} else {
-					gest.mouseDrag(self, e);
+					gest.onDrag(self, e);
 				}
 			});
 			self.fireChange();
@@ -159,7 +159,7 @@
 			if (gest) {
 				fixEvent(self, e);
 				self.paper.paintAfter(function () {
-					gest.mouseDrag(self, e);
+					gest.onDrag(self, e);
 				});
 			}
 		};
@@ -170,8 +170,8 @@
 			if (gest) {
 				fixEvent(self, e);
 				self.paper.paintAfter(function () {
-					gest.mouseDrag(self, e);
-					gest.mouseUp(self, e);
+					gest.onDrag(self, e);
+					gest.onRelease(self, e);
 				});
 			}
 			self.fireChange();
