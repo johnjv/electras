@@ -316,7 +316,7 @@
 		});
 	};
 
-	my.MoveGesture.prototype.mouseDrag = function (info, e) {
+	my.MoveGesture.prototype.onDrag = function (info, e) {
 		var dx, dy, legal, oldElts, newElts, opacity, hidden;
 		if (this.dragImg === null) {
 			info.setGesture(null);
@@ -356,7 +356,7 @@
 		});
 	};
 
-	my.MoveGesture.prototype.mouseUp = function (info, e) {
+	my.MoveGesture.prototype.onRelease = function (info, e) {
 		var dx, dy, elt, legal, ports;
 		$.each(this.hidden, function (i, hideElt) {
 			hideElt.show();
@@ -440,11 +440,11 @@
 		this.iy0 = imgPos.top;
 	};
 
-	my.AddGesture.prototype.mouseDrag = my.MoveGesture.prototype.mouseDrag;
+	my.AddGesture.prototype.onDrag = my.MoveGesture.prototype.onDrag;
 
-	my.AddGesture.prototype.mouseUp = function (info, e) {
+	my.AddGesture.prototype.onRelease = function (info, e) {
 		info.layout.addElement(this.elt);
-		my.MoveGesture.prototype.mouseUp.call(this, info, e);
+		my.MoveGesture.prototype.onRelease.call(this, info, e);
 	};
 
 	my.AddGesture.prototype.cancel = my.MoveGesture.prototype.cancel;

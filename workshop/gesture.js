@@ -1,7 +1,7 @@
 (function (my, $) {
 	"use strict";
 	var ERASER_CONNECT = 15,
-		CONNECT_RADIUS = 15;
+		CONNECT_RADIUS = 18;
 
 	my.PORT_WIRE_SEP = 15;
 
@@ -85,7 +85,7 @@
 
 	my.NullGesture = function (info) { };
 
-	my.NullGesture.prototype.mouseDown = function (info, e) {
+	my.NullGesture.prototype.onDown = function (info, e) {
 		var x, y, best, gest, elt, newState;
 		x = e.circuitX;
 		y = e.circuitY;
@@ -97,7 +97,7 @@
 			} else {
 				gest = new my.WiringGesture(info, best.port);
 				info.setGesture(gest);
-				gest.mouseDrag(info, e);
+				gest.onDrag(info, e);
 			}
 		} else {
 			elt = findElementImage(info.layout, x, y);
@@ -118,9 +118,9 @@
 
 	};
 
-	my.NullGesture.prototype.mouseDrag = function (info, e) { };
+	my.NullGesture.prototype.onDrag = function (info, e) { };
 
-	my.NullGesture.prototype.mouseUp = function (info, e) {
+	my.NullGesture.prototype.onRelease = function (info, e) {
 		info.hideError();
 	};
 
@@ -207,7 +207,7 @@
 		}
 	};
 
-	my.WiringGesture.prototype.mouseDrag = function (info, e) {
+	my.WiringGesture.prototype.onDrag = function (info, e) {
 		var p0, p1old, p1cand, p1, line, legal, change;
 
 		p0 = this.port0;
@@ -261,7 +261,7 @@
 		}
 	};
 
-	my.WiringGesture.prototype.mouseUp = function (info, e) {
+	my.WiringGesture.prototype.onRelease = function (info, e) {
 		var p0, p1;
 
 		p0 = this.port0;
@@ -296,11 +296,11 @@
 			.css('position', 'absolute')
 			.attr('src', my.getResourcePath('eraser.png'))
 			.width(50);
-		this.mouseDrag(info, e);
+		this.onDrag(info, e);
 		info.canvas.append(this.dragImg);
 	};
 
-	my.EraseGesture.prototype.mouseDrag = function (info, e) {
+	my.EraseGesture.prototype.onDrag = function (info, e) {
 		var ex, ey, elt, w;
 
 		ex = e.circuitX;
@@ -329,7 +329,7 @@
 		}
 	};
 
-	my.EraseGesture.prototype.mouseUp = function (info, e) {
+	my.EraseGesture.prototype.onRelease = function (info, e) {
 		var x, y, wire, elt, ports;
 
 		x = e.circuitX;

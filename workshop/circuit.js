@@ -80,7 +80,7 @@ var Circuit = (function ($, Workshop, multidrag) {
 			});
 		}
 
-		RestoreHandler.prototype.onUp = function (e) { };
+		RestoreHandler.prototype.onRelease = function (e) { };
 
 		backDrag = multidrag.create(RestoreHandler).register(main);
 	}
@@ -120,7 +120,7 @@ var Circuit = (function ($, Workshop, multidrag) {
 			}
 		}
 
-		MinimizeHandler.prototype.onUp = function (e) { };
+		MinimizeHandler.prototype.onRelease = function (e) { };
 
 		minimizeDrag = multidrag.create(MinimizeHandler).register(iface);
 	});
