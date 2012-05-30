@@ -97,18 +97,17 @@ Tutorial = {};
 		body = $('#circuit');
 		canv = $('#container');
 		onDrag = null;
-		onUp = null;
+		//onUp = null;
 		function MoveBubble(e) {
 			e.preventDefault();
 			this.offsetDiff = {diffX: e.pageX - canv.offset().left, diffY: e.pageY - canv.offset().top};
+			Circuit.setInterfaceEnabled(false, true);
 			console.log("dragged");
-			body.attr('disabled', 'disabled');
-			body.prop('disabled', true);
 		};
 
 		MoveBubble.prototype.onDrag = function (e) {
-			body.prop('disable', true);
 			console.log("dragging");
+			Circuit.setInterfaceEnabled(false);
 			var newX = e.pageX - this.offsetDiff.diffX;
 			var newY = e.pageY - this.offsetDiff.diffY
 			e.preventDefault();
@@ -117,6 +116,9 @@ Tutorial = {};
 				this.offsetDiff = {diffX: e.pageX - canv.offset().left, diffY: e.pageY - canv.offset().top};
 			}
 		};
+		MoveBubble.prototype.onUp = function (e) {
+			Circuit.setInterfaceEnabled(true, true);
+		}
 
     console.log("We're about to register it!!!")
 		multidrag.register(canv, MoveBubble);
@@ -127,7 +129,7 @@ Tutorial = {};
 	function createSpeechBubble(target, text){
 		"use strict";
 		var bubbleContainer = $('<div id = "container"></div>');
-		$('#circuit').append(bubbleContainer);
+		$('#circuit_iface').append(bubbleContainer);
 		bubbleContainer.text(text);
 		bubbleContainer.offset({left: target.x + target.r, top: target.y + target.r});
 		bubbleContainer.css('opacity', '0');
