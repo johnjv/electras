@@ -15,7 +15,7 @@ $(document).ready(function(){
 	    var pagenumber = LevelSelector.getCurrentPage();	    	
         var page = $('#page' + pagenumber);        
         event.preventDefault();
-        if(num >= 0 && num <= 22){
+        if(num >= 0 && num <= 23){
             if(num > pagenumber){
                 transitionNext(page, $('#page' + num));
 	            $('#prev').fadeTo('slow', '1');
@@ -35,17 +35,25 @@ $(document).ready(function(){
                $('#showLevels').fadeTo('slow', '0.5');
                $('#circuit').hide();
                $('#factory').hide();
-            }  
-            else{
+            } 
+            else if(num === 23){
+                Credit.slideDesc();
+	            var pagenumber = LevelSelector.getCurrentPage();	    	
+                var page = $('#page' + pagenumber);     
+                transitionNext(page, $('#page23'));
+                $('#hint').fadeTo('slow', '0.5');        
+                $('#circuit').hide();
+                $('#factory').hide();
+                LevelSelector.setPage(23); 
+                $('#clipButtons').hide();
+            }    
+            else{                
                 $('#circuit').show();
                 $('#factory').show();
                 Placer.place();            
                 $('#hint').fadeTo('slow', '1');
                 $('#showLevels').fadeTo('slow', '1');            
-                LevelSelector.setLevel(all_levels[num-3]);
-                if(num === 22){
-                    $('#next').fadeTo('slow', '0.5');
-                }  
+                LevelSelector.setLevel(all_levels[num-3]);                
             }		
             LevelSelector.setPage(num); 
             $('.hintText').hide();
@@ -78,9 +86,10 @@ $(document).ready(function(){
 	    $('#clipboard').hide();
         $('#cliptip').show();	
         $('#clipboard').css('bottom', '-90%');
+        Circuit.setInterfaceEnabled(true);
 	});
 	
-	$('#factoryParent').click(function(){	  
+	$('#factory').click(function(){	  
 	    $('#clipboard').hide();
         $('#cliptip').show();	
         $('#clipboard').css('bottom', '-90%');
@@ -89,8 +98,7 @@ $(document).ready(function(){
 	$("#tip").click(function(){
 		$('#clipboard').show();
         $('#cliptip').hide();
-        $('#clipboard').animate({ bottom: '+=90%' }, 1000, function () {
-	    });        
+	    Circuit.setInterfaceEnabled(false);
 	});
 	
 	$("#hint").click(function(){
@@ -114,9 +122,9 @@ $(document).ready(function(){
         $('#hint').fadeTo('slow', '0.5');        
         $('#circuit').hide();
         $('#factory').hide();
-        LevelSelector.setPage(23);         
+        LevelSelector.setPage(23); 
+        $('#clipButtons').hide();        
 	});
-	
 
     function getHint(){
         var level = LevelSelector.getCurrentLevel();
@@ -187,6 +195,7 @@ $(document).ready(function(){
         $('#hintText').hide(); 
         $('#circuit').hide();
         $('#factory').hide();
+        Circuit.setInterfaceEnabled(false);
         
     }
 
