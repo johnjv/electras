@@ -44,16 +44,16 @@
 					}
 				}
 			}),
-		'out': new my.ElementType('out', 'output0', -30, -60, 50, 50, [
-				new my.Port(true, 0, 0, 0, -10)
+		'out': new my.ElementType('out', 'light0', 10, -15, 30, 30, [
+				new my.Port(true, 0, 0, 10, 0)
 			], function (elt, state) {
 				state.setState(elt, state.getValue(elt.ports[0]));
 			}, {
 				updateImage: function (elt, state) {
 					if (state.getValue(elt.ports[0])) {
-						elt.setImage('output1');
+						elt.setImage('light1');
 					} else {
-						elt.setImage('output0');
+						elt.setImage('light0');
 					}
 				}
 			})
