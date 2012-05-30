@@ -21,7 +21,10 @@ $(document).ready(function(){
 function startMachine(){
 	var count =0;
 	var candies = getLevelType();
-	var flag = $('<img src="../Floor/resource-image/envx.png" id="flag"></img>');
+	var correct = true;
+	//SOUND
+	var belt = $('#belt_sound')[0];
+	belt.play();
 	
 	function startNext(){
 		
@@ -37,34 +40,38 @@ function startMachine(){
 			else if (check === 0){
 				levelMark = true;
 				circuitMark = false;
-				putAFlag(flag);
-				moveFlag(flag);
-				
 			}
 			else if(check === -1){
-				//movePuncher();
 				levelMark = false;
 				circuitMark = false;
 			}
-			else{
+			else if (check === 2){
 				levelMark = false;
 				circuitMark = true;
-				putAFlag(flag);
-				moveFlag(flag);
+			}
+			else if (check === 1 || check === -1){
+				correct = false;
 			}
 			placeCandy(candies[count]);
 			moveCandy(candies[count]);
 			insertCandyIntoTally(candies[count].src);
 			insertInfoIntoTally(circuitMark,levelMark);
-			console.log(candies[count].circuitSays);
 			Circuit.setState(candies[count].circuitSays);
 			count++; 			
 			setTimeout(startNext, 3000);
 		}
+		else if (count >= 8) {
+			belt.pause();
+		}
 	}
 	
 	startNext();
-	//$("#start").attr("disabled",false);
+	if (correct) {
+		// level is completed
+	}
+	else{
+		// level is not completed
+	}
 }
 
 
@@ -129,52 +136,73 @@ function moveCandy(candy){
 	var trash = $("#trash");
 	var factory = $('#factory');
 	var punchingBox = $('#punchingbox');
+	var garbage = $('#garbage_sound')[0];
+	var correct = $('#correct_sound')[0];
 	
 	posleft = glove.position().left;
 	posdown = trash.position().top - candyPic.position().top + candyPic.height() + trash.width()/4.0; 
-	//$(candyPic).animate({left:posleft},1500, 'linear');
 	
 	if(candy.checkCandy() === -1) {
 		$(candyPic).animate({left:posleft},1500, 'linear', function() {movePuncher();});
-		$(candyPic).animate({top:'+=' + posdown, width: '-=40'}, 600, 'linear');
+		$(candyPic).animate({top:'+=' + posdown, width: '-=40'}, 600, 'linear', function() {
+			garbage.play();});
+	}
+	
+	else if(candy.checkCandy() === 0 || candy.checkCandy() ===  2){
+		$(candyPic).animate({left:posleft},1500, 'linear', 
+			function(){
+				var flag = putAFlag();
+				moveFlag(flag);
+			});
+		
+		posleft = glove.position().left - belt.position().left;
+		posdown = box.width()/3.0;
+		$(candyPic).animate({left: '-=' + posleft}, 3000, 'linear'); 
+		$(candyPic).animate({left: '-=' + (posdown),width: '-=40'}, 1500, 'linear');
+		
 	}
 	
 	else {
 		posleft = dropper.position().left - belt.position().left;
 		posdown = box.width()/3.0;
-		$(candyPic).animate({left: '-=' + posleft}, 3000, 'linear'); 
+		$(candyPic).animate({left: '-=' + posleft}, 3000, 'linear', 
+			function() {
+				correct.play();}); 
 		$(candyPic).animate({left: '-=' + (posdown),width: '-=40'}, 1500, 'linear');
    }
 }
 
-function putAFlag(flag){
+function putAFlag(){
 	"use strict";
+	var flag = $('<img src="../Floor/resource-image/envx.png" id="flag"></img>');
 	var dropper = $('#dropper');
 	var flagPos;
 	var factory = $('#factory');
+	var glove = $('#glove');
 	flag.width(20);
-	var x = dropper.position().left;
-	var y = dropper.position().top + dropper.height()/2.0 - flag.height()/2.0;
+	var x = glove.position().left;
+	var y = dropper.position().top + dropper.height()/2.0 - flag.width() * 2.0;
 	flag.css('left', x).css('top', y);
 	factory.append(flag);
-	
+	return flag;
 }
 
 function moveFlag(flag){
 	"use strict";
 	var belt = $('#belt');
 	var glove = $('#glove');
-	var flag = $('#flag');
 	var x = flag.offset().left - belt.offset().left;
-	
-	$("#flag").animate({left:'-=0' + x},3000);
-	$("#flag").hide(3000);
+	$(flag).animate({left:'-=0' + x},3000, 'linear');
+	$(flag).animate({width: '-=20'}, 1500, 'linear');
 }
 
 
 function movePuncher(){
 	var belt = $('#belt'); 
-	$('#glove').animate({top: '+=0' + belt.height()/3.0}, (1000/ $("#glove").position().left),'linear');
+	var punch = $('#punch_sound')[0];
+	$('#glove').animate({top: '+=0' + belt.height()/3.0}, 
+				(1000/ $("#glove").position().left),'linear', function() {
+					punch.play();});
 	$('#glove').animate({top: '-=0' + belt.height()/3.0}, 600,'linear');
 }
 
@@ -192,13 +220,10 @@ var FactoryFloor = (function($) {
 	"use strict";
 	var my = {}; 
 
-	my.levelChanged = function(oldLevel, newLevel) {
+	my.levelChanged = function() {
 		clearTable();
 		$("#start").attr("disabled",false);
-		
 	};
-
-	
 	my.windowResized = function () {
         var par;
         par = $('#main_container');
