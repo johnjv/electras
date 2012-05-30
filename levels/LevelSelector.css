@@ -19,5 +19,6 @@ html, body { background: #EDE275; width: 100%; height: 100%; margin: 0px; paddin
 .hintText{padding-bottom: 2em; font-weight:bold; color: green;}
 #shapes{position: relative; margin-left: 30%;}
 #flavors{position: relative; margin-left: 20%;}
-#hlogo{position: relative; padding-top: 2em;}
+#hlogo{position: relative; padding-top: 1em;}
+#return{width: 60px;}
 

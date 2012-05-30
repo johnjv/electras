@@ -4,6 +4,8 @@ var Credit = {};
 	"use strict";
 	var contentDiv = $('<div class = "page" id = "page23"></div>');
 	my.slideDesc = function(){
+	    $('#showLevels').fadeTo('slow', '1');
+	    contentDiv.html("");
 		var body = $('#clipOrder');
 		body.append(contentDiv);
 		var header = $("<h2>Electra's Candy Factory</h2>");
@@ -19,19 +21,19 @@ var Credit = {};
 						+ '<div>Thanks for playing!!</div>'							
 						+ '<div><img src = "../levels/images/hlogo.png" id = "hlogo" height = "15%" width = "90%"></div>');
 					
-		var circuitDiv = $('<div class = "credits"><table><tbody><tr><th><u>Circuit Editor</u></th></tr>'
+		var circuitDiv = $('<div class = "credits"><table class = "credtable"><tbody><tr><th><u>Circuit Editor</u></th></tr>'
 							+ '<tr><td><b>Dr. Carl Burch</b></td></tr></tbody></table>');
 							
-		var clipboardDiv = $('<div class = "credits"><table><tbody><tr><th><u>Clipboard</u></th></tr>'
+		var clipboardDiv = $('<div class = "credits"><table class = "credtable"><tbody><tr><th><u>Clipboard</u></th></tr>'
 							+ '<tr><td><b>Concorde Habineza</b></td></tr><tr><td><b>Jeannette Inema</b></td></tr><tr><td><b>Brandon McNew</b></td></tr></tbody></table></div>');
 							
-		var factoryDiv = $('<div class = "credits"><table><tbody><tr><th><u>Factory Floor</u></th></tr>'
+		var factoryDiv = $('<div class = "credits"><table class = "credtable"><tbody><tr><th><u>Factory Floor</u></th></tr>'
 							+ '<tr><td><b>Thierry Kimenyi</b></td></tr><tr><td><b>Justin John</b></td></tr><tr><td><b>Sung Oh</b></td></tr></tbody></table></div>');
 							
-		var graphicDiv = $('<div class = "credits"><table><tbody><tr><th><u>Graphics Designer</u></th></tr>'
+		var graphicDiv = $('<div class = "credits"><table class = "credtable"><tbody><tr><th><u>Graphics Designer</u></th></tr>'
 							+ '<tr><td><b>Megan Childress</b></td</tr></tbody></table</div>');
 							
-		var tutorialDiv = $('<div class = "credits"><table><tbody><tr><th><u>Tutorial/Credits</u></th></tr>'
+		var tutorialDiv = $('<div class = "credits"><table class = "credtable"><tbody><tr><th><u>Tutorial/Credits</u></th></tr>'
 							+ '<tr><td><b>Jeffrey Biles</b></td></tr><tr><td><b>Safari Sibomana</b></td></tr></tbody></table></div>');
 		var myElts = [circuitDiv, clipboardDiv, factoryDiv, graphicDiv, tutorialDiv, odysseyDesc];
     	contentDiv.append(myElts[0]);
@@ -43,18 +45,18 @@ var Credit = {};
 	    divs[i].css('width', '98%');
 		divs[i].css('margin', '1%');
 		divs[i].css('font-size', '1.5em');
-		$('table th').css('padding-top', '1.5em');
-		$('table td').css('font-size', '0.5em');
-		$('table').css('margin-left', '15%');
-		$('table').css('width', '70%');
+		$('.credtable th').css('padding-top', '1.5em');
+		$('.credtable td').css('font-size', '0.5em');
+		$('.credtable').css('margin-left', '15%');
+		$('.credtable').css('width', '70%');
 		divs[i].css('margin-top', '0px');	
 		if(i == divs.length -1){
 	        return;
 	    }	
-		divs[i].delay(4000).animate({
+		divs[i].delay(400).animate({
 			
 		marginLeft: divs[i].outerWidth()
-    		}, 2000, function(){
+    		}, 200, function(){
     			divs[i].remove();
     			if(i < divs.length -1){
     				contentDiv.append(divs[i + 1]);

@@ -9,6 +9,7 @@ $(document).ready(function(){
 	var tip = $("#tip");
 	var hint = $("#hint");
 	var credits = $('#credits');
+	var ret = $('#return');
 	
 
 	function Next(e) {
@@ -38,7 +39,7 @@ $(document).ready(function(){
 	function ShowLevels(e) {
 	    e.preventDefault();
 	};
-		
+			
 	ShowLevels.prototype.onRelease = function (e) {
 	    if(e.isTap){
 	        e.preventDefault();
@@ -137,12 +138,13 @@ $(document).ready(function(){
 		    Credit.slideDesc();
             var pagenumber = LevelSelector.getCurrentPage();	    	
             var page = $('#page' + pagenumber);     
-            transitionNext(page, $('#page23'));
-            $('#hint').fadeTo('slow', '0.5');        
+            transitionNext(page, $('#page23'));                    
             $('#circuit').hide();
             $('#factory').hide();
             LevelSelector.setPage(23); 
-            $('#clipButtons').hide();         
+            $('#hint').hide();         
+            $('#prev').hide();         
+            $('#next').hide();         
 	    }
 	};
     multidrag.register(credits, Credits);
@@ -155,8 +157,7 @@ $(document).ready(function(){
     
     function goToPage(num){
 	    var pagenumber = LevelSelector.getCurrentPage();	    	
-        var page = $('#page' + pagenumber);        
-        event.preventDefault();
+        var page = $('#page' + pagenumber);       
         if(num >= 0 && num <= 23){
             if(num > pagenumber){
                 transitionNext(page, $('#page' + num));
@@ -187,7 +188,9 @@ $(document).ready(function(){
                 $('#circuit').hide();
                 $('#factory').hide();
                 LevelSelector.setPage(23); 
-                $('#clipButtons').hide();
+                $('#hint').hide();         
+                $('#prev').hide();         
+                $('#next').hide();
             }    
             else{                
                 $('#circuit').show();
