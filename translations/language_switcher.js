@@ -7,23 +7,22 @@ var Translator = (function ($) {
   var english_texts = {}
   var listeners = []
 
+
   returns.getText = function(){
     var i = 0;
     var text = current_texts;
+    var looping = false;
     while (i < arguments.length){
       if (text.hasOwnProperty(arguments[i])) {
         text = text[arguments[i]]
+        i++;
       } else {
+        if (looping){return arguments[arguments.length-1]}
         console.log("Error finding ", arguments[i],  ".  The error is ", e,".  Replacing with English text")
-        text = english_texts[arguments[i]]
+        i = 0;
+        text = english_texts
+        looping = true
       }
-//      try {
-//        text = text[arguments[i]]
-//      } catch (e) {
-//        console.log("Error finding ", arguments[i-1],  ".  The error is ", e)
-//        return null
-//      }
-      i++;
     }
     return text
   }
