@@ -94,9 +94,7 @@ var Circuit = (function ($, Workshop, multidrag) {
 			workshop = new Workshop.Workshop(main, iface);
 			workshop.setTools(['and', 'or', 'not', 'in', 'out', 'eraser']);
 			if (typeof Tutorial !== 'undefined' && Tutorial.circuitChanged) {
-				console.log('adding change listener');
 				workshop.addChangeListener(function (e) {
-					console.log('change:', e.type);
 					Tutorial.circuitChanged();
 				});
 			}
@@ -264,7 +262,7 @@ var Circuit = (function ($, Workshop, multidrag) {
 			layout = new Workshop.Layout();
 			outT = Workshop.getElementType('out');
 			outElt = new Workshop.Element(outT,
-				workshop.canvas.width() - 10 - outT.imgWidth + outT.imgX,
+				workshop.canvas.width() - 10 - outT.imgWidth - 10,
 				Math.round((workshop.canvas.height() - outT.imgY) / 2.0));
 			outElt.isFrozen = true;
 			layout.addElement(outElt);
