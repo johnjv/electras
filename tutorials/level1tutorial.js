@@ -20,6 +20,7 @@ var i_so_blue_events = function(){
           elements.lightbulb().input('filled').exists()){
     console.log("the user has connected the two");
     Tutorial.unhighlightSection()
+    createSpeechBubble(blue_sensor_connection, getBubble(1, 3));
 //    waiting on FactorFloor to expose getLeverLocation()
 //    var level = FactoryFloor.getLeverLocation()
 //    highlightSection(lever, false);
