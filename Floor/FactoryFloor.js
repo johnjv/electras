@@ -33,21 +33,21 @@ function startMachine(){
 			var levelMark = false;
 			var circuitMark = false;
 			if (check === 1) {
-				levelMark = true;
 				circuitMark = true;
+				levelMark = true;
 			}
 
 			else if (check === 0){
-				levelMark = true;
 				circuitMark = false;
+				levelMark = true;
 			}
 			else if(check === -1){
-				levelMark = false;
 				circuitMark = false;
+				levelMark = false;
 			}
 			else if (check === 2){
-				levelMark = false;
 				circuitMark = true;
+				levelMark = false;
 			}
 			else if (check === 1 || check === -1){
 				correct = false;
@@ -140,7 +140,7 @@ function moveCandy(candy){
 	var correct = $('#correct_sound')[0];
 	
 	posleft = glove.position().left;
-	posdown = trash.position().top - candyPic.position().top + candyPic.height() + trash.width()/4.0; 
+	posdown = trash.position().top - candyPic.position().top + candyPic.height() + trash.height()/4.0; 
 	
 	if(candy.checkCandy() === -1) {
 		$(candyPic).animate({left:posleft},1500, 'linear', function() {movePuncher();});
@@ -148,7 +148,33 @@ function moveCandy(candy){
 			garbage.play();});
 	}
 	
-	else if(candy.checkCandy() === 0 || candy.checkCandy() ===  2){
+	else if(candy.checkCandy() === 0){
+		$(candyPic).animate({left:posleft},1500, 'linear', function() {
+			var flag = putAFlag(); 
+			posdown = trash.position().top - flag.position().top + trash.height()/2.0;
+			$(flag).animate({top: '+=' + (posdown),width: '-=20'}, 1500, 'linear');
+			movePuncher();
+		});
+		$(candyPic).animate({top:'+=' + posdown, width: '-=40'}, 600, 'linear', function() {
+			garbage.play();});
+		
+	}
+	
+	else if(candy.checkCandy() === 2){
+		$(candyPic).animate({left:posleft},1500, 'linear', 
+			function(){
+				var flag = putAFlag();
+				moveFlag(flag);
+			});
+		
+		posleft = glove.position().left - belt.position().left;
+		posdown = box.width()/3.0;
+		$(candyPic).animate({left: '-=' + posleft}, 3000, 'linear'); 
+		$(candyPic).animate({left: '-=' + (posdown),width: '-=40'}, 1500, 'linear');
+		
+	}
+	
+	else if(candy.checkCandy() ===  2){
 		$(candyPic).animate({left:posleft},1500, 'linear', 
 			function(){
 				var flag = putAFlag();
