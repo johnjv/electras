@@ -73,7 +73,7 @@
 		return toolTypes[id];
 	};
 
-	my.Workshop = function (jqElt, tools) {
+	my.Workshop = function (jqElt, jqIface, tools) {
 		var self, toolbar, canvas, errContainer, name, gesture, info;
 
 		self = this;
@@ -83,8 +83,9 @@
 		errContainer = $('<div></div>').addClass('circ_error_parent');
 		jqElt.append(toolbar);
 		jqElt.append(canvas);
-		jqElt.append($('<div></div>').addClass('circ_error_grandparent')
+		canvas.append($('<div></div>').addClass('circ_error_grandparent')
 			.append(errContainer));
+		this.iface = jqIface;
 		this.toolbar = toolbar;
 		this.toolbarEnabled = true;
 		this.canvas = canvas;
@@ -176,7 +177,7 @@
 			self.fireChange();
 		};
 
-		multidrag.register(jqElt, GestureHandler);
+		this.gestures = multidrag.create(GestureHandler).register(jqIface);
 
 		Translator.addListener(function () {
 			var errMsg, errElt, text;
@@ -402,9 +403,22 @@
 			canvasX = 0;
 			canvasY = Math.min(200, toolbar.outerHeight());
 		}
-		canvas.css({left: canvasX, top: canvasY});
+		canvas.css({left: canvasX, top: canvasY,
+			width: width - canvasX, height: height - canvasY});
 		paper.paintAfter(function () {
 			paper.setSize(width - canvasX, height - canvasY);
 		});
 	};
+
+	my.Workshop.prototype.setInterfaceEnabled = function (value) {
+		console.log('  setInterfaceEnabled', this.gestures.id, value);
+		if (value) {
+			this.iface.show();
+			this.gestures.register(this.iface);
+		} else {
+			this.iface.hide();
+			this.gestures.unregister();
+		}
+		console.log('  exit setInterfaceEnabled', this.gestures.id, value);
+	}
 }(Workshop, jQuery, raphwrap, multidrag));
