@@ -1,27 +1,22 @@
 $(document).ready(function(){
-	var startC = 0;
 	$("#showhide").hide();
-	
 	$("#tally").hide();
-	
-	$("#start").click(function(){
-	
-		$("#start").attr("disabled",true);
-		if (startC === 0 ) {
-			startMachine();
-		}
-		else {
-			clearTable();
-			startMachine();
-		}
-		$("#tally").show();
-		startC += 1;
+	$("#start").on('click', function(){
+		startAll();
 	});
 });	
+
+function startAll(){
+		$("#start").off('click');
+		clearTable()
+		startMachine()
+		$("#tally").show();
+}
+	
 function startMachine(){
 	var count =0;
 	var candies = getLevelType();
-	var correct = true;
+	var correctSet = true;
 	//SOUND
 	var belt = $('#belt_sound')[0];
 	belt.play();
@@ -50,7 +45,7 @@ function startMachine(){
 				levelMark = false;
 			}
 			else if (check === 1 || check === -1){
-				correct = false;
+				correctSet = false;
 			}
 			placeCandy(candies[count]);
 			moveCandy(candies[count]);
@@ -62,11 +57,12 @@ function startMachine(){
 		}
 		else if (count >= 8) {
 			belt.pause();
+			$("#start").on('click', startAll);
 		}
 	}
 	
 	startNext();
-	if (correct) {
+	if (correctSet) {
 		// level is completed
 	}
 	else{
@@ -248,7 +244,6 @@ var FactoryFloor = (function($) {
 
 	my.levelChanged = function() {
 		clearTable();
-		$("#start").attr("disabled",false);
 	};
 	my.windowResized = function () {
         var par;
@@ -259,9 +254,10 @@ var FactoryFloor = (function($) {
         $('#factoryParent').offset(par.offset());
         console.log(par.width(), par.height(), $('#factoryParent').offset());
         Placer.place();
+        stopMovingPuncher();
     };  
     
 	return my;		
-	}(jQuery));
+}(jQuery));
 
 
