@@ -98,6 +98,7 @@
 		this.layout = new my.Layout();
 		this.state = my.newInitialState(this.layout);
 		this.changeListeners = [];
+		this.changes = [];
 		this.setSize(jqElt.width(), jqElt.height());
 
 		function GestureHandler(e) {
@@ -150,6 +151,8 @@
 					gest.onDrag(self, e);
 				}
 			});
+
+			self.fireChanges();
 		}
 
 		GestureHandler.prototype.onDrag = function (e) {
@@ -161,6 +164,7 @@
 					gest.onDrag(self, e);
 				});
 			}
+			self.fireChanges();
 		};
 
 		GestureHandler.prototype.onRelease = function (e) {
@@ -173,6 +177,7 @@
 					gest.onRelease(self, e);
 				});
 			}
+			self.fireChanges();
 		};
 
 		this.gestures = multidrag.create(GestureHandler).register(jqIface);
@@ -410,11 +415,24 @@
 		this.changeListeners.push(listener);
 	};
 
+	my.Workshop.prototype.queueChange = function (e) {
+		this.changes.push(e);
+	};
+
 	my.Workshop.prototype.fireChange = function (e) {
 		var ls, i;
 		ls = this.changeListeners;
 		for (i = 0; i < ls.length; i += 1) {
 			ls[i](e);
+		}
+	};
+
+	my.Workshop.prototype.fireChanges = function () {
+		var es, i;
+		es = this.changes;
+		this.changes = [];
+		for (i = 0; i < es.length; i += 1) {
+			this.fireChange(es[i]);
 		}
 	};
 }(Workshop, jQuery, raphwrap, multidrag, Translator));

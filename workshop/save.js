@@ -47,7 +47,7 @@
 			comp, port, part, comp1;
 		layout = new my.Layout();
 		descs = str.split(';');
-		reComp = /^([^0-9]+)([0-9]+),([0-9]+)(:[0-9,.]*)?$/;
+		reComp = /^([^0-9.]+)([0-9.]+),([0-9.]+)(:[0-9,.]*)?$/;
 		comps = {};
 		ports = {};
 		for (i = 0; i < descs.length; i += 1) {

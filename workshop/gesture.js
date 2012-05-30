@@ -104,8 +104,8 @@
 			if (elt) {
 				newState = elt.type.poke(elt, x - elt.x, y - elt.y, info.state);
 				if (newState) {
-					info.fireChange({type: 'poke'});
 					info.setState(newState.evaluate());
+					info.queueChange({type: 'poke'});
 				} else {
 					if (elt.isFrozen) {
 						info.showError('err_move_frozen', [x, y]);
@@ -197,7 +197,7 @@
 			port.elt.x + port.dx, port.elt.y + port.dy);
 		this.connected = port.elt.findElements(!port.input);
 		my.DrawCirc.hideStub(info, port);
-		info.fireChange({type: 'wireStart'});
+		info.queueChange({type: 'wireStart'});
 	};
 
 	my.WiringGesture.prototype.cancel = function (info) {
@@ -280,13 +280,13 @@
 			my.DrawCirc.attachWire(info, p0, p1);
 			this.port0 = null;
 			this.port1 = null;
-			info.fireChange({type: 'wireDone'});
+			info.queueChange({type: 'wireDone'});
 		} else {
 			if (this.candPort1) {
 				my.DrawCirc.showStub(info, this.candPort1);
-				info.fireChange({type: 'wireFailed'});
+				info.queueChange({type: 'wireFailed'});
 			} else {
-				info.fireChange({type: 'canceled'});
+				info.queueChange({type: 'canceled'});
 			}
 		}
 		if (this.line) {
@@ -304,7 +304,7 @@
 			.width(50);
 		this.onDrag(info, e);
 		info.canvas.append(this.dragImg);
-		info.fireChange({type: 'eraseStart'});
+		info.queueChange({type: 'eraseStart'});
 	};
 
 	my.EraseGesture.prototype.onDrag = function (info, e) {
@@ -349,13 +349,13 @@
 			my.DrawCirc.removeWire(info, wire[0], wire[1]);
 			info.circuitChanged();
 			my.DrawCirc.recolorPorts(info, wire[1]);
-			info.fireChange({type: 'eraseWire'});
+			info.queueChange({type: 'eraseWire'});
 		} else {
 			elt = findElement(info.layout, x, y);
 			if (elt !== null) {
 				if (elt.isFrozen) {
 					info.showError('err_remove_frozen', [x, y]);
-					info.fireChange({type: 'eraseFailed'});
+					info.queueChange({type: 'eraseFailed'});
 				} else {
 					info.hideError();
 					ports = my.getConnectedPorts(elt);
@@ -366,10 +366,10 @@
 						my.DrawCirc.showStub(info, port);
 						my.DrawCirc.recolorPort(info, port);
 					});
-					info.fireChange({type: 'eraseElement'});
+					info.queueChange({type: 'eraseElement'});
 				}
 			} else {
-				info.fireChange({type: 'canceled'});
+				info.queueChange({type: 'canceled'});
 			}
 		}
 		info.setGesture(null);

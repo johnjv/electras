@@ -316,7 +316,7 @@
 				my.DrawCirc.hideWire(info, port, port.ports[j]);
 			}
 		});
-		info.fireChange({type: 'moveStart'});
+		info.queueChange({type: 'moveStart'});
 	};
 
 	my.MoveGesture.prototype.onDrag = function (info, e) {
@@ -387,7 +387,7 @@
 				drawingElt.remove();
 			});
 			info.circuitChanged();
-			info.fireChange({type: this.onDone});
+			info.queueChange({type: this.onDone});
 		} else if (legal.legal === LEGAL_OUT) {
 			ports = my.getConnectedPorts(elt);
 			info.layout.removeElement(elt);
@@ -400,10 +400,10 @@
 			$.each(this.drawingElts, function (i, drawingElt) {
 				drawingElt.remove();
 			});
-			info.fireChange({type: this.onOut});
+			info.queueChange({type: this.onOut});
 		} else {
 			this.cancel(info);
-			info.fireChange({type: 'canceled'});
+			info.queueChange({type: 'canceled'});
 		}
 		info.setGesture(null);
 		info.hideError();
@@ -444,7 +444,7 @@
 		this.dragImg = dragImg;
 		this.ix0 = imgPos.left;
 		this.iy0 = imgPos.top;
-		info.fireChange({type: 'addStart'});
+		info.queueChange({type: 'addStart'});
 		this.onDone = 'addDone';
 		this.onOut = 'canceled';
 	};
