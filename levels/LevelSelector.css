@@ -6,7 +6,7 @@ html, body { background: #EDE275; width: 100%; height: 100%; margin: 0px; paddin
 #prev, #next { position: relative; height: 1em; width: 5em; top: -430px; right: -70px; cursor: pointer;}
 #hint{margin-left: auto; position: relative; top: -430px; right: -70px; cursor: pointer; }
 #showLevels{margin-left: auto; position:relative; top: -430px; right: -70px; cursor: pointer;}
-#cliptip{ position: absolute; width: 408px;}
+#cliptip{ position: absolute; width: 408px; cursor: pointer; }
 #hintText{position: relative; height: 100px; margin-left: auto; top: -500px; max-width: 325px;}
 .page {	position: absolute;	background-color: #f5f3db; opacity: 1;border: solid 1px gray;overflow: hidden; max-height: 365px; max-width: 325px; min-height: 365px; height: auto !important}
 #clip{height: 598px; width: 408px;}
@@ -24,4 +24,6 @@ html, body { background: #EDE275; width: 100%; height: 100%; margin: 0px; paddin
 .levelname{padding-bottom: 2em;font-weight:bold;}
 .order{padding-bottom: 2em; font-weight:bold;}
 .hintText{padding-bottom: 2em; font-weight:bold; color: green;}
+#shapes{position: relative; margin-left: 30%;}
+#flavors{position: relative; margin-left: 20%;}
 
