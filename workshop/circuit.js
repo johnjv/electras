@@ -94,8 +94,10 @@ var Circuit = (function ($, Workshop, multidrag) {
 			workshop = new Workshop.Workshop(main, iface);
 			workshop.setTools(['and', 'or', 'not', 'in', 'out', 'eraser']);
 			if (typeof Tutorial !== 'undefined' && Tutorial.circuitChanged) {
-				workshop.addChangeListener(function () {
-						Tutorial.circuitChanged();
+				console.log('adding change listener');
+				workshop.addChangeListener(function (e) {
+					console.log('change:', e.type);
+					Tutorial.circuitChanged();
 				});
 			}
 			my.workshop = workshop;
@@ -323,6 +325,10 @@ var Circuit = (function ($, Workshop, multidrag) {
 				iface.hide();
 			}
 		}
+	};
+
+	my.addChangeListener = function (listener) {
+		workshop.addChangeListener(listener);
 	};
 
 	return my;
