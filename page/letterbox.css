@@ -30,7 +30,7 @@ html, body {
 }
 
 #cliptip{
-    z-index: 12;
+    z-index: 100;
 }
 
 #container{

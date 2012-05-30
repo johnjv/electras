@@ -9,6 +9,7 @@
 </head>
 
 <body>
+ <div id="circuit_iface"></div>
  <div id="main_container">
   <div id="circuit"></div>
  </div>
@@ -16,6 +17,7 @@
  <script src="../lib/jquery.transform2d.js"></script>
  <script src="../lib/raphael.js"></script>
  <script src="../lib/multidrag.js"></script>
+ <script src="../translations/language_switcher.js"></script>
  <script src="../workshop/raphwrap.js"></script>
  <script src="../workshop/layout.js"></script>
  <script src="../workshop/save.js"></script>
@@ -27,5 +29,23 @@
  <script src="../workshop/canvas.js"></script>
  <script src="../workshop/circuit.js"></script>
  <script src="../workshop/test.js"></script>
+
+<div id="translations">
+ <div id="EN">
+  <span class="circuit">
+   <span class="err_connect_inputs">Cannot connect inputs</span>
+   <span class="err_connect_outputs">Cannot connect outputs</span>
+   <span class="err_connect_self">Cannot connect element to itself</span>
+   <span class="err_connect_loop">Cannot create loop</span>
+   <span class="err_double_input">Input can have only one connection</span>
+   <span class="err_port_on_wire">Port cannot be near wire</span>
+   <span class="err_port_on_element">Port cannot overlap element</span>
+   <span class="err_element_on_wire">Wire cannot cross element</span>
+   <span class="err_element_on_element">Elements cannot overlap</span>
+   <span class="err_move_frozen">Element is frozen and cannot be moved</span>
+   <span class="err_remove_frozen">Element is frozen and cannot be removed</span>
+  </span><!-- end of span.circuit -->
+ </div><!-- end of div#EN -->
+</div>
 </body>
 </html>

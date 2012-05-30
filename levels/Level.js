@@ -36,7 +36,7 @@ Level.prototype.analyze = function (){
    return analysis;
 };
 
-Level.prototype.getSequence = function(types, answers){
+Level.prototype.getSequence = function(types){
     "use strict";
     var sequenceLength, sequence;
     sequenceLength = 8;
@@ -128,7 +128,7 @@ Level.prototype.getBest = function(types, answers){
    bestCase = 0;
    arraySeq = [];
    for(i = 0; i <= 200; i += 1){           
-        sequence = this.getSequence(types, answers);	   
+        sequence = this.getSequence(types);	   
         sequence = sequence.split(',');
         arraySeq.push(sequence);
         for(j = 0; j < sequence.length; j +=1){

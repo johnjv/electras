@@ -143,7 +143,7 @@ var raphwrap = (function (Raphael, $) {
 	};
 
 	RaphWrap = function (elt, width, height) {
-		var hasSvg, jqElt, canvas;
+		var hasSvg, canvas;
 		hasSvg = Raphael && (window.SVGAngle ||
 			document.implementation.hasFeature(SVGxml, "1.1"));
 		if (hasSvg) {

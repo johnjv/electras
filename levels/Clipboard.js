@@ -15,7 +15,7 @@ $(document).ready(function(){
 	    var pagenumber = LevelSelector.getCurrentPage();	    	
         var page = $('#page' + pagenumber);        
         event.preventDefault();
-        if(num >= 0 && num <= 22){
+        if(num >= 0 && num <= 23){
             if(num > pagenumber){
                 transitionNext(page, $('#page' + num));
 	            $('#prev').fadeTo('slow', '1');
@@ -24,32 +24,41 @@ $(document).ready(function(){
 	            transitionPrev(page, $('#page' + num));
                 $('#next').fadeTo('slow', '1'); 
             }
-            if(num === 0){
-               $('#prev').fadeTo('slow', '0.5');
+            if(num < 3){
+               if(num === 0){
+                   $('#prev').fadeTo('slow', '0.5'); 
+               }
+               else{
+                   $('#prev').fadeTo('slow', '1'); 
+               }
                $('#hint').fadeTo('slow', '0.5');
                $('#showLevels').fadeTo('slow', '0.5');
-            }
-            else if(num === 2 || num === 1){
-               $('#prev').fadeTo('slow', '1');
-               $('#hint').fadeTo('slow', '0.5');
-               $('#showLevels').fadeTo('slow', '0.5');
-            }
-            else if(num === 22){
-               $('#next').fadeTo('slow', '0.5');
-               LevelSelector.setLevel(all_levels[num-3]);
-               //add a place here that shows the credits option!            
+               $('#circuit').hide();
+               $('#factory').hide();
             } 
-            else{
-                $('#circuit').show();            
+            else if(num === 23){
+                Credit.slideDesc();
+	            var pagenumber = LevelSelector.getCurrentPage();	    	
+                var page = $('#page' + pagenumber);     
+                transitionNext(page, $('#page23'));
+                $('#hint').fadeTo('slow', '0.5');        
+                $('#circuit').hide();
+                $('#factory').hide();
+                LevelSelector.setPage(23); 
+                $('#clipButtons').hide();
+            }    
+            else{                
+                $('#circuit').show();
+                $('#factory').show();
+                Placer.place();            
                 $('#hint').fadeTo('slow', '1');
                 $('#showLevels').fadeTo('slow', '1');            
-                LevelSelector.setLevel(all_levels[num-3]);
+                LevelSelector.setLevel(all_levels[num-3]);                
             }		
             LevelSelector.setPage(num); 
             $('.hintText').hide();
             $('#hint').text("Hint");
-	        
-	    }
+	    }	    
 	}
 	
 	
@@ -77,9 +86,10 @@ $(document).ready(function(){
 	    $('#clipboard').hide();
         $('#cliptip').show();	
         $('#clipboard').css('bottom', '-90%');
+        Circuit.setInterfaceEnabled(true);
 	});
 	
-	$('#factoryParent').click(function(){	  
+	$('#factory').click(function(){	  
 	    $('#clipboard').hide();
         $('#cliptip').show();	
         $('#clipboard').css('bottom', '-90%');
@@ -88,8 +98,7 @@ $(document).ready(function(){
 	$("#tip").click(function(){
 		$('#clipboard').show();
         $('#cliptip').hide();
-        $('#clipboard').animate({ bottom: '+=90%' }, 1000, function () {
-	    });        
+	    Circuit.setInterfaceEnabled(false);
 	});
 	
 	$("#hint").click(function(){
@@ -104,6 +113,18 @@ $(document).ready(function(){
 	        }
 	    }	    
 	}); 
+	
+	$("#credits").click(function(){
+	    Credit.slideDesc();
+	    var pagenumber = LevelSelector.getCurrentPage();	    	
+        var page = $('#page' + pagenumber);     
+        transitionNext(page, $('#page23'));
+        $('#hint').fadeTo('slow', '0.5');        
+        $('#circuit').hide();
+        $('#factory').hide();
+        LevelSelector.setPage(23); 
+        $('#clipButtons').hide();        
+	});
 
     function getHint(){
         var level = LevelSelector.getCurrentLevel();
@@ -161,8 +182,7 @@ $(document).ready(function(){
 	}; 
 
     function setUpLevel(){ 
-        Placer.place();     
-        //$('#factory').hide();
+        Placer.place(); 
         $('#cliptip').hide();
         makePages();
         $('.page').hide();    
@@ -172,7 +192,10 @@ $(document).ready(function(){
         $('#showLevels').fadeTo('slow', '0.5');
         $('#prev').fadeTo('slow', '0.5');
         $('#return').fadeTo('slow', '0.5');
-        $('#hintText').hide();  
+        $('#hintText').hide(); 
+        $('#circuit').hide();
+        $('#factory').hide();
+        Circuit.setInterfaceEnabled(false);
         
     }
 
@@ -196,9 +219,10 @@ $(document).ready(function(){
             order.append($('<div></div>').addClass('levelname').text(level.levelid + ". " + level.levelname));
             order.append($('<div></div>').addClass('order').text("Order: " + level.orderText)); 
             order.append($('<div></div>').addClass('hintText').text("Hint: " + level.hint));
-            $('#clipOrder').append(order); 
+            $('#clipOrder').append(order);             
         }
-        addLevelClicks();    
+        addLevelClicks();       
+        $('#levels2').append($('<tr><td id = "credits">Credits</td></tr>')); 
     }
 
     function addLevelClicks(){
@@ -212,8 +236,6 @@ $(document).ready(function(){
                 $('#prev').fadeTo('slow', '1');
                 $('#factory').show();     
                 Placer.place();
-                //$('#circuit').hide(); 
-                           
             });
         });
         
@@ -226,61 +248,8 @@ $(document).ready(function(){
                 $('#prev').fadeTo('slow', '1');
                 $('#factory').show();
                 Placer.place();
-                //$('#circuit').hide();
                 
             });   
         });
     }
 });	
-
-/*
- function resizeClipboard(){
-        "use strict";
-        var clip = $('img#clip');
-        var clipboard = $('#clipboard');
-        var container = $('#main_container');
-        var clipPos = clipboard.position();
-        clip.width(container.width() * 0.25);
-        clip.height(container.height() * 0.54);
-        clipPos.left = container.width() * 0.4;
-        clipPos.top = container.width() * 0.1;
-        clipboard.css('left', clipPos.left).css('top', clipPos.top);                
-    } 
-    
-  function resizeCliporder(){
-        "use strict";      
-        var cliporder = $('#clipOrder');
-        var container = $('img#clip');    
-        var clipPos = cliporder.position();
-        cliporder.width(container.width() * 0.8);
-        cliporder.height(container.height() * 0.7);
-        $('.page').height(container.height() * 0.7);
-        clipPos.left = container.width() * 0.07;
-        clipPos.top = container.height() * 0.15;
-        cliporder.css('left', clipPos.left).css('top', clipPos.top);                
-    }
-    
-    function resizeClipbuttons(){
-       "use strict";
-        var clipbuttons = $('#clipButtons');
-        var left = $('img#prev');
-        var right = $('img#next');        
-        var show = $('#showLevels');
-        var hint = $('#hint');
-        var container = $('img#clip');
-        var clipPos = clipbuttons.position();
-        clipbuttons.width(container.width() * 0.6);
-        clipbuttons.height(container.height() * 0.2);
-        clipPos.left = container.width() * 0.19;
-        clipPos.top = container.height() * 0.87;
-        clipbuttons.css('left', clipPos.left).css('top', clipPos.top);
-        left.css('height', container.height() * 0.02); 
-        left.css('width', container.width() * 0.1); 
-        right.css('height', container.height() * 0.02); 
-        right.css('width', container.width() * 0.1);         
-        show.css('width', container.width() * 0.2);
-        hint.css('width', container.width() * 0.2); 
-        show.css('height', container.height() * 0.05);
-        hint.css('height', container.height() * 0.05); 
-    }
-    */

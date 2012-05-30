@@ -1,4 +1,4 @@
-(function (my, $, raphwrap, multidrag) {
+(function (my, $, raphwrap, multidrag, Translator) {
 	"use strict";
 	var toolTypes = {
 		'and': new my.ElementType('and', 'gateand', -60, -25, 50, 50, [
@@ -61,22 +61,6 @@
 
 	var ERROR_CIRCLE_RADIUS = 10;
 
-	var ERR_MESSAGES = {
-		connect_inputs: 'Cannot connect inputs',
-		connect_outputs: 'Cannot connect outputs',
-		connect_self: 'Cannot connect element to itself',
-		connect_loop: 'Cannot create loop',
-		double_input: 'Input can have only one connection',
-
-		port_on_wire: 'Port cannot be near wire',
-		port_on_element: 'Port cannot overlap element',
-		element_on_wire: 'Wire cannot cross element',
-		element_on_element: 'Elements cannot overlap',
-
-		move_frozen: 'Element is frozen and cannot be moved',
-		remove_frozen: 'Element is frozen and cannot be removed'
-	};
-
 	function fixEvent(workshop, e) {
 		var poffs;
 		poffs = workshop.canvas.offset();
@@ -89,22 +73,24 @@
 		return toolTypes[id];
 	};
 
-	my.Workshop = function (jqElt, tools) {
-		var self, toolbar, canvas, errContainer, name, gesture, info;
+	my.Workshop = function (jqElt, jqIface, tools) {
+		var self, toolbar, canvas, errContainer;
 
 		self = this;
 		jqElt.addClass('circ_container');
-		toolbar = $('<div></div>').addClass('circ_toolbar');
+		toolbar = $('<div></div>').addClass('toolbar');
 		canvas = $('<div></div>').addClass('circ_canvas');
 		errContainer = $('<div></div>').addClass('circ_error_parent');
 		jqElt.append(toolbar);
 		jqElt.append(canvas);
-		jqElt.append($('<div></div>').addClass('circ_error_grandparent')
+		canvas.append($('<div></div>').addClass('circ_error_grandparent')
 			.append(errContainer));
+		this.iface = jqIface;
 		this.toolbar = toolbar;
 		this.toolbarEnabled = true;
 		this.canvas = canvas;
 		this.errContainer = errContainer;
+		this.errMsg = null;
 		this.errElt = null;
 		this.errCircs = [];
 		this.gesture = new my.NullGesture(self);
@@ -112,19 +98,21 @@
 		this.layout = new my.Layout();
 		this.state = my.newInitialState(this.layout);
 		this.changeListeners = [];
+		this.setSize(jqElt.width(), jqElt.height());
 
 		function GestureHandler(e) {
-			var ex, ey, gest, newGest, toolOffs;
+			var ex, ey, gest, newGest, canvOffs;
 
 			e.preventDefault();
 			ex = e.pageX;
 			ey = e.pageY;
 			fixEvent(self, e);
-			if (self.toolbarEnabled && (ey < canvas.offset().top ||
-					ex < canvas.offset().left)) {
+			canvOffs = canvas.offset();
+			if (self.toolbarEnabled && (ey < canvOffs.top ||
+					ex < canvOffs.left)) {
 				newGest = null;
 				$('.tool', toolbar).each(function (i, tool) {
-					var elt, offs, dx, dy, typeName, type;
+					var elt, offs, dx, dy, typeName;
 					elt = $(tool);
 					offs = elt.offset();
 					dx = ex - offs.left;
@@ -189,8 +177,20 @@
 			self.fireChange();
 		};
 
-		multidrag.register(jqElt, GestureHandler);
+		this.gestures = multidrag.create(GestureHandler).register(jqIface);
 
+		Translator.addListener(function () {
+			var errMsg, errElt, text;
+			errMsg = self.errMsg;
+			errElt = self.errElt;
+			if (errMsg !== null && errElt !== null) {
+				text = Translator.getText('circuit', errMsg);
+				if (text === null) {
+					text = errMsg;
+				}
+				errElt.text(text);
+			}
+		});
 	};
 
 	my.Workshop.prototype.addChangeListener = function (listener) {
@@ -267,7 +267,7 @@
 	};
 
 	my.Workshop.prototype.showError = function (msg, locs) {
-		var oldElt, i, key, text, oldText, errElt, circs;
+		var oldElt, text, oldText, errElt;
 
 		oldElt = this.errElt;
 
@@ -275,6 +275,7 @@
 			this.setErrorCircles([]);
 			if (oldElt) {
 				this.errElt = null;
+				this.errMsg = null;
 				oldElt.stop().fadeOut(100, function () {
 					oldElt.remove();
 				});
@@ -282,18 +283,10 @@
 			return;
 		}
 
-		i = msg.lastIndexOf('.');
-		if (i >= 0) {
-			key = msg.substring(i + 1);
-		} else {
-			key = msg;
-		}
-		if (ERR_MESSAGES.hasOwnProperty(key)) {
-			text = ERR_MESSAGES[key];
-		} else {
+		text = Translator.getText('circuit', msg);
+		if (text === null) {
 			text = msg;
 		}
-		// console.log(text, loc); //OK
 		if (oldElt === null) {
 			oldText = '';
 		} else {
@@ -302,6 +295,7 @@
 		if (text !== oldText) {
 			errElt = $('<span></span>').addClass('circ_error').text(text).hide();
 			this.errElt = errElt;
+			this.errMsg = msg;
 			this.errContainer.append(errElt);
 			if (oldText === '') {
 				errElt.fadeIn(100);
@@ -313,35 +307,36 @@
 			}
 		}
 
-		if (locs !== null) {
+		if (typeof locs !== 'undefined' && locs !== null && locs.length >= 0) {
 			if (locs[0].length) {
 				this.setErrorCircles(locs);
 			} else {
 				this.setErrorCircles([locs]);
 			}
+		} else {
+			this.setErrorCircles([]);
 		}
 	};
 
 	my.Workshop.prototype.setErrorCircles = function (locs) {
-		var r, circs, numOld, num, offs0, i, loc, x, y, circ;
+		var r, circs, numOld, num, i, loc, x, y, circ;
 		r = ERROR_CIRCLE_RADIUS;
 		circs = this.errCircs;
 		numOld = circs.length;
 		num = locs.length;
-		offs0 = this.canvas.offset();
 		for (i = 0; i < num; i += 1) {
 			loc = locs[i];
-			x = offs0.left + loc[0] - r;
-			y = offs0.top + loc[1] - r;
+			x = loc[0] - r;
+			y = loc[1] - r;
 			if (i < numOld) {
-				circs[i].show().offset({left: x, top: y});
+				circs[i].css({left: x, top: y}).show();
 			} else {
 				circ = ($('<img></img>').fadeTo(0, 0.5)
 					.attr('src', my.getResourcePath('err-circ.svg'))
 					.addClass('error_circle')
-					.width(2 * r));
+					.width(2 * r)
+					.css({left: x, top: y}));
 				this.canvas.append(circ);
-				circ.offset({left: x, top: y});
 				circs.push(circ);
 			}
 		}
@@ -391,10 +386,37 @@
 	};
 
 	my.Workshop.prototype.setSize = function (width, height) {
-		var paper;
+		var toolbar, canvas, paper, canvasX, canvasY;
+		toolbar = this.toolbar;
+		canvas = this.canvas;
 		paper = this.paper;
+		if (width > height) { // toolbar at left side
+			if (!toolbar.hasClass('toolbar_vert')) {
+				toolbar.removeClass('toolbar_horz').addClass('toolbar_vert');
+			}
+			canvasX = Math.min(200, toolbar.outerWidth());
+			canvasY = 0;
+		} else { // toolbar at top
+			if (!toolbar.hasClass('toolbar_horz')) {
+				toolbar.removeClass('toolbar_vert').addClass('toolbar_horz');
+			}
+			canvasX = 0;
+			canvasY = Math.min(200, toolbar.outerHeight());
+		}
+		canvas.css({left: canvasX, top: canvasY,
+			width: width - canvasX, height: height - canvasY});
 		paper.paintAfter(function () {
-			paper.setSize(width, height);
+			paper.setSize(width - canvasX, height - canvasY);
 		});
 	};
-}(Workshop, jQuery, raphwrap, multidrag));
+
+	my.Workshop.prototype.setInterfaceEnabled = function (value) {
+		if (value) {
+			this.iface.show();
+			this.gestures.register(this.iface);
+		} else {
+			this.iface.hide();
+			this.gestures.unregister();
+		}
+	};
+}(Workshop, jQuery, raphwrap, multidrag, Translator));

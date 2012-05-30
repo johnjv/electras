@@ -11,6 +11,7 @@
 </head>
 
 <body>
+<div id="circuit_iface"></div>
 <div id="main_container">
 
     <div id="factoryParent">
@@ -32,13 +33,11 @@
    </div>
    
    <div id="circuit"></div>
-     
-    <div id = "cliptip">
-        <img src = "../levels/images/clipboard-top.png" id = "tip">
-    </div> 
-
+   <div id = "cliptip">
+        <img src = "../levels/images/clipboard-top1.png" id = "tip">
+    </div>
     <div id = "clipboard">
-        <img src = "../levels/images/clipboard.png" id = "clip">        
+        <img src = "../levels/images/clipboard1.png" id = "clip">        
         <div id = "clipOrder">
             <div class = "page" id = "page0">
                 <p> Welcome to my candy factory! Our customers send orders to us,
@@ -46,18 +45,18 @@
 
                 <p>Our factory produces candy in three shapes:</p>
 
-                <table>
+                <table id = "shapes">
                     <tr><td>drops</td><td>stars</td><td>squares</td></tr>
                     <tr><td><img class = "welcolor" src="../Floor/resource-image/candy00.png" /></td><td><img  class = "welcolor" src="../Floor/resource-image/candy01.png" /></td><td><img class = "welcolor" src="../Floor/resource-image/candy02.png" /></td></tr>
                 </table>
 
                 <p>And candy comes in four flavors:</p>
 
-                <table>
+                <table id = "flavors">
                     <tr><td>Blue</td><td>Cherry</td><td>Lemon</td><td>Mint</td></tr>
                     <tr><td>(blue)</td><td>(red)</td><td>(yellow)</td><td>(green)</td></tr>
                     <tr><td><img class = "welcolor" src="../workshop/resource/color0.png" /></td><td><img class = "welcolor" src="../workshop/resource/color1.png" /></td>
-                    <td><img class = "welcolor" src="../workshop/resource/color2.png" /></td><td><img  class = "welcolor" src="../workshop/resource/color3.png" /></td></tr>
+                    <td><img class = "welcolor" src="../workshop/resource/color3.png" /></td><td><img  class = "welcolor" src="../workshop/resource/color2.png" /></td></tr>
                 </table>
                  
                 <p>Let's get started! We will help you along the way!</p>               
@@ -77,8 +76,9 @@
 <script type = "text/javascript"  src="letterbox.js"></script>
 <script type = "text/javascript"  src="../lib/raphael.js"></script>
 <script type = "text/javascript"  src="../lib/imagesloaded.js"></script>
+<script type = "text/javascript"  src="../translations/language_switcher.js"></script>
 <script type = "text/javascript"  src="../lib/multidrag.js"></script>
-<script type = "text/javascript"  src="../workshop/raphwrap.js"></script>   
+<script type = "text/javascript"  src="../workshop/raphwrap.js"></script>
 <script type = "text/javascript"  src="../workshop/layout.js"></script>
 <script type = "text/javascript"  src="../workshop/evaluate.js"></script>
 <script type = "text/javascript"  src="../workshop/drawcirc.js"></script>
@@ -87,7 +87,8 @@
 <script type = "text/javascript"  src="../workshop/eltgest.js"></script>
 <script type = "text/javascript"  src="../workshop/gesture.js"></script>
 <script type = "text/javascript"  src="../workshop/canvas.js"></script>
-<script type = "text/javascript"  src="../workshop/circuit.js"></script>     
+<script type = "text/javascript"  src="../workshop/circuit.js"></script> 
+<script type = "text/javascript"  src="../levels/credit.js"></script>    
 <script type = "text/javascript"  src="../levels/SequenceItem.js"></script>
 <script type = "text/javascript"  src="../levels/Level.js"></script>
 <script type = "text/javascript"  src="../levels/PreMadeLevels.js"></script> 
@@ -97,17 +98,46 @@
 <script type = "text/javascript"  src="../Floor/FactoryFloor.js"></script>
 <script type = "text/javascript"  src="../Floor/floor.js"></script>
 <script type = "text/javascript"  src="../tutorials/jquery-ui-1.8.20.custom.min.js"></script>
+
 <script type = "text/javascript"  src="../tutorials/tutorial.js"></script>
 <script type = "text/javascript"  src="../tutorials/filtering.js"></script>
 <script type = "text/javascript"  src="../tutorials/convenience_operators.js"></script>
+<script type = "text/javascript"  src="../tutorials/translator_interface.js"></script>
 <script type = "text/javascript"  src="../tutorials/level3tutorial.js"></script>
 <script type = "text/javascript"  src="../tutorials/level1tutorial.js"></script>
 <script type = "text/javascript"  src="../tutorials/level2tutorial.js"></script>
 <script type = "text/javascript"  src="../tutorials/level4tutorial.js"></script>
 <script type = "text/javascript"  src="../tutorials/level6tutorial.js"></script>
 <script type = "text/javascript"  src="../tutorials/level8tutorial.js"></script>
-<script type = "text/javascript"  src="../translations/language_switcher.js"></script>
-<script type = "text/javascript"  src="../tutorials/translator_interface.js"></script>
+
+<audio id="correct_sound"> 
+	<source src="../sounds/correct1.ogg" type="audio/ogg; codec=vorbis" preload="auto">
+	<source src="../sounds/correct1.mp3" type="audio/mp3" preload="auto">
+</audio>
+	
+<audio id="belt_sound" loop>
+	<source src="../sounds/belt3.mp3" type="audio/mp3" preload="auto">
+	<source src="../sounds/belt3.ogg" type="audio/ogg; codec=vorbis" preload="auto">
+</audio>
+
+<audio id="punch_sound"> 
+	<source src="../sounds/punch.ogg" type="audio/ogg; codec=vorbis" preload="auto">
+	<source src="../sounds/punch.mp3" type="audio/mp3" preload="auto">
+</audio>
+
+<audio id="paper_sound"> 
+	<source src="../sounds/paper.ogg" type="audio/ogg; codec=vorbis" preload="auto">
+	<source src="../sounds/paper.mp3" type="audio/mp3" preload="auto">
+</audio>
+<audio id="paper_sound2"> 
+	<source src="../sounds/paper.ogg" type="audio/ogg; codec=vorbis" preload="auto">
+	<source src="../sounds/paper.mp3" type="audio/mp3" preload="auto">
+</audio>
+
+<audio id="garbage_sound"> 
+	<source src="../sounds/garbage.ogg" type="audio/ogg; codec=vorbis" preload="auto">
+	<source src="../sounds/garbage.mp3" type="audio/mp3" preload="auto">
+</audio>
 
 
 <div id="translations" hidden="hidden">
@@ -118,6 +148,19 @@
     <span class="menu">
 
     </span>
+	<span class="circuit">
+		<span class="err_connect_inputs">Cannot connect inputs</span>
+		<span class="err_connect_outputs">Cannot connect outputs</span>
+		<span class="err_connect_self">Cannot connect element to itself</span>
+		<span class="err_connect_loop">Cannot create loop</span>
+		<span class="err_double_input">Input can have only one connection</span>
+		<span class="err_port_on_wire">Port cannot be near wire</span>
+		<span class="err_port_on_element">Port cannot overlap element</span>
+		<span class="err_element_on_wire">Wire cannot cross element</span>
+		<span class="err_element_on_element">Elements cannot overlap</span>
+		<span class="err_move_frozen">Element is frozen and cannot be moved</span>
+		<span class="err_remove_frozen">Element is frozen and cannot be removed</span>
+	</span>
   <span class="tutorial1">
     <span class="order"></span>
     <span class="hint"></span>
@@ -227,6 +270,19 @@
   </div>
 
   <div id="FR">
+	<span class="circuit">
+		<span class="err_connect_inputs">Cannot connect inputs</span>
+		<span class="err_connect_outputs">Cannot connect outputs</span>
+		<span class="err_connect_self">Cannot connect element to itself</span>
+		<span class="err_connect_loop">Cannot create loop</span>
+		<span class="err_double_input">Input can have only one connection</span>
+		<span class="err_port_on_wire">Port cannot be near wire</span>
+		<span class="err_port_on_element">Port cannot overlap element</span>
+		<span class="err_element_on_wire">Wire cannot cross element</span>
+		<span class="err_element_on_element">Elements cannot overlap</span>
+		<span class="err_move_frozen">Element is frozen and cannot be moved</span>
+		<span class="err_remove_frozen">Element is frozen and cannot be removed</span>
+	</span>
   <span class="tutorial1">
     <span class="bubble1">Another language!</span>
     <span class="bubble2">We should translate things</span>

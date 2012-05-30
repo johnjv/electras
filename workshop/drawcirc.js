@@ -68,7 +68,7 @@
 	my.DrawCirc = {};
 
 	my.DrawCirc.createElement = function (info, elt) {
-		var type, img, offs0;
+		var type, img;
 
 		if (elt.imgElt) {
 			elt.imgElt.remove();
@@ -82,9 +82,7 @@
 		img.width(type.imgWidth);
 		img.height(type.imgHeight);
 		info.canvas.append(img);
-		offs0 = info.canvas.offset();
-		img.offset({ left: offs0.left + elt.x + elt.type.imgX,
-			top: offs0.top + elt.y + elt.type.imgY });
+		img.css({left: elt.x + elt.type.imgX, top: elt.y + elt.type.imgY});
 
 		$.each(elt.ports, function (i, port) {
 			my.DrawCirc.attachStub(info, port);
@@ -115,13 +113,12 @@
 	};
 
 	my.DrawCirc.repositionElement = function (info, elt) {
-		var type, offs0, x, y, img;
+		var type, x, y;
 
 		type = elt.type;
-		offs0 = info.canvas.offset();
-		x = offs0.left + elt.x + elt.type.imgX;
-		y = offs0.top + elt.y + elt.type.imgY;
-		elt.imgElt.offset({left: x, top: y});
+		x = elt.x + elt.type.imgX;
+		y = elt.y + elt.type.imgY;
+		elt.imgElt.css({left: x, top: y});
 
 		$.each(elt.ports, function (i, port) {
 			var j;
