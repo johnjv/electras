@@ -412,10 +412,8 @@
 
 	my.Workshop.prototype.setInterfaceEnabled = function (value) {
 		if (value) {
-			this.iface.show();
 			this.gestures.register(this.iface);
 		} else {
-			this.iface.hide();
 			this.gestures.unregister();
 		}
 	};

@@ -65,7 +65,7 @@ var Circuit = (function ($, Workshop, multidrag) {
 			top: '-=' + (main.width() * 0.2) + 'px',
 			borderWidth: '4px'
 		}, 1000);
-		workshop.setInterfaceEnabled(false);
+		my.setInterfaceEnabled(false);
 
 		function RestoreHandler() {
 			backDrag.unregister();
@@ -75,7 +75,7 @@ var Circuit = (function ($, Workshop, multidrag) {
 				top: 0,
 				borderWidth: 0
 			}, 1000, function () {
-				workshop.setInterfaceEnabled(true);
+				my.setInterfaceEnabled(true);
 				my.setMinimizeEnabled(true);
 			});
 		}
@@ -312,8 +312,17 @@ var Circuit = (function ($, Workshop, multidrag) {
 		}
 	};
 
-	my.setInterfaceEnabled = function (value) {
-		workshop.setInterfaceEnabled(value);
+	my.setInterfaceEnabled = function (value, keepIface) {
+		var iface;
+		workshop.setInterfaceEnabled(value, keepIface);
+		iface = $('#circuit_iface');
+		if (value) {
+			iface.show();
+		} else {
+			if (keepIface !== true) {
+				iface.hide();
+			}
+		}
 	};
 
 	return my;
