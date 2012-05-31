@@ -103,3 +103,18 @@
 #trashTally{
 	width:20px;
 }
+
+#success{
+	position:absolute;
+	color:green;
+	left: 10%;
+	top:80%
+}
+
+#failure{
+	position:absolute;
+	color:red;
+	left: 10%;
+	top:80%
+}
+
