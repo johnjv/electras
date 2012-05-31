@@ -213,26 +213,26 @@
 		this.toolbarEnabled = value;
 	};
 
-	my.Workshop.prototype.setLayout = function (layout) {
-		var self;
-
-		self = this;
+	my.Workshop.prototype.layoutRearranged = function () {
+		var self = this;
 		$('img', this.canvas).remove();
 		this.paper.paintAfter(function () {
 			self.paper.clear();
-
-			self.layout = layout;
-			self.state = my.newInitialState(layout);
-
-			$.each(layout.elts, function (i, elt) {
+			$.each(self.layout.elts, function (i, elt) {
 				my.DrawCirc.createElement(self, elt);
 				elt.type.updateImage(elt, self.state);
 			});
-			layout.forEachWire(function (p0, p1) {
+			self.layout.forEachWire(function (p0, p1) {
 				my.DrawCirc.attachWire(self, p0, p1);
 			});
 		});
-		self.fireChange({type: 'layoutReplaced'});
+	}
+
+	my.Workshop.prototype.setLayout = function (layout) {
+		this.layout = layout;
+		this.state = my.newInitialState(layout);
+		this.layoutRearranged();
+		this.fireChange({type: 'layoutReplaced'});
 	};
 
 	my.Workshop.prototype.setState = function (state) {
@@ -322,7 +322,11 @@
 			x = loc[0] - r;
 			y = loc[1] - r;
 			if (i < numOld) {
-				circs[i].css({left: x, top: y}).show();
+				circ = circs[i];
+				circ.css({left: x, top: y}).show();
+				if (circ.parent().size() === 0) {
+					this.canvas.append(circ);
+				}
 			} else {
 				circ = ($('<img></img>').fadeTo(0, 0.5)
 					.attr('src', my.getResourcePath('err-circ', ['svg', 'png']))
