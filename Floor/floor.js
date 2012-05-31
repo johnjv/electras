@@ -90,10 +90,21 @@ var Placer = {};
 	function placeTally(){
 		"use strict";
 		var tally = $('#tally');
+		var punchingBox = $("img#punchingbox");
 		var container = $('#factory');
 		var x = container.width() * 0.5;
 		var y = container.height() * 0.001;
 		moveTo(tally,x,y);
+		
+		var tallyPosBottom = tally.position().top + tally.height();
+		var punchingBoxPos = punchingBox.position().top;
+		var tallyPosRight = tally.position().left + tally.width();
+		if (tallyPosBottom > punchingBoxPos || tallyPosRight > container.width()) {
+			tally.hide();
+		}
+		else{
+			tally.show();
+		}
 	}
 	
 }(Placer, jQuery));
