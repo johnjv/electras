@@ -1,163 +1,201 @@
 function Level(level){
-    "use strict";
-    this.levelid = level.levelid;
+	"use strict";
+	this.levelid = level.levelid;
 	this.levelname = level.levelname;
 	this.orderText = level.orderText;
-	this.hint = level.hint; 
+	this.hint = level.hint;
 	this.sensors = level.sensors;
 	this.tools = level.tools;
-	this.types = level.types;    	
+	this.types = level.types;
 	this.script = level.script;
-	this.answers = level.answers; 
-	this.complete = false;	
+	this.answers = level.answers;
+	this.complete = false;
 }
- 
-Level.prototype.analyze = function (){
-   "use strict";
-   var analysis, levelSays, circuitSays, evaluator, sequence, i, sequenceItem ,j, levelAnswers, correct;	  
-   levelAnswers = this.parseAnswer(this.answers);   	   
-   sequence = this.getBest(this.types, levelAnswers); //'C-,C|,Co,R-,R|,Ro,Y-,Y|,Yo,G-,G|,Go'; 	   
-   analysis = []; 
-   correct = false;
-  
-   for(i = 0; i < sequence.length; i+=1){	               	        
-        for(j = 0; j < levelAnswers.length; j += 1){	                        
-            if(sequence[i] === levelAnswers[j]){	               	                              	                	                
-               correct = true;	 
-            }	            
-        }	              
-    levelSays = correct;
-    evaluator = Circuit.getEvaluator(); 
-    circuitSays =  evaluator.evaluate(sequence[i]);
-    sequenceItem = new SequenceItem(sequence[i], levelSays, circuitSays);	   
-    analysis.push(sequenceItem);
-    correct = false;
-   }	   
-   return analysis;
-};
 
-Level.prototype.getSequence = function(types){
-    "use strict";
-    var sequenceLength, sequence;
-    sequenceLength = 8;
-    sequence = "";
-    if(types.length == 1){		    
-      	var type0 = types[0].toString();
-      	var count = type0.indexOf("C");	      	
-      	
-      	if( count !== -1){	  		
-      		var acceptabletypes = "C-,C|,Co";
-     		sequence = this.addToSeq(acceptabletypes);    		
-     	}
-      		
-      	else if(type0.indexOf("G") !== -1){
-      		var acceptabletypes = "G-,G|,Go";
-     		sequence = this.addToSeq(acceptabletypes); 		
-     	}
-     
-       	else if(type0.indexOf("Y")!== -1){
-        	var acceptabletypes = "Y-,Y|,Yo";
-        	sequence = this.addToSeq(acceptabletypes);     		
-      	}
-      		
-      	else if(type0.indexOf("R") !== -1){
-        	var acceptabletypes = "R-,R|,Ro";
-        	sequence = this.addToSeq(acceptabletypes);   		
-      	}
-      			  		
-      	else if(type0.indexOf("*") !== -1 && type0.indexOf("|") !==-1){
-      		var acceptabletypes = "G|,R|,Y|,C|";
-     		sequence = this.addToSeq(acceptabletypes); 		
-      	}
-      		
-      	else if(type0.indexOf("*") !== -1 && type0.indexOf("-") !==-1){
-      		var acceptabletypes = "G-,R-,Y-,C-";
-     		sequence = this.addToSeq(acceptabletypes);  		
-        	 
-      	}
-      	else if(type0.indexOf("*") !== -1 && type0.indexOf("o") !==-1){
-      		var acceptabletypes = "Go,Ro,Yo,Co";
-     		sequence = this.addToSeq(acceptabletypes); 	
-      	}
-      	
-      	else{	  		
-      		var acceptabletypes = "G-,G|,Go,R-,R|,Ro,Y-,Y|,Yo,C-,C|,Co";
-     		sequence = this.addToSeq(acceptabletypes); 	
-        }
-     }
-     return sequence;   
-};
-
-  Level.prototype.parseAnswer = function(answer){
-    "use strict";
-    var answers, newAnswers, i, j;
-    answers = answer.split(",");
-    newAnswers =[];            
-    
-    for(i = 0;i< answers.length; i += 1 ){
-        if($.trim(answers[i].split("")[0]) === '*'){
-            newAnswers.push( 'G' + $.trim(answers[i].split("")[1]) );
-            newAnswers.push( 'Y' + $.trim(answers[i].split("")[1]) );
-            newAnswers.push( 'R' + $.trim(answers[i].split("")[1]) );
-            newAnswers.push( 'C' + $.trim(answers[i].split("")[1]) );
-        }
-        else if($.trim(answers[i].split("")[1]) === '*'){
-                newAnswers.push( $.trim(answers[i].split("")[0]) + '-' );
-                newAnswers.push( $.trim(answers[i].split("")[0]) + 'o' );
-                newAnswers.push( $.trim(answers[i].split("")[0]) + '|' );
-        }
-        else{
-            newAnswers.push(answers[i]);
-        }                  
-    }                                    
-    for (i = 0; i < newAnswers.length; i += 1){
-        for (j= 1+i; j < newAnswers.length; j += 1) {
-            if(newAnswers[i]=== newAnswers[j]){
-                newAnswers.splice(i,1)          
-            }            
-        }
-    }
-    return newAnswers;            
-};
-
-Level.prototype.getBest = function(types, answers){
-   "use strict";
-   var sequence, i, bestCase, j , k, maxSeq, total, arraySeq;       
-   maxSeq = 10;
-   bestCase = 0;
-   arraySeq = [];
-   for(i = 0; i <= 200; i += 1){           
-        sequence = this.getSequence(types);	   
-        sequence = sequence.split(',');
-        arraySeq.push(sequence);
-        for(j = 0; j < sequence.length; j +=1){
-            total = 0; 
-            for(k = 0; k < answers.length; k += 1){
-                if(sequence[j] === answers[k]){
-                    total += 1;
-                }               
-           }
-           if(total < maxSeq){
-                maxSeq = total;
-                bestCase = i;	        
-           }
-       }
-  }
-    return arraySeq[bestCase];
-};
-
-Level.prototype.addToSeq = function(types){ 
-    "use strict";  
-    var i;     
-    var sequence = "";
-    var acceptableelementType = types.split(",");
- 	for(i = 0; i < 8;i++){
-		var index = Math.floor(Math.random()*acceptableelementType.length);
-		sequence += acceptableelementType[index] ;
-		if(i != 7){
-		    sequence += ",";
+function levelCandyDescriptionToArray(candies) {
+	"use strict";
+	var possible, tokens, k, type, colors, shapes, i, j, candy;
+	possible = [];
+	tokens = candies.split(',');
+	for (k = 0; k < tokens.length; k += 1) {
+		type = tokens[k];
+		colors = [type.substring(0, 1)];
+		shapes = [type.substring(1)];
+		if (colors[0] === '*') {
+			colors = ['C', 'R', 'G', 'Y'];
 		}
-    }        
-    return sequence;    
-};
+		if (shapes[0] === '*') {
+			shapes = ['o', '|', '-'];
+		}
+		for (i = 0; i < colors.length; i += 1) {
+			for (j = 0; j < shapes.length; j += 1) {
+				candy = colors[i] + shapes[j];
+				if ($.inArray(possible, candy) < 0) {
+					possible.push(candy);
+				}
+			}
+		}
+	}
+	return possible;
+}
 
+function levelCandyDescriptionToSet(candies) {
+	"use strict";
+	var possible, arr, i;
+	possible = {};
+	arr = levelCandyDescriptionToArray(candies);
+	for (i = 0; i < arr.length; i += 1) {
+		possible[arr[i]] = true;
+	}
+	return possible;
+}
+
+function levelGenerateSequence(candyPool) {
+	"use strict";
+	var sequence, sequenceLength, i, index;
+	sequenceLength = 8;
+	sequence = [];
+	for (i = 0; i < sequenceLength; i += 1) {
+		index = Math.floor(Math.random() * candyPool.length);
+		sequence.push(candyPool[index]);
+	}
+	return sequence;
+}
+
+function levelEvaluateSequence(seqIndex, sequence, candyAcceptSet) {
+	"use strict";
+	var evaluator, i, candy, circuitSays, levelSays, numWrong, combo,
+		combos, numCombos, minCombo, c, colors, numColors,
+		shapes, numShapes, candies, numCandies, varMetric;
+
+	combos = [0, 0, 0, 0];
+	// combos[0]: number of times circuit says reject, level says reject
+	// combos[1]: number of times circuit says reject, level says accept
+	// combos[2]: number of times circuit says accept, level says reject
+	// combos[3]: number of times circuit says accept, level says accept
+	candies = {}; // candies[x] will be true when x was found in sequence
+	shapes = {}; // shapes[x] will be true when x was found in sequence
+	colors = {}; // colors[x] will be true when x was found in sequence
+	numWrong = 0; // number of candies where machine was wrong
+	numCandies = 0; // count distinct candies - i.e. size(candies)
+	numColors = 0; // count distinct colors in candies - i.e. size(colors)
+	numShapes = 0; // count distinct shapes in candies - i.e. size(shapes)
+	evaluator = Circuit.getEvaluator();
+	for (i = 0; i < sequence.length; i += 1) {
+		candy = sequence[i];
+		circuitSays = evaluator.evaluate(candy).accept;
+		levelSays = candyAcceptSet[candy] === true;
+
+		if (circuitSays !== levelSays) {
+			numWrong += 1;
+		}
+		combo = (circuitSays ? 2 : 0) + (levelSays ? 1 : 0);
+		combos[combo] += 1;
+		if (!candies.hasOwnProperty(candy)) {
+			candies[candy] = true;
+			numCandies += 1;
+		}
+		c = candy.substring(0, 1);
+		if (!colors.hasOwnProperty(c)) {
+			colors[c] = true;
+			numColors += 1;
+		}
+		c = candy.substring(1, 2);
+		if (!shapes.hasOwnProperty(c)) {
+			shapes[c] = true;
+			numShapes += 1;
+		}
+	}
+
+	numCombos = 0;
+	minCombo = sequence.length;
+	for (i = 0; i < 4; i += 1) {
+		combo = combos[i];
+		if (combo > 0) {
+			numCombos += 1;
+			if (combo < minCombo) {
+				minCombo = combo;
+			}
+		}
+	}
+
+	// We will be selecting results based on the following criteria,
+	// choosing the result for which the first number (after numWrong)
+	// is maximal.
+	// * Our first preference is a sequence that displays as
+	//   many combinations of circuitAccepts/levelAccepts as possible.
+	// * Our second preference is a sequence that has several of
+	//   each such combination.
+	// * Our third preference is a sequence that has a variety
+	//   of shapes, colors, and candies.
+	// * Our fourth preference is just to select the first
+	//   sequence generated - this is just a conclusive tie-breaker.
+	varMetric = Math.min(numShapes, numCandies) * 64 +
+		Math.max(numShapes, numCandies) * 16 + numCandies;
+	return [numWrong, numCombos, minCombo, varMetric, seqIndex, sequence];
+}
+
+function levelSelectSequence(candyPool, candyAcceptSet) {
+	"use strict";
+	var results, worstWrong, i, sequence, result, thresh, initResults;
+
+	// Generate 100 random sequences, evaluating each of them
+	// and tracking the worst performance of the machine.
+	results = [];
+	worstWrong = 0;
+	for (i = 0; i < 100; i += 1) {
+		sequence = levelGenerateSequence(candyPool);
+		result = levelEvaluateSequence(i, sequence, candyAcceptSet);
+		results.push(result);
+		if (result[0] > worstWrong) {
+			worstWrong = result[0];
+		}
+	}
+
+	if (worstWrong > 0) {
+		// Machine is wrong. Constrain attention to sequences where machine
+		// did more than half as badly as its worst performance.
+		thresh = 1 + Math.floor(worstWrong / 2);
+		initResults = results;
+		results = [];
+		for (i = 0; i < initResults.length; i += 1) {
+			result = initResults[i];
+			if (result[0] >= thresh) {
+				results.push(result);
+			}
+		}
+	}
+
+	results.sort(function (r0, r1) {
+		var i, d;
+		for (i = 1; i < 10; i += 1) {
+			d = r0[i] - r1[i];
+			if (d !== 0) {
+				return d;
+			}
+		}
+		return 0; // should never happen
+	});
+
+	// Choose the result from the last among this sorted list.
+	result = results[results.length - 1];
+	return result[result.length - 1];
+}
+
+Level.prototype.analyze = function (){
+	"use strict";
+	var candyPool, candyAcceptSet, sequence, analysis, evaluator, i, candy;
+
+	candyPool = levelCandyDescriptionToArray(this.types);
+	candyAcceptSet = levelCandyDescriptionToSet(this.answers);
+	sequence = levelSelectSequence(candyPool, candyAcceptSet);
+
+	analysis = [];
+	evaluator = Circuit.getEvaluator();
+	for (i = 0; i < sequence.length; i += 1) {
+		candy = sequence[i];
+		analysis.push(new SequenceItem(candy,
+			candyAcceptSet[candy] === true, evaluator.evaluate(candy)));
+	}
+	return analysis;
+};
