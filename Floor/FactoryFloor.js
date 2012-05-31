@@ -1,7 +1,8 @@
 $(document).ready(function(){
 		setCircuitSound();
         $("#tally").hide();
-       	
+       	$("#success").hide();
+       	$("#failure").hide();
 		var startIm = $("#start");
 		var animationAlive = false;
 		
@@ -49,6 +50,7 @@ function setCircuitSound(){
 	});
 
 }
+
    
 function startMachine(onDone){
         var count =0;
@@ -90,9 +92,12 @@ function startMachine(onDone){
 				belt.pause();
 				if (correctSet) {
 					LevelSelector.setComplete(true);
+					showMessage($("#success"));
+					
 				}
 				else{
 					LevelSelector.setComplete(false);
+					showMessage($("#failure"));
 				}
 			}
         }
@@ -285,6 +290,15 @@ function stopMachine(){
     $('#tally').hide();
     //stopMovingPuncher();
     Placer.place();
+}
+
+function showMessage(mess){
+	"use strict";
+	mess.show();
+	mess.fadeOut(15000, function(){
+		mess.hide();
+	});
+	
 }
 
 var FactoryFloor = (function($) {
