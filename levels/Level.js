@@ -16,7 +16,7 @@ Level.prototype.analyze = function (){
    "use strict";
    var analysis, levelSays, circuitSays, evaluator, sequence, i, sequenceItem ,j, levelAnswers, correct;	  
    levelAnswers = this.parseAnswer(this.answers);   	   
-   sequence = this.getBest(this.types, levelAnswers);	   
+   sequence = this.getBest(this.types, levelAnswers); //'C-,C|,Co,R-,R|,Ro,Y-,Y|,Yo,G-,G|,Go'; 	   
    analysis = []; 
    correct = false;
   
@@ -41,7 +41,6 @@ Level.prototype.getSequence = function(types){
     var sequenceLength, sequence;
     sequenceLength = 8;
     sequence = "";
-    var levelType = types;	    
     if(types.length == 1){		    
       	var type0 = types[0].toString();
       	var count = type0.indexOf("C");	      	
@@ -124,7 +123,7 @@ Level.prototype.getSequence = function(types){
 Level.prototype.getBest = function(types, answers){
    "use strict";
    var sequence, i, bestCase, j , k, maxSeq, total, arraySeq;       
-   maxSeq = 0;
+   maxSeq = 10;
    bestCase = 0;
    arraySeq = [];
    for(i = 0; i <= 200; i += 1){           
@@ -138,7 +137,7 @@ Level.prototype.getBest = function(types, answers){
                     total += 1;
                 }               
            }
-           if(total > maxSeq){
+           if(total < maxSeq){
                 maxSeq = total;
                 bestCase = i;	        
            }

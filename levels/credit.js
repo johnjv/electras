@@ -3,8 +3,7 @@ var Credit = {};
 (function(my, $){
 	"use strict";
 	var contentDiv = $('<div class = "page" id = "page23"></div>');
-	my.slideDesc = function(){
-	    $('#showLevels').fadeTo('slow', '1');
+	my.slideDesc = function(){	    
 	    contentDiv.html("");
 		var body = $('#clipOrder');
 		body.append(contentDiv);
@@ -51,12 +50,14 @@ var Credit = {};
 		$('.credtable').css('width', '70%');
 		divs[i].css('margin-top', '0px');	
 		if(i == divs.length -1){
+		    $('#showLevels').show();
+		    $('#showLevels').fadeTo('slow', '1');
 	        return;
 	    }	
-		divs[i].delay(400).animate({
+		divs[i].delay(4000).animate({
 			
 		marginLeft: divs[i].outerWidth()
-    		}, 200, function(){
+    		}, 1000, function(){
     			divs[i].remove();
     			if(i < divs.length -1){
     				contentDiv.append(divs[i + 1]);
