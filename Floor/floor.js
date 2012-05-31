@@ -8,6 +8,7 @@ var Placer = {};
 		placePunchingBox();
 		placeGlove();
 		placeTrash();
+		placeTally();
 	}
 	
 	function moveTo(elt, x, y) {
@@ -90,6 +91,18 @@ var Placer = {};
 		moveTo(trash,x,y);
 		
 	}
+	
+	function placeTally(){
+		"use strict";
+		var tally = $('#tally');
+		var container = $('#factory');
+		var x = container.width() * 0.5;
+		var y = container.height() * 0.001;
+		
+		moveTo(tally,x,y);
+	
+	}
+	
 }(Placer, jQuery));
 
 
