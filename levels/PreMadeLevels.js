@@ -17,7 +17,7 @@ var its_a_start = new Level({
   hint: "You have some choices.  Remember, star-shaped candies are shaped like stars.",
   sensors: '|o-',
   tools: [],
-  types: ['C*'],
+  types: 'C*',
   answers: '*|',
   script: 'its_a_start'
 });
@@ -29,7 +29,7 @@ var soyl_not_green = new Level({
   hint: "You can add components now!  Try placing the 'not' component between the lightbulb and the green sensor and see what happens.",
   sensors: 'G',
   tools: ['not'],
-  types: ['*-'],
+  types: '*-',
   answers: 'C*,R*,Y*',
   script: 'soyl_not_green'
 });
@@ -42,7 +42,7 @@ var flavor_unearthed = new Level({
       " a green and a blue sensor to it.",
   sensors: 'GC',
   tools: ['or'],
-  types: ['*o'],
+  types: '*o',
   answers: 'C*,G*',
   script: 'flavor_unearthed'
 });
@@ -55,7 +55,7 @@ var indecisive = new Level({
   hint:  "They want things that are round or red.  This looks similar to what you did in the last level.",
   sensors: 'CRo-',
   tools: ['or'],
-  types: ['**'],
+  types: '**',
   answers: 'R*,*o',
   script: 'indecisive'
 });
@@ -68,7 +68,7 @@ var anti_twinkle = new Level({
   hint: "You'll have to combine an 'or' operator with either one or two 'not' operators.",
   sensors: 'Y|',
   tools: ['or', 'not'],
-  types: ['**'],
+  types: '**',
   answers: 'Co,C-,Ro,R-,Go,G-', 
   script: 'anti_twinkle'
 });
@@ -80,7 +80,7 @@ var a_new_earth = new Level({
   hint: "Looks like whoever delivers our sensors messed up and gave us the wrong ones!  You'll just have to use your brains to overcome that.",
   sensors: 'YR',
   tools: ['or', 'not'],
-  types: ['**'],
+  types: '**',
   answers: 'C*,G*',
   script: 'a_new_earth'
 });
@@ -92,7 +92,7 @@ var out_on_a_lemon = new Level({
   hint: "The 'and' operator combines two different sensors.It will only light up if both inputs are true",
   sensors: 'Y-',
   tools: ['and'],
-  types: ['**'],
+  types: '**',
   answers: 'Y-',
   script: 'out_on_a_lemon'
 });
@@ -104,7 +104,7 @@ var backlash = new Level({
   hint: "We want the OPPOSITE of last time.  Which operator gives you the opposite?",
   sensors: 'Y-',
   tools: ['and', 'not'],
-  types: ['**'],
+  types: '**',
   answers: 'Yo,Y|,R*,G*,C*',
   script: 'backlash'
 });
@@ -116,7 +116,7 @@ var speak_softly_cherry_a_stick = new Level({
   hint: "There are only so many ways to combine these operators and sensors.  Keep trying!",
   sensors: '-RY',
   tools: ['and', 'or'],
-  types: ['**'],
+  types: '**',
   answers: 'R-,Y-',
   script: 'speak_softly_cherry_a_stick'
 });
@@ -129,7 +129,7 @@ var botique = new Level({
   hint: "Make something that finds lemon drops, then something that finds green squares. Combine them!",
   sensors: 'GY-o',
   tools: ['and', 'or'],
-  types: ['**'],
+  types: '**',
   answers: 'Yo,G-',
   script: 'botique'
 });
@@ -141,7 +141,7 @@ var winnowing = new Level({
   hint: "You'll have to combine an 'and' operator and two 'or' operators to make this work.",
   sensors: 'YRo|',
   tools: ['and', 'or', 'not'],
-  types: ['**'],
+  types: '**',
   answers: 'Ro,R|,Yo,Y|',
   script: 'winnowing'
 });
@@ -153,7 +153,7 @@ var gniwonniw = new Level({
   hint: "We've got the same tools as last time, but we want the exact opposite.  How do we reverse what the machine is telling us?",
   sensors: 'YRo|',
   tools: ['and', 'or', 'not'],
-  types: ['**'],
+  types: '**',
   answers: 'C-,G-',
   script: 'gniwonniw'
 });
@@ -165,7 +165,7 @@ var mish_mash = new Level({
   hint: "You'll have to use all of the operators creatively.  Try making a machine that fills the first part of the order, then a machine that fills the second part. Finally, create a circuit that combines them.",
   sensors: 'RCo|',
   tools: ['and', 'or', 'not'],
-  types: ['**'],
+  types: '**',
   answers: 'Ro,R|,G|,Y|',
   script: 'mishmash'
 });
@@ -177,7 +177,7 @@ var combination = new Level({
   hint:  "There doesn't seem to be a green sensor.  It looks like we'll have to get the other sensors working together to make up for that.",
   sensors: 'CRY',
   tools: ['and', 'or', 'not'],
-  types: ['**'],
+  types: '**',
   answers: 'G*',
   script: 'combination'
 });
@@ -189,7 +189,7 @@ var conditional = new Level({
   hint: "Each operator gets used EXACTLY once. However, one of the sensors gets used more than once.",
   tools: ['and', 'or', 'not'],
   sensors: 'C-',
-  types: ['**'],
+  types: '**',
   answers: 'C-,R*,Y*,G*',
   script: 'conditional'
 });
@@ -202,7 +202,7 @@ var fake_it = new Level({
   hint: "Oh no!  Whatever will we do?  Somehow you'll have to make an 'or' operator from the 'and' operators and the 'not' operators.  ",
   tools: ['and', 'not'],
   sensors: 'CG',
-  types: ['**'],
+  types: '**',
   answers: 'C*,G*',
   script: 'fake_it'
 });
@@ -214,7 +214,7 @@ var fake_out = new Level({
   hint: "Wait, hasn't this happened before?  Let's try and solve it a similar way as last time.",
   tools: ['or', 'not'],
   sensors: 'Yo',
-  types: ['**'],
+  types: '**',
   answers: 'Yo',
   script: 'fake_out'
 });
@@ -226,7 +226,7 @@ var stop_gap = new Level({
   hint: "You can do it!",
   tools: ['and', 'or'],
   sensors: 'CGRY',
-  types: ['**'],
+  types: '**',
   answers: 'C*,R*,Y*',
   script: 'stop_gap'
 });
@@ -238,7 +238,7 @@ var kludge = new Level({
   hint: "When they said 'and', it's a trick of the English language.  In our world, that really means 'or'.  Anything we let pass will be a blue square or a star that isn't mint.",
   tools: ['and', 'or'],
   sensors: '|RYC',
-  types: ['**'],
+  types: '**',
   answers: 'C*,R|,Y|',
   script: 'kludge'
 });
