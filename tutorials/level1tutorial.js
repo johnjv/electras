@@ -21,14 +21,6 @@ var i_so_blue_events = function(){
     console.log("the user has connected the two");
     Tutorial.unhighlightSection()
     createSpeechBubble(blue_sensor_connection, getBubble(1, 3));
-//    waiting on FactorFloor to expose getLeverLocation()
-//    var level = FactoryFloor.getLeverLocation()
-//    highlightSection(lever, false);
-//    createSpeechBubble(blue_sensor_connection, getBubble(1, 3));
-
-//    do we need to deal with the clipboard here, or will it pop up on its own?
-//    var advance_location = getAdvanceLocation();
-//    highlightSection(advance_location)
 
   }
 
