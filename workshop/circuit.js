@@ -3,13 +3,18 @@ var Circuit = (function ($, Workshop, multidrag) {
 
 	var my = {},
 		workshop = null,
+		isMinimized = false,
 		minimizeIcon = null,
 		minimizeDrag = null,
 		colorNames = 'CRGY',
 		shapeNames = 'o|-',
 		colorSensors = [],
 		shapeSensors = [],
-		elementMap = {};
+		elementMap = {},
+		MINIMIZE_X = 0.05,
+		MINIMIZE_Y = 0.1,
+		MINIMIZE_W = 0.3,
+		MINIMIZE_H = 0.3;
 
 	(function () {
 		var ports, i, c, sensor;
@@ -53,18 +58,24 @@ var Circuit = (function ($, Workshop, multidrag) {
 			top: mainOffs.top + main.height() - 10 - 40});
 	}
 
+	function getMinimizeTransform() {
+		var main = $('#main_container');
+		return {
+			transform: 'scale(' + MINIMIZE_W + ',' + MINIMIZE_H + ')',
+			left: main.width() * ((MINIMIZE_W - 1) / 2 + MINIMIZE_X) + 'px',
+			top: main.height() * ((MINIMIZE_H - 1) / 2 + MINIMIZE_Y) + 'px',
+			borderWidth: '4px'
+		};
+	}
+
 	function doMinimize() {
 		var main, backDrag;
 
+		isMinimized = true;
 		my.setMinimizeEnabled(false);
 		main = $('#circuit');
 		main.css('border-width', 4);
-		main.animate({
-			transform: 'scale(0.3, 0.25)',
-			left: '-=' + (main.width() * 0.3) + 'px',
-			top: '-=' + (main.width() * 0.2) + 'px',
-			borderWidth: '4px'
-		}, 1000);
+		main.animate(getMinimizeTransform(), 1000);
 		my.setInterfaceEnabled(false);
 
 		function RestoreHandler() {
@@ -75,6 +86,7 @@ var Circuit = (function ($, Workshop, multidrag) {
 				top: 0,
 				borderWidth: 0
 			}, 1000, function () {
+				isMinimized = false;
 				my.setInterfaceEnabled(true);
 				my.setMinimizeEnabled(true);
 			});
@@ -299,12 +311,17 @@ var Circuit = (function ($, Workshop, multidrag) {
 		self.width(par.width());
 		self.height(par.height());
 		workshop.setSize(par.width(), par.height());
+		if (isMinimized) {
+			$('#circuit').css(getMinimizeTransform());
+		}
 		placeMinimizeIcon();
 	};
 
 	my.setMinimizeEnabled = function (value) {
 		if (value) {
-			minimizeIcon.fadeIn();
+			minimizeIcon.fadeIn(function () {
+				placeMinimizeIcon();
+			});
 			minimizeDrag.register($('#circuit_iface'));
 		} else {
 			minimizeIcon.fadeOut();
