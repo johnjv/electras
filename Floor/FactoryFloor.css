@@ -80,16 +80,16 @@
 #tally{
 	position: absolute;
 	z-index:7;
-	left: 60%;
-	top:10%;
+	/*left: 60%;
+	top:10%;*/
 }
 #tally td{
 	/*border-width: 100px;*/
 	border-style: inset;
 	padding: 10px;
 	border-width: 0px;
-	width: 25px;
-	height: 25px;
+	width: 15px;
+	height: 15px;
 	vertical-align: middle;
 	empty-cells: hide;
 }
