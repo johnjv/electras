@@ -25,7 +25,6 @@ var Placer = {};
 		var x =container.width() * (0.1);
 		var y =container.height() * (0.5);
 		moveTo(box, x, y);
-		console.log('box at', x, y);
 	}
 
 	function placeBelt(){
@@ -61,7 +60,6 @@ var Placer = {};
 		punchingBox.height(belt.height()/2.0);
 		var x = belt.position().left + belt.width()/2.0 ;
 		var y =container.height() * (0.5) - punchingBox.height();
-		
 		moveTo(punchingBox,x,y);
 	}
 	
@@ -73,7 +71,6 @@ var Placer = {};
 		glove.height(belt.height()/2.0);
 		var x = (punchingBox.width() - glove.width())/2.0 + punchingBox.position().left;
 		var y =punchingBox.position().top + punchingBox.height()/3.0;
-		
 		moveTo(glove,x,y);
 	}
 	
@@ -87,9 +84,7 @@ var Placer = {};
 		trash.width(punchingBox.width());
 		var x = punchingBox.position().left;
 		var y = container.height() * 0.8;
-
 		moveTo(trash,x,y);
-		
 	}
 	
 	function placeTally(){
@@ -98,9 +93,7 @@ var Placer = {};
 		var container = $('#factory');
 		var x = container.width() * 0.5;
 		var y = container.height() * 0.001;
-		
 		moveTo(tally,x,y);
-	
 	}
 	
 }(Placer, jQuery));

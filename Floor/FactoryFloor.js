@@ -22,8 +22,6 @@ $(document).ready(function(){
 			startAll();
 		};
 		multidrag.register(startIm, starter);
-		
-
 });  
 
 function setCircuitSound(){
@@ -53,11 +51,9 @@ function setCircuitSound(){
 }
    
 function startMachine(onDone){
-
         var count =0;
         var candies = getLevelType();
         var correctSet = true;
-        //SOUND
         var belt = $('#belt_sound')[0];
         belt.play();
         
@@ -74,6 +70,7 @@ function startMachine(onDone){
                 else if (check === 0){
                         circuitMark = false;
                         levelMark = true;
+                        correctSet = false;
                 }
                 else if(check === -1){
                         circuitMark = false;
@@ -82,31 +79,33 @@ function startMachine(onDone){
                 else if (check === 2){
                         circuitMark = true;
                         levelMark = false;
-                }
-                else if (check === 1 || check === -1){
                         correctSet = false;
                 }
-                placeCandy(candies[count]);
-                moveCandy(candies[count]);
-                insertCandyIntoTally(candies[count].src);
-                insertInfoIntoTally(circuitMark,levelMark);
-                Circuit.setState(candies[count].circuitSays);
+                animateEach(candies[count],circuitMark,levelMark);
                 count++;                        
                 setTimeout(startNext, 3000);
             }
-            else if (count >= candies.length) {
-            		onDone();
-                    belt.pause();
-            }
+			else if (count >= candies.length) {
+				onDone();
+				belt.pause();
+				if (correctSet) {
+					LevelSelector.setComplete(true);
+				}
+				else{
+					LevelSelector.setComplete(false);
+				}
+			}
         }
-        
         startNext();
-        if (correctSet) {
-                // level is completed
-        }
-        else{
-                // level is not completed
-        }
+       
+}
+
+function animateEach(candy,cir, lev) {
+	placeCandy(candy);
+	moveCandy(candy);
+	insertCandyIntoTally(candy.src);
+	insertInfoIntoTally(cir,lev);
+	Circuit.setState(candy.circuitSays);
 }
 
 
@@ -132,16 +131,17 @@ function insertCandyIntoTally(picture){
 }
 
 function insertInfoIntoTally(circuitSays, levelSays){
-        "use strict";
+   	"use strict";
     var xflag = '<img src="../Floor/resource-image/envx.png" id="xflag"></img>';
     var checkmark = '<img src="../Floor/resource-image/checkmark.png" id="checkmark"></img>';
+    var boxTally = '<img src="../Floor/resource-image/box.png" id="boxTally"></img>';
+	var trashTally = '<img src="../Floor/resource-image/trash.png" id="trashTally"></img>';  
+    
+    if(circuitSays) { $("#srow").append("<td class='checkmarks'>" + boxTally + "</td>");}
+    else { $("#srow").append("<td class='flags'>" + trashTally + "</td>");}
         
-        
-    if(circuitSays) { $("#srow").append("<td class='checkmarks'>" + checkmark + "</td>");}
-    else { $("#srow").append("<td class='flags'>" + xflag + "</td>");}
-        
-    if(levelSays) { $("#trow").append("<td class='checkmarks'>" + checkmark + "</td>");}
-    else { $("#trow").append("<td class='flags' >" + xflag + "</td>"); }
+    if(levelSays) { $("#trow").append("<td class='checkmarks'>" + boxTally + "</td>");}
+    else { $("#trow").append("<td class='flags' >" + trashTally + "</td>"); }
         
     if(levelSays === circuitSays) { $("#forow").append("<td class='checkmarks'>" + checkmark + "</td>");}
     else { $("#forow").append("<td class='flags'>" + xflag + "</td>"); }
@@ -169,7 +169,6 @@ function moveCandy(candy){
     var dropper = $('#dropper');
     var glove = $("#glove");
     var trash = $("#trash");
-    var factory = $('#factory');
     var punchingBox = $('#punchingbox');
     var garbage = $('#garbage_sound')[0];
     var correct = $('#correct_sound')[0];
@@ -195,45 +194,44 @@ function moveCandy(candy){
         });
 		$(candyPic).animate({top:'+=' + posdown, width: '-=40'}, 600, 'linear',function() {
         	garbage.play();});
-                
     }
         
-        else if(candy.checkCandy() === 2){
-                $(candyPic).animate({left:posleft},1500, 'linear', 
-                        function(){
-                                var flag = putAFlag();
-                                moveFlag(flag);
-                        });
-                
-                posleft = glove.position().left - belt.position().left;
-                posdown = box.width()/3.0;
-                $(candyPic).animate({left: '-=' + posleft}, 3000, 'linear'); 
-                $(candyPic).animate({left: '-=' + (posdown),width: '-=40'}, 1500, 'linear');
-                
-        }
+    else if(candy.checkCandy() === 2){
+        $(candyPic).animate({left:posleft},1500, 'linear', 
+                function(){
+                        var flag = putAFlag();
+                        moveFlag(flag);
+                });
         
-        else if(candy.checkCandy() ===  2){
-                $(candyPic).animate({left:posleft},1500, 'linear', 
-                        function(){
-                                var flag = putAFlag();
-                                moveFlag(flag);
-                        });
-                
-                posleft = glove.position().left - belt.position().left;
-                posdown = box.width()/3.0;
-                $(candyPic).animate({left: '-=' + posleft}, 3000, 'linear'); 
-                $(candyPic).animate({left: '-=' + (posdown),width: '-=40'}, 1500, 'linear');
-                
-        }
+        posleft = glove.position().left - belt.position().left;
+        posdown = box.width()/3.0;
+        $(candyPic).animate({left: '-=' + posleft}, 3000, 'linear'); 
+        $(candyPic).animate({left: '-=' + (posdown),width: '-=40'}, 1500, 'linear');
+            
+    }
         
-        else {
-            posleft = dropper.position().left - belt.position().left;
-            posdown = box.width()/3.0;
-            $(candyPic).animate({left: '-=' + posleft}, 3000, 'linear', 
-                    function() {
-                            correct.play();}); 
-            $(candyPic).animate({left: '-=' + (posdown),width: '-=40'}, 1500, 'linear');
-   		}
+    else if(candy.checkCandy() ===  2){
+        $(candyPic).animate({left:posleft},1500, 'linear', 
+                function(){
+                        var flag = putAFlag();
+                        moveFlag(flag);
+                });
+        
+        posleft = glove.position().left - belt.position().left;
+        posdown = box.width()/3.0;
+        $(candyPic).animate({left: '-=' + posleft}, 3000, 'linear'); 
+        $(candyPic).animate({left: '-=' + (posdown),width: '-=40'}, 1500, 'linear');
+            
+    }
+        
+    else {
+        posleft = dropper.position().left - belt.position().left;
+        posdown = box.width()/3.0;
+        $(candyPic).animate({left: '-=' + posleft}, 3000, 'linear', 
+                function() {
+                        correct.play();}); 
+        $(candyPic).animate({left: '-=' + (posdown),width: '-=40'}, 1500, 'linear');
+	}
 }
 
 function putAFlag(){
@@ -285,7 +283,7 @@ function clearTable(){
 function stopMachine(){
 	clearTable();
     $('#tally').hide();
-    stopMovingPuncher();
+    //stopMovingPuncher();
     Placer.place();
 }
 
@@ -296,17 +294,18 @@ var FactoryFloor = (function($) {
         my.levelChanged = function() {
         	stopMachine();
         };
+        
         my.windowResized = function () {
-        var par;
-        par = $('#main_container');
-        console.log(par.width(), par.height(), $('#factoryParent').offset());
-        $('#factoryParent').width(par.width()).height(par.height());
-        $('#factory').width(par.width()).height(par.height());
-        $('#factoryParent').offset(par.offset());
-        console.log(par.width(), par.height(), $('#factoryParent').offset());
-        Placer.place();
-        stopMovingPuncher();
-    };  
+		    var par;
+		    par = $('#main_container');
+		    console.log(par.width(), par.height(), $('#factoryParent').offset());
+		    $('#factoryParent').width(par.width()).height(par.height());
+		    $('#factory').width(par.width()).height(par.height());
+		    $('#factoryParent').offset(par.offset());
+		    console.log(par.width(), par.height(), $('#factoryParent').offset());
+		    Placer.place();
+		    stopMovingPuncher();
+    	};  
     
         return my;              
 }(jQuery));
