@@ -1,53 +1,14 @@
-var Circuit = (function ($, Workshop, multidrag) {
+(function (my, $, Workshop, multidrag) {
 	"use strict";
 
-	var my = {},
-		workshop = null,
+	var workshop = null,
 		isMinimized = false,
 		minimizeIcon = null,
 		minimizeDrag = null,
-		colorNames = 'CRGY',
-		shapeNames = 'o|-',
-		colorSensors = [],
-		shapeSensors = [],
-		elementMap = {},
 		MINIMIZE_X = 0.05,
 		MINIMIZE_Y = 0.1,
 		MINIMIZE_W = 0.3,
 		MINIMIZE_H = 0.3;
-
-	(function () {
-		var ports, i, c, sensor;
-
-		function propagateSensor(elt, state) {
-			state.setValue(elt.ports[0], state.getState(elt));
-		}
-
-		ports = [ new Workshop.Port(false, 0, 0, -10, 0) ];
-		for (i = 0; i < colorNames.length; i += 1) {
-			c = colorNames.substring(i, i + 1);
-			sensor = new Workshop.ElementType(c, 'color' + i,
-				-60, -25, 50, 50, ports, propagateSensor);
-			sensor.isSensor = true;
-			colorSensors.push(sensor);
-			elementMap[c] = sensor;
-		}
-		for (i = 0; i < shapeNames.length; i += 1) {
-			c = shapeNames.substring(i, i + 1);
-			sensor = new Workshop.ElementType(c, 'shape' + i,
-				-60, -25, 50, 50, ports, propagateSensor);
-			sensor.isSensor = true;
-			shapeSensors.push(sensor);
-			elementMap[c] = sensor;
-		}
-
-		$.each(['in', 'out', 'and', 'or', 'not'], function (i, key) {
-			var val = Workshop.getElementType(key);
-			if (val) {
-				elementMap[key] = val;
-			}
-		});
-	}());
 
 	function placeMinimizeIcon() {
 		var main, mainOffs;
@@ -216,51 +177,6 @@ var Circuit = (function ($, Workshop, multidrag) {
 		return ret;
 	};
 
-	function computeSensors(sensorsString) {
-		var sensors, types, totalHeight, maxWidth, gap, y, i, j, c, sensor;
-		
-		totalHeight = 0;
-		maxWidth = 0;
-		types = [];
-		for (i = 0; i < sensorsString.length; i += 1) {
-			c = sensorsString.substring(i, i + 1);
-			sensor = null;
-			j = colorNames.indexOf(c);
-			if (j >= 0) {
-				sensor = colorSensors[j];
-			} else {
-				j = shapeNames.indexOf(c);
-				if (j >= 0) {
-					sensor = shapeSensors[j];
-				} else if (c !== ' ') {
-					console.log('invalid sensor name "' + sensor + '"'); //OK
-				}
-			}
-			if (sensor !== null) {
-				totalHeight += sensor.imgHeight;
-				if (-sensor.imgX > maxWidth) {
-					maxWidth = -sensor.imgX;
-				}
-				types.push(sensor);
-			}
-		}
-		gap = Math.round(1.0 * (workshop.canvas.height() - totalHeight) /
-			(types.length + 1));
-		if (gap < 10) {
-			gap = 10;
-		}
-
-		sensors = [];
-		y = 0;
-		$.each(types, function (i, type) {
-			y += gap;
-			sensors.push(new Workshop.Element(type, 10 + maxWidth,
-				y - type.imgY));
-			y += type.imgHeight;
-		});
-		return sensors;
-	}
-
 	my.levelChanged = function (oldLevel, newLevel) {
 		var layout, outT, outElt, sourceElt, tools;
 
@@ -269,26 +185,10 @@ var Circuit = (function ($, Workshop, multidrag) {
 		}
 
 		if (newLevel.circuit) {
-			layout = Workshop.parse(newLevel.circuit, elementMap);
+			layout = Workshop.parse(newLevel.circuit, my.elementMap);
 		} else {
-			layout = new Workshop.Layout();
-			outT = Workshop.getElementType('out');
-			outElt = new Workshop.Element(outT,
-				workshop.canvas.width() - 10 - outT.imgWidth - 10,
-				Math.round((workshop.canvas.height() - outT.imgY) / 2.0));
-			outElt.isFrozen = true;
-			layout.addElement(outElt);
-			sourceElt = null;
-			$.each(computeSensors(newLevel.sensors), function (i, sensor) {
-				sensor.isFrozen = true;
-				if (newLevel.link === sensor.type.id) {
-					sourceElt = sensor;
-				}
-				layout.addElement(sensor);
-			});
-			if (sourceElt) {
-				layout.addWire(sourceElt.ports[0], outElt.ports[0]);
-			}
+			layout = my.computeLayout(newLevel.sensors, newLevel.link,
+				workshop.canvas.width(), workshop.canvas.height());
 		}
 		workshop.setLayout(layout);
 		tools = [];
@@ -304,15 +204,19 @@ var Circuit = (function ($, Workshop, multidrag) {
 	};
 
 	my.windowResized = function () {
-		var par, self;
+		var self, par, parWidth, parHeight;
 		
 		self = $('#circuit');
 		par = self.parent();
-		self.width(par.width());
-		self.height(par.height());
-		workshop.setSize(par.width(), par.height());
+		parWidth = par.width();
+		parHeight = par.height();
+		self.width(parWidth);
+		self.height(parHeight);
+		workshop.setSize(parWidth, parHeight);
+		my.autoplace(workshop.layout, workshop.canvas.width(), workshop.canvas.height());
+		workshop.layoutRearranged();
 		if (isMinimized) {
-			$('#circuit').css(getMinimizeTransform());
+			self.css(getMinimizeTransform());
 		}
 		placeMinimizeIcon();
 	};
@@ -347,4 +251,4 @@ var Circuit = (function ($, Workshop, multidrag) {
 	};
 
 	return my;
-}(jQuery, Workshop, multidrag));
+}(Circuit, jQuery, Workshop, multidrag));
