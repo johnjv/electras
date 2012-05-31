@@ -8,19 +8,21 @@ $(document).ready(function(){
 		
 		function starter(e) {
 			e.preventDefault();
-			
 		};
 
 		function startAll(){
 			if(!animationAlive){
 				animationAlive = true;
 				clearTable();
-				startMachine(function(){ animationAlive = false;});
+				startMachine(function(){
+					animationAlive = false;
+				});
 				$("#tally").show();
 			}
 		}
 		starter.prototype.onRelease = function () {
 			startAll();
+			$("#tip").hide(); 
 		};
 		multidrag.register(startIm, starter);
 });  
@@ -51,7 +53,6 @@ function setCircuitSound(){
 
 }
 
-   
 function startMachine(onDone){
         var count =0;
         var candies = getLevelType();
@@ -60,6 +61,7 @@ function startMachine(onDone){
         belt.play();
         
         function startNext(){
+        	var failedCandy;
             if(count < candies.length) {
                 var check = candies[count].checkCandy();
                 var levelMark = false;
@@ -82,37 +84,36 @@ function startMachine(onDone){
                         circuitMark = true;
                         levelMark = false;
                         correctSet = false;
+         				failedCandy = candies[count].src;
                 }
                 animateEach(candies[count],circuitMark,levelMark);
                 count++;                        
                 setTimeout(startNext, 3000);
             }
-			else if (count >= candies.length) {
+			else{
+				$("#tip").show();
 				onDone();
 				belt.pause();
 				if (correctSet) {
 					LevelSelector.setComplete(true);
 					showMessage($("#success"));
-					
 				}
 				else{
 					LevelSelector.setComplete(false);
 					showMessage($("#failure"));
+					$("#failedCandy").append(failedCandy);
 				}
 			}
         }
         startNext();
-       
 }
 
 function animateEach(candy,cir, lev) {
 	placeCandy(candy);
 	moveCandy(candy);
-	insertCandyIntoTally(candy.src);
-	insertInfoIntoTally(cir,lev);
+	createTally(candy.src,cir,lev);
 	Circuit.setState(candy.circuitSays);
 }
-
 
 function getLevelType(){
     "use strict";
@@ -130,17 +131,14 @@ function getLevelType(){
     return typeInfo;
 }
 
-function insertCandyIntoTally(picture){
-    "use strict";
-    $("#frow").append("<td class='upperrow'>" + picture + "</td>");
-}
-
-function insertInfoIntoTally(circuitSays, levelSays){
+function createTally(picture, circuitSays, levelSays){
    	"use strict";
     var xflag = '<img src="../Floor/resource-image/envx.png" id="xflag"></img>';
     var checkmark = '<img src="../Floor/resource-image/checkmark.png" id="checkmark"></img>';
     var boxTally = '<img src="../Floor/resource-image/box.png" id="boxTally"></img>';
 	var trashTally = '<img src="../Floor/resource-image/trash.png" id="trashTally"></img>';  
+    
+    $("#frow").append("<td class='upperrow'>" + picture + "</td>");
     
     if(circuitSays) { $("#srow").append("<td class='checkmarks'>" + boxTally + "</td>");}
     else { $("#srow").append("<td class='flags'>" + trashTally + "</td>");}
@@ -151,7 +149,6 @@ function insertInfoIntoTally(circuitSays, levelSays){
     if(levelSays === circuitSays) { $("#forow").append("<td class='checkmarks'>" + checkmark + "</td>");}
     else { $("#forow").append("<td class='flags'>" + xflag + "</td>"); }
 }
-
 
 function placeCandy(candy){
     "use strict";
@@ -275,27 +272,16 @@ function movePuncher(){
     $('#glove').animate({top: '-=0' + belt.height()/3.0}, 600,'linear');
 }
 
-function stopMovingPuncher(){
-    $('#glove').stop();
-}
-
 function clearTable(){
     $(".upperrow").remove();
     $(".checkmarks").remove();
     $(".flags").remove();
 }
 
-function stopMachine(){
-	clearTable();
-    $('#tally').hide();
-    //stopMovingPuncher();
-    Placer.place();
-}
-
 function showMessage(mess){
 	"use strict";
 	mess.show();
-	mess.fadeOut(15000, function(){
+	mess.fadeOut(20000, function(){
 		mess.hide();
 	});
 	
@@ -306,7 +292,11 @@ var FactoryFloor = (function($) {
         var my = {}; 
 
         my.levelChanged = function() {
-        	stopMachine();
+        	clearTable();
+        	$("#tally").hide();
+        	Placer.place();
+        	$("#success").hide();
+        	$("#failure").hide();
         };
         
         my.windowResized = function () {
@@ -318,7 +308,6 @@ var FactoryFloor = (function($) {
 		    $('#factoryParent').offset(par.offset());
 		    console.log(par.width(), par.height(), $('#factoryParent').offset());
 		    Placer.place();
-		    stopMovingPuncher();
     	};  
     
         return my;              
