@@ -4,51 +4,13 @@
 		CONNECT_RADIUS = 3,
 		baseDirectory;
 
-	my.getRelativePath = function (desired) {
-		var browser, cwd, cdirs, ddirs, i, j, ret;
-		browser = self;
-		if (!browser || !browser.location || !browser.location.href) {
-			return '';
-		}
-		cwd = browser.location.href;
-		i = cwd.indexOf('electras/');
-		if (i >= 0) {
-			cwd = cwd.substring(i + 'electras/'.length);
-		}
-		cdirs = cwd.split('/');
-		ddirs = desired.split('/');
-		if (i < 0) {
-			for (j = 0; j < cdirs.length; j += 1) {
-				if (cdirs[j] === ddirs[0]) {
-					cdirs.splice(0, j + 1);
-					ddirs.splice(0, 1);
-					break;
-				}
-			}
-		}
-		j = 0;
-		while (j < cdirs.length && j < ddirs.length && cdirs[j] === ddirs[j]) {
-			j += 1;
-		}
-		ret = '';
-		for (i = j; i < cdirs.length - 1; i += 1) {
-			ret += '../';
-		}
-		for (i = j; i < ddirs.length; i += 1) {
-			ret += ddirs[i] + '/';
-		}
-		return ret;
-	};
-
-	baseDirectory = my.getRelativePath('workshop/resource');
-
-	my.getResourcePath = function (filename) {
-		return baseDirectory + filename;
+	my.getResourcePath = function (base, extensions) {
+		return imgpath.get('workshop/resource/' + base, extensions);
 	};
 
 	function setterImage(elt) {
 		return function (imgName) {
-			var newName = my.getResourcePath(imgName + '.png');
+			var newName = my.getResourcePath(imgName, ['svg', 'png']);
 			if (elt.imgElt.attr('src') !== newName) {
 				elt.imgElt.attr('src', newName);
 			}

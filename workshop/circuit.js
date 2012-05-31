@@ -102,7 +102,7 @@ var Circuit = (function ($, Workshop, multidrag) {
 		}
 
 		minimizeIcon = $('<img></img>')
-			.attr('src', Workshop.getResourcePath('to-floor.svg'))
+			.attr('src', Workshop.getResourcePath('to-floor', ['svg', 'png']))
 			.css({position: 'absolute', width: '40px'});
 		iface.append(minimizeIcon);
 		placeMinimizeIcon();

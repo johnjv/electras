@@ -300,7 +300,7 @@
 	my.EraseGesture = function (info, e) {
 		this.dragImg = $('<img></img>')
 			.css('position', 'absolute')
-			.attr('src', my.getResourcePath('eraser.png'))
+			.attr('src', my.getResourcePath('eraser', ['svg', 'png']))
 			.width(50);
 		this.onDrag(info, e);
 		info.canvas.append(this.dragImg);

@@ -325,7 +325,7 @@
 				circs[i].css({left: x, top: y}).show();
 			} else {
 				circ = ($('<img></img>').fadeTo(0, 0.5)
-					.attr('src', my.getResourcePath('err-circ.svg'))
+					.attr('src', my.getResourcePath('err-circ', ['svg', 'png']))
 					.addClass('error_circle')
 					.width(2 * r)
 					.css({left: x, top: y}));
@@ -364,13 +364,13 @@
 				toolbar.append($('<img></img>')
 					.addClass('tool')
 					.width(type.imgWidth * 0.8)
-					.attr('src', my.getResourcePath(type.imgName + '.png'))
+					.attr('src', my.getResourcePath(type.imgName, ['svg', 'png']))
 					.attr('type', type.id));
 			} else if (tool === 'eraser') {
 				toolbar.append($('<img></img>')
 					.addClass('tool')
 					.width(50 * 0.8)
-					.attr('src', my.getResourcePath('eraser.png'))
+					.attr('src', my.getResourcePath('eraser', ['svg', 'png']))
 					.attr('type', 'eraser'));
 			} else if (tool !== '') {
 				console.log('unknown tool type "' + tool + '"'); //OK
