@@ -144,7 +144,8 @@ $(document).ready(function(){
             LevelSelector.setPage(23); 
             $('#hint').hide();         
             $('#prev').hide();         
-            $('#next').hide();         
+            $('#next').hide();
+            show.hide();         
 	    }
 	};
     multidrag.register(credits, Credits);
@@ -191,6 +192,7 @@ $(document).ready(function(){
                 $('#hint').hide();         
                 $('#prev').hide();         
                 $('#next').hide();
+                show.hide();       
             }    
             else{                
                 $('#circuit').show();

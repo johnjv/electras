@@ -117,7 +117,7 @@ var speak_softly_cherry_a_stick = new Level({
   sensors: '-RY',
   tools: ['and', 'or'],
   types: ['**'],
-  answers: 'C-,Y-',
+  answers: 'R-,Y-',
   script: 'speak_softly_cherry_a_stick'
 });
 
