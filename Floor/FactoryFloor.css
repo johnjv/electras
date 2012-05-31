@@ -18,9 +18,10 @@
 	z-index: 1;
 }
 
-.candy{
-	position: absolute;
+.srcCandy{
+	width: 20px;
 	z-index:2;
+	position: absolute;
 }
 
 #dropper{
@@ -52,12 +53,6 @@
 	width: 10%;
 	height: 10%;
 }
-
-.srcCandy{
-	width: 20px;
-	position: absolute;
-}
-
 #flag{
 	position: absolute;
 	z-index:8;
@@ -80,11 +75,8 @@
 #tally{
 	position: absolute;
 	z-index:7;
-	/*left: 60%;
-	top:10%;*/
 }
 #tally td{
-	/*border-width: 100px;*/
 	border-style: inset;
 	padding: 10px;
 	border-width: 0px;
@@ -102,4 +94,12 @@
 
 .upperrow{
 	border-top: solid;
+}
+
+#boxTally{
+	width:20px;
+}
+
+#trashTally{
+	width:20px;
 }
