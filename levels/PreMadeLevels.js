@@ -5,7 +5,7 @@ var i_so_blue = new Level({
   hint: 'You should connect the blue sensor to the lightbulb by clicking on the connectors.',
   sensors:  'C',
   tools: [],
-  types:  ['*o'], 
+  types: '*o', 
   answers: 'C*',
   script: 'i_so_blue'
 });
