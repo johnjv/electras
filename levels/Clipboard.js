@@ -1,6 +1,6 @@
 $(document).ready(function(){
 	"use strict";
-	setUpLevel();
+	setUpLevel();	
 	var next = $('#next');
 	var prev = $('#prev');
 	var show = $("#showLevels");
@@ -10,7 +10,8 @@ $(document).ready(function(){
 	var hint = $("#hint");
 	var credits = $('#credits');
 	var ret = $('#return');
-	
+	var sound = $('#sound');
+	var lang = $('#lang');
 
 	function Next(e) {
 	    e.preventDefault();
@@ -113,15 +114,8 @@ $(document).ready(function(){
 	Hint.prototype.onRelease = function (e) {
 	    if(e.isTap){
 	        e.preventDefault();
-		    if(LevelSelector.getCurrentPage() >= 3){
-	            if($('#hint').text() === "Hint"){
+		    if(LevelSelector.getCurrentPage() >= 3){	           
 	                $('.hintText').show();
-	                $('#hint').text("Hide");
-	            }
-	            else{
-	                $('.hintText').hide();
-	                $('#hint').text("Hint");
-	            }
 	        }
 	    }
 	};
@@ -138,6 +132,39 @@ $(document).ready(function(){
 	    }
 	};
     multidrag.register(credits, Credits);
+    
+    function Sound(e) {        
+	    e.preventDefault();
+	};
+			
+	Sound.prototype.onRelease = function (e) {
+	    if(e.isTap){
+	        e.preventDefault();
+	        /*FactoryFloor.getSoundState();
+	        if(FactoryFloor.getSoundState()){
+		        sound.attr('src', '../levels/images/soundoff.png');
+		        FactoryFloor.setSoundState(false);
+		    }
+		    else{
+		        sound.attr('src', '../levels/images/soundon.png');
+		        FactoryFloor.setSoundState(true);
+		    }*/
+	    }
+	};
+    multidrag.register(sound, Sound);
+    
+    function Language(e) {        
+	    e.preventDefault();
+	};
+			
+	Language.prototype.onRelease = function (e) {
+	    if(e.isTap){
+	        e.preventDefault();
+	        Translator.changeLanguage(Translator.getCurrentLanguage());
+		    //can only go from English to Korean, but cannot go back to English
+	    }
+	};
+    multidrag.register(lang, Language);
     
     function getHint(){
         var level = LevelSelector.getCurrentLevel();
@@ -257,47 +284,51 @@ $(document).ready(function(){
     function setUpLevel(){ 
         Placer.place();
         makePages();
-        $('#cliptip').hide();
-        $('.page').hide();    
-        $('.hintText').hide();  
-        $('.complete').hide();
-        $('#hintText').hide(); 
-        $('#circuit').hide();
-        $('#factory').hide();    
-        $('#page0').show();    
+        Translator.addListener(makePages);
         $('#hint').fadeTo('slow', '0.5');
         $('#showLevels').fadeTo('slow', '0.5');
         $('#prev').fadeTo('slow', '0.5');
+        $('#cliptip').hide();       
+        $('#circuit').hide();
+        $('#factory').hide(); 
         Circuit.setInterfaceEnabled(false);
     }
-
+    
+    
     function makePages() {    
         var i = 0;
+        $('#tbody1').empty();
+        $('#tbody2').empty();
+        $('#orders').empty();        
         for(var i = 0 ; i< 20; i += 1){
             var level = all_levels[i]       
             var page = $('<tr></tr>').addClass('rows').attr('id', 'row' + level.levelid);
-            var page2 = $('<tr></tr>').addClass('rows').attr('id', 'row' + level.levelid);
+            var page2 = $('<tr></tr>').addClass('rows').attr('id', 'row' + level.levelid);            
             var order = $('<div></div>').addClass('page').attr('id', 'page' + (level.levelid + 2));     
                 
-            if(i <= 9){
-                page.append($('<td></td>').addClass('selectName').text(level.levelid + ". " + level.levelname)); 
+            if(i <= 9){                
+                page.append($('<td></td>').addClass('selectName').text(level.levelid + ". " + Translator.getText('levels', level.levelname))); 
                 page.append($('<td></td>').addClass('checkmark').text(""));               
                 $('#levels1').append(page);                              
             }
-            else if(9 < i & i <=19){
-                page2.append($('<td></td>').addClass('selectName').text(level.levelid + ". " + level.levelname));
+            else {                
+                page2.append($('<td></td>').addClass('selectName').text(level.levelid + ". " + Translator.getText('levels', level.levelname))); 
                 page2.append($('<td></td>').addClass('checkmark').text(""));
                 $('#levels2').append(page2);              
-            }
-            
-            order.append($('<div></div>').addClass('levelname').text(level.levelid + ". " + level.levelname));
-            order.append($('<div></div>').addClass('order').text("Order: " + level.orderText)); 
-            order.append($('<div></div>').addClass('hintText').text("Hint: " + level.hint));
+            }            
+            order.append($('<div></div>').addClass('levelname').text(level.levelid + ". " + Translator.getText('levels', level.levelname)));            
+            order.append($('<div></div>').addClass('order').text("Order: " + Translator.getText('levels', level.orderText)));            
+            order.append($('<div></div>').addClass('hintText').text("Hint: " + Translator.getText('levels', level.hint)));
             order.append($('<div></div>').addClass('complete').text("Complete"));
-            $('#clipOrder').append(order);             
+            $('#orders').append(order);             
         }
         addLevelClicks();       
-        $('#levels2').append($('<tr><td id = "credits">Credits</td></tr>')); 
+        $('#levels2').append($('<tr><td id = "credits">Credits</td></tr>'));
+        $('.page').hide();    
+        $('.hintText').hide();
+        $('#page' + LevelSelector.getCurrentPage()).show();  
+        $('.complete').hide();  
+        $('#hintText').hide();           
     }
     
     function addLevelClicks(){
