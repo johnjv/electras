@@ -1,0 +1,4 @@
+FILES="`egrep 'script src' workshop.html | egrep -v '<!--' | sed 's/.*src=\"//;s/\".*//' | egrep -v http`"
+#echo ${FILES}
+cat ${FILES}
+#cat ${FILES} | yuicompress --type js > ${HOME}/cat-code.js

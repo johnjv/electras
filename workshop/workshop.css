@@ -1,0 +1,89 @@
+div#circuit_iface {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	height: 100%;
+	z-index: 100;
+	background: rgba(0, 0, 0, 0);
+}
+
+div.circ_container {
+	position: relative;
+	border-style: solid;
+	border-color: #282;
+	border-width: 0;	
+	overflow: hidden;
+}
+
+div.circ_container > div.toolbar {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	background-color: #FFB;
+}
+
+div.circ_container > div.toolbar_horz {
+	border-bottom: solid 2px #282;
+	width: 100%;
+	height: 58px;
+	text-align: left;
+	line-height: 58px;
+	vertical-align: middle;
+}
+
+div.circ_container > div.toolbar_vert {
+	border-right: solid 2px #282;
+	width: 58px;
+	height: 100%;
+	text-align: center;
+}
+
+div.circ_container > div.toolbar_horz > img.tool {
+	display: inline;
+	margin: auto 0px auto 8px;
+	vertical-align: middle;
+}
+
+div.circ_container > div.toolbar_vert > img.tool {
+	display: block;
+	margin: 8px auto 0px auto;
+}
+
+div.circ_canvas {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	background-color: white;
+}
+
+div.circ_error_grandparent {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	z-index: 10;
+}
+
+div.circ_error_parent {
+	text-align: center;
+	margin-top: 1em;
+}
+
+span.circ_error {
+	background-color: rgba(17, 68, 14, 0.4);
+	border: solid 2px rgba(17, 68, 14, 0.5);
+	padding: 0.5em 1em;
+	border-radius: 0.5em;
+	-moz-border-radius: 0.5em;
+	-webkit-border-radius: 0.5em;
+}
+
+img.on_canvas {
+	position: absolute;
+}
+
+img.error_circle {
+	position: absolute;
+	z-index: 9;
+}
