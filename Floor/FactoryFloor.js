@@ -1,30 +1,30 @@
 $(document).ready(function(){
-		setCircuitSound();
-        $("#tally").hide();
-       	$("#success").hide();
-       	$("#failure").hide();
-		var startIm = $("#start");
-		var animationAlive = false;
-		
-		function starter(e) {
-			e.preventDefault();
-		};
+	setCircuitSound();
+    $("#tally").hide();
+   	$("#success").hide();
+   	$("#failure").hide();
+	var startIm = $("#start");
+	var animationAlive = false;
+	
+	function starter(e) {
+		e.preventDefault();
+	};
 
-		function startAll(){
-			if(!animationAlive){
-				animationAlive = true;
-				clearTable();
-				startMachine(function(){
-					animationAlive = false;
-				});
-				$("#tally").show();
-			}
+	function startAll(){
+		if(!animationAlive){
+			animationAlive = true;
+			clearTable();
+			startMachine(function(){
+				animationAlive = false;
+			});
+			$("#tally").show();
 		}
-		starter.prototype.onRelease = function () {
-			startAll();
-			$("#tip").hide();
-		};
-		multidrag.register(startIm, starter);
+	}
+	starter.prototype.onRelease = function () {
+		startAll();
+		$("#tip").hide();
+	};
+	multidrag.register(startIm, starter);
 });  
 
 function setCircuitSound(){
@@ -133,6 +133,7 @@ function getLevelType(){
 
 function createTally(picture, circuitSays, levelSays){
    	"use strict";
+   	Placer.place();
     var xflag = '<img src="../Floor/resource-image/envx.png" id="xflag"></img>';
     var checkmark = '<img src="../Floor/resource-image/checkmark.png" id="checkmark"></img>';
     var boxTally = '<img src="../Floor/resource-image/box.png" id="boxTally"></img>';
@@ -153,7 +154,7 @@ function createTally(picture, circuitSays, levelSays){
 function placeCandy(candy){
     "use strict";
     var candyPic = candy.picture;
-    candyPic.width(40);
+    candyPic.width('3%');
     var factory = $('#factory');
     var dropper = $("#dropper");
 	var x = dropper.position().left;
@@ -180,7 +181,7 @@ function moveCandy(candy){
         
     if(candy.checkCandy() === -1) {
         $(candyPic).animate({left:posleft},1500, 'linear', function(){movePuncher();});
-    	$(candyPic).animate({top:'+=' + posdown, width: '-=40'}, 600, 'linear',
+    	$(candyPic).animate({top:'+=' + posdown, width: '-=0' + candyPic.width()}, 600, 'linear',
     		function(){
 				garbage.play();
 				correct.play();
@@ -194,7 +195,7 @@ function moveCandy(candy){
         	$(flag).animate({top: '+=' + (posdown),width: '-=20'}, 600, 'linear');
 			movePuncher();
         });
-		$(candyPic).animate({top:'+=' + posdown, width: '-=40'}, 600, 'linear',function() {
+		$(candyPic).animate({top:'+=' + posdown, width: '-=0'+ candyPic.width()}, 600, 'linear',function() {
         	garbage.play();});
     }
         
@@ -207,7 +208,7 @@ function moveCandy(candy){
         posleft = glove.position().left - belt.position().left;
         posdown = box.width()/3.0;
         $(candyPic).animate({left: '-=' + posleft}, 3000, 'linear'); 
-        $(candyPic).animate({left: '-=' + (posdown),width: '-=40'}, 1500, 'linear');
+        $(candyPic).animate({left: '-=' + (posdown),width: '-=0'+ candyPic.width()}, 1500, 'linear');
             
     }
         
@@ -218,7 +219,7 @@ function moveCandy(candy){
 			function(){
 				correct.play();
 		}); 
-        $(candyPic).animate({left: '-=' + (posdown),width: '-=40'}, 1500, 'linear');
+        $(candyPic).animate({left: '-=' + (posdown),width: '-=0'+candyPic.width()}, 1500, 'linear');
 	}
 }
 
@@ -275,25 +276,25 @@ function showMessage(mess){
 }
 
 var FactoryFloor = (function($) {
-        "use strict";
-        var my = {}; 
+    "use strict";
+    var my = {}; 
 
-        my.levelChanged = function() {
-        	clearTable();
-        	$("#tally").hide();
-        	Placer.place();
-        	$("#success").hide();
-        	$("#failure").hide();
-        };
-        
-        my.windowResized = function () {
-		    var par;
-		    par = $('#main_container');
-		    $('#factoryParent').width(par.width()).height(par.height());
-		    $('#factory').width(par.width()).height(par.height());
-		    $('#factoryParent').offset(par.offset());
-		    Placer.place();
-    	};  
+    my.levelChanged = function() {
+    	clearTable();
+    	$("#tally").hide();
+    	Placer.place();
+    	$("#success").hide();
+    	$("#failure").hide();
+    };
     
-        return my;              
+    my.windowResized = function () {
+	    var par;
+	    par = $('#main_container');
+	    $('#factoryParent').width(par.width()).height(par.height());
+	    $('#factory').width(par.width()).height(par.height());
+	    $('#factoryParent').offset(par.offset());
+	    Placer.place();
+	};  
+
+    return my;              
 }(jQuery));
