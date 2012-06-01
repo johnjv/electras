@@ -15,7 +15,7 @@
 
 		main = $('#main_container');
 		mainOffs = main.offset();
-		minimizeIcon.offset({left: mainOffs.left + 8,
+		minimizeIcon.offset({left: mainOffs.left + 10,
 			top: mainOffs.top + main.height() - 10 - 40});
 	}
 
