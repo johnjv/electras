@@ -8,8 +8,7 @@ $(document).ready(function(){
 	var factory = $('#factory');
 	var tip = $("#tip");
 	var hint = $("#hint");
-	var credits = $('#credits');
-	var ret = $('#return');
+	var credits = $('#credits');	
 	var sound = $('#sound');
 	var lang = $('#lang');
 
