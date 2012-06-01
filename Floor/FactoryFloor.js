@@ -22,7 +22,7 @@ $(document).ready(function(){
 		}
 		starter.prototype.onRelease = function () {
 			startAll();
-			$("#tip").hide(); 
+			$("#tip").hide();
 		};
 		multidrag.register(startIm, starter);
 });  
@@ -35,7 +35,6 @@ function setCircuitSound(){
 	var click = $('#click_sound')[0];
 	var correct2 = $('#correct2_sound')[0];
 	Circuit.addChangeListener(function(e) {
-	console.log(e.type);
 	if (e.type === 'wireStart') {
 		electric.play();}
 	else if(e.type === 'eraseWire' || e.type === 'eraseElement') {
@@ -54,59 +53,59 @@ function setCircuitSound(){
 }
 
 function startMachine(onDone){
-        var count =0;
-        var candies = getLevelType();
-        var correctSet = true;
-        var belt = $('#belt_sound')[0];
-        belt.play();
-        
-        function startNext(){
-        	var failedCandy;
-            if(count < candies.length) {
-                var check = candies[count].checkCandy();
-                var levelMark = false;
-                var circuitMark = false;
-                if (check === 1) {
-                        circuitMark = true;
-                        levelMark = true;
-                }
-
-                else if (check === 0){
-                        circuitMark = false;
-                        levelMark = true;
-                        correctSet = false;
-                }
-                else if(check === -1){
-                        circuitMark = false;
-                        levelMark = false;
-                }
-                else if (check === 2){
-                        circuitMark = true;
-                        levelMark = false;
-                        correctSet = false;
-         				failedCandy = candies[count].src;
-                }
-                animateEach(candies[count],circuitMark,levelMark);
-                count++;                        
-                setTimeout(startNext, 3000);
+    var count =0;
+    var candies = getLevelType();
+    var correctSet = true;
+    var belt = $('#belt_sound')[0];
+    belt.play();
+    startNext();
+    
+    function startNext(){
+    	var failedCandy;
+        if(count < candies.length) {
+            var check = candies[count].checkCandy();
+            var levelMark = false;
+            var circuitMark = false;
+            if (check === 1) {
+                    circuitMark = true;
+                    levelMark = true;
             }
-			else{
-				$("#tip").show();
-				onDone();
-				belt.pause();
-				if (correctSet) {
-					LevelSelector.setComplete(true);
-					checkComplete();
-					showMessage($("#success"));
-				}
-				else{
-					LevelSelector.setComplete(false);
-					showMessage($("#failure"));
-					$("#failedCandy").append(failedCandy);
-				}
-			}
+
+            else if (check === 0){
+                    circuitMark = false;
+                    levelMark = true;
+                    correctSet = false;
+            }
+            else if(check === -1){
+                    circuitMark = false;
+                    levelMark = false;
+            }
+            else if (check === 2){
+                    circuitMark = true;
+                    levelMark = false;
+                    correctSet = false;
+     				failedCandy = candies[count].src;
+            }
+            animateEach(candies[count],circuitMark,levelMark);
+            count++;                        
+            setTimeout(startNext, 3000);
         }
-        startNext();
+		else{
+			$("#tip").show();
+			onDone();
+			belt.pause();
+			if (correctSet) {
+				LevelSelector.setComplete(true);
+				checkComplete();
+				showMessage($("#success"));
+			}
+			else{
+				LevelSelector.setComplete(false);
+				showMessage($("#failure"));
+				$("#failedCandy").append(failedCandy);
+			}
+		}
+    }
 }
 
 function animateEach(candy,cir, lev) {
@@ -181,19 +180,19 @@ function moveCandy(candy){
         
     if(candy.checkCandy() === -1) {
         $(candyPic).animate({left:posleft},1500, 'linear', function(){movePuncher();});
-    	$(candyPic).animate({top:'+=' + posdown, width: '-=40'}, 600, 
-    		'linear', function(){
-            	garbage.play();
-            	correct.play();
+    	$(candyPic).animate({top:'+=' + posdown, width: '-=40'}, 600, 'linear',
+    		function(){
+				garbage.play();
+				correct.play();
         });
     }
         
     else if(candy.checkCandy() === 0){
         $(candyPic).animate({left:posleft},1500, 'linear', function() {
-        var flag = putAFlag(); 
-        posdown = trash.position().top - flag.position().top + trash.height()/2.0;
-        $(flag).animate({top: '+=' + (posdown),width: '-=20'}, 1500, 'linear');
-                        movePuncher();
+        	var flag = putAFlag(); 
+        	posdown = trash.position().top - flag.position().top + trash.height()/2.0;
+        	$(flag).animate({top: '+=' + (posdown),width: '-=20'}, 600, 'linear');
+			movePuncher();
         });
 		$(candyPic).animate({top:'+=' + posdown, width: '-=40'}, 600, 'linear',function() {
         	garbage.play();});
@@ -201,25 +200,10 @@ function moveCandy(candy){
         
     else if(candy.checkCandy() === 2){
         $(candyPic).animate({left:posleft},1500, 'linear', 
-                function(){
-                        var flag = putAFlag();
-                        moveFlag(flag);
-                });
-        
-        posleft = glove.position().left - belt.position().left;
-        posdown = box.width()/3.0;
-        $(candyPic).animate({left: '-=' + posleft}, 3000, 'linear'); 
-        $(candyPic).animate({left: '-=' + (posdown),width: '-=40'}, 1500, 'linear');
-            
-    }
-        
-    else if(candy.checkCandy() ===  2){
-        $(candyPic).animate({left:posleft},1500, 'linear', 
-                function(){
-                        var flag = putAFlag();
-                        moveFlag(flag);
-                });
-        
+			function(){
+				var flag = putAFlag();
+				moveFlag(flag);
+		});
         posleft = glove.position().left - belt.position().left;
         posdown = box.width()/3.0;
         $(candyPic).animate({left: '-=' + posleft}, 3000, 'linear'); 
@@ -231,8 +215,9 @@ function moveCandy(candy){
         posleft = dropper.position().left - belt.position().left;
         posdown = box.width()/3.0;
         $(candyPic).animate({left: '-=' + posleft}, 3000, 'linear', 
-                function() {
-                        correct.play();}); 
+			function(){
+				correct.play();
+		}); 
         $(candyPic).animate({left: '-=' + (posdown),width: '-=40'}, 1500, 'linear');
 	}
 }
@@ -263,8 +248,8 @@ function moveFlag(flag){
     $(flag).animate({width: '-=20'}, 1500, 'linear');
 }
 
-
 function movePuncher(){
+	"use strict";
     var belt = $('#belt'); 
     var punch = $('#punch_sound')[0];
     $('#glove').animate({top: '+=0' + belt.height()/3.0}, 
@@ -274,6 +259,7 @@ function movePuncher(){
 }
 
 function clearTable(){
+	"use strict";
     $(".upperrow").remove();
     $(".checkmarks").remove();
     $(".flags").remove();
@@ -303,11 +289,9 @@ var FactoryFloor = (function($) {
         my.windowResized = function () {
 		    var par;
 		    par = $('#main_container');
-		    console.log(par.width(), par.height(), $('#factoryParent').offset());
 		    $('#factoryParent').width(par.width()).height(par.height());
 		    $('#factory').width(par.width()).height(par.height());
 		    $('#factoryParent').offset(par.offset());
-		    console.log(par.width(), par.height(), $('#factoryParent').offset());
 		    Placer.place();
     	};  
     
