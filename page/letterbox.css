@@ -2,14 +2,12 @@ html, body {
 	height: 100%;
 	width: 100%;
 	margin: 0;
-	background: #141;
+	background: #333 url(floor-tile.png);
+	background-size: 20px 20px;
 }
 
 #main_container {
 	position: relative;
-	background: white;
-	border-style: solid;
-	border-color: #282;
 }
 
 .welcolor{
