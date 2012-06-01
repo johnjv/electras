@@ -124,18 +124,7 @@ $(document).ready(function(){
 	    }
 	};
     multidrag.register(hint, Hint);
-	
-	function Credits(e) {
-	    e.preventDefault();
-	};
-			
-	Credits.prototype.onRelease = function (e) {
-	    if(e.isTap){
-	        e.preventDefault();
-		    goToCredits();        
-	    }
-	};
-    multidrag.register(credits, Credits);
+
     
     function Sound(e) {        
 	    e.preventDefault();
@@ -327,7 +316,6 @@ $(document).ready(function(){
             $('#orders').append(order);             
         }
         addLevelClicks();       
-        $('#levels2').append($('<tr><td id = "credits">Credits</td></tr>'));
         $('.page').hide();    
         $('.hintText').hide();
         $('#page' + LevelSelector.getCurrentPage()).show();  
