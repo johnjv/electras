@@ -1,0 +1,39 @@
+html, body {
+	height: 100%;
+	width: 100%;
+	margin: 0;
+	background: #141;
+}
+
+#main_container {
+	position: relative;
+	background: white;
+	border-style: solid;
+	border-color: #282;
+}
+
+.welcolor{
+    height: 2em;
+    width: 2em;
+    
+}
+
+#factoryParent{
+    z-index: 10;
+}
+
+#circuit{
+    z-index: 11;
+}
+
+#clipboard{
+    z-index: 12;
+}
+
+#cliptip{
+    z-index: 100;
+}
+
+#container{
+    z-index: 13;
+}
