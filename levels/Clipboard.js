@@ -139,16 +139,17 @@ $(document).ready(function(){
 			
 	Sound.prototype.onRelease = function (e) {
 	    if(e.isTap){
-	        e.preventDefault();
-	        /*FactoryFloor.getSoundState();
+	        e.preventDefault();	        
 	        if(FactoryFloor.getSoundState()){
 		        sound.attr('src', '../levels/images/soundoff.png');
 		        FactoryFloor.setSoundState(false);
+		        console.log('Sound off');
 		    }
 		    else{
 		        sound.attr('src', '../levels/images/soundon.png');
 		        FactoryFloor.setSoundState(true);
-		    }*/
+		        console.log('Sound on');
+		    }
 	    }
 	};
     multidrag.register(sound, Sound);
@@ -225,9 +226,8 @@ $(document).ready(function(){
             }            
             $('.hintText').hide();
             $('#hint').text("Hint");
-            var paper = $('#paper_sound')[0];
-	        paper.play();
-	        //playSound(paper);
+                
+	        playSound("paper_sound");
 	    }	    
 	}
 
