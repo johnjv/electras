@@ -60,7 +60,12 @@ $(document).ready(function(){
 	            }	            
 	            checkComplete();                
                 $('#cliptip').hide();     
-                $('#container').hide();            
+                $('#container').hide();
+                $('#hint').show();         
+                $('#prev').show();         
+                $('#next').show();
+                $('#sound').show();
+                $('#lang').show();            
 	        } 
 	    }  
 	};
@@ -185,6 +190,7 @@ $(document).ready(function(){
         $('#prev').hide();         
         $('#next').hide();
         $('#sound').hide();
+        $('#lang').hide();
         show.hide(); 
     }
     
@@ -226,7 +232,6 @@ $(document).ready(function(){
             }            
             $('.hintText').hide();
             $('#hint').text("Hint");
-                
 	        playSound("paper_sound");
 	    }	    
 	}

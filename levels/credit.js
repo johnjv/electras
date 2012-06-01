@@ -18,7 +18,7 @@ var Credit = {};
 		contentDiv.css('text-align', 'center');
 		var odysseyDesc = $('<div class = "credit">Odyssey Project Completed May 2012 at Hendrix College</div>'		                					
 						+ '<div>Thanks for playing!!</div>'							
-						+ '<div><img src = "../levels/images/hlogo.png" id = "hlogo" height = "15%" width = "90%"></div>');
+						+ '<div><img src = "../levels/images/hlogo.png" id = "hlogo" height = "20%" width = "90%"></div>');
 					
 		var circuitDiv = $('<div class = "credits"><table class = "credtable"><tbody><tr><th><u>Circuit Editor</u></th></tr>'
 							+ '<tr><td><b>Dr. Carl Burch</b></td></tr></tbody></table>');
