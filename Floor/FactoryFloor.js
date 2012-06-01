@@ -96,6 +96,7 @@ function startMachine(onDone){
 				belt.pause();
 				if (correctSet) {
 					LevelSelector.setComplete(true);
+					checkComplete();
 					showMessage($("#success"));
 				}
 				else{
