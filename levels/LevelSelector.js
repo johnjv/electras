@@ -35,7 +35,7 @@ var LevelSelector = (function($) {
         tip = $('#cliptip');
         clipPos = self.position();       
         clipPos.left = (container.width() - self.width())/2        
-        clipPos.top = container.height() * 0.15;
+        clipPos.top = container.height() *0;
         self.css('left', clipPos.left).css('top', clipPos.top);	
         tip.css('left', container.width() * 0.45).css('bottom' , '0%'); 
     };

@@ -19,7 +19,9 @@ $(document).ready(function(){
 	Next.prototype.onRelease = function (e) {
 	    if(e.isTap){
 	        e.preventDefault();
+	        checkComplete(); 
 		    goToPage(LevelSelector.getCurrentPage() + 1);
+		    
 		}    
 	};
     multidrag.register(next, Next);
@@ -31,7 +33,9 @@ $(document).ready(function(){
 	Prev.prototype.onRelease = function (e) {
 	    if(e.isTap){
 	        e.preventDefault();
-		    goToPage(LevelSelector.getCurrentPage() - 1); 
+	        checkComplete();
+		    goToPage(LevelSelector.getCurrentPage() - 1);
+		     
 		}   
 	};
     multidrag.register(prev, Prev);
@@ -54,9 +58,7 @@ $(document).ready(function(){
 	                goToPage(2);
 	                LevelSelector.setPage(2);
 	            }
-	            if(level.complete){
-	                $('#row' + level.levelid).append('<td><img id = "check" src = "../levels/images/checkmark.png"></td>');
-	            }	                
+	            checkComplete();                
                 $('#cliptip').hide();     
                 $('#container').hide();            
 	        } 
@@ -72,8 +74,7 @@ $(document).ready(function(){
 	    if(e.isTap){
 	        e.preventDefault();
 		    $('#clipboard').hide();
-            $('#cliptip').show();	
-            $('#clipboard').css('bottom', '-90%');
+            $('#cliptip').show();            
             Circuit.setInterfaceEnabled(true); 
         } 
 	};
@@ -87,8 +88,7 @@ $(document).ready(function(){
 	    if(e.isTap){
 	        e.preventDefault();
 		    $('#clipboard').hide();
-            $('#cliptip').show();	
-            $('#clipboard').css('bottom', '-90%');
+            $('#cliptip').show();           
         }   
 	};
     multidrag.register(factory, Factory);
@@ -150,7 +150,13 @@ $(document).ready(function(){
 	};
     multidrag.register(credits, Credits);
 	
-
+    function checkComplete(){
+        var level = LevelSelector.getCurrentLevel();
+        if(level.complete){            
+	        $('#row' + level.levelid).children('.checkmark').html('<img id = "check" src = "../levels/images/checkmark.png">');	        
+	    }
+    }
+    
     function getHint(){
         var level = LevelSelector.getCurrentLevel();
         return level.hint;
@@ -288,10 +294,12 @@ $(document).ready(function(){
                 
             if(i <= 9){
                 page.append($('<td></td>').addClass('selectName').text(level.levelid + ". " + level.levelname)); 
+                page.append($('<td></td>').addClass('checkmark').text(""));               
                 $('#levels1').append(page);                              
             }
             else if(9 < i & i <=19){
                 page2.append($('<td></td>').addClass('selectName').text(level.levelid + ". " + level.levelname));
+                page2.append($('<td></td>').addClass('checkmark').text(""));
                 $('#levels2').append(page2);              
             }
             
