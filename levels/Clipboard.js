@@ -135,17 +135,7 @@ $(document).ready(function(){
 	Credits.prototype.onRelease = function (e) {
 	    if(e.isTap){
 	        e.preventDefault();
-		    Credit.slideDesc();
-            var pagenumber = LevelSelector.getCurrentPage();	    	
-            var page = $('#page' + pagenumber);     
-            transitionNext(page, $('#page23'));                    
-            $('#circuit').hide();
-            $('#factory').hide();
-            LevelSelector.setPage(23); 
-            $('#hint').hide();         
-            $('#prev').hide();         
-            $('#next').hide();
-            show.hide();         
+		    goToCredits();        
 	    }
 	};
     multidrag.register(credits, Credits);
@@ -155,10 +145,29 @@ $(document).ready(function(){
         return level.hint;
     }
     
+    function goToCredits(){
+        Credit.slideDesc();
+        var pagenumber = LevelSelector.getCurrentPage();	    	
+        var page = $('#page' + pagenumber);     
+        transitionNext(page, $('#page23'));
+        $('#hint').fadeTo('slow', '0.5');        
+        $('#circuit').hide();
+        $('#factory').hide();
+        LevelSelector.setPage(23); 
+        $('#hint').hide();         
+        $('#prev').hide();         
+        $('#next').hide();
+        show.hide(); 
+    }
+    
     function goToPage(num){
 	    var pagenumber = LevelSelector.getCurrentPage();	    	
-        var page = $('#page' + pagenumber);       
-        if(num >= 0 && num <= 23){
+        var page = $('#page' + pagenumber); 
+        if(num === 23){
+            goToCredits();      
+        }       
+        if(num >= 0 && num <= 22){
+            LevelSelector.setPage(num);
             if(num > pagenumber){
                 transitionNext(page, $('#page' + num));
 	            $('#prev').fadeTo('slow', '1');
@@ -178,21 +187,7 @@ $(document).ready(function(){
                $('#showLevels').fadeTo('slow', '0.5');
                $('#circuit').hide();
                $('#factory').hide();
-            } 
-            else if(num === 23){
-                Credit.slideDesc();
-	            var pagenumber = LevelSelector.getCurrentPage();	    	
-                var page = $('#page' + pagenumber);     
-                transitionNext(page, $('#page23'));
-                $('#hint').fadeTo('slow', '0.5');        
-                $('#circuit').hide();
-                $('#factory').hide();
-                LevelSelector.setPage(23); 
-                $('#hint').hide();         
-                $('#prev').hide();         
-                $('#next').hide();
-                show.hide();       
-            }    
+            }                
             else{                
                 $('#circuit').show();
                 $('#factory').show();
@@ -200,8 +195,7 @@ $(document).ready(function(){
                 $('#hint').fadeTo('slow', '1');
                 $('#showLevels').fadeTo('slow', '1');            
                 LevelSelector.setLevel(all_levels[num-3]);                
-            }		
-            LevelSelector.setPage(num); 
+            }            
             $('.hintText').hide();
             $('#hint').text("Hint");
             var paper = $('#paper_sound')[0];
@@ -260,22 +254,20 @@ $(document).ready(function(){
 	}; 
 
     function setUpLevel(){ 
-        Placer.place(); 
-        $('#cliptip').hide();
+        Placer.place();
         makePages();
+        $('#cliptip').hide();
         $('.page').hide();    
         $('.hintText').hide();  
-        $('.complete').hide();    
+        $('.complete').hide();
+        $('#hintText').hide(); 
+        $('#circuit').hide();
+        $('#factory').hide();    
         $('#page0').show();    
         $('#hint').fadeTo('slow', '0.5');
         $('#showLevels').fadeTo('slow', '0.5');
         $('#prev').fadeTo('slow', '0.5');
-        $('#return').fadeTo('slow', '0.5');
-        $('#hintText').hide(); 
-        $('#circuit').hide();
-        $('#factory').hide();
         Circuit.setInterfaceEnabled(false);
-        
     }
 
     function makePages() {    
@@ -308,17 +300,23 @@ $(document).ready(function(){
     }
     
     function addLevelClicks(){
-        var page, pagenum,kid1, kid2;
-         
-        $('#tbody1').children().each(function(i, child){           
-            kid1 =  $(child);           
+        var page,kid;        
+        for(var i = 1; i < 3; i += 1){
+        $('#tbody' + i).children().each(function(i, child){           
+            kid =  $(child);           
             function Kid(e){
                 e.preventDefault();
             }
             Kid.prototype.onRelease = function(e){
                 if(e.isTap){
+                    page = LevelSelector.getCurrentPage();
                     e.preventDefault();
-                    goToPage(i + 3);
+                    if(page === 1){
+                        goToPage(i + 3);
+                    }
+                    else{
+                        goToPage(i + 13);
+                    }
                     $('#circuit').show();
                     $('#hint').fadeTo('slow', '1');
                     $('#showLevels').fadeTo('slow', '1');
@@ -328,38 +326,17 @@ $(document).ready(function(){
                     checkComplete();
                 }
             }                                 
-            multidrag.register(kid1,Kid);
+            multidrag.register(kid,Kid);
         });
-        
-        $('#tbody2').children().each(function(i, child){ 
-             kid2 =  $(child) 
-             function Kid2(e){
-                e.preventDefault();
-            }
-            Kid2.prototype.onRelease = function(e){
-                if(e.isTap){
-                    e.preventDefault();
-                    goToPage(i + 13);
-                    $('#circuit').show();
-                    $('#hint').fadeTo('slow', '1');
-                    $('#showLevels').fadeTo('slow', '1');
-                    $('#prev').fadeTo('slow', '1');
-                    $('#factory').show();    
-                    Placer.place();
-                    checkComplete();
-                }
-            }                                 
-            multidrag.register(kid2,Kid2);                                  
-               
-        });
-    }
+      }
+    }       
 });	
 
 function checkComplete(){
-        var level = LevelSelector.getCurrentLevel();
-        var page = LevelSelector.getCurrentPage();
-        if(level.complete){            
-	        $('#row' + level.levelid).children('.checkmark').html('<img id = "check" src = "../levels/images/checkmark.png">');
-	        $('#page' + page).children('.complete').show();	        
-	    }
+    var level = LevelSelector.getCurrentLevel();
+    var page = LevelSelector.getCurrentPage();
+    if(level.complete){            
+        $('#row' + level.levelid).children('.checkmark').html('<img id = "check" src = "../levels/images/checkmark.png">');
+        $('#page' + page).children('.complete').show();	        
     }
+}
