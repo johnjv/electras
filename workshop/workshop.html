@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <meta charset="utf-8">
+ <title>Electra's Workshop</title>
+ <link rel="stylesheet" href="../workshop/workshop-page.css" />
+ <link rel="stylesheet" href="../workshop/workshop.css" />
+ <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, width=device-width">
+</head>
+
+<body>
+ <div id="circuit_iface"></div>
+ <div id="circuit"></div>
+ <!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script> -->
+ <script src="../lib/jquery-1.7.1.js"></script>
+ <script src="../lib/raphael.js"></script>
+ <script src="../lib/multidrag.js"></script>
+ <script src="../translations/language_switcher.js"></script>
+ <script src="../workshop/imgpath.js"></script>
+ <script src="../workshop/raphwrap.js"></script>
+ <script src="../workshop/layout.js"></script>
+ <script src="../workshop/save.js"></script>
+ <script src="../workshop/evaluate.js"></script>
+ <script src="../workshop/drawcirc.js"></script>
+ <script src="../workshop/wireseg.js"></script>
+ <script src="../workshop/gesture.js"></script>
+ <script src="../workshop/eltgest.js"></script>
+ <script src="../workshop/canvas.js"></script>
+ <script src="../workshop/workshop.js"></script>
+
+<div id="translations">
+ <div id="EN">
+  <span class="circuit">
+   <span class="err_connect_inputs">Cannot connect inputs</span>
+   <span class="err_connect_outputs">Cannot connect outputs</span>
+   <span class="err_connect_self">Cannot connect element to itself</span>
+   <span class="err_connect_loop">Cannot create loop</span>
+   <span class="err_double_input">Input can have only one connection</span>
+   <span class="err_port_on_wire">Port cannot be near wire</span>
+   <span class="err_port_on_element">Port cannot overlap element</span>
+   <span class="err_element_on_wire">Wire cannot cross element</span>
+   <span class="err_element_on_element">Elements cannot overlap</span>
+   <span class="err_move_frozen">Element is frozen and cannot be moved</span>
+   <span class="err_remove_frozen">Element is frozen and cannot be removed</span>
+  </span><!-- end of span.circuit -->
+ </div><!-- end of div#EN -->
+</div>
+</body>
+</html>
