@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <meta charset="utf-8">
+ <title>Electra's Workshop</title>
+ <link rel="stylesheet" href="../levels/LevelSelector.css" type="text/css">   
+ <link rel="stylesheet" href="../workshop/workshop.css" type="text/css"/>
+ <link rel="stylesheet" href="../Floor/FactoryFloor.css" type="text/css">
+ <link rel="stylesheet" href="../tutorials/highlighter.css" type="text/css">
+ <link rel="stylesheet" href="letterbox.css" />
+</head>
+
+<body>
+<div id="circuit_iface"></div>
+<div id="main_container">
+
+    <div id="factoryParent">
+    <div id = "factory">
+		<img src="../Floor/resource-image/belt.png" id="belt">
+		<img src="../Floor/resource-image/box.png" id="box">
+		<img src="../Floor/resource-image/dropper.png" id="dropper">
+		<img src="../Floor/resource-image/punchingbox.png" id="punchingbox">		
+		<img src="../Floor/resource-image/glove.png" id="glove">
+		<img src="../Floor/resource-image/trash.png" id="trash">
+ 		<table id="tally">
+		 	<tr id="frow"><td></td></tr>
+		 	<tr id="srow"><td class ="fcol">Circuit Says</td></tr>
+		 	<tr id="trow"><td class = "fcol">Level Says</td></tr>
+		 	<tr id="forow"><td></td></tr>
+ 		</table>
+ 		<img src="../Floor/resource-image/start.png" id="start">
+ 		<p id="success"> Great Job! The circuit is correct.</p>
+ 		<p id="failure"> I am sorry! The circuit was not right. Try again</p>
+ 				
+   </div>
+   </div>
+   
+   <div id="circuit"></div>
+   <div id = "cliptip">
+        <img src = "../levels/images/clipboard-top1.png" id = "tip">
+    </div>
+    <div id = "clipboard">
+        <img src = "../levels/images/clipboard_big.png" id = "clip">        
+        <div id = "clipOrder">
+            <div class = "page" id = "page0">
+                <p> Welcome to my candy factory! Our customers send orders to us,
+                    and your job is to build machines matching their orders.</p>
+
+                <p>Our factory produces candy in three shapes:</p>
+
+                <table id = "shapes">
+                    <tr><td>Drops</td><td>Stars</td><td>Squares</td></tr>
+                    <tr><td><img class = "welcolor" src="../levels/images/drop.png" /></td><td><img  class = "welcolor" src="../levels/images/star.png" /></td><td><img class = "welcolor" src="../levels/images/square.png" /></td></tr>
+                </table>
+
+                <p>And candy comes in four flavors:</p>
+
+                <table id = "flavors">
+                    <tr><td>Blue</td><td>Cherry</td><td>Lemon</td><td>Mint</td></tr>                   
+                    <tr><td><img class = "welcolor" src="../levels/images/blue.png" /></td><td><img class = "welcolor" src="../levels/images/red.png" /></td>
+                    <td><img class = "welcolor" src="../levels/images/yellow.png" /></td><td><img  class = "welcolor" src="../levels/images/green.png" /></td></tr>
+                </table>
+                 
+                <p>Let's get started! We will help you along the way!</p>               
+            </div>   
+            <div class = "page" id = "page1"><table  id = "levels1"><tbody id = "tbody1"></tbody></table></div>
+            <div class = "page" id = "page2"><table  id = "levels2"><tbody id = "tbody2"></tbody></table></div>
+        </div>        
+        <div id = "clipButtons">            
+            <div id = "editLevels"><img src = "../levels/images/left.png" id = "prev"><button id = "hint">Hint</button><button id="showLevels">Levels</button><img src = "../levels/images/right.png" id = "next"></div>
+        </div>
+    </div>
+
+</div>
+
+<script type = "text/javascript"  src="../lib/jquery-1.7.1.js"></script>
+<script type = "text/javascript"  src="../lib/jquery.transform2d.js"></script>
+<script type = "text/javascript"  src="letterbox.js"></script>
+<script type = "text/javascript"  src="../lib/raphael.js"></script>
+<script type = "text/javascript"  src="../lib/imagesloaded.js"></script>
+<script type = "text/javascript"  src="../translations/language_switcher.js"></script>
+<script type = "text/javascript"  src="../lib/multidrag.js"></script>
+<script type = "text/javascript"  src="../workshop/imgpath.js"></script>
+<script type = "text/javascript"  src="../workshop/raphwrap.js"></script>
+<script type = "text/javascript"  src="../workshop/layout.js"></script>
+<script type = "text/javascript"  src="../workshop/evaluate.js"></script>
+<script type = "text/javascript"  src="../workshop/drawcirc.js"></script>
+<script type = "text/javascript"  src="../workshop/wireseg.js"></script>
+<script type = "text/javascript"  src="../workshop/save.js"></script>
+<script type = "text/javascript"  src="../workshop/eltgest.js"></script>
+<script type = "text/javascript"  src="../workshop/gesture.js"></script>
+<script type = "text/javascript"  src="../workshop/canvas.js"></script>
+<script type = "text/javascript"  src="../workshop/circplace.js"></script> 
+<script type = "text/javascript"  src="../workshop/circuit.js"></script> 
+<script type = "text/javascript"  src="../levels/credit.js"></script>    
+<script type = "text/javascript"  src="../levels/SequenceItem.js"></script>
+<script type = "text/javascript"  src="../levels/Level.js"></script>
+<script type = "text/javascript"  src="../levels/PreMadeLevels.js"></script> 
+<script type = "text/javascript"  src="../levels/Clipboard.js"></script> 
+<script type = "text/javascript"  src="../levels/LevelSelector.js"></script>
+<script type = "text/javascript"  src="../Floor/Candy.js"></script> 
+<script type = "text/javascript"  src="../Floor/FactoryFloor.js"></script>
+<script type = "text/javascript"  src="../Floor/floor.js"></script>
+<script type = "text/javascript"  src="../tutorials/jquery-ui-1.8.20.custom.min.js"></script>
+
+<script type = "text/javascript"  src="../tutorials/tutorial.js"></script>
+<script type = "text/javascript"  src="../tutorials/filtering.js"></script>
+<script type = "text/javascript"  src="../tutorials/convenience_operators.js"></script>
+<script type = "text/javascript"  src="../tutorials/translator_interface.js"></script>
+<script type = "text/javascript"  src="../tutorials/level3tutorial.js"></script>
+<script type = "text/javascript"  src="../tutorials/level1tutorial.js"></script>
+<script type = "text/javascript"  src="../tutorials/level2tutorial.js"></script>
+<script type = "text/javascript"  src="../tutorials/level4tutorial.js"></script>
+<script type = "text/javascript"  src="../tutorials/level6tutorial.js"></script>
+<script type = "text/javascript"  src="../tutorials/level8tutorial.js"></script>
+
+<audio id="correct_sound"> 
+	<source src="../sounds/correct1.ogg" type="audio/ogg; codec=vorbis" preload="auto">
+	<source src="../sounds/correct1.mp3" type="audio/mp3" preload="auto">
+</audio>
+	
+<audio id="belt_sound" loop>
+	<source src="../sounds/belt3.mp3" type="audio/mp3" preload="auto">
+	<source src="../sounds/belt3.ogg" type="audio/ogg; codec=vorbis" preload="auto">
+</audio>
+
+<audio id="punch_sound"> 
+	<source src="../sounds/punch.ogg" type="audio/ogg; codec=vorbis" preload="auto">
+	<source src="../sounds/punch.mp3" type="audio/mp3" preload="auto">
+</audio>
+
+<audio id="paper_sound"> 
+	<source src="../sounds/paper.ogg" type="audio/ogg; codec=vorbis" preload="auto">
+	<source src="../sounds/paper.mp3" type="audio/mp3" preload="auto">
+</audio>
+<audio id="paper_sound2"> 
+	<source src="../sounds/paper.ogg" type="audio/ogg; codec=vorbis" preload="auto">
+	<source src="../sounds/paper.mp3" type="audio/mp3" preload="auto">
+</audio>
+
+<audio id="garbage_sound"> 
+	<source src="../sounds/garbage.ogg" type="audio/ogg; codec=vorbis" preload="auto">
+	<source src="../sounds/garbage.mp3" type="audio/mp3" preload="auto">
+</audio>
+
+<audio id="incorrect_sound">
+	<source src="../sounds/incorrect.ogg" type="audio/ogg; codec=vorbis" preload="auto">
+	<source src="../sounds/incorrect.mp3" type="audio/mp3" preload="auto">
+</audio>
+<audio id="electric_sound">
+	<source src="../sounds/electric.ogg" type="audio/ogg; codec=vorbis" preload="auto">
+	<source src="..sounds/electric.mp3" type="audio/mp3" preload="auto">
+</audio>
+<audio id="eraser_sound">
+	<source src="../sounds/eraser.ogg" type="audio/ogg; codec=vorbis" preload="auto">
+	<source src="..sounds/eraser.mp3" type="audio/mp3" preload="auto">
+</audio>
+<audio id="click_sound">
+	<source src="../sounds/click.ogg" type="audio/ogg; codec=vorbis" preload="auto">
+	<source src="..sounds/click.mp3" type="audio/mp3" preload="auto">
+</audio>
+<audio id="correct2_sound">
+	<source src="../sounds/correct2.ogg" type="audio/ogg; codec=vorbis" preload="auto">
+	<source src="../sounds/correct2.ogg" type="audio/ogg; codec=vorbis" preload="auto">
+</audio>
+
+
+<div id="translations" hidden="hidden">
+  <div id="EN">
+    <span class="factory_floor">
+
+    </span>
+    <span class="menu">
+
+    </span>
+	<span class="circuit">
+		<span class="err_connect_inputs">Cannot connect inputs</span>
+		<span class="err_connect_outputs">Cannot connect outputs</span>
+		<span class="err_connect_self">Cannot connect element to itself</span>
+		<span class="err_connect_loop">Cannot create loop</span>
+		<span class="err_double_input">Input can have only one connection</span>
+		<span class="err_port_on_wire">Port cannot be near wire</span>
+		<span class="err_port_on_element">Port cannot overlap element</span>
+		<span class="err_element_on_wire">Wire cannot cross element</span>
+		<span class="err_element_on_element">Elements cannot overlap</span>
+		<span class="err_move_frozen">Element is frozen and cannot be moved</span>
+		<span class="err_remove_frozen">Element is frozen and cannot be removed</span>
+	</span>
+  <span class="tutorial1">
+    <span class="order"></span>
+    <span class="hint"></span>
+    <span class="bubble1">We must tell the machine what to do.  Click on the sensor to start laying down wire.</span>
+    <span class="bubble2">Good job!  Now connect it to the lightbulb!</span>
+    <span class="bubble3">Click on the arrow in the lower left of your screen to go to the factory floor.
+      Then click the big green play button to start the conveyor belt.</span>
+  </span>
+  <span class="tutorial2">
+    <span class="order"></span>
+    <span class="hint"></span>
+    <span class="bubble1">Candies can have 3 shapes: drop, star, and square.</span>
+    <span class="bubble2">Good choice!  Now click on the lightbulb just like last time.</span>
+    <span class="bubble3">With great power comes great responsibility.</span>
+    <span class="bubble4">Uh oh!  Someone connected this wrong! Grab the eraser and click on the wire to give us a nice clean slate to work with.</span>
+  </span>
+  <span class="tutorial3">
+    <span class="order"></span>
+    <span class="hint"></span>
+    <span class="bubble1">The only way you'll be able to solve this is by connecting the lightbulb to the NOT operator.  You may need to erase the current connection.</span>
+    <span class="bubble2">We'll be using the NOT operator.  Whatever is put into it comes out the opposite!</span>
+    <span class="bubble3">We'll only need one NOT operator for this.</span>
+    <span class="bubble4">Great!  Now connect the green sensor to the input of the NOT operator</span>
+    <span class="bubble5">Now just finish it off.</span>
+  </span>
+  <span class="tutorial4">
+    <span class="order"></span>
+    <span class="hint"></span>
+    <span class="bubble1">The only way you'll be able to solve this is by connecting the lightbulb to the OR operator.  You may need to erase the current connection.</span>
+    <span class="bubble2">This time we'll be using an OR operator.  Go ahead and put one on screen.</span>
+    <span class="bubble3">We'll only need one OR operator for this.</span>
+    <span class="bubble4">This operator has two inputs.  Select one and attach it to a sensor.</span>
+    <span class="bubble5">Now connect the other...</span>
+    <span class="bubble6">Great!  Now if either green or blue is true, the OR will output true.</span>
+  </span>
+  <span class="tutorial5">
+    <span class="order"></span>
+    <span class="hint"></span>
+  </span>
+  <span class="tutorial6">
+    <span class="order"></span>
+    <span class="hint"></span>
+    <span class="bubble1">You'll need both an OR and a NOT to solve this.</span>
+  </span>
+  <span class="tutorial7">
+    <span class="order"></span>
+    <span class="hint"></span>
+  </span>
+  <span class="tutorial8">
+    <span class="order"></span>
+    <span class="hint"></span>
+    <span class="bubble1">The only way you'll be able to solve this is by connecting the lightbulb to the AND operator.  You may need to erase the current connection.</span>
+    <span class="bubble2">This time we'll be using an AND operator.  Go ahead and put one on screen.</span>
+    <span class="bubble3">We'll only need one AND operator for this.</span>
+    <span class="bubble4">This operator has two inputs.  Select one and attach it to a sensor.</span>
+    <span class="bubble5">Now connect the other...</span>
+    <span class="bubble6">Great!  Now if yellow AND square are both true, the AND will output true.</span>
+  </span>
+  <span class="tutorial9">
+    <span class="order"></span>
+    <span class="hint"></span>
+  </span>
+  <span class="tutorial10">
+    <span class="order"></span>
+    <span class="hint"></span>
+  </span>
+  <span class="tutorial11">
+    <span class="order"></span>
+    <span class="hint"></span>
+  </span>
+  <span class="tutorial12">
+    <span class="order"></span>
+    <span class="hint"></span>
+  </span>
+  <span class="tutorial13">
+    <span class="order"></span>
+    <span class="hint"></span>
+  </span>
+  <span class="tutorial14">
+    <span class="order"></span>
+    <span class="hint"></span>
+  </span>
+  <span class="tutorial15">
+    <span class="order"></span>
+    <span class="hint"></span>
+  </span>
+  <span class="tutorial16">
+    <span class="order"></span>
+    <span class="hint"></span>
+  </span>
+  <span class="tutorial17">
+    <span class="order"></span>
+    <span class="hint"></span>
+  </span>
+  <span class="tutorial18">
+    <span class="order"></span>
+    <span class="hint"></span>
+  </span>
+  <span class="tutorial19">
+    <span class="order"></span>
+    <span class="hint"></span>
+  </span>
+  <span class="tutorial20">
+    <span class="order"></span>
+    <span class="hint"></span>
+  </span>
+
+  </div>
+
+  <div id="FR">
+	<span class="circuit">
+		<span class="err_connect_inputs">Cannot connect inputs</span>
+		<span class="err_connect_outputs">Cannot connect outputs</span>
+		<span class="err_connect_self">Cannot connect element to itself</span>
+		<span class="err_connect_loop">Cannot create loop</span>
+		<span class="err_double_input">Input can have only one connection</span>
+		<span class="err_port_on_wire">Port cannot be near wire</span>
+		<span class="err_port_on_element">Port cannot overlap element</span>
+		<span class="err_element_on_wire">Wire cannot cross element</span>
+		<span class="err_element_on_element">Elements cannot overlap</span>
+		<span class="err_move_frozen">Element is frozen and cannot be moved</span>
+		<span class="err_remove_frozen">Element is frozen and cannot be removed</span>
+	</span>
+  <span class="tutorial1">
+    <span class="bubble1">Another language!</span>
+    <span class="bubble2">We should translate things</span>
+    <span class="bubble3">Yes, translate.</span>
+  </span>
+  <span class="tutorial2">
+    <span class="bubble1">Candies can have 3 shapes: ball, star, and square.</span>
+    <span class="bubble2">Good choice!  Now click on the lightbulb just like last time.</span>
+    <span class="bubble3">With great power comes great responsibility.</span>
+    <span class="bubble4">Uh oh!  Someone connected this wrong! Grab the eraser and click on the wire to give us a nice clean slate to work with.</span>
+  </span>
+  <span class="tutorial3">
+    <span class="bubble1">The only way you'll be able to solve this is by connecting the lightbulb to the NOT operator.  You may need to erase the current connection.</span>
+    <span class="bubble2">We'll be using the NOT operator.  Whatever is put into it comes out the opposite!</span>
+    <span class="bubble3">We'll only need one NOT operator for this.</span>
+    <span class="bubble4">Great!  Now connect the green sensor to the input of the NOT operator</span>
+    <span class="bubble5">Now just finish it off.</span>
+  </span>
+  <span class="tutorial4">
+    <span class="bubble1">The only way you'll be able to solve this is by connecting the lightbulb to the OR operator.  You may need to erase the current connection.</span>
+    <span class="bubble2">This time we'll be using an OR operator.  Go ahead and put one on screen.</span>
+    <span class="bubble3">We'll only need one OR operator for this.</span>
+    <span class="bubble4">This operator has two inputs.  Select one and attach it to a sensor.</span>
+    <span class="bubble5">Now connect the other...</span>
+    <span class="bubble6">Great!  Now if either green or blue is true, the OR will output true.</span>
+  </span>
+  <span class="tutorial6">
+    <span class="bubble1">You'll need both an OR and a NOT to solve this.</span>
+  </span>
+  <span class="tutorial8">
+    <span class="bubble1">The only way you'll be able to solve this is by connecting the lightbulb to the AND operator.  You may need to erase the current connection.</span>
+    <span class="bubble2">This time we'll be using an AND operator.  Go ahead and put one on screen.</span>
+    <span class="bubble3">We'll only need one AND operator for this.</span>
+    <span class="bubble4">This operator has two inputs.  Select one and attach it to a sensor.</span>
+    <span class="bubble5">Now connect the other...</span>
+    <span class="bubble6">Great!  Now if yellow AND square are both true, the AND will output true.</span>
+  </span>
+  </div>
+</div>
+</body>
+</html>
