@@ -18,7 +18,7 @@ $(document).ready(function(){
 	
 	Next.prototype.onRelease = function (e) {
 	    if(e.isTap){
-	        e.preventDefault();
+	        e.preventDefault();	        
 	        checkComplete(); 
 		    goToPage(LevelSelector.getCurrentPage() + 1);
 		    
@@ -32,7 +32,7 @@ $(document).ready(function(){
 		
 	Prev.prototype.onRelease = function (e) {
 	    if(e.isTap){
-	        e.preventDefault();
+	        e.preventDefault();	        
 	        checkComplete();
 		    goToPage(LevelSelector.getCurrentPage() - 1);
 		     
@@ -57,7 +57,7 @@ $(document).ready(function(){
 	            else{
 	                goToPage(2);
 	                LevelSelector.setPage(2);
-	            }
+	            }	            
 	            checkComplete();                
                 $('#cliptip').hide();     
                 $('#container').hide();            
@@ -149,13 +149,6 @@ $(document).ready(function(){
 	    }
 	};
     multidrag.register(credits, Credits);
-	
-    function checkComplete(){
-        var level = LevelSelector.getCurrentLevel();
-        if(level.complete){            
-	        $('#row' + level.levelid).children('.checkmark').html('<img id = "check" src = "../levels/images/checkmark.png">');	        
-	    }
-    }
     
     function getHint(){
         var level = LevelSelector.getCurrentLevel();
@@ -271,7 +264,8 @@ $(document).ready(function(){
         $('#cliptip').hide();
         makePages();
         $('.page').hide();    
-        $('.hintText').hide();    
+        $('.hintText').hide();  
+        $('.complete').hide();    
         $('#page0').show();    
         $('#hint').fadeTo('slow', '0.5');
         $('#showLevels').fadeTo('slow', '0.5');
@@ -306,6 +300,7 @@ $(document).ready(function(){
             order.append($('<div></div>').addClass('levelname').text(level.levelid + ". " + level.levelname));
             order.append($('<div></div>').addClass('order').text("Order: " + level.orderText)); 
             order.append($('<div></div>').addClass('hintText').text("Hint: " + level.hint));
+            order.append($('<div></div>').addClass('complete').text("Complete"));
             $('#clipOrder').append(order);             
         }
         addLevelClicks();       
@@ -330,6 +325,7 @@ $(document).ready(function(){
                     $('#prev').fadeTo('slow', '1');
                     $('#factory').show();     
                     Placer.place();
+                    checkComplete();
                 }
             }                                 
             multidrag.register(kid1,Kid);
@@ -350,6 +346,7 @@ $(document).ready(function(){
                     $('#prev').fadeTo('slow', '1');
                     $('#factory').show();    
                     Placer.place();
+                    checkComplete();
                 }
             }                                 
             multidrag.register(kid2,Kid2);                                  
@@ -357,3 +354,12 @@ $(document).ready(function(){
         });
     }
 });	
+
+function checkComplete(){
+        var level = LevelSelector.getCurrentLevel();
+        var page = LevelSelector.getCurrentPage();
+        if(level.complete){            
+	        $('#row' + level.levelid).children('.checkmark').html('<img id = "check" src = "../levels/images/checkmark.png">');
+	        $('#page' + page).children('.complete').show();	        
+	    }
+    }
