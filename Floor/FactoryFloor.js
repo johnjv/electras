@@ -211,8 +211,7 @@ function moveCandy(candy){
         posleft = glove.position().left - belt.position().left;
         posdown = box.width()/3.0;
         $(candyPic).animate({left: '-=' + posleft}, 3000, 'linear'); 
-        $(candyPic).animate({left: '-=' + (posdown),width: '-=0'+ candyPic.width()}, 1500, 'linear');
-            
+        $(candyPic).animate({left: '-=' + (posdown),width: '-=0'+ candyPic.width()}, 1500, 'linear');  
     }
         
     else {
@@ -224,6 +223,9 @@ function moveCandy(candy){
 		}); 
         $(candyPic).animate({left: '-=' + (posdown),width: '-=0'+candyPic.width()}, 1500, 'linear');
 	}
+	$(candyPic).fadeOut(600, function(){
+		$(candyPic).hide();
+	});
 }
 
 function putAFlag(){
