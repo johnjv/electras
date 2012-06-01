@@ -28,36 +28,42 @@ $(document).ready(function(){
 });  
 
 function setCircuitSound(){
-	var electric = $('#electric_sound')[0];
-	var eraser = $('#eraser_sound')[0];
-	var garbage = $('#garbage_sound')[0];
-	var incorrect = $('#incorrect_sound')[0];
-	var click = $('#click_sound')[0];
-	var correct2 = $('#correct2_sound')[0];
 	Circuit.addChangeListener(function(e) {
 	if (e.type === 'wireStart') {
-		electric.play();}
+		playSound('electric_sound');}
 	else if(e.type === 'eraseWire' || e.type === 'eraseElement') {
-		eraser.play();}
+		playSound('eraser_sound');}
 	else if(e.type ==='moveOut') {
-		garbage.play();}
+		playSound('garbage_sound');}
 	else if(e.type === 'wireFailed') {
-		incorrect.play();}
+		playSound('incorrect_sound');}
 	else if(e.type === 'addDone' || e.type === 'moveDone') {
-		click.play();}
+		playSound('click_sound');}
 	else if(e.type === 'wireDone') {
-		electric.play();
-		correct2.play();}
+		playSound('electric_sound');
+		playSound('correct2_sound');}
 	});
+}
 
+function playSound(sound_id) {
+	if(FactoryFloor.getSoundState()) {
+		var sound = $('#' + sound_id)[0];
+		sound.play();
+	}
+}
+
+function pauseSound(sound_id) {
+	if(FactoryFloor.getSoundState()) {
+		var sound = $('#' + sound_id)[0];
+		sound.pause();
+	}
 }
 
 function startMachine(onDone){
     var count =0;
     var candies = getLevelType();
     var correctSet = true;
-    var belt = $('#belt_sound')[0];
-    belt.play();
+   	playSound('belt_sound');
     startNext();
     
     function startNext(){
@@ -93,7 +99,7 @@ function startMachine(onDone){
 		else{
 			$("#tip").show();
 			onDone();
-			belt.pause();
+			pauseSound('belt_sound');
 			if (correctSet) {
 				LevelSelector.setComplete(true);
 				checkComplete();
@@ -173,9 +179,6 @@ function moveCandy(candy){
     var glove = $("#glove");
     var trash = $("#trash");
     var punchingBox = $('#punchingbox');
-    var garbage = $('#garbage_sound')[0];
-    var correct = $('#correct_sound')[0];
-        
     posleft = glove.position().left;
     posdown = trash.position().top - candyPic.position().top + candyPic.height() + trash.height()/4.0; 
         
@@ -183,8 +186,8 @@ function moveCandy(candy){
         $(candyPic).animate({left:posleft},1500, 'linear', function(){movePuncher();});
     	$(candyPic).animate({top:'+=' + posdown, width: '-=0' + candyPic.width()}, 600, 'linear',
     		function(){
-				garbage.play();
-				correct.play();
+				playSound('garbage_sound');			
+				playSound('correct_sound');
         });
     }
         
@@ -192,11 +195,11 @@ function moveCandy(candy){
         $(candyPic).animate({left:posleft},1500, 'linear', function() {
         	var flag = putAFlag(); 
         	posdown = trash.position().top - flag.position().top + trash.height()/2.0;
-        	$(flag).animate({top: '+=' + (posdown),width: '-=20'}, 600, 'linear');
+        	$(flag).animate({top: '+=' + (posdown),width: '-=0' + flag.width()}, 600, 'linear');
 			movePuncher();
         });
 		$(candyPic).animate({top:'+=' + posdown, width: '-=0'+ candyPic.width()}, 600, 'linear',function() {
-        	garbage.play();});
+        	playSound('garbage_sound');});
     }
         
     else if(candy.checkCandy() === 2){
@@ -217,7 +220,7 @@ function moveCandy(candy){
         posdown = box.width()/3.0;
         $(candyPic).animate({left: '-=' + posleft}, 3000, 'linear', 
 			function(){
-				correct.play();
+				playSound('correct_sound');
 		}); 
         $(candyPic).animate({left: '-=' + (posdown),width: '-=0'+candyPic.width()}, 1500, 'linear');
 	}
@@ -225,18 +228,17 @@ function moveCandy(candy){
 
 function putAFlag(){
     "use strict";
-    var incorrect = $('#incorrect_sound')[0];
     var flag = $('<img src="../Floor/resource-image/envx.png" id="flag"></img>');
     var dropper = $('#dropper');
     var flagPos;
     var factory = $('#factory');
     var glove = $('#glove');
-    flag.width(20);
+    flag.width('2%');
     var x = glove.position().left;
     var y = dropper.position().top + dropper.height()/2.0 - flag.width() * 2.0;
     flag.css('left', x).css('top', y);
     factory.append(flag);
-    incorrect.play();
+    playSound('incorrect_sound');
     return flag;
 }
 
@@ -246,16 +248,15 @@ function moveFlag(flag){
     var glove = $('#glove');
     var x = flag.offset().left - belt.offset().left;
     $(flag).animate({left:'-=0' + x},3000, 'linear');
-    $(flag).animate({width: '-=20'}, 1500, 'linear');
+    $(flag).animate({width: '-=0' + flag.width()}, 1500, 'linear');
 }
 
 function movePuncher(){
 	"use strict";
-    var belt = $('#belt'); 
-    var punch = $('#punch_sound')[0];
+    var belt = $('#belt');
     $('#glove').animate({top: '+=0' + belt.height()/3.0}, 
                             (1000/ $("#glove").position().left),'linear', function() {
-                                    punch.play();});
+                                    playSound('punch_sound');});
     $('#glove').animate({top: '-=0' + belt.height()/3.0}, 600,'linear');
 }
 
@@ -278,7 +279,8 @@ function showMessage(mess){
 var FactoryFloor = (function($) {
     "use strict";
     var my = {}; 
-
+	var soundState = true;
+	
     my.levelChanged = function() {
     	clearTable();
     	$("#tally").hide();
@@ -294,7 +296,15 @@ var FactoryFloor = (function($) {
 	    $('#factory').width(par.width()).height(par.height());
 	    $('#factoryParent').offset(par.offset());
 	    Placer.place();
-	};  
-
+	}; 
+	
+	my.setSoundState = function(boolean_value) {
+		soundState = boolean_value;
+	};
+	
+	my.getSoundState = function() {
+		return soundState;
+	};
+	
     return my;              
 }(jQuery));
