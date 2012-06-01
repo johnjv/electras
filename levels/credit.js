@@ -24,7 +24,7 @@ var Credit = {};
 							+ '<tr><td><b>Dr. Carl Burch</b></td></tr></tbody></table>');
 							
 		var clipboardDiv = $('<div class = "credits"><table class = "credtable"><tbody><tr><th><u>Clipboard</u></th></tr>'
-							+ '<tr><td><b>Concorde Habineza</b></td></tr><tr><td><b>Jeannette Inema</b></td></tr><tr><td><b>Brandon McNew</b></td></tr></tbody></table></div>');
+							+ '<tr><td><b>Brandon McNew</b></td></tr><tr><td><b>Concorde Habineza</b></td></tr><tr><td><b>Jeannette Inema</b></td></tr></tbody></table></div>');
 							
 		var factoryDiv = $('<div class = "credits"><table class = "credtable"><tbody><tr><th><u>Factory Floor</u></th></tr>'
 							+ '<tr><td><b>Thierry Kimenyi</b></td></tr><tr><td><b>Justin John</b></td></tr><tr><td><b>Sung Oh</b></td></tr></tbody></table></div>');

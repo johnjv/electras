@@ -123,7 +123,7 @@ var speak_softly_cherry_a_stick = new Level({
 
 
 var botique = new Level({
-  levelname: 'Botique',  
+  levelname: 'Boutique',  
   levelid: 11,
   orderText: "I want lemon drops and green squares. But not lemon squares or green drops! "  ,
   hint: "Make something that finds lemon drops, then something that finds green squares. Combine them!",
