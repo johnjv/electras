@@ -21,7 +21,6 @@ $(document).ready(function(){
 	        e.preventDefault();	        
 	        checkComplete(); 
 		    goToPage(LevelSelector.getCurrentPage() + 1);
-		    
 		}    
 	};
     multidrag.register(next, Next);
@@ -157,6 +156,7 @@ $(document).ready(function(){
         $('#hint').hide();         
         $('#prev').hide();         
         $('#next').hide();
+        $('#sound').hide();
         show.hide(); 
     }
     
@@ -200,6 +200,7 @@ $(document).ready(function(){
             $('#hint').text("Hint");
             var paper = $('#paper_sound')[0];
 	        paper.play();
+	        //playSound(paper);
 	    }	    
 	}
 
