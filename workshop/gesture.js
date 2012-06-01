@@ -302,18 +302,23 @@
 			.css('position', 'absolute')
 			.attr('src', my.getResourcePath('eraser', ['svg', 'png']))
 			.width(50);
+		this.fadeImg = null;
+		this.fadeElts = [];
 		this.onDrag(info, e);
 		info.canvas.append(this.dragImg);
 		info.queueChange({type: 'eraseStart'});
 	};
 
 	my.EraseGesture.prototype.onDrag = function (info, e) {
-		var ex, ey, elt, w;
+		var ex, ey, elt, w, fadeElts, fadeImg;
 
 		ex = e.circuitX;
 		ey = e.circuitY;
 
 		this.dragImg.css({left: ex - 0.3 * 50.0, top: ey - 50});
+
+		fadeElts = [];
+		fadeImg = null;
 
 		elt = findElement(info.layout, ex, ey);
 		if (elt !== null) {
@@ -323,25 +328,98 @@
 			} else {
 				info.hideError();
 				$(this.dragImg).stop().fadeTo(0, 1.0);
+				fadeImg = elt.imgElt;
+				$.each(elt.ports, function (i, port) {
+					var j;
+					if (port.input) {
+						if (port.ports.length === 0) {
+							fadeElts.push(port.circ);
+							fadeElts.push(port.stub);
+						} else {
+							fadeElts.push(port.line);
+						}
+					} else {
+						fadeElts.push(port.circ);
+						if (port.ports.length === 0) {
+							fadeElts.push(port.stub);
+						} else {
+							for (j = port.ports.length - 1; j >= 0; j -= 1) {
+								fadeElts.push(port.ports[j].line);
+							}
+						}
+					}
+				});
 			}
 		} else {
 			w = my.Wire.find(info.layout, ex, ey, ERASER_CONNECT);
 			if (w !== null) {
 				info.hideError();
 				$(this.dragImg).stop().fadeTo(0, 1.0);
+				if (w[0].input) {
+					fadeElts.push(w[0].line);
+				} else {
+					fadeElts.push(w[1].line);
+				}
 			} else {
 				info.hideError();
 				$(this.dragImg).stop().fadeTo(0, 0.5);
 			}
 		}
+
+		if (this.fadeImg !== fadeImg) {
+			if (this.fadeImg) {
+				this.fadeImg.stop().fadeTo(0, 1.0);
+			}
+			this.fadeImg = fadeImg;
+			if (fadeImg) {
+				fadeImg.stop().fadeTo(0, 0.5);
+			}
+		}
+
+		$.each(this.fadeElts, function (i, elt) {
+			if ($.inArray(fadeElts, elt) < 0) {
+				elt.attr('opacity', 1.0);
+			}
+		});
+		this.fadeElts = fadeElts;
+		$.each(fadeElts, function (i, elt) {
+			elt.attr('opacity', 0.5);
+		});
 	};
+
+	my.EraseGesture.prototype.cancel = function (info) {
+		if (this.fadeImg) {
+			this.fadeImg.stop().fadeTo(0, 1.0);
+		}
+		$.each(this.fadeElts, function (i, elt) {
+			elt.attr('opacity', 1.0);
+		});
+		this.fadeImg = null;
+		this.fadeElts = [];
+		if (this.dragImg) {
+			this.dragImg.remove();
+			this.dragImg = null;
+		}
+	}
 
 	my.EraseGesture.prototype.onRelease = function (info, e) {
 		var x, y, wire, elt, ports;
 
+		if (this.fadeImg) {
+			this.fadeImg.stop().fadeTo(0, 1.0);
+		}
+		$.each(this.fadeElts, function (i, elt) {
+			elt.attr('opacity', 1.0);
+		});
+		this.fadeImg = null;
+		this.fadeElts = [];
+		if (this.dragImg) {
+			this.dragImg.remove();
+			this.dragImg = null;
+		}
+
 		x = e.circuitX;
 		y = e.circuitY;
-		this.dragImg.remove();
 		wire = my.Wire.find(info.layout, x, y, ERASER_CONNECT);
 		if (wire !== null) {
 			info.hideError();
