@@ -39,6 +39,5 @@ var LevelSelector = (function($) {
         self.css('left', clipPos.left).css('top', clipPos.top);	
         tip.css('left', container.width() * 0.45).css('bottom' , '0%'); 
     };
-    
     return my;
 }(jQuery));
