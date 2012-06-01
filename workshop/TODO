@@ -1,8 +1,5 @@
-Respond to change in canvas size
 Allow gestures via click/tap to start and click/tap to end (not just dragging)
 Error message when wires are basically parallel and overlap
-Internationalization
-When eraser is over something, make it fade out
 
 Electricity animation
 Save edited layouts on disk?
