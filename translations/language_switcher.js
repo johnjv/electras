@@ -6,6 +6,7 @@ var Translator = (function ($) {
   var current_texts = {}
   var english_texts = {}
   var listeners = []
+  var lang = 'KO'
 
 
   returns.getText = function(){
@@ -18,7 +19,7 @@ var Translator = (function ($) {
         i++;
       } else {
         if (looping){return arguments[arguments.length-1]}
-        console.log("Error finding ", arguments[i],  ".  The error is ", e,".  Replacing with English text")
+        console.log("Error finding ", arguments[i],  ".  Replacing with English text")
         i = 0;
         text = english_texts
         looping = true
@@ -29,13 +30,23 @@ var Translator = (function ($) {
 
   returns.changeLanguage = function(language_code){
     current_language = language_code
-
     current_texts = hashify($('#translations #' + language_code))
     $.each(listeners, function(i, listener){
         listener.call()
     })
-
+    console.log(current_texts)
+    if(language_code === 'EN'){
+        lang = 'KO'
+    }
+    else{
+        lang = 'EN'
+    }
+    
   }
+
+  returns.getCurrentLanguage = function(){
+     return lang; 
+  }  
 
   returns.list_languages = function(){
     return $('#translations').children().map(function(i, child){return child.id})
@@ -60,6 +71,7 @@ var Translator = (function ($) {
 
   $(document).ready(function(){
     Translator.changeLanguage('EN')
+    console.log('it got the english')
     english_texts = hashify($('#translations #EN'))
   })
 

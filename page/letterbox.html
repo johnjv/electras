@@ -65,9 +65,10 @@
             </div>   
             <div class = "page" id = "page1"><table  id = "levels1"><tbody id = "tbody1"></tbody></table></div>
             <div class = "page" id = "page2"><table  id = "levels2"><tbody id = "tbody2"></tbody></table></div>
+            <div id = "orders"></div>
         </div>        
         <div id = "clipButtons">            
-            <div id = "editLevels"><img src = "../levels/images/left.png" id = "prev"><button id = "hint">Hint</button><button id="showLevels">Levels</button><img src = "../levels/images/right.png" id = "next"><button id = "sound">Sound</button></div>
+            <div id = "editLevels"><img src = "../levels/images/left.png" id = "prev"><img src = "../levels/images/hint.png" id = "hint"><img src = "../levels/images/levels.png" id="showLevels"><img src = "../levels/images/soundon.png" id = "sound"><img src = "../levels/images/language.png" id = "lang"><img src = "../levels/images/right.png" id = "next"></div>
         </div>
     </div>
 
@@ -216,7 +217,7 @@
 		<span class="lev10desc">I want red squares and yellow squares.</span>
 		<span class="lev10hint">There are only so many ways to combine these operators and sensors.  Keep trying!</span>
 		<span class="lev10name">Speak softly, CHERRY a stick</span>
-		<span class="lev11desc">I want lemon drops and green squares. But not lemon squares or green drops! "  ,
+		<span class="lev11desc">I want lemon drops and green squares. But not lemon squares or green drops! "</span>
 		<span class="lev11hint">Make something that finds lemon drops, then something that finds green squares. Combine them!</span>
 		<span class="lev11name">Boutique</span>
 		<span class="lev12desc">I want something red or yellow, and I want it in either a drop or a star shape.</span>
@@ -228,7 +229,7 @@
 		<span class="lev14desc">We want cherry drops or any star that isn&rsquo;t blue.</span>
 		<span class="lev14hint">You&rsquo;ll have to use all of the operators creatively.  Try making a machine that fills the first part of the order, then a machine that fills the second part. Finally, create a circuit that combines them.</span>
 		<span class="lev14name">Mishmash</span>
-		<span class="lev15desc">Green.  Only green.." ,
+		<span class="lev15desc">Green.  Only green.."</span>
 		<span class="lev15hint">There doesn&rsquo;t seem to be a green sensor.  It looks like we&rsquo;ll have to get the other sensors working together to make up for that.</span>
 		<span class="lev15name">Combination</span>
 		<span class="lev16desc">I don&rsquo;t want any blues... unless it&rsquo;s a blue square.</span>
@@ -305,54 +306,7 @@
     <span class="bubble5">Now connect the other...</span>
     <span class="bubble6">Great!  Now if yellow AND square are both true, the AND will output true.</span>
   </span>
-  <span class="tutorial9">
-    <span class="order"></span>
-    <span class="hint"></span>
-  </span>
-  <span class="tutorial10">
-    <span class="order"></span>
-    <span class="hint"></span>
-  </span>
-  <span class="tutorial11">
-    <span class="order"></span>
-    <span class="hint"></span>
-  </span>
-  <span class="tutorial12">
-    <span class="order"></span>
-    <span class="hint"></span>
-  </span>
-  <span class="tutorial13">
-    <span class="order"></span>
-    <span class="hint"></span>
-  </span>
-  <span class="tutorial14">
-    <span class="order"></span>
-    <span class="hint"></span>
-  </span>
-  <span class="tutorial15">
-    <span class="order"></span>
-    <span class="hint"></span>
-  </span>
-  <span class="tutorial16">
-    <span class="order"></span>
-    <span class="hint"></span>
-  </span>
-  <span class="tutorial17">
-    <span class="order"></span>
-    <span class="hint"></span>
-  </span>
-  <span class="tutorial18">
-    <span class="order"></span>
-    <span class="hint"></span>
-  </span>
-  <span class="tutorial19">
-    <span class="order"></span>
-    <span class="hint"></span>
-  </span>
-  <span class="tutorial20">
-    <span class="order"></span>
-    <span class="hint"></span>
-  </span>
+
 
   </div> <!-- end of EN -->
 
@@ -409,7 +363,23 @@
   </span>
   </div> <!-- end of FR -->
 
+    
+
   <div id="KO">
+    <span class="circuit">
+        <span class="err_connect_inputs">이 입력구는 다른 입력구와 연결이 불가능 합니다</span>
+        <span class="err_connect_outputs">출력구에 연결이 불가능 합니다</span> 
+        <span class="err_connect_self">부속품들은 자체 연결이 불가능 합니다 </span> 
+        <span class="err_connect_loop">폐회로는 허가가 안됩니다</span>
+        <span class="err_double_input">입력구들은 꼭 하나의 부속과 연결 됩니다</span>
+        <span class="err_port_on_wire">연결구가 전선에 너무 가까이 있슴니다</span>
+        <span class="err_port_on_element">연결구를 다른 부속위에 덮지 마세요</span>
+        <span class="err_element_on_wire">전선이 부속품 위로 지나가면 안됩니다</span>
+        <span class="err_element_on_element">부속품들을 덮지 마세요</span>
+        <span class="err_move_frozen">이 부속품은 움직이지 못합니다</span>
+        <span class="err_remove_frozen">이 부속품은 지우면 안되요</span>		      
+	</span>
+  
 	<span class="levels">
 		<span class="lev01desc">모든 푸른 사탕을 주세요!</span>
 		<span class="lev01hint">푸른색 감지기를 전구에 연결하세요.</span>
@@ -441,7 +411,7 @@
 		<span class="lev10desc">이번에는 빨간 네모와 노란 네모만 주세요.</span>
 		<span class="lev10hint">노력해봐요!</span>
 		<span class="lev10name">빨간 네모, 레몬 네모</span>
-		<span class="lev11desc">노란 방울 사탕과 녹색 네모 사탕만! 노란 네모나 녹색 방울은 빼줘요!"  ,
+		<span class="lev11desc">노란 방울 사탕과 녹색 네모 사탕만! 노란 네모나 녹색 방울은 빼줘요!" . </span>
 		<span class="lev11hint">노란 방울사탕을 선택하는 회로를 녹색 네모를 고르는 회로랑 결합하세요.</span>
 		<span class="lev11name">부티크</span>  
 		<span class="lev12desc">빨간색이나 노란색 사탕들을 별 이나 방울모양의로 보내세요.</span>
@@ -453,7 +423,7 @@
 		<span class="lev14desc">빨간 방울이나 파라지 않는 별사탕을 주문할께요.</span>
 		<span class="lev14hint">부속들을 창조적으로 사용 해야 되요.  첫 번째 부분을 채우는 기계를 만들어보세요. 다음에는 나머지 주문을 채우는 회로를 많들어 봐요. 마지막의로 두게의 회로를 결합시켜요!</span>
 		<span class="lev14name">뒤범벅</span>
-		<span class="lev15desc">녹색만…" ,
+		<span class="lev15desc">녹색만…" </span>
 		<span class="lev15hint">녹색 감지기가 없어도 다른 감지기들을 이용해서 주문을 채우세요.</span>
 		<span class="lev15name">결합</span>
 		<span class="lev16desc">푸른 네모가 아니면, 푸른색 사탕은 절대로 보내지 마세요.</span>
@@ -472,6 +442,68 @@
 		<span class="lev20hint">논리회로에서 'and' 부속이 어떻게 'or' 부품이 되나요? 우리는 파란 네모외 녹색이 아닌 사탕을 원한다는것을 생각해 보세요. </span>
 		<span class="lev20name">짬뽕</span>
 	</span>
+	
+	<span class="tutorial1"> 
+	    <span class="order"></span> 
+	    <span class="hint"></span> 
+	    <span class="bubble1">이제 이 기게 프로그래밍을 시작 합시다감지기에 눌러서 전선을 깔으세요</span> 
+	    <span class="bubble2">잘 했어요!이제 전선을 전구에 연결하세요!</span> 
+	    <span class="bubble3">왼쪽 하단에 있는 화살표를 누르면 공장이 나타남니다</span> 
+	</span> 
+	<span class="tutorial2"> 
+        <span class="order"></span>
+        <span class="hint"></span> 
+        <span class="bubble1">사탕들은 세가지 모양을 가질수 있슴니다: 원형, 별, 네모.</span> 
+        <span class="bubble2">잘 골랐어요!이제 지난번과 마찬가지로 전구를 클릭 하세요.</span>
+        <span class="bubble3">잘 할수 있어요!</span>
+        <span class="bubble4">아! 다시 해보세요!여기는 전선이 잘못 연결되었습니다!지우개로 전선을 지우고 다시 시작합시다.</span>
+	</span> 
+	
+	<span class="tutorial3"> 
+        <span class="order"></span>
+        <span class="hint"></span>
+        <span class="bubble1">이번 퍼즐은 전구를 'NOT' 논리 회로 부품과 연결해아지만 해결할수 있습니다. 지금만든 연결상태는 지워야 합니다.</span>
+        <span class="bubble2">이 문제는 'NOT' 논리 회로 부품이 필요 합니다. 이 부품은 항상 반대 논리 결과를 출력합니다.</span>
+        <span class="bubble3">이번에는 꼭 하나만의 'NOT' 부품이 필요합니다. 지금 녹색 감지기와 'NOT' 부품과 전선으로 연결 하세요. </span>
+        <span class="bubble5">이제 끝내보새요.  </span> 	         
+    </span> 
+    
+    <span class="tutorial4">
+        <span class="order"></span>
+        <span class="hint"></span>
+        <span class="bubble1">전구와 'OR' 부품을 연결하세요. 지금만든 연결상태는 지워야 합니다.</span>
+        <span class="bubble2">'OR' 논리 부품을 쓰세요. 화면에 부품을 배치해봐요.</span>
+        <span class="bubble3">꼭 하나만의 'OR' 부품이 필요합니다.</span> 
+        <span class="bubble4">이 부품은 두게의 입력구가 있습니다부품을 감지기에 연결하세요.</span> 
+        <span class="bubble5">이제 다른것을... </span>
+        <span class="bubble6">잘 했어요!만약에 녹색 감지기나 푸른색 감지기가 진리 상태이면, 'OR' 부품도 진리 상태에 있을것입니다.</span>
+    </span>
+    
+    <span class="tutorial5"> 
+        <span class="order"></span> 
+        <span class="hint"></span>
+    </span> 
+    
+    <span class="tutorial6"> 
+        <span class="order"></span> 
+        <span class="hint"></span> 
+        <span class="bubble1">'OR' 부품과 'NOT' 부품이 필요합니다.</span> 
+    </span>
+
+    <span class="tutorial7"> <span class="order"></span> 
+        <span class="hint"></span>
+    </span> 
+
+    <span class="tutorial8">
+        <span class="order"></span> 
+        <span class="hint"></span>
+        <span class="bubble1">전구와 'AND' 부품을 연결하세요. 지금만든 연결상태는 지워야 합니다.</span> 
+        <span class="bubble2">'AND' 논리 부품을 쓰세요. 화면에 부품을 배치해봐요.</span>
+        <span class="bubble3">이번에는 꼭 하나만의 'AND' 부품이 필요합니다.</span> 
+        <span class="bubble4">이 부품은 두게의 입력구가 있습니다. 부품을 선택하고 감지기에 연결하세요.</span> 
+        <span class="bubble5">이제 다른부품들도... </span>
+        <span class="bubble6">잘 했어요!노란색 감지기와 네모 감지기가 진리 상태이면, 'AND' 부품도 진리 상태에 있을것입니다.</span> 
+    </span>
   </div> <!-- end of KO -->
 
 </div> <!-- end of translations -->
