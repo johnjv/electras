@@ -55,7 +55,7 @@
 
 		RestoreHandler.prototype.onRelease = function (e) { };
 
-		backDrag = multidrag.create(RestoreHandler).register(main);
+		backDrag = multidrag.create(RestoreHandler, 'restore').register(main);
 	}
 
 	$(document).ready(function () {
@@ -95,7 +95,7 @@
 
 		MinimizeHandler.prototype.onRelease = function (e) { };
 
-		minimizeDrag = multidrag.create(MinimizeHandler).register(iface);
+		minimizeDrag = multidrag.create(MinimizeHandler, 'minimize').register(iface);
 	});
 
 	function Evaluator(layout) {

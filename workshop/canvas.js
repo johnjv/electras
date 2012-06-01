@@ -180,7 +180,7 @@
 			self.fireChanges();
 		};
 
-		this.gestures = multidrag.create(GestureHandler).register(jqIface);
+		this.gestures = multidrag.create(GestureHandler, 'workshop').register(jqIface);
 
 		Translator.addListener(function () {
 			var errMsg, errElt, text;

@@ -1,7 +1,7 @@
 (function (my, $) {
 	"use strict";
 	var ERASER_CONNECT = 15,
-		CONNECT_RADIUS = 18;
+		CONNECT_RADIUS = 20;
 
 	my.PORT_WIRE_SEP = 15;
 
