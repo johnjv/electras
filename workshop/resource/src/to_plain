@@ -1,4 +1,0 @@
-for file in *.svg
-do
-	inkscape --vacuum-defs -l ../${file} ${file}
-done
