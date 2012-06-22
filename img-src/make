@@ -1,0 +1,88 @@
+#!/usr/bin/python
+import sys
+import re
+import os
+import os.path
+import filecmp
+
+svg_sizes = {
+	'clipboard/button_blank': 33,
+	'clipboard/button_sound_off': 25,
+	'clipboard/checkmark': 40,
+	'clipboard/clipboard': 512,
+	'floor/candy00': 80,
+	'floor/candy01': 80,
+	'floor/candy02': 80,
+	'floor/candy10': 80,
+	'floor/candy11': 80,
+	'floor/candy12': 80,
+	'floor/candy20': 80,
+	'floor/candy21': 80,
+	'floor/candy22': 80,
+	'floor/candy30': 80,
+	'floor/candy31': 80,
+	'floor/candy32': 80,
+	'floor/floorbase': 512,
+	'floor/floor-tile': 20,
+	'floor/light0': 20,
+	'floor/light1': 20,
+	'floor/producer': 42.5,
+	'floor/punchbox': 128,
+	'floor/punchglove': 42,
+	'floor/table_box': 30,
+	'floor/table_can': 30,
+	'workshop/color0': 50,
+	'workshop/color1': 50,
+	'workshop/color2': 50,
+	'workshop/color3': 50,
+	'workshop/eraser': 50,
+	'workshop/err-circ': 20,
+	'workshop/gateand': 50,
+	'workshop/gatenot': 50,
+	'workshop/gateor': 30,
+	'workshop/light0': 30,
+	'workshop/light1': 30,
+	'workshop/shape0': 50,
+	'workshop/shape1': 50,
+	'workshop/shape2': 50,
+	'workshop/switch0': 37.5,
+	'workshop/switch1': 37.5,
+	'workshop/to-floor': 40,
+}
+
+if len(sys.argv) <= 1:
+	filenames = sorted(svg_sizes.keys())
+else:
+	filenames = sys.argv[1:]
+
+unknown_found = False
+for filename in filenames:
+	prefix = re.sub(r'\.svg$', '', filename)
+	if prefix not in svg_sizes:
+		unknown_found = True
+		sys.stderr.write('Unknown filename {0}\n'.format(filename))
+if unknown_found:
+	sys.exit('No action due to unknown filenames')
+
+for filename in filenames:
+	prefix = re.sub(r'\.svg$', '', filename)
+	print('::: ' + prefix + ' :::')
+	args = ['inkscape', '--vacuum-defs', '-l', 'tmp.svg', prefix + '.svg']
+	os.system(' '.join(args))
+	dest = '../resource/' + prefix + '.svg'
+	if not (os.path.exists(dest) and filecmp.cmp('tmp.svg', dest)):
+		os.rename('tmp.svg', dest)
+
+		width = round(4 * svg_sizes[prefix])
+		args = ['inkscape', '-D', '--export-background=white',
+			'--export-background-opacity=0', '-w', str(width),
+			prefix + '.svg', '-e', 'tmp.png']
+		os.system(' '.join(args))
+		dest = '../resource/' + prefix + '.png'
+		if not (os.path.exists(dest) and filecmp.cmp('tmp.png', dest)):
+			os.rename('tmp.png', dest)
+
+if os.path.exists('tmp.png'):
+	os.remove('tmp.png')
+if os.path.exists('tmp.svg'):
+	os.remove('tmp.svg')

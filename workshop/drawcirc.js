@@ -5,7 +5,7 @@
 		baseDirectory;
 
 	my.getResourcePath = function (base, extensions) {
-		return imgpath.get('workshop/resource/' + base, extensions);
+		return imgpath.get('resource/workshop/' + base, extensions);
 	};
 
 	function setterImage(elt) {

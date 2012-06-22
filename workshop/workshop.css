@@ -20,11 +20,11 @@ div.circ_container > div.toolbar {
 	position: absolute;
 	top: 0px;
 	left: 0px;
-	background-color: #FFB;
+	background-color: #456;
 }
 
 div.circ_container > div.toolbar_horz {
-	border-bottom: solid 2px #282;
+	border-bottom: solid 2px black;
 	width: 100%;
 	height: 58px;
 	text-align: left;
@@ -33,7 +33,7 @@ div.circ_container > div.toolbar_horz {
 }
 
 div.circ_container > div.toolbar_vert {
-	border-right: solid 2px #282;
+	border-right: solid 2px black;
 	width: 58px;
 	height: 100%;
 	text-align: center;

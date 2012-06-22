@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   version="1.1"
+   width="180"
+   height="120"
+   id="svg3972">
+  <defs
+     id="defs3974">
+    <linearGradient
+       id="linearGradient3954-8">
+      <stop
+         id="stop3956-8"
+         style="stop-color:#4e86c4;stop-opacity:1"
+         offset="0" />
+      <stop
+         id="stop3966-4"
+         style="stop-color:#c7d9ed;stop-opacity:1"
+         offset="0.5" />
+      <stop
+         id="stop3958-9"
+         style="stop-color:#548ac6;stop-opacity:1"
+         offset="1" />
+    </linearGradient>
+    <linearGradient
+       x1="-113.74254"
+       y1="1284.6749"
+       x2="-63.783772"
+       y2="1189.1628"
+       id="linearGradient5491"
+       xlink:href="#linearGradient3954-8"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.8585326,0,0,0.76696648,271.7896,-411.20029)" />
+    <linearGradient
+       x1="-94.935936"
+       y1="1227.3927"
+       x2="-37.570404"
+       y2="1131.9131"
+       id="linearGradient5493"
+       xlink:href="#linearGradient3954-8"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
+  <g
+     transform="translate(-158.31073,-480.86639)"
+     id="layer1">
+    <g
+       id="g5495">
+      <g
+         id="g5503">
+        <path
+           d="M 162.83995,487.60462 162.83981,594.1281 301.81073,540.86639 162.83995,487.60462 z"
+           id="path3942-1"
+           style="fill:url(#linearGradient5491);fill-opacity:1;stroke:#223344;stroke-width:9;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+        <path
+           d="m 73.948116,1214.6372 a 26.703487,26.703487 0 1 1 -53.406974,0 26.703487,26.703487 0 1 1 53.406974,0 z"
+           transform="matrix(0.6849835,0,0,0.6849835,283.94894,-291.14006)"
+           id="path3948-1"
+           style="fill:url(#linearGradient5493);fill-opacity:1;stroke:#223344;stroke-width:13.1390028;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+      </g>
+    </g>
+  </g>
+</svg>

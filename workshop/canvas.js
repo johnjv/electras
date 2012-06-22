@@ -23,7 +23,7 @@
 			], function (elt, state) {
 				state.setValue(elt.ports[0], !state.getValue(elt.ports[1]));
 			}),
-		'in': new my.ElementType('in', 'switch0', -60, -25, 50, 50, [
+		'in': new my.ElementType('in', 'switch0', -47, -25, 37, 50, [
 				new my.Port(false, 0, 0, -10, 0)
 			], function (elt, state) {
 				var val = state.eltStates[elt.id] || false;
