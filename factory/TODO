@@ -1,14 +1,22 @@
 floor:
-	enable play button
-	interface to click play (bottom half) and clipboard tip
-	size punchbox, punchglove, producer appropriately
-	add light to punchbox
+	enable pause button
+	interface to click play (bottom half of button) and clipboard tip
+	enable punchbox light as candies are processed
+	tally as candies are processed
+	update circuit state as candies are processed
+	play sounds
 
 tutorial:
 	add highlight image
 
 clipboard:
+	initial title screen
+	maybe bigger font? (split levels across three screens?)
 	rearrange buttons to be all on bottom
 	enable buttons: levels, language, sound on/off
 	whether hint revealed should be remembered
-	get credits working properly
+	credits page does not work
+	add checks when correct
+
+circuit:
+	when minimized, resizing window should lead to moving

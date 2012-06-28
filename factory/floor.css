@@ -2,6 +2,7 @@
 	position: absolute;
 	top: 0px;
 	left: 0px;
+	overflow: hidden;
 }
 
 #factory {
@@ -14,17 +15,20 @@
 	position: absolute;
 }
 
-.srcCandy {
-	z-index: 1;
-	width: 20px;
-}
-
 #floorbase {
 	z-index: 0;
 }
 
 #punchglove {
 	z-index: 1
+}
+
+#candies {
+	z-index: 1;
+}
+
+#candies > img {
+	position: absolute;
 }
 
 #punchbox {
