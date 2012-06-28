@@ -1,34 +1,21 @@
 var FactoryFloor = (function ($) {
 	"use strict";
 
-	var imageData = [
-		['floorbase', 0, 0, 2048, 1365.33],
-		['punchglove', 1515, 720, 172.75, 455.88],
-		['punchbox', 1420, 895, 446, 361.5],
-		['producer', 1878, 450, 170, 361.5]
-	];
-
 	function createImages() {
-		var par = $('#factory');
+		var imageData = [
+			['floorbase', 0, 0, 2048, 1365.33],
+			['punchglove', 1480, 688, 180, 474.969],
+			['punchbox', 1420, 879, 387, 313.738],
+			['producer', 1879, 450, 170, 361.5]
+		];
 		$.each(imageData, function (i, data) {
-			var name, src, elt;
-			name = data[0]
-			src = imgpath.get('resource/floor/' + name, ['svg', 'png']);
-			par.append($('<img></img>').attr('src', src).attr('id', name));
-		});
-		layoutImages();
-	}
-
-	function layoutImages() {
-		var r;
-		r = $('#factory').width() / 2048.0
-		$.each(imageData, function (i, data) {
-			var name, x, y, w;
-			name = data[0];
-			x = r * data[1];
-			y = r * data[2];
-			w = r * data[3];
-			$('#' + name).stop().width(w).css('left', x).css('top', y);
+			var src;
+			src = imgpath.get('resource/floor/' + data[0], ['svg', 'png']);
+			$('#factory').append($('<img></img>')
+				.attr('src', src)
+				.attr('id', data[0])
+				.css({left: data[1], top: 1365.33 - data[2] - data[4],
+					width: data[3]}));
 		});
 	}
 
@@ -55,16 +42,23 @@ var FactoryFloor = (function ($) {
 
 	var ClickHandler = function (e) {
 		e.preventDefault();
+		this.enabled = true;
+		if (Clipboard.isInClipboardTip(e)) {
+			this.enabled = false;
+			Clipboard.setVisible(true);
+		}
 	};
 
 	ClickHandler.prototype.onRelease = function (e) {
 		var par, poffs, r, x, y;
-		if (e.isTap) {
-			par = $('#factory');
+		console.log('ClickHandler', e.pageX, e.pageY);
+		if (e.isTap && this.enabled) {
+			par = $('#main_container');
 			poffs = par.offset();
-			r = par.width() / 2048.0;
-			x = (e.pageX - poffs.left) / r;
-			y = (e.pageY - poffs.top) / r;
+			r = 2048.0 / par.width();
+			x = (e.pageX - poffs.left) * r;
+			y = (e.pageY - poffs.top) * r;
+			console.log('ClickHandler 2', x, y);
 			$.each(buttonLocations, function (i, data) {
 				if (x >= data[1] && y >= data[2] && x < data[1] + data[3] &&
 						y < data[2] + data[4]) {
@@ -82,7 +76,7 @@ var FactoryFloor = (function ($) {
 		correctSet = true;
 		Audio.play('belt_sound');
 		startNext();
-		
+
 		function startNext() {
 			var failedCandy;
 			if(count < candies.length) {
@@ -151,15 +145,15 @@ var FactoryFloor = (function ($) {
 		var checkmark = '<img src="../Floor/resource-image/checkmark.png" id="checkmark"></img>';
 		var boxTally = '<img src="../Floor/resource-image/box.png" id="boxTally"></img>';
 		var trashTally = '<img src="../Floor/resource-image/trash.png" id="trashTally"></img>';  
-		
+
 		$("#frow").append("<td class='upperrow'>" + picture + "</td>");
-		
+
 		if(circuitSays) { $("#srow").append("<td class='checkmarks'>" + boxTally + "</td>");}
 		else { $("#srow").append("<td class='flags'>" + trashTally + "</td>");}
-			
+
 		if(levelSays) { $("#trow").append("<td class='checkmarks'>" + boxTally + "</td>");}
 		else { $("#trow").append("<td class='flags' >" + trashTally + "</td>"); }
-			
+
 		if(levelSays === circuitSays) { $("#forow").append("<td class='checkmarks'>" + checkmark + "</td>");}
 		else { $("#forow").append("<td class='flags'>" + xflag + "</td>"); }
 	*/
@@ -190,7 +184,7 @@ var FactoryFloor = (function ($) {
 		var punchingBox = $('#punchingbox');
 		posleft = glove.position().left;
 		posdown = trash.position().top - candyPic.position().top + candyPic.height() + trash.height()/4.0; 
-			
+
 		if(candy.checkCandy() === -1) {
 			$(candyPic).animate({left:posleft},1500, 'linear', function(){movePuncher();});
 			$(candyPic).animate({top:'+=' + posdown, width: '-=0' + candyPic.width()}, 600, 'linear',
@@ -199,7 +193,7 @@ var FactoryFloor = (function ($) {
 					Audio.play('correct_sound');
 			});
 		}
-			
+
 		else if(candy.checkCandy() === 0){
 			$(candyPic).animate({left:posleft},1500, 'linear', function() {
 				var flag = putAFlag(); 
@@ -210,7 +204,7 @@ var FactoryFloor = (function ($) {
 			$(candyPic).animate({top:'+=' + posdown, width: '-=0'+ candyPic.width()}, 600, 'linear',function() {
 				Audio.play('garbage_sound');});
 		}
-			
+
 		else if(candy.checkCandy() === 2){
 			$(candyPic).animate({left:posleft},1500, 'linear', 
 				function(){
@@ -222,7 +216,7 @@ var FactoryFloor = (function ($) {
 			$(candyPic).animate({left: '-=' + posleft}, 3000, 'linear'); 
 			$(candyPic).animate({left: '-=' + (posdown),width: '-=0'+ candyPic.width()}, 1500, 'linear');  
 		}
-			
+
 		else {
 			posleft = dropper.position().left - belt.position().left;
 			posdown = box.width()/3.0;
@@ -290,37 +284,49 @@ var FactoryFloor = (function ($) {
 		});
 	}
 
+	var initialized = false;
+
+	function ensureInitialized() {
+		if (!initialized) {
+			initialized = true;
+			createImages();
+
+			$("#tally").hide();
+			$("#success").hide();
+			$("#failure").hide();
+
+			multidrag.register($('#factory'), ClickHandler);
+		}
+	}
+
+	function updateLevel(oldLevel, newLevel) {
+		if (newLevel === null) {
+			$('#factory').hide();
+		} else {
+			ensureInitialized();
+			clearTable();
+			$("#tally").hide();
+			$("#success").hide();
+			$("#failure").hide();
+			$('#factory').show();
+			$('#factoryParent').show();
+		}
+	};
+
 	$(document).ready(function () {
-		createImages();
-
-		$("#tally").hide();
-		$("#success").hide();
-		$("#failure").hide();
-
-		multidrag.register($('#factory'), ClickHandler);
+		LevelSelector.addListener(updateLevel);
 	});  
 
 	var my = {}; 
 
-	my.updateLayout = layoutImages;
-	
-	my.levelChanged = function () {
-		clearTable();
-		$("#tally").hide();
-		layoutImages();
-		$("#success").hide();
-		$("#failure").hide();
-	};
-	
-	my.windowResized = function () {
-		var par;
-		par = $('#main_container');
-		$('#factoryParent').width(par.width()).height(par.height());
-		$('#factory').width(par.width()).height(par.height());
-		$('#factoryParent').offset(par.offset());
-		layoutImages();
+	my.windowResized = function (w, time) {
+		var x, y;
+		x = -(2048 - w) / 2;
+		y = x / 1.5;
+		$('#factoryParent').stop().animate({ width: w, height: w / 1.5 }, time);
+		$('#factory').stop().animate({ left: x, top: y,
+			transform: 'scale(' + (w / 2048)  + ')' }, time);
 	}; 
-	
+
 	return my;              
 }(jQuery));
-

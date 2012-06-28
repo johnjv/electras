@@ -10,6 +10,7 @@ svg_sizes = {
 	'clipboard/button_sound_off': 25,
 	'clipboard/checkmark': 40,
 	'clipboard/clipboard': 512,
+	'clipboard/clipclip': 512,
 	'floor/candy00': 80,
 	'floor/candy01': 80,
 	'floor/candy02': 80,

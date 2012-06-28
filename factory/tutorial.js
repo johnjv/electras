@@ -1,177 +1,136 @@
-
 Tutorial = {};
 
 (function(my, $){
 	"use strict";
-	var highlightId = 0;
-	
-	function blink(){
-		var curId = highlightId;
-	    $(".highlight").each(function(){
-	    		$(this).fadeOut(1000, function(){
-	    			if(highlightId === curId){
-	    				$(this).fadeIn(1600, function(){
-	    					blink();
-	    				});
-	    			}
-	    		});
-	    	});	
-	}
-	
-	my.highlightSections = function(parameters){
-		Tutorial.unhighlightSection();
-		highlightId += 1;
-		$.each(parameters, function(index, parameter){
-			var highlightDiv = $('<div class = "highlight"></div>');
-			var body = $('#circuit');
-			body.append(highlightDiv);
-			highlightDiv.offset({left: parameter.x, top: parameter.y});
-			highlightDiv.width(parameter.width);
-			highlightDiv.height(parameter.height);
-			var imageUrl;
-			if(parameter.isCircular){
-				imageUrl = ('../tutorials/circ_highlighter.png');
-				highlightDiv.css('background-image', 'url(' + imageUrl + ')');
-				highlightDiv.css('background-size', '100% 100%');
-				highlightDiv.css('background-repeat' ,'no-repeat');
-			}else{
-				imageUrl = encodeURI('../tutorials/rect_highlighter.png');
-				highlightDiv.css('background-image', 'url(' + imageUrl + ')');
-				highlightDiv.css('background-size', '100%');
-				highlightDiv.css('background-repeat' ,'no-repeat');
-			}
-			highlightDiv.on('click mousedown mouseup mousemove touchstart touchmove touchend', function(e){
-				var elt, under;
-				elt = $(e.target);
-				elt.hide();
-				under = document.elementFromPoint(e.pageX, e.pageY);
-				elt.show();
-				$(under).trigger(e);
+	var ALL_EVENTS, highlightId;
+
+	ALL_EVENTS = 'click mousedown mouseup mousemove touchstart touchmove touchend';
+
+	highlightId = 0;
+
+	function blink(elt, curId){
+		if (highlightId === curId) {
+			elt.fadeOut(1000, function () {
+				if(highlightId === curId){
+					elt.fadeIn(1600, function () {
+						blink(elt, curId);
+					});
+				}
 			});
-			blink(3000, 1000);
-		});
-		console.log("highlight");
-	}
-	
-
-	/*highlight an element's section*/
-	my.highlightSection = function(x, y, width, height, isCircular){
-		Tutorial.unhighlightSection();
-		highlightId += 1;
-		var highlightDiv = $('<div class = "highlight"></div>');
-		var body = $('#circuit');
-		body.append(highlightDiv);
-		highlightDiv.offset({left: x, top: y});
-		highlightDiv.width(width);
-		highlightDiv.height(height);
-		var imageUrl;
-		if(isCircular){
-			imageUrl = ('../tutorials/circ_highlighter.png');
-			highlightDiv.css('background-image', 'url(' + imageUrl + ')');
-			highlightDiv.css('background-size', '100% 100%');
-			highlightDiv.css('background-repeat' ,'no-repeat');
-		}else{
-			imageUrl = encodeURI('../tutorials/rect_highlighter.png');
-			highlightDiv.css('background-image', 'url(' + imageUrl + ')');
-			highlightDiv.css('background-size', '100%');
-			highlightDiv.css('background-repeat' ,'no-repeat');
 		}
-		highlightDiv.on('click mousedown mouseup mousemove touchstart touchmove touchend', function(e){
-			var elt, under;
-			elt = $(e.target);
-			elt.hide();
-			under = document.elementFromPoint(e.pageX, e.pageY);
-			elt.show();
-			$(under).trigger(e);
-		});
-		blink(3000, 1000);
-		
 	}
-	
-	function registerDraggable(){
-		var body, bubble;
-		body = $('#circuit');
-		bubble = $('#container');
-		
-		function MoveBubble(e) {
-			e.preventDefault();
-			this.offsetDiff = {diffX: e.pageX - bubble.offset().left, diffY: e.pageY - bubble.offset().top};
-			Circuit.setInterfaceEnabled(false, true);
-		};
 
-		MoveBubble.prototype.onDrag = function (e) {
-			Circuit.setInterfaceEnabled(false, true);
-			var newX = e.pageX - this.offsetDiff.diffX;
-			var newY = e.pageY - this.offsetDiff.diffY
-			e.preventDefault();
-			if(newX > 0 && newY > 0 && (newX + bubble.outerWidth()) < (body.width()) && (newY + bubble.outerHeight()) < body.height()){
-				bubble.offset({left: newX, top: newY});
-				this.offsetDiff = {diffX: e.pageX - bubble.offset().left, diffY: e.pageY - bubble.offset().top};
+	function moveBubbleTo(x, y) {
+		var bubble, body, x1, y1;
+		bubble = $('#tutbubble');
+		body = bubble.parent();
+		x1 = Math.min(Math.max(0, x), body.width() - bubble.outerWidth());
+		y1 = Math.min(Math.max(0, y), body.height() - bubble.outerHeight());
+		bubble.css({left: x1, top: y1});
+	}
+
+	function MoveBubble(e) {
+		var pos = $('#tutbubble').position();
+		e.preventDefault();
+		this.x0 = pos.left;
+		this.y0 = pos.top;
+		this.dragX = e.pageX;
+		this.dragY = e.pageY;
+	}
+
+	MoveBubble.prototype.onDrag = function (e) {
+		e.preventDefault();
+		moveBubbleTo(this.x0 + (e.pageX - this.dragX),
+			this.y0 + (e.pageY - this.dragY));
+	};
+
+	function moveBubbleHandler(e) {
+		var b, offs, x, y;
+
+		b = $('#tutbubble');
+		if (b.size() > 0) {
+			offs = b.offset();
+			x = e.pageX - offs.left;
+			y = e.pageY - offs.top;
+			if (x >= 0 && y >= 0 && x < b.outerWidth() && y < b.outerHeight()) {
+				return new MoveBubble(e);
 			}
-		};
-		MoveBubble.prototype.onRelease = function (e) {
-			Circuit.setInterfaceEnabled(true, true);
 		}
 
-    console.log("We're about to register it!!!")
-		multidrag.register(bubble, MoveBubble);
-    console.log("We registered it")
+		return null;
+	};
+
+	function transferEventUnder(e) {
+		var elt, under;
+		elt = $(e.target);
+		elt.hide();
+		under = document.elementFromPoint(e.pageX, e.pageY);
+		elt.show();
+		$(under).trigger(e);
 	}
 
-	/*create temporary speech bubble*/
-	function createSpeechBubble(target, levelId, textId) {
-		var text, bubbleContainer;
+	my.setHighlights = function (targets) {
+		$('img.highlight').remove();
+		highlightId += 1;
+		$.each(targets, function (index, target) {
+			var highlight, srcUrl;
+
+			if (target.isCircular) {
+				srcUrl = imgpath.get('resource/app/circ_highlight', ['svg', 'png']);
+			} else {
+				srcUrl = imgpath.get('resource/app/rect_highlight', ['svg', 'png']);
+			}
+			highlight = $('<img></img>')
+				.addClass('highlight')
+				.attr('src', srcUrl)
+				.css({left: target.x, top: target.y,
+					width: target.width, height: target.height})
+				.on(ALL_EVENTS, transferEventUnder);
+			$('#circuit').append(highlight);
+		});
+		blink($('img.highlight'), highlightId);
+	};
+
+	// set the current bubble (replacing the previous one if it exists)
+	my.setBubble = function (target, levelId, textId) {
+		var text, bubble, x, y;
 
 		text = Translator.getText('tutorial' + levelId, 'bubble' + textId);
-		bubbleContainer = $('<div id="container"></div>');
-		$('#circuit_iface').append(bubbleContainer);
-		bubbleContainer.text(text);
-		bubbleContainer.offset({left: target.x + target.r, top: target.y + target.r});
-		bubbleContainer.css('opacity', '0');
-	}
+		bubble = $('#tutbubble');
+		if (bubble.length <= 0) {
+			bubble = $('<div></div>').attr('id', 'tutbubble');
+			$('#circuit_iface').append(bubble);
+		}
+		if (bubble.text() !== text) {
+			bubble.hide();
+			x = target.x + target.r;
+			y = target.y + target.r;
+			if(x + bubble.width() > $('#circuit').width()){
+				x = $('#circuit').width() - bubble.width();
+			}
+			if(y + bubble.height() > $('#circuit').height()){
+				y = $('#circuit').height() - bubble.height();
+			}
+			bubble.text(text).css({left: x, top: y}).show();
+		}
+	};
 
-	/*if you need to remove the highlighter*/
-	my.unhighlightSection = function(){
-		highlightId += 1;	
-		$('div.highlight').each(function(){
-			$(this).remove();
-		});
-		$('div#container').remove();
-	}
-	/*add speech bubble*/
-	my.placeBubble = function(target, text){
-		var bubbleContainer;
-		if($('#container').length <= 0){
-			createSpeechBubble(target, text);
-			bubbleContainer = $('div#container');
-		}else{
-			bubbleContainer = $('div#container');
-			bubbleContainer.text(text);
-		}
-		var x = target.x + target.r;
-		var y = target.y + target.r;
-		
-		if((x + bubbleContainer.width()) > $('#circuit').width()){
-			x = $('#circuit').width() - bubbleContainer.width();
-			bubbleContainer.offset({left: x, top: y});
-		}
-		if((y + bubbleContainer.height()) > $('#circuit').height()){
-			y = $('#circuit').height() - bubbleContainer.height();
-			bubbleContainer.offset({left: x, top: y});
-		}
-		$('div#container').css('opacity', '.8');
-		registerDraggable();
-	}
+	// remove the current bubble
+	my.removeBubble = function () {
+		$('#tutbubble').remove();
+	};
 
-	function updateBubble(e) {
+	function update(e) {
 		var script = LevelSelector.getCurrentLevel().script;
-		$('#container').hide();
+		$('#tutbubble').hide();
 		if (tutorial_scripts.hasOwnProperty(script)) {
 			tutorial_scripts[script]();
 		}
 	}
 
-	Circuit.addChangeListener(updateBubble);
-
-	Translator.addListener(updateBubble);
+	$(document).ready(function () {
+		Circuit.addChangeListener(update);
+		Circuit.addInterfaceHandler(moveBubbleHandler);
+		Translator.addListener(update);
+	});
 }(Tutorial, jQuery));

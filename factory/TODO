@@ -1,0 +1,14 @@
+floor:
+	enable play button
+	interface to click play (bottom half) and clipboard tip
+	size punchbox, punchglove, producer appropriately
+	add light to punchbox
+
+tutorial:
+	add highlight image
+
+clipboard:
+	rearrange buttons to be all on bottom
+	enable buttons: levels, language, sound on/off
+	whether hint revealed should be remembered
+	get credits working properly

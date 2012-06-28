@@ -12,14 +12,22 @@ var Audio = (function ($) {
 	};
 
 	my.play = function (sound_id) {
+		var elt;
 		if (soundEnabled) {
-			$('#' + sound_id)[0].play();
+			elt = $('#' + sound_id);
+			if (elt.length > 0) {
+				elt[0].play();
+			}
 		}
 	}
 
 	my.pause = function (sound_id) {
+		var elt;
 		if (soundEnabled) {
-			$('#' + sound_id)[0].pause();
+			elt = $('#' + sound_id);
+			if (elt.length > 0) {
+				elt[0].pause();
+			}
 		}
 	}
 
@@ -61,7 +69,8 @@ var Audio = (function ($) {
 	$(document).ready(function () {
 		var circuitSounds;
 
-		loadAudio();
+		// Wait a bit before loading audio since it's a lower priority
+		setTimeout(5000, loadAudio);
 
 		circuitSounds = {
 			'wireStart': ['electric_sound'],

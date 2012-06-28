@@ -1,32 +1,25 @@
 var Clipboard = (function ($, Translator, all_levels, LevelSelector, Audio) {
 	"use strict";
 
+	var LEVEL1_PAGE = 3;
 	var CREDITS_PAGE = 23;
 	
 	var clipboardVisible = true;
+	var curIndex = 0;
 
-	function checkComplete(){
+	var dragTip = null;
+	var dragBoard = null;
+
+	function checkComplete() {
 		var level = LevelSelector.getCurrentLevel();
-		var page = LevelSelector.getCurrentPage();
-		if (level.complete) {
+		var page = curIndex;
+		if (level && level.complete) {
 			$('#row' + level.levelid).children('.checkmark').html('<img id = "check" src = "../levels/images/checkmark.png">');
 			$('#page' + page).children('.complete').show();
 		}
 	}
 
-	function positionPage(page) {
-		var vpad, hpad;
-		vpad = page.innerHeight() - page.height();
-		hpad = page.innerWidth() - page.width();
-		page.height(page.parent().height() - vpad);
-		page.width(page.parent().width() - hpad);
-		page.css('top', '-' + page.css('border-top-width'));
-		page.css('left', '-' + page.css('border-left-width'));
-		page.css('transform', 'scale(1)');
-	}
-
 	function transitionCut(src, dst) {
-		positionPage(dst);
 		dst.show();
 		if (src) {
 			src.hide();
@@ -34,34 +27,30 @@ var Clipboard = (function ($, Translator, all_levels, LevelSelector, Audio) {
 	}
 
 	function transitionNext(src, dst) {
-		var d = Math.floor(dst.parent().height() / 2);
-		src.css('z-index', 52);
-		dst.css('z-index', 51);
-		positionPage(dst);
+		dst.removeAttr('style');
+		src.css('z-index', 2);
+		dst.css('z-index', 1);
 		dst.show();
 		src.stop().animate({
-			top: '-=' + d + 'px',
+			top: '-=' + Math.floor(dst.height() / 2),
 			transform: 'scale(1, 0.01)'
-		}, 1000, function () {
+		}, 500, function () {
 			src.hide();
 			src.css('z-index', 0);
 		});
 	}
 
 	function transitionPrev(src, dst) {
-		var d = Math.floor(dst.parent().height() / 2);
-		src.css('z-index', 51);
-		dst.css('z-index', 52);
-		positionPage(dst);
-		dst.css('top', '-=' + d + 'px');
-		dst.css('transform', 'scale(1, 0.01)');
+		var d;
+		dst.removeAttr('style');
+		d = Math.floor(dst.height() / 2);
+		dst.css({ zIndex: 2, transform: 'scale(1, 0.01)', top: '-=' + d });
+		src.css('z-index', 1);
 		dst.show();
-		dst.stop().animate({
-			top: '+=' + d + 'px',
-			transform: 'scale(1)'
-		}, 1000, function () {
-			src.hide();
-		});
+		dst.stop().animate({ top: '+=' + d, transform: 'scale(1)' },
+			500, function () {
+				src.hide();
+			});
 	}
 
 
@@ -69,11 +58,11 @@ var Clipboard = (function ($, Translator, all_levels, LevelSelector, Audio) {
 		var oldIndex, oldPage, newPage;
 		checkComplete();
 		if (pageIndex >= 0 && pageIndex < CREDITS_PAGE) {
-			oldIndex = LevelSelector.getCurrentPage();
+			oldIndex = curIndex;
+			curIndex = pageIndex;
 			oldPage = $('#page' + oldIndex);
 			newPage = $('#page' + pageIndex);
 
-			LevelSelector.setPage(pageIndex);
 			Audio.play('paper_sound');
 			if (pageIndex > oldIndex) {
 				transitionNext(oldPage, newPage);
@@ -87,20 +76,21 @@ var Clipboard = (function ($, Translator, all_levels, LevelSelector, Audio) {
 				$('#factory').hide();
 				clipboardButtons.hint.setEnabled(false);
 				clipboardButtons.level.setEnabled(false);
+				LevelSelector.setLevel(null);
 			} else {
 				$('#circuit').show();
 				$('#factory').show();
 				clipboardButtons.hint.setEnabled(true);
 				clipboardButtons.level.setEnabled(true);
-				FactoryFloor.updateLayout();
 				LevelSelector.setLevel(all_levels[pageIndex - 3]);
 			}
 			$('.hintText').hide();
 		} else if (pageIndex === CREDITS_PAGE) {
-			oldIndex = LevelSelector.getCurrentPage();
+			oldIndex = curIndex;
+			curIndex = pageIndex;
 			oldPage = $('#page' + oldIndex);
 
-			LevelSelector.setPage(pageIndex);
+			LevelSelector.setLevel(null);
 			Credit.slideDesc();
 			transitionNext(oldPage, $('#page23'));
 			clipboardButtons.hint.setEnabled(false);
@@ -115,16 +105,14 @@ var Clipboard = (function ($, Translator, all_levels, LevelSelector, Audio) {
 	}
 
 	function goPrev() {
-		var curPage = LevelSelector.getCurrentPage();
-		if (curPage > 0) {
-			goToPage(curPage - 1);
+		if (curIndex > 0) {
+			goToPage(curIndex - 1);
 		}
 	}
 
 	function goNext() {
-		var curPage = LevelSelector.getCurrentPage();
-		if (curPage < CREDITS_PAGE) {
-			goToPage(curPage + 1);
+		if (curIndex < CREDITS_PAGE) {
+			goToPage(curIndex + 1);
 		}
 	}
 
@@ -138,7 +126,7 @@ var Clipboard = (function ($, Translator, all_levels, LevelSelector, Audio) {
 	}
 
 	function showHint() {
-		if (LevelSelector.getCurrentPage() >= 3) {
+		if (curIndex >= 3) {
 			$('.hintText').show();
 		}
 	}
@@ -151,12 +139,10 @@ var Clipboard = (function ($, Translator, all_levels, LevelSelector, Audio) {
 	function toggleAudio() {
 		if (Audio.isEnabled()){
 			sound.attr('src', '../levels/images/soundoff.png');
-			FactoryFloor.setEnabled(false);
-			console.log('Sound off');
+			Audio.setEnabled(false);
 		} else {
 			sound.attr('src', '../levels/images/soundon.png');
 			Audio.setEnabled(true);
-			console.log('Sound on');
 		}
 	}
 
@@ -192,35 +178,26 @@ var Clipboard = (function ($, Translator, all_levels, LevelSelector, Audio) {
 		audio: new Button(toggleAudio, 1158,  203, 100, 100)
 	};
 
-	function ClickHandler(e) {
-		console.log('in click handler');
-	}
+	function ClickHandler(e) { }
 
 	ClickHandler.prototype.onRelease = function (e) {
 		var clip, offs, r, x, y;
-		console.log('in click release');
 		if (e.isTap) {
 			offs = $('#main_container').offset();
 			r = $('#main_container').width() / 2048;
 			x = (e.pageX - offs.left) / r;
 			y = (e.pageY - offs.top) / r;
-			console.log('at', x, y, e.pageX, e.pageY, r, clipboardVisible);
 			if (!clipboardVisible) {
 				if (x >= 1000 && x < 1048 && y >= 1275) {
 					e.preventDefault();
 					Clipboard.setVisible(true);
 				}
 			} else if (x >= 398 && y >= 172 && x < 398 + 1252 && y < 1338) {
-				console.log('checking buttons');
 				// clicked in clipboard - maybe clicked a button?
 				$.each(clipboardButtons, function (key, b) {
 					var dx, dy;
 					dx = x - b.x;
 					dy = y - b.y;
-					console.log('checking', key);
-					if (b.onClick === goNext) {
-						console.log('goNext:', dx, dy, b.width, b.height);
-					}
 					if (dx >= 0 && dy >= 0 && dx < b.width && dy < b.height) {
 						console.log('clicked', key);
 						e.preventDefault();
@@ -237,7 +214,6 @@ var Clipboard = (function ($, Translator, all_levels, LevelSelector, Audio) {
 	};
 
 	function setUpLevel(){
-		FactoryFloor.updateLayout();
 		makePages();
 		Translator.addListener(makePages);
 		$('#hint').fadeTo('slow', '0.5');
@@ -265,10 +241,19 @@ var Clipboard = (function ($, Translator, all_levels, LevelSelector, Audio) {
 		var parent, i, imgSrc;
 		parent = $('#clipboard');
 		imgSrc = imgpath.get('resource/clipboard/clipboard', ['svg', 'png']);
+		parent.append($('<img></img>').attr('id', 'boardImage').attr('src', imgSrc));
+		imgSrc = imgpath.get('resource/clipboard/clipclip', ['svg', 'png']);
 		parent.append($('<img></img>').attr('id', 'clipImage').attr('src', imgSrc));
 		for (i = 0; i <= CREDITS_PAGE; i += 1) {
 			parent.append(createPage(i));
 		}
+	}
+
+	function createLevelLoader(levIndex) {
+		return function (e) {
+			e.preventDefault();
+			goToPage(LEVEL1_PAGE + levIndex);
+		};
 	}
 
 	function loadText() {
@@ -276,17 +261,20 @@ var Clipboard = (function ($, Translator, all_levels, LevelSelector, Audio) {
 		$('#levels2').empty();
 
 		$.each(all_levels, function (i, level) {
-			var id, title, text, hint, tocRow, order;
+			var onClick, id, title, text, hint, tocRow, order;
 
+			onClick = createLevelLoader(i);
 			id = level.levelid;
 			title = Translator.getText('levels', level.levelname);
 			text = Translator.getText('levels', level.orderText);
 			hint = Translator.getText('levels', level.hint);
 
-			tocRow = $('<tr></tr>').addClass('rows');
+			tocRow = $('<tr></tr>').addClass('tocRow');
 			tocRow.attr('id', 'row' + id);
-			tocRow.append($('<td></td>').addClass('selectName')
-				.text(id + '. ' + title));
+			tocRow.append($('<td></td>').addClass('tocNumber')
+				.append($('<a></a>').attr('href', '#').click(onClick).text(id + '.')));
+			tocRow.append($('<td></td>').addClass('tocTitle')
+				.append($('<a></a>').attr('href', '#').click(onClick).text(title)));
 			tocRow.append($('<td></td>').addClass('checkmark'));
 			if (i < 10) {
 				$('#levels1').append(tocRow);
@@ -297,58 +285,31 @@ var Clipboard = (function ($, Translator, all_levels, LevelSelector, Audio) {
 			order = $('#page' + (id + 2)).empty();
 			order.append($('<div></div>').addClass('levelname')
 				.text(id + '. ' + title));
-			order.append($('<div></div>').addClass('order').text('Order: ' + text));
+			order.append($('<div></div>').addClass('order').text(text));
 			order.append($('<div></div>').addClass('hintText').text('Hint: ' + hint));
 			order.append($('<div></div>').addClass('complete').text('Complete'));
 		});
-		addLevelClicks();
 
 		$('.page').hide();
 		$('.hintText').hide();
 		$('.complete').hide();
-		$('#page' + LevelSelector.getCurrentPage()).show();
-	}
-
-	function addLevelClicks(){
-		var i;
-		for (i = 1; i < 3; i += 1) {
-			$('#tbody' + i).children().each(function (i, child) {
-				function Kid(e) {
-					e.preventDefault();
-				}
-
-				Kid.prototype.onRelease = function (e) {
-					var page;
-
-					if (e.isTap) {
-						e.preventDefault();
-						page = LevelSelector.getCurrentPage();
-						if (page === 1) {
-							goToPage(i + 3);
-						} else {
-							goToPage(i + 13);
-						}
-						FactoryFloor.updateLayout();
-						checkComplete();
-					}
-				};
-
-				multidrag.register($(child), Kid);
-			});
-		}
+		$('#page' + curIndex).show();
 	}
 
 	var my = {};
 
 	my.setVisible = function (value) {
 		var moveBy, newY;
-		console.log('Clipboard.setVisible', value);
 		if (clipboardVisible !== value) {
 			clipboardVisible = value;
 			if (value) {
 				newY = '-=' + 0.9 * $('#main_container').height();
+				dragBoard.register($('#boardImage'));
+				dragTip.register($('#clipImage'));
 			} else {
 				newY = '+=' + 0.9 * $('#main_container').height();
+				dragBoard.unregister();
+				dragTip.unregister();
 			}
 			$('#clipboard').animate({ top: newY }, 500);
 			Circuit.setInterfaceEnabled(!value);
@@ -366,10 +327,25 @@ var Clipboard = (function ($, Translator, all_levels, LevelSelector, Audio) {
 			transform: 'scale(' + (w / 2048)  + ')' }, time);
 	};
 
+	my.goToPage = goToPage;
+
+	my.isInClipboardTip = function (x, y) {
+		var elt, r, offs0, x0, y0, dx, dy;
+		elt = $('#clipboard');
+		r = 2048.0 / elt.parent().width();
+		offs0 = elt.parent().offset();
+		x0 = r * (x - offs0.left);
+		y0 = 1.9 * 1365.33 - r * (y - offs0.top);
+		dx = x0 - 1024.0; // relative to center of tip's circle
+		dy = y0 - 1246.77;
+		return dx * dx + dy * dy < 10000.0;
+	}
+
 	$(document).ready(function () {
 		configureClipboard();
 		loadText();
-		multidrag.register($('#clipboard'), ClickHandler);
+		dragBoard = multidrag.create(ClickHandler).register($('#boardImage'));
+		dragTip = multidrag.create(ClickHandler).register($('#clipImage'));
 		Circuit.setInterfaceEnabled(false);
 	});
 
