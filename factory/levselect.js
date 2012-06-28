@@ -1,31 +1,27 @@
 var LevelSelector = (function ($) {
     "use strict";
     var my = {};                 
-    var level = all_levels[0];
-    var pagenumber = 0;
+	var listeners = [];
+    var curLevel = all_levels[0];
+
+	my.addListener = function (listener) {
+		listeners.push(listener);
+	};
 
     my.setLevel = function (newLevel) {
-        var oldLevel;
-        oldLevel = level;
-        level = newLevel;
-        Circuit.levelChanged(oldLevel, newLevel);
-        FactoryFloor.levelChanged(oldLevel, newLevel);         
-    }; 
-
-    my.setPage = function (change) {
-        pagenumber = change;        
+        var oldLevel = curLevel;
+        curLevel = newLevel;
+		$.each(listeners, function (i, listener) {
+			listener(oldLevel, newLevel);
+		});
     }; 
 
     my.getCurrentLevel = function () {     
-        return level;
-    };
-
-    my.getCurrentPage = function () {
-        return pagenumber;
+        return curLevel;
     };
 
     my.setComplete = function (complete) {
-        level.complete = complete;
+        curLevel.complete = complete;
     };
 
     return my;

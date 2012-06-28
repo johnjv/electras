@@ -1,25 +1,72 @@
-html, body { background: #EDE275; width: 100%; height: 100%; margin: 0px; padding-right: 0px; overflow: hidden;}
+#clipboard {
+	position: absolute;
+	width: 2048px;
+	height: 1365.3px;
+}
+
+#clipboard > img {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	width: 2048px;
+}
+
+#boardImage {
+	height: 1365.3px;
+}
+
+#clipImage {
+	z-index: 4;
+	height: 338.56px;
+}
+
+.page {
+	position: absolute;
+	left: 450px;
+	top: 273px;
+	width: 1022px;
+	height: 764px;
+	border: 8px solid black;
+	border-radius: 30px;
+	font-size: 56px;
+	padding: 100px 56px 12px 56px;
+	background-color: #f5f3db;
+	opacity: 1;
+	overflow: hidden;
+}
+
+
 #check{ position: relative; height: 1em; width: 1em;}
 
-#clipboard{ position: absolute;}
-#clipOrder{position: relative; top: -455px; right: -70px; overflow: hidden; max-height: 350px; max-width: 325px; min-height: 350px; height: auto !important;}
-#next, #prev {height: 2em; width: 5em; padding-right: 0.3em; padding-left: 0.3em;}
-#hint, #showLevels, #sound, #lang {height: 2em; width: 2em; padding-right: 0.3em; padding-left: 0.3em;}
-#clipButtons{position: relative; cursor: pointer; top: -455px; right: -68px;}
-#cliptip{ position: absolute; width: 408px; cursor: pointer; }
-#hintText{position: relative; height: 100px; margin-left: auto; top: -500px; max-width: 325px;}
-#clip{height: 598px; width: 478px;}
-#credits{cursor: pointer; color: blue; text-decoration: underline; }
-#shapes{position: relative; margin-left: 30%;}
-#flavors{position: relative; margin-left: 20%;}
-#hlogo{position: relative; padding-top: 1em;}
-#return{width: 60px;}
+.tocRow {
+	position: relative;
+	cursor: pointer;
+	color: #A30000;
+}
 
+.tocRow a {
+	text-decoration: none;
+	color: inherit;
+}
 
-.page {	position: absolute;	background-color: #f5f3db; opacity: 1;overflow: hidden; max-height: 350px; max-width: 325px; min-height: 350px; height: auto !important}
-.rows { position: relative; cursor: pointer; color: #A30000; font-size: 22px;}
-.levelname{padding-bottom: 2em;font-weight:bold;}
-.order{padding-bottom: 2em; font-weight:bold;}
-.hintText{padding-bottom: 2em; font-weight:bold; color: blue;}
-.complete{font-weight: bold; color: green;}
+.tocNumber {
+	text-align: right;
+	padding-right: 1ex;
+}
+
+.levelname {
+	padding-bottom: 1em;
+	font-weight: bold;
+}
+.order {
+	padding-bottom: 1em;
+}
+.hintText {
+	padding-bottom: 2em;
+	color: blue;
+}
+.complete {
+	font-weight: bold;
+	color: green;
+}
 

@@ -100,9 +100,23 @@
 		this.changeListeners = [];
 		this.changes = [];
 		this.setSize(jqElt.width(), jqElt.height());
+		this.ifaceHandlers = [];
 
 		function GestureHandler(e) {
-			var ex, ey, gest, newGest, canvOffs;
+			var foundHandler, ex, ey, gest, newGest, canvOffs;
+
+			foundHandler = null;
+			$.each(self.ifaceHandlers, function (i, handler) {
+				var result = handler(e);
+				if (result) {
+					foundHandler = result;
+					return false;
+				}
+			});
+			this.actualHandler = foundHandler;
+			if (foundHandler !== null) {
+				return;
+			}
 
 			e.preventDefault();
 			ex = e.pageX;
@@ -156,28 +170,46 @@
 		}
 
 		GestureHandler.prototype.onDrag = function (e) {
-			var gest = self.gesture;
-			e.preventDefault();
-			if (gest) {
-				fixEvent(self, e);
-				self.paper.paintAfter(function () {
-					gest.onDrag(self, e);
-				});
+			var actual, gest;
+
+			actual = this.actualHandler;
+			if (actual) {
+				if (actual.onDrag) {
+					actual.onDrag(e);
+				}
+			} else {
+				e.preventDefault();
+				gest = self.gesture;
+				if (gest) {
+					fixEvent(self, e);
+					self.paper.paintAfter(function () {
+						gest.onDrag(self, e);
+					});
+				}
+				self.fireChanges();
 			}
-			self.fireChanges();
 		};
 
 		GestureHandler.prototype.onRelease = function (e) {
-			var gest = self.gesture;
-			e.preventDefault();
-			if (gest) {
-				fixEvent(self, e);
-				self.paper.paintAfter(function () {
-					gest.onDrag(self, e);
-					gest.onRelease(self, e);
-				});
+			var actual, gest;
+
+			actual = this.actualHandler;
+			if (actual) {
+				if (actual.onRelease) {
+					actual.onRelease(e);
+				}
+			} else {
+				e.preventDefault();
+				gest = self.gesture;
+				if (gest) {
+					fixEvent(self, e);
+					self.paper.paintAfter(function () {
+						gest.onDrag(self, e);
+						gest.onRelease(self, e);
+					});
+				}
+				self.fireChanges();
 			}
-			self.fireChanges();
 		};
 
 		this.gestures = multidrag.create(GestureHandler, 'workshop').register(jqIface);
@@ -438,5 +470,9 @@
 		for (i = 0; i < es.length; i += 1) {
 			this.fireChange(es[i]);
 		}
+	};
+
+	my.Workshop.prototype.addIfaceHandler = function (handler) {
+		this.ifaceHandlers.push(handler);
 	};
 }(Workshop, jQuery, raphwrap, multidrag, Translator));

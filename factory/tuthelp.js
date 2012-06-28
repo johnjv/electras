@@ -1,13 +1,15 @@
 var Filters = (function ($) {
 	var my = {}
 
-	my.find_connection = function(element, connectedTo, type){
+	my.find_connection = function (element, connectedTo, type) {
 		if(type == 'input') {
 			type = true
 		} else if (type == 'output') {
 			type = false
 		}
-		return element.connects.filter(function(connection) {return connection_is_match(connection, {input: type, connectedTo: connectedTo})})[0]
+		return element.connects.filter(function(connection) {
+			return connection_is_match(connection, {input: type, connectedTo: connectedTo});
+		})[0];
 	}
 
 	my.filter_elements = function(elements, criterion){ //both criterion and elements are arrays
@@ -84,42 +86,6 @@ var Filters = (function ($) {
 
 	return my;
 }(jQuery))
-
-//shortcuts and standins
-
-var highlightSection = function(highlighted, isCircular){
-	var params = parametric_to_square(highlighted, isCircular)
-	Tutorial.highlightSections([params])
-}
-
-var parametric_to_square = function(highlighted, isCircular){
-	params = {}
-	params.x = highlighted.x - highlighted.r
-	params.y = highlighted.y - highlighted.r
-	params.height = highlighted.r * 2
-	params.width = highlighted.r * 2
-	params.isCircular = isCircular
-	return params
-}
-
-var highlightSections = function(params){
-	Tutorial.highlightSections(params)
-	//console.log("highlighting multiple sections with params: ", params)
-}
-
-var createSpeechBubble = function(hightlighted, text) {
-	Tutorial.placeBubble(hightlighted, text)
-	//console.log("creating speech bubble: ", hightlighted.x, hightlighted.y, text);
-}
-
-var getLeverLocation = function(){
-	return {
-		x: 110,
-		y: 120,
-		height: 130,
-		width: 140
-	}
-}
 
 var CircElements = (function () {
 	var my = function (elements) {

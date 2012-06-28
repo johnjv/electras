@@ -4,8 +4,10 @@
 	left: 0px;
 }
 
-#factory{
+#factory {
 	position: relative;
+	width: 2048px;
+	height: 1365.33px;
 }
 
 #factory > img {
@@ -25,7 +27,7 @@
 	z-index: 1
 }
 
-#punchingbox {
+#punchbox {
 	z-index: 2;
 }
 
