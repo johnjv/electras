@@ -17,15 +17,8 @@
 
     <div id="factoryParent">
     <div id = "factory">
- 		<table id="tally">
-		 	<tr id="frow"><td></td></tr>
-		 	<tr id="srow"><td class ="fcol">Circuit Says</td></tr>
-		 	<tr id="trow"><td class = "fcol">Level Says</td></tr>
-		 	<tr id="forow"><td></td></tr>
- 		</table>
  		<p id="success"> Great Job! The circuit is correct.</p>
  		<p id="failure"> I am sorry! The circuit was not right. Try again</p>
- 				
    </div>
    </div>
    
@@ -41,6 +34,7 @@
 <script type="text/javascript" src="../lib/imagesloaded.js"></script>
 <script type="text/javascript" src="../lib/xlator.js"></script>
 <script type="text/javascript" src="../lib/multidrag.js"></script>
+<script type="text/javascript" src="../lib/buzz.js"></script>
 
 <script type="text/javascript" src="../workshop/imgpath.js"></script>
 <script type="text/javascript" src="../workshop/raphwrap.js"></script>
@@ -58,6 +52,7 @@
 <script type="text/javascript" src="levselect.js"></script>    
 <script type="text/javascript" src="levsequence.js"></script> 
 <script type="text/javascript" src="audio.js"></script>
+<script type="text/javascript" src="floortally.js"></script> 
 <script type="text/javascript" src="flooranim.js"></script> 
 <script type="text/javascript" src="floor.js"></script>
 <script type="text/javascript" src="circuit.js"></script> 
@@ -70,12 +65,11 @@
 
 <div id="translations" hidden="hidden">
   <div id="EN">
-    <span class="factory_floor">
-
+    <span class="floor">
+		<span class="tallyExpected">Expected</span>
+		<span class="tallyActual">Computed</span>
     </span>
-    <span class="menu">
 
-    </span>
 	<span class="circuit">
 		<span class="err_connect_inputs">Cannot connect inputs</span>
 		<span class="err_connect_outputs">Cannot connect outputs</span>

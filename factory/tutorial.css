@@ -1,3 +1,7 @@
+.highlight {
+	position: absolute;
+}
+
 #tutbubble {
 	font-size: .8em;
 	font-weight: normal;

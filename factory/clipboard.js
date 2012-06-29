@@ -7,9 +7,6 @@ var Clipboard = (function ($, Translator, all_levels, LevelSelector, Audio) {
 	var clipboardVisible = true;
 	var curIndex = 0;
 
-	var dragTip = null;
-	var dragBoard = null;
-
 	function checkComplete() {
 		var level = LevelSelector.getCurrentLevel();
 		var page = curIndex;
@@ -178,21 +175,32 @@ var Clipboard = (function ($, Translator, all_levels, LevelSelector, Audio) {
 		audio: new Button(toggleAudio, 1158,  203, 100, 100)
 	};
 
-	function ClickHandler(e) { }
+	function ClickHandler(e) {
+		var handler;
+		this.handler = null;
+		if (!clipboardVisible) {
+			handler = FactoryFloor.getHandler(e);
+			if (handler !== null) {
+				this.handler = handler;
+			}
+		}
+	}
 
 	ClickHandler.prototype.onRelease = function (e) {
-		var clip, offs, r, x, y;
-		if (e.isTap) {
+		var handler, offs, r, x, y;
+
+		handler = this.handler;
+		if (handler !== null) {
+			handler.onRelease(e);
+			return;
+		}
+			
+		if (e.isTap && clipboardVisible) {
 			offs = $('#main_container').offset();
-			r = $('#main_container').width() / 2048;
-			x = (e.pageX - offs.left) / r;
-			y = (e.pageY - offs.top) / r;
-			if (!clipboardVisible) {
-				if (x >= 1000 && x < 1048 && y >= 1275) {
-					e.preventDefault();
-					Clipboard.setVisible(true);
-				}
-			} else if (x >= 398 && y >= 172 && x < 398 + 1252 && y < 1338) {
+			r = 2048 / $('#main_container').width();
+			x = r * (e.pageX - offs.left);
+			y = r * (e.pageY - offs.top);
+			if (x >= 398 && y >= 172 && x < 398 + 1252 && y < 1338) {
 				// clicked in clipboard - maybe clicked a button?
 				$.each(clipboardButtons, function (key, b) {
 					var dx, dy;
@@ -299,19 +307,17 @@ var Clipboard = (function ($, Translator, all_levels, LevelSelector, Audio) {
 	var my = {};
 
 	my.setVisible = function (value) {
-		var moveBy, newY;
+		var moveBy, w, x, newY;
 		if (clipboardVisible !== value) {
 			clipboardVisible = value;
-			if (value) {
-				newY = '-=' + 0.9 * $('#main_container').height();
-				dragBoard.register($('#boardImage'));
-				dragTip.register($('#clipImage'));
-			} else {
-				newY = '+=' + 0.9 * $('#main_container').height();
-				dragBoard.unregister();
-				dragTip.unregister();
+			w = $('#main_container').width();
+			x = -(2048 - w) / 2;
+			newY = x / 1.5;
+			if (!value) {
+				newY += 0.9 * w / 1.5;
 			}
-			$('#clipboard').animate({ top: newY }, 500);
+			console.log('setVisible', value, newY, $('#clipboard').offset().top);
+			$('#clipboard').animate({top: newY}, 500);
 			Circuit.setInterfaceEnabled(!value);
 		}
 	};
@@ -338,14 +344,15 @@ var Clipboard = (function ($, Translator, all_levels, LevelSelector, Audio) {
 		y0 = 1.9 * 1365.33 - r * (y - offs0.top);
 		dx = x0 - 1024.0; // relative to center of tip's circle
 		dy = y0 - 1246.77;
+		console.log('isInTip', x0, y0, dx, dy);
 		return dx * dx + dy * dy < 10000.0;
 	}
 
 	$(document).ready(function () {
 		configureClipboard();
 		loadText();
-		dragBoard = multidrag.create(ClickHandler).register($('#boardImage'));
-		dragTip = multidrag.create(ClickHandler).register($('#clipImage'));
+		multidrag.create(ClickHandler).register($('#boardImage'));
+		multidrag.create(ClickHandler).register($('#clipImage'));
 		Circuit.setInterfaceEnabled(false);
 	});
 

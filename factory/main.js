@@ -4,5 +4,6 @@ $(document).ready(function () {
 	    FactoryFloor.windowResized(w, time);
 	    Circuit.windowResized(w, time); 
 	    Clipboard.windowResized(w, time);
+		setTimeout(Tutorial.update, time + 200);
 	});	 
 });

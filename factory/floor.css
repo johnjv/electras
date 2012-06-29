@@ -39,63 +39,32 @@
 	z-index: 2;
 }
 
-#start{
-	position: absolute;
-	z-index:10;
-	left: 80%;
-	top: 80%;
-	width: 10%;
-	height: 10%;
-}
-#flag{
-	position: absolute;
-	z-index:8;
-}
-#order{
-	position: absolute;
-	z-index:7;
+#light1 {
+	z-index: 3;
 }
 
-#xflag{
+#tally {
 	position: absolute;
-	width: 20px;
+	z-index: 2;
+	bottom: 50px;
+	left: 50px;
 }
 
-#checkmark{
-	position: absolute;
-	width: 20px;
-}
-
-#tally{
-	position: absolute;
-	z-index:7;
-}
-#tally td{
-	border-style: inset;
-	padding: 10px;
-	border-width: 0px;
-	width: 15px;
-	height: 15px;
+#tally td {
 	vertical-align: middle;
-	empty-cells: hide;
+	text-align: center;
+	font-size: 48px;
+	color: #EAE242;
+	height: 84px;
 }
 
-.fcol{
-	background-color: #C0C0C0;
-	vertical-align: middle;
-	white-space: nowrap;
+#tally td.tallyHead {
+	padding-right: 0.5em;
 }
 
-.upperrow{
-	border-top: solid;
-}
-
-#boxTally{
-	width:20px;
-}
-
-#trashTally{
-	width:20px;
+#tally img {
+	width: 80px;
+	height: 80px;
 }
 
 #success{

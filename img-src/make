@@ -6,6 +6,8 @@ import os.path
 import filecmp
 
 svg_sizes = {
+	'app/app_icon': 50,
+	'app/highlight': 50,
 	'clipboard/button_blank': 33,
 	'clipboard/button_sound_off': 25,
 	'clipboard/checkmark': 40,
@@ -29,8 +31,10 @@ svg_sizes = {
 	'floor/producer': 42.5,
 	'floor/punchbox': 96.75,
 	'floor/punchglove': 45,
-	'floor/table_box': 30,
-	'floor/table_can': 30,
+	'floor/tallybox': 20,
+	'floor/tallycan': 20,
+	'floor/tallyboxx': 20,
+	'floor/tallycanx': 20,
 	'workshop/color0': 50,
 	'workshop/color1': 50,
 	'workshop/color2': 50,
