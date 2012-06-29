@@ -258,7 +258,7 @@
 				my.DrawCirc.attachWire(self, p0, p1);
 			});
 		});
-	}
+	};
 
 	my.Workshop.prototype.setLayout = function (layout) {
 		this.layout = layout;

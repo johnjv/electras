@@ -81,7 +81,7 @@ var all_levels = [
 		sensors: 'Y|',
 		tools: ['or', 'not'],
 		types: '**',
-		answers: 'Co,C-,Ro,R-,Go,G-', 
+		answers: 'Co,C-,Ro,R-,Go,G-'
 	}),
 
 	new Level({

@@ -14,6 +14,7 @@ clipboard:
 	credits page does not work
 	add checks when correct
 	repair page sound to remove silence at end
+	fade buttons when inapplicable (next, hint, prev, credits, contents)
 
 circuit:
 	when minimized, resizing window should lead to moving circuit

@@ -1,6 +1,4 @@
-Tutorial = {};
-
-(function(my, $){
+var Tutorial = (function ($, imgpath, Translator, LevelSelector, tutorial_scripts, Circuit) {
 	"use strict";
 	var ALL_EVENTS, highlightId;
 
@@ -60,7 +58,7 @@ Tutorial = {};
 		}
 
 		return null;
-	};
+	}
 
 	function transferEventUnder(e) {
 		var elt, under;
@@ -70,6 +68,8 @@ Tutorial = {};
 		elt.show();
 		$(under).trigger(e);
 	}
+
+	var my = {};
 
 	my.setHighlights = function (targets) {
 		$('img.highlight').remove();
@@ -125,11 +125,11 @@ Tutorial = {};
 		if (tutorial_scripts.hasOwnProperty(script)) {
 			tutorial_scripts[script]();
 		}
-	}
+	};
 
 	$(document).ready(function () {
 		Circuit.addChangeListener(my.update);
 		Circuit.addInterfaceHandler(moveBubbleHandler);
 		Translator.addListener(my.update);
 	});
-}(Tutorial, jQuery));
+}(jQuery, imgpath, Translator, LevelSelector, tutorial_scripts, Circuit));

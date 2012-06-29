@@ -19,6 +19,12 @@ var Audio = (function ($) {
 		}
 	};
 
+	my.player = function (id) {
+		return function () {
+			my.play(id);
+		};
+	};
+
 	my.loop = function (id) {
 		if (soundEnabled && sounds.hasOwnProperty(id)) {
 			sounds[id].loop().play();
@@ -74,7 +80,7 @@ var Audio = (function ($) {
 			'moveOut': ['garbage_sound'],
 			'wireFailed': ['incorrect_sound'],
 			'addDone': ['click_sound'],
-			'moveDone': ['click_sound'],
+			'moveDone': ['click_sound']
 		};
 
 		Circuit.addChangeListener(function (e) {

@@ -1,4 +1,4 @@
-(function (my, $, Workshop, multidrag) {
+(function (my, $, Workshop, multidrag, Clipboard, LevelSelector) {
 	"use strict";
 
 	var workshop = null,
@@ -48,7 +48,7 @@
 		}
 
 		return null;
-	};
+	}
 
 	function doMinimize() {
 		var main, backDrag;
@@ -123,7 +123,7 @@
 			my.windowResized();
 			$('#circuit').show();
 		}
-	};
+	}
 
 	$(document).ready(function () {
 		var main, iface;
@@ -279,7 +279,7 @@
 		workshop.addIfaceHandler(handler);
 	};
 
-	my.getWorkshop = function () { return workshop };
+	my.getWorkshop = function () { return workshop; };
 
 	return my;
-}(Circuit, jQuery, Workshop, multidrag));
+}(Circuit, jQuery, Workshop, multidrag, Clipboard, LevelSelector));
