@@ -1,7 +1,8 @@
-(function (my, $, Workshop, multidrag, Clipboard, LevelSelector) {
+var Circuit = (function ($, multidrag, Workshop) {
 	"use strict";
 
-	var workshop = null,
+	var my = {},
+		workshop = null,
 		changeListeners = [],
 		isMinimized = false,
 		minimizeIcon = null,
@@ -108,9 +109,9 @@
 		} else {
 			ensureInitialized();
 			if (newLevel.circuit) {
-				layout = Workshop.parse(newLevel.circuit, my.elementMap);
+				layout = Workshop.parse(newLevel.circuit, CircuitPlace.elementMap);
 			} else {
-				layout = my.computeLayout(newLevel.sensors, newLevel.link,
+				layout = CircuitPlace.computeLayout(newLevel.sensors, newLevel.link,
 					workshop.canvas.width(), workshop.canvas.height());
 			}
 			workshop.setLayout(layout);
@@ -220,7 +221,6 @@
 			}
 			ret.push({id: elt.id, type: elt.type.id, connects: ports});
 		});
-		console.log('getElts', workshop, ret);
 		return ret;
 	};
 
@@ -229,32 +229,33 @@
 	};
 
 	my.windowResized = function (w, time) {
-		var self, par, parWidth, parHeight;
+		var elt, h;
 
-		self = $('#circuit');
-		
+		elt = $('#circuit');
 		if (typeof w === 'undefined') {
-			w = self.parent().width();
+			w = elt.parent().width();
 			time = 0;
 		}
 
-		if (self.is(':visible')) {
-			parWidth = w;
-			parHeight = w / 1.5;
-			self.stop().animate({ width: w, height: w / 1.5 }, time, function () {
-				workshop.setSize(parWidth, parHeight);
-				my.autoplace(workshop.layout, workshop.canvas.width(), workshop.canvas.height());
+		h = w / 1.5;
+
+		if (elt.is(':visible')) {
+			elt.stop().animate({width: w, height: h}, time, function () {
+				workshop.setSize(w, h);
+				CircuitPlace.autoplace(workshop.layout, workshop.canvas.width(), workshop.canvas.height());
 				workshop.layoutRearranged();
 				if (isMinimized) {
-					self.css(getMinimizeTransform());
+					elt.css(getMinimizeTransform());
 				}
 			});
+		} else {
+			elt.css({width: w, height: h});
+			workshop.setSize(w, h);
 		}
 	};
 
 	my.setInterfaceEnabled = function (value, keepIface) {
 		var iface = $('#circuit_iface');
-		console.log('setInterfaceEnabled', value, keepIface);
 		workshop.setInterfaceEnabled(value, keepIface);
 		if (value) {
 			if (!isMinimized) {
@@ -282,4 +283,4 @@
 	my.getWorkshop = function () { return workshop; };
 
 	return my;
-}(Circuit, jQuery, Workshop, multidrag, Clipboard, LevelSelector));
+}(jQuery, multidrag, Workshop));

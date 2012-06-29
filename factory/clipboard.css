@@ -35,8 +35,9 @@
 	overflow: hidden;
 }
 
-
-#check{ position: relative; height: 1em; width: 1em;}
+#check {
+	position: relative; height: 1em; width: 1em;
+}
 
 .tocRow {
 	position: relative;
@@ -54,19 +55,33 @@
 	padding-right: 1ex;
 }
 
-.levelname {
-	padding-bottom: 1em;
-	font-weight: bold;
-}
-.order {
-	padding-bottom: 1em;
-}
-.hintText {
-	padding-bottom: 2em;
-	color: blue;
-}
-.complete {
-	font-weight: bold;
-	color: green;
+.tocComplete {
+	width: 1em;
 }
 
+.tocComplete img {
+	height: 1em;
+}
+
+.levTitle {
+	padding-bottom: 1em;
+	font-weight: bold;
+}
+
+.levOrder {
+	padding-bottom: 1em;
+}
+
+.levHint {
+	padding-bottom: 2em;
+	color: #32c;
+}
+
+.levComplete {
+	font-weight: bold;
+	color: #2a2;
+}
+
+.levComplete img {
+	height: 1em;
+}

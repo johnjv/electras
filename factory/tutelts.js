@@ -1,4 +1,4 @@
-var CircElements = (function () {
+var CircElements = (function ($) {
 	var my = function (elements) {
 		this.elements = elements;
 	};
@@ -22,25 +22,15 @@ var CircElements = (function () {
 	my.prototype.sensor = function (type) {
 		var self, all_sensors, sensor_type, elements;
 		self = this;
-		if (type === null) {
-			all_sensors = [];
-			sensor_types = ['-', '^\\|$', '^o$', 'C', 'Y', 'R', 'G'];
-			elements = this.elements;
-			$.each(sensor_types, function (i, sensor) {
-				var new_sensor_array = self.filter_one_sensor_type(elements, sensor);
-				var new_sensor = new_sensor_array[0];
-				if (new_sensor) {
-					all_sensors.push(new_sensor);
-				}
-			});
-			return new my(all_sensors);
+		if (typeof type === 'undefined' || type === null) {
+			return new my(Filters.filterByType(this.elements, '[-|oCYRG]'));
 		} else {
-			return new my(Filters.filter_elements(this.elements, {type: type}));
+			return new my(Filters.filterByType(this.elements, type));
 		}
 	};
 
 	my.prototype.filter_one_sensor_type = function (elements, regex) {
-		return Filters.filter_elements(elements, {type: regex});
+		return Filters.filterByType(elements, regex);
 	};
 
 	my.prototype.output = function (connectedTo) {
@@ -56,19 +46,19 @@ var CircElements = (function () {
 	};
 
 	my.prototype.lightbulb = function () {
-		return new my(Filters.filter_elements(this.elements, {type: 'out'}));
+		return new my(Filters.filterByType(this.elements, 'out'));
 	};
 
 	my.prototype.OR = function () {
-		return new my(Filters.filter_elements(this.elements, {type: 'or'}));
+		return new my(Filters.filterByType(this.elements, 'or'));
 	};
 
 	my.prototype.AND = function () {
-		return new my(Filters.filter_elements(this.elements, {type: 'and'}));
+		return new my(Filters.filterByType(this.elements, 'and'));
 	};
 
 	my.prototype.NOT = function () {
-		return new my(Filters.filter_elements(this.elements, {type: 'not'}));
+		return new my(Filters.filterByType(this.elements, 'not'));
 	};
 
 	my.prototype.first_connection = function () {
@@ -80,4 +70,4 @@ var CircElements = (function () {
 	};
 
 	return my;
-}());
+}(jQuery));

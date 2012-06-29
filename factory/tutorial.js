@@ -1,4 +1,4 @@
-var Tutorial = (function ($, imgpath, Translator, LevelSelector, tutorial_scripts, Circuit) {
+var Tutorial = (function ($, imgpath, Translator) {
 	"use strict";
 	var ALL_EVENTS, highlightId;
 
@@ -122,9 +122,7 @@ var Tutorial = (function ($, imgpath, Translator, LevelSelector, tutorial_script
 	my.update = function (e) {
 		var script = LevelSelector.getCurrentLevel().script;
 		$('#tutbubble').hide();
-		if (tutorial_scripts.hasOwnProperty(script)) {
-			tutorial_scripts[script]();
-		}
+		TutorialScript.execute(script);
 	};
 
 	$(document).ready(function () {
@@ -132,4 +130,6 @@ var Tutorial = (function ($, imgpath, Translator, LevelSelector, tutorial_script
 		Circuit.addInterfaceHandler(moveBubbleHandler);
 		Translator.addListener(my.update);
 	});
-}(jQuery, imgpath, Translator, LevelSelector, tutorial_scripts, Circuit));
+
+	return my;
+}(jQuery, imgpath, Translator));

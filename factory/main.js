@@ -1,4 +1,4 @@
-(function ($, Letterbox, FactoryFloor, Circuit, Clipboard, Tutorial) {
+(function ($, Letterbox) {
 	"use strict";
 
 	$(document).ready(function () {
@@ -9,4 +9,4 @@
 			setTimeout(Tutorial.update, time + 200);
 		});
 	});
-}(jQuery, Letterbox, FactoryFloor, Circuit, Clipboard, Tutorial));
+}(jQuery, Letterbox));

@@ -7,14 +7,15 @@ tutorial:
 
 clipboard:
 	initial title screen
+	don't allow putting down clipboard on first pages or credits
 	maybe bigger font? (split levels across three screens?)
 	rearrange buttons to be all on bottom
-	enable buttons: levels, language, sound on/off
+	implement buttons: levels, language, sound on/off
 	whether hint revealed should be remembered
 	credits page does not work
-	add checks when correct
 	repair page sound to remove silence at end
 	fade buttons when inapplicable (next, hint, prev, credits, contents)
 
 circuit:
+	initial error message when creating Workshop object
 	when minimized, resizing window should lead to moving circuit

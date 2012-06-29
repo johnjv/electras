@@ -55,7 +55,7 @@
 	text-align: center;
 	font-size: 48px;
 	color: #EAE242;
-	height: 84px;
+	height: 90px;
 }
 
 #tally td.tallyHead {
@@ -66,18 +66,3 @@
 	width: 80px;
 	height: 80px;
 }
-
-#success{
-	position:absolute;
-	color:green;
-	left: 10%;
-	top:80%
-}
-
-#failure{
-	position:absolute;
-	color:red;
-	left: 10%;
-	top:80%
-}
-

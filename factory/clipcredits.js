@@ -1,9 +1,11 @@
-var Credit = {};
-
-(function(my, $){
+var Credit = (function ($) {
 	"use strict";
+
+	var my = {};
+
 	var contentDiv = $('<div class = "page" id = "page23"></div>');
-	my.slideDesc = function(){	    
+
+	my.slideDesc = function() {	    
 	    contentDiv.html("");
 		var body = $('#clipOrder');
 		body.append(contentDiv);
@@ -40,7 +42,8 @@ var Credit = {};
     	contentDiv.css('overflow', 'hidden');			
 		contentDiv.css('background-color', '#f5f3db');		
     }
-	function slideDivs(divs, i){	
+
+	function slideDivs(divs, i) {
 	    divs[i].css('width', '98%');
 		divs[i].css('margin', '1%');
 		divs[i].css('font-size', '1.5em');
@@ -49,24 +52,24 @@ var Credit = {};
 		$('.credtable').css('margin-left', '15%');
 		$('.credtable').css('width', '70%');
 		divs[i].css('margin-top', '0px');	
-		if(i == divs.length -1){
+		if (i == divs.length -1) {
 		    $('#showLevels').show();
 		    $('#showLevels').fadeTo('slow', '1');
 	        return;
 	    }	
 		divs[i].delay(4000).animate({
-			
-		marginLeft: divs[i].outerWidth()
-    		}, 1000, function(){
+				marginLeft: divs[i].outerWidth()
+    		}, 1000, function() {
     			divs[i].remove();
-    			if(i < divs.length -1){
+    			if (i < divs.length -1) {
     				contentDiv.append(divs[i + 1]);
     				slideDivs(divs, i+1);
-    			}else{
+    			} else {
     				contentDiv.html(divs[0]);
     				slideDivs(divs, 0);
     			}
     		});
-		}
+	}
 
-}(Credit, jQuery));
+	return my;
+}(jQuery));
