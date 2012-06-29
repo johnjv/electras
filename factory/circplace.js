@@ -1,4 +1,4 @@
-var Circuit = (function ($, Workshop) {
+var CircuitPlace = (function ($, Workshop) {
 	"use strict";
 
 	var my = {},

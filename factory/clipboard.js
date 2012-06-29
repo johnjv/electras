@@ -1,6 +1,4 @@
-var Clipboard = (function ($,
-	Translator, multidrag, imgpath,
-	all_levels, LevelSelector, Audio, FactoryFloor, Circuit) {
+var Clipboard = (function ($, Translator, multidrag, imgpath) {
 	"use strict";
 
 	var LEVEL1_PAGE = 3;
@@ -8,15 +6,6 @@ var Clipboard = (function ($,
 
 	var clipboardVisible = true;
 	var curIndex = 0;
-
-	function checkComplete() {
-		var level = LevelSelector.getCurrentLevel();
-		var page = curIndex;
-		if (level && level.complete) {
-			$('#row' + level.levelid).children('.checkmark').html('<img id = "check" src = "../levels/images/checkmark.png">');
-			$('#page' + page).children('.complete').show();
-		}
-	}
 
 	function transitionCut(src, dst) {
 		dst.show();
@@ -52,10 +41,8 @@ var Clipboard = (function ($,
 			});
 	}
 
-
 	function goToPage(pageIndex) {
 		var oldIndex, oldPage, newPage;
-		checkComplete();
 		if (pageIndex >= 0 && pageIndex < CREDITS_PAGE) {
 			oldIndex = curIndex;
 			curIndex = pageIndex;
@@ -81,9 +68,9 @@ var Clipboard = (function ($,
 				$('#factory').show();
 				clipboardButtons.hint.setEnabled(true);
 				clipboardButtons.level.setEnabled(true);
-				LevelSelector.setLevel(all_levels[pageIndex - 3]);
+				LevelSelector.setLevel(allLevels[pageIndex - 3]);
 			}
-			$('.hintText').hide();
+			$('.levHint').hide();
 		} else if (pageIndex === CREDITS_PAGE) {
 			oldIndex = curIndex;
 			curIndex = pageIndex;
@@ -126,7 +113,7 @@ var Clipboard = (function ($,
 
 	function showHint() {
 		if (curIndex >= 3) {
-			$('.hintText').show();
+			$('.levHint').show();
 		}
 	}
 
@@ -209,7 +196,6 @@ var Clipboard = (function ($,
 					dx = x - b.x;
 					dy = y - b.y;
 					if (dx >= 0 && dy >= 0 && dx < b.width && dy < b.height) {
-						console.log('clicked', key);
 						e.preventDefault();
 						b.onClick();
 						return false;
@@ -227,7 +213,7 @@ var Clipboard = (function ($,
 		var ret = $('<div></div>').addClass('page');
 		ret.attr('id', 'page' + index);
 		if (index === 0) {
-			ret.append($('<h1></h1>').text("Electra's Candy Factory"));
+			ret.append($('<h1></h1>').text("Electra's Candy"));
 		} else if (index < 3) {
 			ret.append($('<table></table>').addClass('levels')
 				.append($('<tbody></tbody>').attr('id', 'levels' + index)));
@@ -255,25 +241,33 @@ var Clipboard = (function ($,
 	}
 
 	function loadText() {
+		var checkpath;
+
+		checkpath = imgpath.get('resource/clipboard/checkmark', ['svg', 'png']);
+
 		$('#levels1').empty();
 		$('#levels2').empty();
 
-		$.each(all_levels, function (i, level) {
-			var onClick, id, title, text, hint, tocRow, order;
+		$.each(allLevels, function (i, level) {
+			var onClick, id, title, text, hint, tocRow, order, check;
 
 			onClick = createLevelLoader(i);
-			id = level.levelid;
-			title = Translator.getText('levels', level.levelname);
+			id = level.id;
+			title = Translator.getText('levels', level.title);
 			text = Translator.getText('levels', level.orderText);
 			hint = Translator.getText('levels', level.hint);
 
 			tocRow = $('<tr></tr>').addClass('tocRow');
-			tocRow.attr('id', 'row' + id);
+			tocRow.attr('id', 'tocRow' + id);
+			check = $('<img></img>').attr('src', checkpath);
+			if (!level.complete) {
+				check.hide();
+			}
+			tocRow.append($('<td></td>').addClass('tocComplete').append(check));
 			tocRow.append($('<td></td>').addClass('tocNumber')
 				.append($('<a></a>').attr('href', '#').click(onClick).text(id + '.')));
 			tocRow.append($('<td></td>').addClass('tocTitle')
 				.append($('<a></a>').attr('href', '#').click(onClick).text(title)));
-			tocRow.append($('<td></td>').addClass('checkmark'));
 			if (i < 10) {
 				$('#levels1').append(tocRow);
 			} else {
@@ -281,16 +275,21 @@ var Clipboard = (function ($,
 			}
 
 			order = $('#page' + (id + 2)).empty();
-			order.append($('<div></div>').addClass('levelname')
+			order.append($('<div></div>').addClass('levTitle')
 				.text(id + '. ' + title));
-			order.append($('<div></div>').addClass('order').text(text));
-			order.append($('<div></div>').addClass('hintText').text('Hint: ' + hint));
-			order.append($('<div></div>').addClass('complete').text('Complete'));
+			order.append($('<div></div>').addClass('levOrder').text(text));
+			order.append($('<div></div>').addClass('levHint').text('Hint: ' + hint));
+			check = $('<div></div>').addClass('levComplete')
+				.append($('<img></img>').attr('src', checkpath))
+				.append('Complete');
+			if (!level.complete) {
+				check.hide();
+			}
+			order.append(check);
 		});
 
+		$('.levHint').hide();
 		$('.page').hide();
-		$('.hintText').hide();
-		$('.complete').hide();
 		$('#page' + curIndex).show();
 	}
 
@@ -306,7 +305,6 @@ var Clipboard = (function ($,
 			if (!value) {
 				newY += 0.9 * w / 1.5;
 			}
-			console.log('setVisible', value, newY, $('#clipboard').offset().top);
 			$('#clipboard').animate({top: newY}, 500);
 			Circuit.setInterfaceEnabled(!value);
 		}
@@ -334,9 +332,18 @@ var Clipboard = (function ($,
 		y0 = 1.9 * 1365.33 - r * (y - offs0.top);
 		dx = x0 - 1024.0; // relative to center of tip's circle
 		dy = y0 - 1246.77;
-		console.log('isInTip', x0, y0, dx, dy);
 		return dx * dx + dy * dy < 10000.0;
 	};
+
+	function levelChanged(oldLevel, newLevel) { }
+
+	levelChanged.completeChanged = function (level) {
+		var id = level.id;
+		if (level.complete) {
+			$('#tocRow' + id).find('.tocComplete').find('img').show();
+			$('#page' + (LEVEL1_PAGE + id - 1)).find('.levComplete').show();
+		}
+	}
 
 	$(document).ready(function () {
 		configureClipboard();
@@ -344,9 +351,8 @@ var Clipboard = (function ($,
 		multidrag.create(ClickHandler).register($('#boardImage'));
 		multidrag.create(ClickHandler).register($('#clipImage'));
 		Circuit.setInterfaceEnabled(false);
+		LevelSelector.addListener(levelChanged);
 	});
 
 	return my;
-}(jQuery,
-	Translator, multidrag, imgpath,
-	all_levels, LevelSelector, Audio, FactoryFloor, Circuit));
+}(jQuery, Translator, multidrag, imgpath));

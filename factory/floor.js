@@ -1,4 +1,4 @@
-var FactoryFloor = (function ($, multidrag, imgpath, LevelSelector, Clipboard, FloorAnimation) {
+var FactoryFloor = (function ($, multidrag, imgpath) {
 	"use strict";
 
 	function createImages() {
@@ -49,14 +49,12 @@ var FactoryFloor = (function ($, multidrag, imgpath, LevelSelector, Clipboard, F
 
 	ClickHandler.prototype.onRelease = function (e) {
 		var par, poffs, r, x, y;
-		console.log('ClickHandler', e.pageX, e.pageY);
 		if (e.isTap && this.enabled) {
 			par = $('#main_container');
 			poffs = par.offset();
 			r = 2048.0 / par.width();
 			x = (e.pageX - poffs.left) * r;
 			y = 1365.33 - (e.pageY - poffs.top) * r;
-			console.log('ClickHandler 2', x, y);
 			$.each(buttonLocations, function (i, data) {
 				if (x >= data[1] && y >= data[2] && x < data[1] + data[3] &&
 						y < data[2] + data[4]) {
@@ -122,4 +120,4 @@ var FactoryFloor = (function ($, multidrag, imgpath, LevelSelector, Clipboard, F
 	};
 
 	return my;              
-}(jQuery, multidrag, imgpath, LevelSelector, Clipboard, FloorAnimation));
+}(jQuery, multidrag, imgpath));

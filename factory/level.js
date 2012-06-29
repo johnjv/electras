@@ -1,6 +1,6 @@
 function Level(data) {
-	this.levelid = data.levelid;
-	this.levelname = data.levelname;
+	this.id = data.id;
+	this.title = data.title;
 	this.orderText = data.orderText;
 	this.hint = data.hint;
 	this.sensors = data.sensors;
@@ -11,11 +11,11 @@ function Level(data) {
 	this.complete = false;
 }
 
-var all_levels = [
+var allLevels = [
 	new Level({
 		script: 'i_so_blue',
-		levelname: "lev01name",
-		levelid: 1,
+		title: "lev01name",
+		id: 1,
 		orderText:  "lev01desc",
 		hint: "lev01hint",
 		sensors:  'C',
@@ -26,8 +26,8 @@ var all_levels = [
 
 	new Level({
 		script: 'its_a_start',
-		levelname: "lev02name",
-		levelid: 2,
+		title: "lev02name",
+		id: 2,
 		orderText: "lev02desc",
 		hint: "lev02hint",
 		sensors: '|o-',
@@ -38,8 +38,8 @@ var all_levels = [
 
 	new Level({
 		script: 'soyl_not_green',
-		levelname: "lev03name",
-		levelid: 3,
+		title: "lev03name",
+		id: 3,
 		orderText: "lev03desc",
 		hint: "lev03hint",
 		sensors: 'G',
@@ -50,8 +50,8 @@ var all_levels = [
 
 	new Level({
 		script: 'flavor_unearthed',
-		levelname: "lev04name",
-		levelid: 4,
+		title: "lev04name",
+		id: 4,
 		orderText: "lev04desc",
 		hint: "lev04hint",
 		sensors: 'GC',
@@ -62,8 +62,8 @@ var all_levels = [
 
 	new Level({
 		script: 'indecisive',
-		levelname: "lev05name",
-		levelid: 5,
+		title: "lev05name",
+		id: 5,
 		orderText: "lev05desc",
 		hint:  "lev05hint",
 		sensors: 'CRo-',
@@ -74,8 +74,8 @@ var all_levels = [
 
 	new Level({
 		script: 'anti_twinkle',
-		levelname: "lev06name",
-		levelid: 6,
+		title: "lev06name",
+		id: 6,
 		orderText: "lev06desc",
 		hint: "lev06hint",
 		sensors: 'Y|',
@@ -86,8 +86,8 @@ var all_levels = [
 
 	new Level({
 		script: 'a_new_earth',
-		levelname: "lev07name",
-		levelid: 7,
+		title: "lev07name",
+		id: 7,
 		orderText: "lev07desc",
 		hint: "lev07hint",
 		sensors: 'YR',
@@ -98,8 +98,8 @@ var all_levels = [
 
 	new Level({
 		script: 'out_on_a_lemon',
-		levelname: "lev08name",
-		levelid: 8,
+		title: "lev08name",
+		id: 8,
 		orderText: "lev08desc",
 		hint: "lev08hint",
 		sensors: 'Y-',
@@ -110,8 +110,8 @@ var all_levels = [
 
 	new Level({
 		script: 'backlash',
-		levelname: "lev09name",
-		levelid: 9,
+		title: "lev09name",
+		id: 9,
 		orderText: "lev09desc",
 		hint: "lev09hint",
 		sensors: 'Y-',
@@ -122,8 +122,8 @@ var all_levels = [
 
 	new Level({
 		script: 'speak_softly_cherry_a_stick',
-		levelname: "lev10name",
-		levelid: 10,
+		title: "lev10name",
+		id: 10,
 		orderText: "lev10desc",
 		hint: "lev10hint",
 		sensors: '-RY',
@@ -134,8 +134,8 @@ var all_levels = [
 
 	new Level({
 		script: 'botique',
-		levelname: "lev11name",  
-		levelid: 11,
+		title: "lev11name",  
+		id: 11,
 		orderText: "lev11desc"  ,
 		hint: "lev11hint",
 		sensors: 'GY-o',
@@ -146,8 +146,8 @@ var all_levels = [
 
 	new Level({
 		script: 'winnowing',
-		levelname: "lev12name",  
-		levelid: 12,
+		title: "lev12name",  
+		id: 12,
 		orderText: "lev12desc",
 		hint: "lev12hint",
 		sensors: 'YRo|',
@@ -158,8 +158,8 @@ var all_levels = [
 
 	new Level({
 		script: 'gniwonniw',
-		levelname: "lev13name",
-		levelid: 13,
+		title: "lev13name",
+		id: 13,
 		orderText: "lev13desc",
 		hint: "lev13hint",
 		sensors: 'YRo|',
@@ -170,8 +170,8 @@ var all_levels = [
 
 	new Level({
 		script: 'mishmash',
-		levelname: "lev14name",
-		levelid: 14,
+		title: "lev14name",
+		id: 14,
 		orderText: "lev14desc",
 		hint: "lev14hint",
 		sensors: 'RCo|',
@@ -182,8 +182,8 @@ var all_levels = [
 
 	new Level({
 		script: 'combination',
-		levelname: "lev15name",
-		levelid: 15,
+		title: "lev15name",
+		id: 15,
 		orderText:"lev15desc" ,
 		hint:  "lev15hint",
 		sensors: 'CRY',
@@ -194,8 +194,8 @@ var all_levels = [
 
 	new Level({
 		script: 'conditional',
-		levelname: "lev16name",
-		levelid: 16,
+		title: "lev16name",
+		id: 16,
 		orderText: "lev16desc",
 		hint: "lev16hint",
 		tools: ['and', 'or', 'not'],
@@ -207,8 +207,8 @@ var all_levels = [
 
 	new Level({
 		script: 'fake_it',
-		levelname: "lev17name",
-		levelid: 17,
+		title: "lev17name",
+		id: 17,
 		orderText: "lev17desc",
 		hint: "lev17hint",
 		tools: ['and', 'not'],
@@ -219,8 +219,8 @@ var all_levels = [
 
 	new Level({
 		script: 'fake_out',
-		levelname: "lev18name",
-		levelid: 18,
+		title: "lev18name",
+		id: 18,
 		orderText: "lev18desc",
 		hint: "lev18hint",
 		tools: ['or', 'not'],
@@ -231,8 +231,8 @@ var all_levels = [
 
 	new Level({
 		script: 'stop_gap',
-		levelname: "lev19name",
-		levelid: 19,
+		title: "lev19name",
+		id: 19,
 		orderText: "lev19desc",
 		hint: "lev19hint",
 		tools: ['and', 'or'],
@@ -243,8 +243,8 @@ var all_levels = [
 
 	new Level({
 		script: 'kludge',
-		levelname: "lev20name",
-		levelid: 20,
+		title: "lev20name",
+		id: 20,
 		orderText: "lev20desc",
 		hint: "lev20hint",
 		tools: ['and', 'or'],

@@ -1,4 +1,4 @@
-var computeSequence = (function ($, Circuit) {
+var computeSequence = (function ($) {
 	"use strict";
 
 	function SequenceItem(type, levelSays, circuitSays) {
@@ -188,4 +188,4 @@ var computeSequence = (function ($, Circuit) {
 		}
 		return analysis;
 	};
-}(jQuery, Circuit));
+}(jQuery));

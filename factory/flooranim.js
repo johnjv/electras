@@ -1,5 +1,4 @@
-var FloorAnimation = (function ($, imgpath,
-		Audio, LevelSelector, computeSequence, FloorTally, Circuit) {
+var FloorAnimation = (function ($, imgpath) {
 	"use strict";
 
 	var H_WIN = 1365.33,
@@ -89,6 +88,7 @@ var FloorAnimation = (function ($, imgpath,
 	function animateGlove(seq) {
 		var glove, lastGloveIn, i, t;
 		glove = $('#punchglove');
+		glove.stop();
 		lastGloveIn = 0;
 		for (i = 0; i < seq.length; i += 1) {
 			if (seq[i].circuitSays.accept) {
@@ -105,10 +105,11 @@ var FloorAnimation = (function ($, imgpath,
 	}
 
 	function Animation() {
-		var candies, seq, i, result, t;
+		var level, candies, seq, i, result, t, correct;
 
+		level = LevelSelector.getCurrentLevel();
 		candies = $('<div></div>').attr('id', 'candies');
-		seq = computeSequence(LevelSelector.getCurrentLevel());
+		seq = computeSequence(level);
 
 		FloorTally.showCleared();
 		t = 0;
@@ -125,6 +126,16 @@ var FloorAnimation = (function ($, imgpath,
 		}, t);
 		$('#factory').append(candies);
 
+		correct = true;
+		for (i = 0; correct && i < seq.length; i += 1) {
+			if (seq[i].circuitSays.accept !== seq[i].levelSays) {
+				correct = false;
+			}
+		}
+		if (correct) {
+			LevelSelector.setComplete(level, true);
+		}
+
 		this.candyDiv = candies;
 	}
 
@@ -136,5 +147,4 @@ var FloorAnimation = (function ($, imgpath,
 	};
 
 	return Animation;              
-}(jQuery, imgpath,
-	Audio, LevelSelector, computeSequence, FloorTally, Circuit));
+}(jQuery, imgpath));

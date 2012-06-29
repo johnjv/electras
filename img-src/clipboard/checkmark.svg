@@ -13,7 +13,7 @@
    height="396.15244"
    id="svg5090"
    version="1.1"
-   inkscape:version="0.47 r22583"
+   inkscape:version="0.48.3.1 r9886"
    sodipodi:docname="checkmark.svg">
   <defs
      id="defs5092">
@@ -73,10 +73,10 @@
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="614"
+     inkscape:window-width="715"
      inkscape:window-height="690"
-     inkscape:window-x="980"
-     inkscape:window-y="116"
+     inkscape:window-x="280"
+     inkscape:window-y="59"
      inkscape:window-maximized="0" />
   <metadata
      id="metadata5095">
@@ -96,7 +96,7 @@
      id="layer1"
      transform="translate(-131.49204,-272.85739)">
     <path
-       style="fill:#e2c63e;fill-opacity:1;stroke:#062537;stroke-width:10.94019699px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="fill:#22aa22;fill-opacity:1;stroke:#062537;stroke-width:10.94019699000000045px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 278.29814,577.643 c 8.83619,-10.27144 128.58991,-237.23684 165.24871,-299.31551 9.3929,14.23605 26.0529,30.52785 42.9782,42.05624 16.9253,11.52839 21.0496,16.26581 56.82737,26.06193 -69.07657,58.40102 -175.47867,186.28629 -215.29593,243.10367 -12.23793,16.57532 -41.38129,60.30349 -44.95422,73.9904 -10.84828,-19.78258 -26.31111,-34.00611 -34.89541,-45.16563 -4.79898,-5.54579 -32.14264,-32.77074 -48.65051,-44.56106 -16.50763,-11.79057 -42.86265,-28.6477 -62.59421,-42.82096 L 231.27346,468.12 278.29814,577.643 z"
        id="path5036"
        sodipodi:nodetypes="cczcccczccc" />

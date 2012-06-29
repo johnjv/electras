@@ -1,8 +1,8 @@
-var LevelSelector = (function ($, all_levels) {
+var LevelSelector = (function ($) {
     "use strict";
     var my = {};                 
 	var listeners = [];
-    var curLevel = all_levels[0];
+    var curLevel = allLevels[0];
 
 	my.addListener = function (listener) {
 		listeners.push(listener);
@@ -20,9 +20,14 @@ var LevelSelector = (function ($, all_levels) {
         return curLevel;
     };
 
-    my.setComplete = function (complete) {
-        curLevel.complete = complete;
+    my.setComplete = function (level, complete) {
+        level.complete = complete;
+		$.each(listeners, function (i, listener) {
+			if (listener.completeChanged) {
+				listener.completeChanged(level);
+			}
+		});
     };
 
     return my;
-}(jQuery, all_levels));
+}(jQuery));

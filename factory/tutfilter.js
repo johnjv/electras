@@ -12,6 +12,18 @@ var Filters = (function ($) {
 		})[0];
 	};
 
+	my.filterByType = function (elements, type) {
+		var result, re;
+		re = new RegExp('^' + type + '$');
+		result = [];
+		$.each(elements, function (i, elt) {
+			if (re.test(elt.type)) {
+				result.push(elt);
+			}
+		});
+		return result;
+	};
+
 	my.filter_elements = function (elements, criterion) { //both criterion and elements are arrays
 		var remaining_elements = elements;
 		$.each(criterion, function (key, value) {

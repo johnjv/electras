@@ -5,8 +5,8 @@ var Audio = (function ($) {
 
 	var soundEnabled = true;
 	
-	my.setEnabled = function (boolean_value) {
-		soundEnabled = boolean_value;
+	my.setEnabled = function (value) {
+		soundEnabled = value;
 	};
 	
 	my.isEnabled = function () {
