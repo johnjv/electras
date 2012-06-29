@@ -1,4 +1,5 @@
-var FloorAnimation = (function ($) {
+var FloorAnimation = (function ($, imgpath,
+		Audio, LevelSelector, computeSequence, FloorTally, Circuit) {
 	"use strict";
 
 	var H_WIN = 1365.33,
@@ -86,7 +87,7 @@ var FloorAnimation = (function ($) {
 	}
 
 	function animateGlove(seq) {
-		var seq, glove, lastGloveIn, i, t;
+		var glove, lastGloveIn, i, t;
 		glove = $('#punchglove');
 		lastGloveIn = 0;
 		for (i = 0; i < seq.length; i += 1) {
@@ -95,9 +96,7 @@ var FloorAnimation = (function ($) {
 				glove.delay(t + T_GLOVE_DELAY - T_GLOVE_OUT - lastGloveIn)
 					.animate({top: '+=' + (Y_GLOVE_OUT - Y_GLOVE_REST)},
 						{duration: T_GLOVE_OUT, easing: 'linear', queue: true,
-							complete: function () {
-								Audio.play('punch_sound');
-							}})
+							complete: Audio.player('punch_sound')})
 					.animate({top: '-=' + (Y_GLOVE_OUT - Y_GLOVE_REST)},
 						{duration: T_GLOVE_IN, easing: 'linear', queue: true});
 				lastGloveIn = t + T_GLOVE_DELAY + T_GLOVE_IN;
@@ -105,14 +104,11 @@ var FloorAnimation = (function ($) {
 		}
 	}
 
-	function my() {
+	function Animation() {
 		var candies, seq, i, result, t;
 
 		candies = $('<div></div>').attr('id', 'candies');
 		seq = computeSequence(LevelSelector.getCurrentLevel());
-
-		this.seq = seq;
-		this.candies = candies;
 
 		FloorTally.showCleared();
 		t = 0;
@@ -128,14 +124,17 @@ var FloorAnimation = (function ($) {
 			Audio.fadeOut('belt_sound', 100);
 		}, t);
 		$('#factory').append(candies);
+
+		this.candyDiv = candies;
 	}
 
-	my.prototype.remove = function () {
-		this.candies.remove();
+	Animation.prototype.remove = function () {
+		this.candyDiv.remove();
 	};
 
-	my.prototype.pause = function () {
+	Animation.prototype.pause = function () {
 	};
 
-	return my;              
-}(jQuery));
+	return Animation;              
+}(jQuery, imgpath,
+	Audio, LevelSelector, computeSequence, FloorTally, Circuit));

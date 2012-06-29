@@ -1,4 +1,4 @@
-var imgpath = (function (my) {
+var imgpath = (function () {
 	"use strict";
 
 	var hasSvg = (function () {
@@ -29,6 +29,7 @@ var imgpath = (function (my) {
 	}());
 
 	var my = {};
+
 	my.get = function (baseName, extensions) {
 		var i;
 		for (i = 0; i < extensions.length; i += 1) {
@@ -41,5 +42,6 @@ var imgpath = (function (my) {
 			}
 		}
 	};
+
 	return my;
 }());

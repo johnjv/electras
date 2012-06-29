@@ -1,9 +1,11 @@
-var Clipboard = (function ($, Translator, all_levels, LevelSelector, Audio) {
+var Clipboard = (function ($,
+	Translator, multidrag, imgpath,
+	all_levels, LevelSelector, Audio, FactoryFloor, Circuit) {
 	"use strict";
 
 	var LEVEL1_PAGE = 3;
 	var CREDITS_PAGE = 23;
-	
+
 	var clipboardVisible = true;
 	var curIndex = 0;
 
@@ -221,18 +223,6 @@ var Clipboard = (function ($, Translator, all_levels, LevelSelector, Audio) {
 		}
 	};
 
-	function setUpLevel(){
-		makePages();
-		Translator.addListener(makePages);
-		$('#hint').fadeTo('slow', '0.5');
-		$('#showLevels').fadeTo('slow', '0.5');
-		$('#prev').fadeTo('slow', '0.5');
-		$('#cliptip').hide();
-		$('#circuit').hide();
-		$('#factory').hide();
-		Circuit.setInterfaceEnabled(false);
-	}
-
 	function createPage(index) {
 		var ret = $('<div></div>').addClass('page');
 		ret.attr('id', 'page' + index);
@@ -346,7 +336,7 @@ var Clipboard = (function ($, Translator, all_levels, LevelSelector, Audio) {
 		dy = y0 - 1246.77;
 		console.log('isInTip', x0, y0, dx, dy);
 		return dx * dx + dy * dy < 10000.0;
-	}
+	};
 
 	$(document).ready(function () {
 		configureClipboard();
@@ -357,4 +347,6 @@ var Clipboard = (function ($, Translator, all_levels, LevelSelector, Audio) {
 	});
 
 	return my;
-}(jQuery, Translator, all_levels, LevelSelector, Audio));
+}(jQuery,
+	Translator, multidrag, imgpath,
+	all_levels, LevelSelector, Audio, FactoryFloor, Circuit));

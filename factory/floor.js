@@ -1,4 +1,4 @@
-var FactoryFloor = (function ($) {
+var FactoryFloor = (function ($, multidrag, imgpath, LevelSelector, Clipboard, FloorAnimation) {
 	"use strict";
 
 	function createImages() {
@@ -26,9 +26,6 @@ var FactoryFloor = (function ($) {
 
 	var curAnimation = null;
 
-	function doPause() {
-	}
-
 	function doPlay() {
 		var cur = curAnimation;
 		if (cur) {
@@ -39,7 +36,6 @@ var FactoryFloor = (function ($) {
 
 	var buttonLocations = [
 		[doPlay, 1776.20, 8.5, 267.32, 187.7],
-		[doPause, 1820.2, 218.3, 159.3, 159.3]
 	];
 
 	var ClickHandler = function (e) {
@@ -104,7 +100,7 @@ var FactoryFloor = (function ($) {
 			$('#factory').show();
 			$('#factoryParent').show();
 		}
-	};
+	}
 
 	$(document).ready(function () {
 		LevelSelector.addListener(updateLevel);
@@ -126,4 +122,4 @@ var FactoryFloor = (function ($) {
 	};
 
 	return my;              
-}(jQuery));
+}(jQuery, multidrag, imgpath, LevelSelector, Clipboard, FloorAnimation));

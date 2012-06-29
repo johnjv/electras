@@ -1,4 +1,4 @@
-var LevelSelector = (function ($) {
+var LevelSelector = (function ($, all_levels) {
     "use strict";
     var my = {};                 
 	var listeners = [];
@@ -25,4 +25,4 @@ var LevelSelector = (function ($) {
     };
 
     return my;
-}(jQuery));
+}(jQuery, all_levels));

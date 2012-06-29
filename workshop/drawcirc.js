@@ -1,4 +1,4 @@
-(function (my, $) {
+(function (my, $, imgpath) {
 	"use strict";
 	var WIRE_WIDTH = 3,
 		CONNECT_RADIUS = 3,
@@ -333,4 +333,4 @@
 			{ stroke: color, opacity: opacity, strokeWidth: WIRE_WIDTH });
 		return line;
 	};
-}(Workshop, jQuery));
+}(Workshop, jQuery, imgpath));

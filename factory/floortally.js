@@ -1,4 +1,4 @@
-var FloorTally = (function ($) {
+var FloorTally = (function ($, Translator, imgpath) {
 	"use strict";
 
 	function tallyEnsureCreated() {
@@ -72,7 +72,7 @@ var FloorTally = (function ($) {
 
 	my.setCandy = function (i, candySrc) {
 		tallySetCell(0, i + 1, candySrc);
-	}
+	};
 
 	my.setExpected = function (i, expect) {
 		tallySetCell(1, i + 1, getImgSrc(expect, true));
@@ -93,4 +93,4 @@ var FloorTally = (function ($) {
 	});
 
 	return my;
-}(jQuery));
+}(jQuery, Translator, imgpath));

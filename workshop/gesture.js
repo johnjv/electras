@@ -400,7 +400,7 @@
 			this.dragImg.remove();
 			this.dragImg = null;
 		}
-	}
+	};
 
 	my.EraseGesture.prototype.onRelease = function (info, e) {
 		var x, y, wire, elt, ports;
