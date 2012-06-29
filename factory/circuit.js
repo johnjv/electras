@@ -37,12 +37,14 @@
 			return new ShowClipboardGesture(e);
 		}
 
-		offs = minimizeIcon.offset();
-		x = e.pageX - offs.left;
-		y = e.pageY - offs.top;
-		if (x >= 0 && y >= 0 && x < minimizeIcon.width() &&
-				y < minimizeIcon.height()) {
-			return new MinimizeGesture(e);
+		if (minimizeIcon !== null) {
+			offs = minimizeIcon.offset();
+			x = e.pageX - offs.left;
+			y = e.pageY - offs.top;
+			if (x >= 0 && y >= 0 && x < minimizeIcon.width() &&
+					y < minimizeIcon.height()) {
+				return new MinimizeGesture(e);
+			}
 		}
 
 		return null;
@@ -188,14 +190,14 @@
 
 	my.getElements = function () {
 		var ret, wiringPort, canvOffs, x0, y0;
+		canvOffs = workshop.canvas.position();
+		x0 = canvOffs.left;
+		y0 = canvOffs.top;
 		ret = [];
 		if (!workshop || !workshop.layout) {
 			return ret;
 		}
 		wiringPort = workshop.gesture.port0 || null;
-		canvOffs = workshop.canvas.offset();
-		x0 = canvOffs.left;
-		y0 = canvOffs.top;
 		$.each(workshop.layout.elts, function (i, elt) {
 			var ports, port, toStr, j, k;
 			ports = [];
@@ -218,6 +220,7 @@
 			}
 			ret.push({id: elt.id, type: elt.type.id, connects: ports});
 		});
+		console.log('getElts', workshop, ret);
 		return ret;
 	};
 
@@ -254,7 +257,9 @@
 		console.log('setInterfaceEnabled', value, keepIface);
 		workshop.setInterfaceEnabled(value, keepIface);
 		if (value) {
-			iface.show();
+			if (!isMinimized) {
+				iface.show();
+			}
 		} else {
 			if (keepIface !== true) {
 				iface.hide();

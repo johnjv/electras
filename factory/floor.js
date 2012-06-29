@@ -6,16 +6,21 @@ var FactoryFloor = (function ($) {
 			['floorbase', 0, 0, 2048, 1365.33],
 			['punchglove', 1480, 688, 180, 474.969],
 			['punchbox', 1420, 879, 387, 313.738],
-			['producer', 1879, 450, 170, 361.5]
+			['producer', 1879, 450, 170, 361.5],
+			['light1', 1420 + 230, 879 + 218, 60, 60]
 		];
 		$.each(imageData, function (i, data) {
-			var src;
+			var src, elt;
 			src = imgpath.get('resource/floor/' + data[0], ['svg', 'png']);
-			$('#factory').append($('<img></img>')
+			elt = $('<img></img>')
 				.attr('src', src)
 				.attr('id', data[0])
 				.css({left: data[1], top: 1365.33 - data[2] - data[4],
-					width: data[3]}));
+					width: data[3]});
+			if (data[0] === 'light1') {
+				elt.css('display', 'none');
+			}
+			$('#factory').append(elt);
 		});
 	}
 
@@ -40,7 +45,7 @@ var FactoryFloor = (function ($) {
 	var ClickHandler = function (e) {
 		e.preventDefault();
 		this.enabled = true;
-		if (Clipboard.isInClipboardTip(e)) {
+		if (Clipboard.isInClipboardTip(e.pageX, e.pageY)) {
 			this.enabled = false;
 			Clipboard.setVisible(true);
 		}
@@ -115,6 +120,10 @@ var FactoryFloor = (function ($) {
 		$('#factory').stop().animate({ left: x, top: y,
 			transform: 'scale(' + (w / 2048)  + ')' }, time);
 	}; 
+
+	my.getHandler = function (e) {
+		return new ClickHandler(e);
+	};
 
 	return my;              
 }(jQuery));

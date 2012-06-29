@@ -5,8 +5,9 @@ function setBubble(targets, levelId, textId, bubbleBase) {
 	} else {
 		locations = [];
 		$.each(targets, function (i, target) {
-			locations.push({x: target.x - target.r, y: target.y - target.r,
-				width: 2 * target.r, height: 2 * target.r,
+			console.log('target', target.x, target.y, target.r);
+			locations.push({x: target.x - 1.5 * target.r, y: target.y - 1.5 * target.r,
+				width: 3 * target.r, height: 3 * target.r,
 				isCircular: true});
 		});
 		Tutorial.setHighlights(locations);

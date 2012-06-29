@@ -1,13 +1,9 @@
 floor:
-	enable pause button
-	interface to click play (bottom half of button) and clipboard tip
-	enable punchbox light as candies are processed
-	tally as candies are processed
-	update circuit state as candies are processed
-	play sounds
+	repair belt sound to remove silence at end
+	puncher doesn't go far enough
 
 tutorial:
-	add highlight image
+	initial locations of highlights seems off
 
 clipboard:
 	initial title screen
@@ -17,6 +13,7 @@ clipboard:
 	whether hint revealed should be remembered
 	credits page does not work
 	add checks when correct
+	repair page sound to remove silence at end
 
 circuit:
-	when minimized, resizing window should lead to moving
+	when minimized, resizing window should lead to moving circuit

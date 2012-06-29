@@ -1,6 +1,8 @@
 var Audio = (function ($) {
 	var my = {};
 
+	var sounds = {};
+
 	var soundEnabled = true;
 	
 	my.setEnabled = function (boolean_value) {
@@ -11,58 +13,50 @@ var Audio = (function ($) {
 		return soundEnabled;
 	};
 
-	my.play = function (sound_id) {
-		var elt;
-		if (soundEnabled) {
-			elt = $('#' + sound_id);
-			if (elt.length > 0) {
-				elt[0].play();
-			}
+	my.play = function (id) {
+		if (soundEnabled && sounds.hasOwnProperty(id)) {
+			sounds[id].play();
 		}
-	}
+	};
 
-	my.pause = function (sound_id) {
-		var elt;
-		if (soundEnabled) {
-			elt = $('#' + sound_id);
-			if (elt.length > 0) {
-				elt[0].pause();
-			}
+	my.loop = function (id) {
+		if (soundEnabled && sounds.hasOwnProperty(id)) {
+			sounds[id].loop().play();
 		}
-	}
+	};
+
+	my.fadeOut = function (id, duration) {
+		var volume;
+		if (sounds.hasOwnProperty(id)) {
+			volume = sounds[id].getVolume();
+			sounds[id].fadeOut(duration, function () {
+				sounds[id].stop().setVolume(volume);
+			});
+		}
+	};
 
 	function loadAudio() {
 		var audioData, body;
 
 		audioData = {
-			correct_sound: 'correct1',
-			belt_sound: 'belt3 loop',
-			punch_sound: 'punch',
 			paper_sound: 'paper',
 			paper_sound2: 'paper',
-			garbage_sound: 'garbage',
+			belt_sound: 'belt3',
+			punch_sound: 'punch',
+			correct_sound: 'correct1',
+			correct2_sound: 'correct2',
 			incorrect_sound: 'incorrect',
-			electric_sound: 'electric',
-			eraser_sound: 'eraser',
+			garbage_sound: 'garbage',
 			click_sound: 'click',
-			correct2_sound: 'correct2'
+			electric_sound: 'electric',
+			eraser_sound: 'eraser'
 		};
+
 
 		body = $('body');
 		$.each(audioData, function (key, name) {
-			var parts, base, elt;
-			parts = name.split();
-			base = '../resource/audio/' + parts[0];
-			elt = $('<audio></audio>').attr('id', key);
-			elt.append($('<source></source>').attr('src', base + '.ogg')
-				.attr('type', 'audio/ogg; codec=vorbis')
-				.attr('preload', 'auto'));
-			elt.append($('<source></source>').attr('src', base + '.mp3')
-				.attr('type', 'audio/mp3').attr('preload', 'auto'));
-			if (parts.length > 1 && parts[1] === 'loop') {
-				elt.attr('loop', 'loop');
-			}
-			body.append(elt);
+			sounds[key] = new buzz.sound('../resource/audio/' + name,
+				{formats: ['ogg', 'mp3']});
 		});
 	}
 
@@ -70,7 +64,7 @@ var Audio = (function ($) {
 		var circuitSounds;
 
 		// Wait a bit before loading audio since it's a lower priority
-		setTimeout(5000, loadAudio);
+		setTimeout(loadAudio, 500);
 
 		circuitSounds = {
 			'wireStart': ['electric_sound'],

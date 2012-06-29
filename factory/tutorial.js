@@ -8,16 +8,18 @@ Tutorial = {};
 
 	highlightId = 0;
 
-	function blink(elt, curId){
-		if (highlightId === curId) {
-			elt.fadeOut(1000, function () {
-				if(highlightId === curId){
-					elt.fadeIn(1600, function () {
-						blink(elt, curId);
-					});
-				}
-			});
+	function blink(elt, curId) {
+		function blinker() {
+			if (highlightId === curId) {
+				elt.fadeOut(1000, function () {
+					if(highlightId === curId){
+						elt.fadeIn(1600);
+					}
+				});
+			}
+			setTimeout(blinker, 2600);
 		}
+		blinker();
 	}
 
 	function moveBubbleTo(x, y) {
@@ -75,11 +77,7 @@ Tutorial = {};
 		$.each(targets, function (index, target) {
 			var highlight, srcUrl;
 
-			if (target.isCircular) {
-				srcUrl = imgpath.get('resource/app/circ_highlight', ['svg', 'png']);
-			} else {
-				srcUrl = imgpath.get('resource/app/rect_highlight', ['svg', 'png']);
-			}
+			srcUrl = imgpath.get('resource/app/highlight', ['svg', 'png']);
 			highlight = $('<img></img>')
 				.addClass('highlight')
 				.attr('src', srcUrl)
@@ -93,7 +91,7 @@ Tutorial = {};
 
 	// set the current bubble (replacing the previous one if it exists)
 	my.setBubble = function (target, levelId, textId) {
-		var text, bubble, x, y;
+		var text, bubble, offs, x, y;
 
 		text = Translator.getText('tutorial' + levelId, 'bubble' + textId);
 		bubble = $('#tutbubble');
@@ -103,8 +101,9 @@ Tutorial = {};
 		}
 		if (bubble.text() !== text) {
 			bubble.hide();
-			x = target.x + target.r;
-			y = target.y + target.r;
+			offs = $('#circuit').offset();
+			x = offs.left + target.x + target.r;
+			y = offs.top + target.y + target.r;
 			if(x + bubble.width() > $('#circuit').width()){
 				x = $('#circuit').width() - bubble.width();
 			}
@@ -120,7 +119,7 @@ Tutorial = {};
 		$('#tutbubble').remove();
 	};
 
-	function update(e) {
+	my.update = function (e) {
 		var script = LevelSelector.getCurrentLevel().script;
 		$('#tutbubble').hide();
 		if (tutorial_scripts.hasOwnProperty(script)) {
@@ -129,8 +128,8 @@ Tutorial = {};
 	}
 
 	$(document).ready(function () {
-		Circuit.addChangeListener(update);
+		Circuit.addChangeListener(my.update);
 		Circuit.addInterfaceHandler(moveBubbleHandler);
-		Translator.addListener(update);
+		Translator.addListener(my.update);
 	});
 }(Tutorial, jQuery));
