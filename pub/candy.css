@@ -1,0 +1,319 @@
+div#circuit_iface {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	height: 100%;
+	z-index: 100;
+	background: rgba(0, 0, 0, 0);
+}
+
+div.circ_container {
+	position: relative;
+	border-style: solid;
+	border-color: #282;
+	border-width: 0;	
+	overflow: hidden;
+}
+
+div.circ_container > div.toolbar {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	background-color: #456;
+}
+
+div.circ_container > div.toolbar_horz {
+	border-bottom: solid 2px black;
+	width: 100%;
+	height: 58px;
+	text-align: left;
+	line-height: 58px;
+	vertical-align: middle;
+}
+
+div.circ_container > div.toolbar_vert {
+	border-right: solid 2px black;
+	width: 58px;
+	height: 100%;
+	text-align: center;
+}
+
+div.circ_container > div.toolbar_horz > img.tool {
+	display: inline;
+	margin: auto 0px auto 8px;
+	vertical-align: middle;
+}
+
+div.circ_container > div.toolbar_vert > img.tool {
+	display: block;
+	margin: 8px auto 0px auto;
+}
+
+div.circ_canvas {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	background-color: white;
+}
+
+div.circ_error_grandparent {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	z-index: 10;
+}
+
+div.circ_error_parent {
+	text-align: center;
+	margin-top: 1em;
+}
+
+span.circ_error {
+	background-color: rgba(17, 68, 14, 0.4);
+	border: solid 2px rgba(17, 68, 14, 0.5);
+	padding: 0.5em 1em;
+	border-radius: 0.5em;
+	-moz-border-radius: 0.5em;
+	-webkit-border-radius: 0.5em;
+}
+
+img.on_canvas {
+	position: absolute;
+}
+
+img.error_circle {
+	position: absolute;
+	z-index: 9;
+}
+#factoryParent {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	overflow: hidden;
+}
+
+#factory {
+	position: relative;
+	width: 2048px;
+	height: 1365.33px;
+}
+
+#factory > img {
+	position: absolute;
+}
+
+#floorbase {
+	z-index: 0;
+}
+
+#punchglove {
+	z-index: 1
+}
+
+#candies {
+	z-index: 1;
+}
+
+#candies > img {
+	position: absolute;
+}
+
+#punchbox {
+	z-index: 2;
+}
+
+#producer {
+	z-index: 2;
+}
+
+#light1 {
+	z-index: 3;
+}
+
+#tally {
+	position: absolute;
+	z-index: 2;
+	bottom: 50px;
+	left: 50px;
+}
+
+#tally td {
+	vertical-align: middle;
+	text-align: center;
+	font-size: 48px;
+	color: #EAE242;
+	height: 90px;
+}
+
+#tally td.tallyHead {
+	padding-right: 0.5em;
+}
+
+#tally img {
+	width: 80px;
+	height: 80px;
+}
+.highlight {
+	position: absolute;
+}
+
+#tutbubble {
+	font-size: .8em;
+	font-weight: normal;
+	font-family: Helvetica, Arial, sans-serif; 
+	position:absolute;
+	padding:2.3em 2.3em;
+	max-width: 200px;
+	text-align:center;
+	background:#5a8f00;
+	/* css3*/ 
+	background:-webkit-gradient(linear, 0 0, 0 100%, from(#b8db29), to(#5a8f00));
+	background:-moz-linear-gradient(#b8db29, #5a8f00);
+	background:-o-linear-gradient(#b8db29, #5a8f00);
+	background:linear-gradient(#b8db29, #5a8f00);
+	
+	-webkit-border-radius:220px 120px; /* produces oval in safari 4 and chrome 4*/
+	-webkit-border-radius:220px / 120px; /*produces oval in chrome 4 (again!) but not supported in safari 4
+	Not correct application of the current spec, therefore, using longhand to avoid future problems with webkit corrects this*/
+	
+	-webkit-border-top-left-radius:220px 120px;
+	-webkit-border-top-right-radius:220px 120px;
+	-webkit-border-bottom-right-radius:220px 120px;
+	-webkit-border-bottom-left-radius:220px 120px;
+	-moz-border-radius:110px / 80px;
+	border-radius:180px / 90px;
+}
+#clipboard {
+	position: absolute;
+	width: 2048px;
+	height: 1365.3px;
+}
+
+#clipboard > img {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	width: 2048px;
+}
+
+#boardImage {
+	height: 1365.3px;
+}
+
+#clipImage {
+	z-index: 4;
+	height: 338.56px;
+}
+
+.page {
+	position: absolute;
+	left: 450px;
+	top: 273px;
+	width: 1022px;
+	height: 764px;
+	border: 8px solid black;
+	border-radius: 30px;
+	font-size: 56px;
+	padding: 100px 56px 12px 56px;
+	background-color: #f5f3db;
+	opacity: 1;
+	overflow: hidden;
+}
+
+#check {
+	position: relative; height: 1em; width: 1em;
+}
+
+.tocRow {
+	position: relative;
+	cursor: pointer;
+	color: #A30000;
+}
+
+.tocRow a {
+	text-decoration: none;
+	color: inherit;
+}
+
+.tocNumber {
+	text-align: right;
+	padding-right: 1ex;
+}
+
+.tocComplete {
+	width: 1em;
+}
+
+.tocComplete img {
+	height: 1em;
+}
+
+.levTitle {
+	padding-bottom: 1em;
+	font-weight: bold;
+}
+
+.levOrder {
+	padding-bottom: 1em;
+}
+
+.levHint {
+	padding-bottom: 2em;
+	color: #32c;
+}
+
+.levComplete {
+	font-weight: bold;
+	color: #2a2;
+}
+
+.levComplete img {
+	height: 1em;
+}
+#circMinimize {
+	position: absolute;
+	width: 40px;
+	left: 10px;
+	bottom: 10px;
+}
+html, body {
+	width: 100%;
+	height: 100%;
+	margin: 0px;
+	overflow: hidden;
+	background: #333 url(../resource/floor/floor-tile.png);
+	background-size: 20px 20px;
+}
+
+#factoryParent {
+	display: none;
+	z-index: 0;
+}
+
+#circuit_iface {
+	display: none;
+	z-index: 10;
+}
+
+#circuit {
+	display: none;
+	z-index: 1;
+}
+
+#clipboard {
+	z-index: 2;
+}
+
+#translations {
+	display: none;
+}
+
+#main_container {
+	position: relative;
+}
+
+#container {
+    z-index: 13;
+}

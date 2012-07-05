@@ -6,13 +6,17 @@ import os.path
 import filecmp
 
 svg_sizes = {
-	'app/app_icon': 50,
+	'app/app_icon': 64,
 	'app/highlight': 50,
-	'clipboard/button_blank': 33,
-	'clipboard/button_sound_off': 25,
+	'app/ios_icon': [( 57.0 / 4, 'app/ios_icon57'),
+					 (114.0 / 4, 'app/ios_icon114'),
+					 ( 72.0 / 4, 'app/ios_icon72'),
+					 (144.0 / 4, 'app/ios_icon144')],
+	'clipboard/button_sound_off': 30,
 	'clipboard/checkmark': 40,
 	'clipboard/clipboard': 512,
 	'clipboard/clipclip': 512,
+	'clipboard/hendrix-logo': 54,
 	'floor/candy00': 80,
 	'floor/candy01': 80,
 	'floor/candy02': 80,
@@ -70,6 +74,11 @@ if unknown_found:
 
 for filename in filenames:
 	prefix = re.sub(r'\.svg$', '', filename)
+
+	info = svg_sizes[prefix]
+	if type(info) == int:
+		info = [(info, prefix)]
+
 	print('::: ' + prefix + ' :::')
 	args = ['inkscape', '--vacuum-defs', '-l', 'tmp.svg', prefix + '.svg']
 	os.system(' '.join(args))
@@ -77,14 +86,14 @@ for filename in filenames:
 	if not (os.path.exists(dest) and filecmp.cmp('tmp.svg', dest)):
 		os.rename('tmp.svg', dest)
 
-		width = round(4 * svg_sizes[prefix])
-		args = ['inkscape', '-D', '--export-background=white',
-			'--export-background-opacity=0', '-w', str(width),
-			prefix + '.svg', '-e', 'tmp.png']
-		os.system(' '.join(args))
-		dest = '../resource/' + prefix + '.png'
-		if not (os.path.exists(dest) and filecmp.cmp('tmp.png', dest)):
-			os.rename('tmp.png', dest)
+		for wBase, outfile in info:
+			args = ['inkscape', '-D', '--export-background=white',
+				'--export-background-opacity=0', '-w', str(round(4 * wBase)),
+				prefix + '.svg', '-e', 'tmp.png']
+			os.system(' '.join(args))
+			dest = '../resource/' + outfile + '.png'
+			if not (os.path.exists(dest) and filecmp.cmp('tmp.png', dest)):
+				os.rename('tmp.png', dest)
 
 if os.path.exists('tmp.png'):
 	os.remove('tmp.png')

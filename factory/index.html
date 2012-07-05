@@ -3,12 +3,22 @@
 <head>
  <meta charset="utf-8">
  <title>Electra's Candy</title>
+ <meta http-equiv="Content-Type" content="text/html">
+ <meta name="apple-mobile-web-app-capable" content="yes" />
+ <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+ <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+ <link rel="apple-touch-icon" href="../resource/app/ios_icon57.png" />
+ <link rel="apple-touch-icon" sizes="72x72" href="../resource/app/ios_icon72.png" />
+ <link rel="apple-touch-icon" sizes="114x114" href="../resource/app/ios_icon114.png" />
+ <link rel="apple-touch-icon" sizes="144x144" href="../resource/app/ios_icon144.png" />
+
+ <!-- <link rel="stylesheet" href="candy.css" type="text/css"> -->
  <link rel="stylesheet" href="../workshop/workshop.css" type="text/css">
- <link rel="stylesheet" href="floor.css" type="text/css">
- <link rel="stylesheet" href="tutorial.css" type="text/css">
- <link rel="stylesheet" href="clipboard.css" type="text/css">
- <link rel="stylesheet" href="circuit.css" type="text/css">
- <link rel="stylesheet" href="main.css" type="text/css">
+ <link rel="stylesheet" href="../factory/floor.css" type="text/css">
+ <link rel="stylesheet" href="../factory/tutorial.css" type="text/css">
+ <link rel="stylesheet" href="../factory/clipboard.css" type="text/css">
+ <link rel="stylesheet" href="../factory/circuit.css" type="text/css">
+ <link rel="stylesheet" href="../factory/main.css" type="text/css">
 </head>
 
 <body>
@@ -20,6 +30,9 @@
 	<div id="circuit"></div>
 	<div id="clipboard"></div>
 </div>
+
+<!-- <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script> -->
+<!-- <script type="text/javascript" src="candy.js"></script> -->
 
 <script type="text/javascript" src="../lib/jquery-1.7.1.js"></script>
 <script type="text/javascript" src="../lib/jquery.transform2d.js"></script>
@@ -41,22 +54,22 @@
 <script type="text/javascript" src="../workshop/gesture.js"></script>
 <script type="text/javascript" src="../workshop/canvas.js"></script>
 
-<script type="text/javascript" src="level.js"></script>
-<script type="text/javascript" src="levselect.js"></script>    
-<script type="text/javascript" src="levsequence.js"></script> 
-<script type="text/javascript" src="audio.js"></script>
-<script type="text/javascript" src="floortally.js"></script> 
-<script type="text/javascript" src="flooranim.js"></script> 
-<script type="text/javascript" src="floor.js"></script>
-<script type="text/javascript" src="circplace.js"></script> 
-<script type="text/javascript" src="circuit.js"></script> 
-<script type="text/javascript" src="clipcredits.js"></script>    
-<script type="text/javascript" src="clipboard.js"></script> 
-<script type="text/javascript" src="tutfilter.js"></script>
-<script type="text/javascript" src="tutelts.js"></script>
-<script type="text/javascript" src="tutscript.js"></script>
-<script type="text/javascript" src="tutorial.js"></script>
-<script type="text/javascript" src="main.js"></script>
+<script type="text/javascript" src="../factory/level.js"></script>
+<script type="text/javascript" src="../factory/levselect.js"></script>    
+<script type="text/javascript" src="../factory/levsequence.js"></script> 
+<script type="text/javascript" src="../factory/audio.js"></script>
+<script type="text/javascript" src="../factory/floortally.js"></script> 
+<script type="text/javascript" src="../factory/flooranim.js"></script> 
+<script type="text/javascript" src="../factory/floor.js"></script>
+<script type="text/javascript" src="../factory/circplace.js"></script> 
+<script type="text/javascript" src="../factory/circuit.js"></script> 
+<script type="text/javascript" src="../factory/clipcredits.js"></script>    
+<script type="text/javascript" src="../factory/clipboard.js"></script> 
+<script type="text/javascript" src="../factory/tutfilter.js"></script>
+<script type="text/javascript" src="../factory/tutelts.js"></script>
+<script type="text/javascript" src="../factory/tutscript.js"></script>
+<script type="text/javascript" src="../factory/tutorial.js"></script>
+<script type="text/javascript" src="../factory/main.js"></script>
 
 <div id="translations" hidden="hidden">
   <div id="EN">
@@ -80,6 +93,11 @@
 	</span>
 
 	<span class="clipboard">
+		<span class="title stop">
+			<img class="clipCandy clipCandyLeft">
+			Electra&rsquo;s Candy
+			<img class="clipCandy clipCandyRight">
+		</span>
 		<span class="intro_page stop">
 			<p>Welcome to my candy factory! Our customers send orders to us,
 			and your job is to build machines matching their orders.</p>
@@ -95,6 +113,47 @@
 			and <b>mint</b> (<img id="intro_green">).</p>
 			 
 			<p>Let's get started! We will help you along the way!</p>
+		</span>
+		<span class="credits0 stop">
+			<p class="credit">A Hendrix College Odyssey project<br />
+			completed May 2012</p>
+			<img id="creditsHlogo">
+			<p>Thanks for playing!!</p>
+		</span>
+		<span class="credits1 stop">
+			<table class="creditsTable"><tbody>
+			<tr><th><u>Circuit Editor</u></th></tr>
+			<tr><td>Dr. Carl Burch</td></tr>
+			</tbody></table>
+		</span>
+		<span class="credits2 stop">
+			<table class="creditsTable"><tbody>
+			<tr><th><u>Clipboard</u></th></tr>
+			<tr><td>Brandon McNew</td></tr>
+			<tr><td>Concorde Habineza</td></tr>
+			<tr><td>Jeannette Inema</td></tr>
+			</tbody></table>
+		</span>
+		<span class="credits3 stop">
+			<table class="creditsTable"><tbody>
+			<tr><th><u>Factory Floor</u></th></tr>
+			<tr><td>Thierry Kimenyi</td></tr>
+			<tr><td>Justin John</td></tr>
+			<tr><td>Sung Oh</td></tr>
+			</tbody></table>
+		</span>
+		<span class="credits4 stop">
+			<table class="creditsTable"><tbody>
+			<tr><th><u>Graphics Designer</u></th></tr>
+			<tr><td>Megan Childress</td</tr>
+			</tbody></table>
+		</span>
+		<span class="credits5 stop">
+			<table class="creditsTable"><tbody>
+			<tr><th><u>Tutorial/Credits</u></th></tr>
+			<tr><td>Jeffrey Biles</td></tr>
+			<tr><td>Safari Sibomana</td></tr>
+			</tbody></table>
 		</span>
 	</span>
 

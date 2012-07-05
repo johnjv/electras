@@ -7,15 +7,12 @@ tutorial:
 
 clipboard:
 	initial title screen
-	don't allow putting down clipboard on first pages or credits
 	maybe bigger font? (split levels across three screens?)
-	rearrange buttons to be all on bottom
-	implement buttons: levels, language, sound on/off
-	whether hint revealed should be remembered
-	credits page does not work
+	implement language switch button
 	repair page sound to remove silence at end
-	fade buttons when inapplicable (next, hint, prev, credits, contents)
+	clicking even in letterbox should hide the clipboard
 
 circuit:
+	tap anywhere on switch should toggle it - drag anywhere should move it
 	initial error message when creating Workshop object
 	when minimized, resizing window should lead to moving circuit
