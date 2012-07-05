@@ -14,8 +14,8 @@
    height="1365.33"
    id="svg2"
    version="1.1"
-   inkscape:version="0.47 r22583"
-   sodipodi:docname="clipboard.svg">
+   inkscape:version="0.48.3.1 r9886"
+   sodipodi:docname="clipboard-with-texture.svg">
   <sodipodi:namedview
      id="base"
      pagecolor="#ffffff"
@@ -30,8 +30,8 @@
      inkscape:current-layer="layer1"
      showgrid="false"
      inkscape:snap-global="false"
-     inkscape:window-width="1593"
-     inkscape:window-height="1035"
+     inkscape:window-width="1440"
+     inkscape:window-height="856"
      inkscape:window-x="5"
      inkscape:window-y="24"
      inkscape:window-maximized="0"
@@ -185,36 +185,6 @@
          stdDeviation="5.0832983"
          id="feGaussianBlur6873" />
     </filter>
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient5831"
-       id="linearGradient5223"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.34689453,0,0,0.34689453,209.71028,540.54399)"
-       x1="121.61147"
-       y1="761.59668"
-       x2="118.2017"
-       y2="753.95569" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient5821"
-       id="linearGradient5225"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.34689453,0,0,0.34689453,209.71028,540.54399)"
-       x1="148.18658"
-       y1="778.23444"
-       x2="136.27452"
-       y2="763.24628" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient5863"
-       id="linearGradient5227"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.67908522,0,0,0.67908522,99.132254,290.1086)"
-       x1="239.1516"
-       y1="789.26337"
-       x2="239.15015"
-       y2="788.1991" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#linearGradient5863"
