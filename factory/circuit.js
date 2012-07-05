@@ -6,6 +6,8 @@ var Circuit = (function ($, multidrag, Workshop) {
 		changeListeners = [],
 		isMinimized = false,
 		minimizeIcon = null,
+		backDrag = null,
+		ifaceEnabledOutside = true,
 		MINIMIZE_X = 0.1,
 		MINIMIZE_Y = 0.03,
 		MINIMIZE_W = 0.26,
@@ -28,7 +30,12 @@ var Circuit = (function ($, multidrag, Workshop) {
 
 	function MinimizeGesture(e) {
 		e.preventDefault();
-		doMinimize();
+		setMinimized(true);
+	}
+
+	function UnminimizeGesture(e) {
+		e.preventDefault();
+		setMinimized(false);
 	}
 
 	function computeHandler(e) {
@@ -51,34 +58,39 @@ var Circuit = (function ($, multidrag, Workshop) {
 		return null;
 	}
 
-	function doMinimize() {
-		var main, backDrag;
+	function setMinimized(value) {
+		var main;
+		
+		if (isMinimized !== value) {
+			main = $('#circuit');
+			if (value) {
+				isMinimized = true;
+				setIfaceEnabled(false);
 
-		isMinimized = true;
-		main = $('#circuit');
-		main.css('border-width', 4);
-		main.animate(getMinimizeTransform(), 1000);
-		minimizeIcon.fadeOut();
-		my.setInterfaceEnabled(false);
-
-		function RestoreHandler() {
-			var elt = $('#circuit');
-			backDrag.unregister();
-			minimizeIcon.fadeIn();
-			elt.stop().animate({
-				transform: 'scale(1)',
-				left: 0,
-				top: 0,
-				borderWidth: 0
-			}, 1000, function () {
-				isMinimized = false;
-				my.setInterfaceEnabled(true);
-			});
+				main.stop('minimize').animate(getMinimizeTransform(),
+					{ duration: 1000, queue: 'minimize' });
+				main.dequeue('minimize');
+				minimizeIcon.fadeOut();
+				backDrag = multidrag.create(UnminimizeGesture, 'restore')
+					.register(main);
+			} else {
+				if (backDrag !== null) {
+					backDrag.unregister();
+					backDrag = null;
+				}
+				minimizeIcon.fadeIn();
+				main.stop('minimize').animate({
+					transform: 'scale(1)',
+					left: 0,
+					top: 0,
+					borderWidth: 0
+				}, { complete: function () {
+					isMinimized = false;
+					setIfaceEnabled(ifaceEnabledOutside);
+				}, duration: 1000, queue: 'minimize' });
+				main.dequeue('minimize');
+			}
 		}
-
-		RestoreHandler.prototype.onRelease = function (e) { };
-
-		backDrag = multidrag.create(RestoreHandler, 'restore').register(main);
 	}
 
 	var initialized = false;
@@ -105,7 +117,7 @@ var Circuit = (function ($, multidrag, Workshop) {
 		}
 
 		if (newLevel === null) {
-			$('#circuit').hide();
+			$('#circuit').fadeOut();
 		} else {
 			ensureInitialized();
 			if (newLevel.circuit) {
@@ -122,7 +134,7 @@ var Circuit = (function ($, multidrag, Workshop) {
 			tools.push('eraser');
 			workshop.setTools(tools);
 			my.windowResized();
-			$('#circuit').show();
+			$('#circuit').fadeIn();
 		}
 	}
 
@@ -137,7 +149,6 @@ var Circuit = (function ($, multidrag, Workshop) {
 			workshop = new Workshop.Workshop(main, iface);
 			workshop.setTools(['and', 'or', 'not', 'in', 'out', 'eraser']);
 			workshop.addIfaceHandler(computeHandler);
-			my.workshop = workshop;
 
 			$.each(changeListeners, function (i, listener) {
 				workshop.addChangeListener(listener);
@@ -254,18 +265,21 @@ var Circuit = (function ($, multidrag, Workshop) {
 		}
 	};
 
-	my.setInterfaceEnabled = function (value, keepIface) {
+	function setIfaceEnabled(value, keepIface) {
 		var iface = $('#circuit_iface');
 		workshop.setInterfaceEnabled(value, keepIface);
 		if (value) {
-			if (!isMinimized) {
-				iface.show();
-			}
+			iface.show();
 		} else {
 			if (keepIface !== true) {
 				iface.hide();
 			}
 		}
+	}
+
+	my.setInterfaceEnabled = function (value, keepIface) {
+		ifaceEnabledOutside = value;
+		setIfaceEnabled(value && !isMinimized, keepIface);
 	};
 
 	my.addChangeListener = function (listener) {
@@ -280,7 +294,7 @@ var Circuit = (function ($, multidrag, Workshop) {
 		workshop.addIfaceHandler(handler);
 	};
 
-	my.getWorkshop = function () { return workshop; };
+	my.setMinimized = setMinimized;
 
 	return my;
 }(jQuery, multidrag, Workshop));

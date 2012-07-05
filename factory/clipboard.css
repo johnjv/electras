@@ -20,6 +20,23 @@
 	height: 338.56px;
 }
 
+.clipButtonFade {
+	position: absolute;
+	z-index: 5;
+	background-color: #34586d;
+	opacity: 0.5;
+	-ms-filter: "progid:DBImageTransform.Microsoft.Alpha(opacity=50)";
+	filter: alpha(opacity=50);
+	-moz-border-radius: 20px;
+	-webkit-border-radius: 20px;
+	border-radius: 20px;
+}
+
+#clipSoundOff {
+	position: absolute;
+	z-index: 5;
+}
+
 .page {
 	position: absolute;
 	left: 450px;
@@ -35,9 +52,26 @@
 	overflow: hidden;
 }
 
-#check {
-	position: relative; height: 1em; width: 1em;
+/* CSS for title page */
+
+#clipTitle {
+	font-size: 1.8em;
+	margin: 0 auto;
+	padding: 0.3em 0 0.3em 0;
+	text-align: center;
 }
+
+.clipCandyLeft {
+	height: 1em;
+	float: left;
+}
+
+.clipCandyRight {
+	height: 1em;
+	float: right;
+}
+
+/* CSS for within each page of table of contents */
 
 .tocRow {
 	position: relative;
@@ -63,6 +97,8 @@
 	height: 1em;
 }
 
+/* CSS for within page for each level */
+
 .levTitle {
 	padding-bottom: 1em;
 	font-weight: bold;
@@ -84,4 +120,53 @@
 
 .levComplete img {
 	height: 1em;
+}
+
+/* CSS for credits page */
+
+.creditsPage {
+	overflow: hidden;
+	text-align: center;
+}
+
+#creditsTitle {
+	font-size: 1.8em;
+	margin: 0 auto;
+	padding: 0.3em 0 0.3em 0;
+}
+
+.creditsDiv {
+	text-align: center;
+	position: absolute;
+	white-space: nowrap;
+	width: 100%;
+}
+
+#creditsCandyLeft {
+	height: 1em;
+	float: left;
+}
+
+#creditsCandyRight {
+	height: 1em;
+	float: right;
+}
+
+#creditsHlogo {
+	height: 3em;
+}
+
+.creditsTable {
+	margin: auto;
+}
+
+.creditsTable th {
+	font-size: 1.5em;
+	text-align: center;
+	font-weight: normal;
+}
+
+.creditsTable td {
+	font-size: 1em;
+	text-align: center;
 }

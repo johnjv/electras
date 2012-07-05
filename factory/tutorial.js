@@ -120,9 +120,13 @@ var Tutorial = (function ($, imgpath, Translator) {
 	};
 
 	my.update = function (e) {
-		var script = LevelSelector.getCurrentLevel().script;
+		var curLevel = LevelSelector.getCurrentLevel();
 		$('#tutbubble').hide();
-		TutorialScript.execute(script);
+		if (curLevel) {
+			TutorialScript.execute(curLevel.script);
+		} else {
+			TutorialScript.execute('');
+		}
 	};
 
 	$(document).ready(function () {

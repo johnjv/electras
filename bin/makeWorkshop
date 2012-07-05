@@ -1,0 +1,14 @@
+SRC='../workshop/index.html'
+DST='../pub/workshop'
+
+# Handle HTML
+cp ${SRC} ${DST}.html
+
+# Handle JavaScript
+FILES="`egrep '<script [^>]*src' ${SRC} | egrep -v '<!--' | sed 's/.*src=\"//;s/\".*//' | egrep -v 'http|jquery-1.7.1'`"
+cat ${FILES} > ${DST}.js
+#cat ${FILES} | yuicompress --type js > ${HOME}/cat-code.js
+
+# Handle CSS
+FILES="`egrep '<link [^>]*rel="stylesheet"' ${SRC} | egrep -v '<!--' | sed 's/.*href=\"//;s/\".*//'`"
+cat ${FILES} > ${DST}.css

@@ -1,74 +1,61 @@
-var Credit = (function ($) {
+var CreditsPage = (function ($) {
 	"use strict";
+
+	var NUM_DIVS = 6;
 
 	var my = {};
 
-	var contentDiv = $('<div class = "page" id = "page23"></div>');
+	my.configurePage = function (page) {
+		var divs, i;
+		page.addClass('creditsPage');
+		page.append($('<div></div>').attr('id', 'creditsTitle'));
+		for (i = 0; i < NUM_DIVS; i += 1) {
+			page.append($('<div></div>').attr('id', 'creditsDiv' + i)
+				.addClass('creditsDiv').hide());
+		}
+		my.loadText(page);
+	};
 
-	my.slideDesc = function() {	    
-	    contentDiv.html("");
-		var body = $('#clipOrder');
-		body.append(contentDiv);
-		var header = $("<h2>Electra's Candy Factory</h2>");
-		contentDiv.append(header);
-		var myHeader = $('h2');
-		myHeader.css('text-align', 'center');
-		myHeader.css('font-size', '1.5em');
-		myHeader.css('margin', '0px');
-		myHeader.css('background-color', '#f5f3db');
-		myHeader.css('padding', '0.3em 0 0.3em 0');
-		contentDiv.css('text-align', 'center');
-		var odysseyDesc = $('<div class = "credit">Odyssey Project Completed May 2012 at Hendrix College</div>'		                					
-						+ '<div>Thanks for playing!!</div>'							
-						+ '<div><img src = "../levels/images/hlogo.png" id = "hlogo" height = "15%" width = "90%"></div>');
-					
-		var circuitDiv = $('<div class = "credits"><table class = "credtable"><tbody><tr><th><u>Circuit Editor</u></th></tr>'
-							+ '<tr><td><b>Dr. Carl Burch</b></td></tr></tbody></table>');
-							
-		var clipboardDiv = $('<div class = "credits"><table class = "credtable"><tbody><tr><th><u>Clipboard</u></th></tr>'
-							+ '<tr><td><b>Brandon McNew</b></td></tr><tr><td><b>Concorde Habineza</b></td></tr><tr><td><b>Jeannette Inema</b></td></tr></tbody></table></div>');
-							
-		var factoryDiv = $('<div class = "credits"><table class = "credtable"><tbody><tr><th><u>Factory Floor</u></th></tr>'
-							+ '<tr><td><b>Thierry Kimenyi</b></td></tr><tr><td><b>Justin John</b></td></tr><tr><td><b>Sung Oh</b></td></tr></tbody></table></div>');
-							
-		var graphicDiv = $('<div class = "credits"><table class = "credtable"><tbody><tr><th><u>Graphics Designer</u></th></tr>'
-							+ '<tr><td><b>Megan Childress</b></td</tr></tbody></table</div>');
-							
-		var tutorialDiv = $('<div class = "credits"><table class = "credtable"><tbody><tr><th><u>Tutorial/Credits</u></th></tr>'
-							+ '<tr><td><b>Jeffrey Biles</b></td></tr><tr><td><b>Safari Sibomana</b></td></tr></tbody></table></div>');
-		var myElts = [circuitDiv, clipboardDiv, factoryDiv, graphicDiv, tutorialDiv, odysseyDesc];
-    	contentDiv.append(myElts[0]);
-    	slideDivs(myElts, 0);	
-    	contentDiv.css('overflow', 'hidden');			
-		contentDiv.css('background-color', '#f5f3db');		
+	my.loadText = function (page) {
+		var i, t;
+		t = Translator.getText('clipboard', 'title');
+		$('#creditsTitle', page).html(t);
+		for (i = 0; i < NUM_DIVS; i += 1) {
+			t = Translator.getText('clipboard', 'credits' + i);
+			$('#creditsDiv' + i, page).html(t);
+		}
+		$('.clipCandy', page).attr('src',
+			imgpath.get('resource/app/app_icon', ['svg', 'png']));
+		$('#creditsHlogo', page).attr('src',
+			imgpath.get('resource/clipboard/hendrix-logo', ['svg', 'png']));
+	};
+
+	my.slideDesc = function (page) {
+		$('.creditsDiv').stop(true).hide();
+    	slideDivs(page, 0);
     }
 
-	function slideDivs(divs, i) {
-	    divs[i].css('width', '98%');
-		divs[i].css('margin', '1%');
-		divs[i].css('font-size', '1.5em');
-		$('.credtable th').css('padding-top', '1.5em');
-		$('.credtable td').css('font-size', '0.5em');
-		$('.credtable').css('margin-left', '15%');
-		$('.credtable').css('width', '70%');
-		divs[i].css('margin-top', '0px');	
-		if (i == divs.length -1) {
-		    $('#showLevels').show();
-		    $('#showLevels').fadeTo('slow', '1');
-	        return;
-	    }	
-		divs[i].delay(4000).animate({
-				marginLeft: divs[i].outerWidth()
-    		}, 1000, function() {
-    			divs[i].remove();
-    			if (i < divs.length -1) {
-    				contentDiv.append(divs[i + 1]);
-    				slideDivs(divs, i+1);
-    			} else {
-    				contentDiv.html(divs[0]);
-    				slideDivs(divs, 0);
-    			}
-    		});
+	function slideDivs(page, i) {
+		var curDiv, transitionNext;
+		curDiv = $('#creditsDiv' + i, page);
+		transitionNext = sliderNext(page, i, curDiv);
+		curDiv.stop()
+			.css('left', -page.width())
+			.show()
+			.animate({left: 0}, 1000)
+			.delay(4000)
+			.animate({left: 1}, 1, transitionNext)
+			.animate({left: page.width() - 1}, 999);
+	}
+
+	function sliderNext(page, i, curDiv) {
+		return function () {
+			if (i < NUM_DIVS - 1) {
+				slideDivs(page, i + 1);
+			} else {
+				slideDivs(page, 0);
+			}
+		};
 	}
 
 	return my;

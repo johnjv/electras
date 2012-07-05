@@ -1,7 +1,7 @@
 var Clipboard = (function ($, Translator, multidrag, imgpath) {
 	"use strict";
 
-	var LEVEL1_PAGE = 3;
+	var LEVEL0_PAGE = 3;
 	var CREDITS_PAGE = 23;
 
 	var clipboardVisible = true;
@@ -42,9 +42,12 @@ var Clipboard = (function ($, Translator, multidrag, imgpath) {
 	}
 
 	function goToPage(pageIndex) {
-		var oldIndex, oldPage, newPage;
+		var oldIndex, oldPage, newPage, newLevel;
+		oldIndex = curIndex;
+		if (oldIndex === pageIndex) {
+			return; // no change to make
+		}
 		if (pageIndex >= 0 && pageIndex < CREDITS_PAGE) {
-			oldIndex = curIndex;
 			curIndex = pageIndex;
 			oldPage = $('#page' + oldIndex);
 			newPage = $('#page' + pageIndex);
@@ -58,31 +61,33 @@ var Clipboard = (function ($, Translator, multidrag, imgpath) {
 				$('#next').fadeTo('slow', '1');
 			}
 			if (pageIndex < 3) {
-				$('#circuit').hide();
-				$('#factory').hide();
+				$('#circuit').fadeOut();
+				$('#factory').fadeOut();
 				clipboardButtons.hint.setEnabled(false);
-				clipboardButtons.level.setEnabled(false);
+				clipboardButtons.level.setEnabled(pageIndex === 0);
 				LevelSelector.setLevel(null);
 			} else {
-				$('#circuit').show();
-				$('#factory').show();
-				clipboardButtons.hint.setEnabled(true);
+				newLevel = allLevels[pageIndex - LEVEL0_PAGE];
+				clipboardButtons.hint.setEnabled(!newLevel.hintShown);
 				clipboardButtons.level.setEnabled(true);
-				LevelSelector.setLevel(allLevels[pageIndex - 3]);
+				LevelSelector.setLevel(newLevel);
+				$('#circuit').fadeIn();
+				$('#factory').fadeIn();
+				Circuit.setMinimized(false);
 			}
-			$('.levHint').hide();
 		} else if (pageIndex === CREDITS_PAGE) {
 			oldIndex = curIndex;
 			curIndex = pageIndex;
 			oldPage = $('#page' + oldIndex);
+			newPage = $('#page' + pageIndex);
 
 			LevelSelector.setLevel(null);
-			Credit.slideDesc();
-			transitionNext(oldPage, $('#page23'));
+			CreditsPage.slideDesc(newPage);
+			transitionNext(oldPage, newPage);
 			clipboardButtons.hint.setEnabled(false);
 			clipboardButtons.level.setEnabled(true);
-			$('#circuit').hide();
-			$('#factory').hide();
+			$('#circuit').fadeOut();
+			$('#factory').fadeOut();
 		} else {
 			return; // page invalid, so no effect
 		}
@@ -104,7 +109,11 @@ var Clipboard = (function ($, Translator, multidrag, imgpath) {
 
 	function goLevels() {
 		var lev = LevelSelector.getCurrentLevel();
-		goToPage(1 + Math.floor(lev / 10));
+		if (lev === null) {
+			goToPage(1);
+		} else {
+			goToPage(1 + Math.floor(lev.id / 10));
+		}
 	}
 
 	function goInfo() {
@@ -112,8 +121,11 @@ var Clipboard = (function ($, Translator, multidrag, imgpath) {
 	}
 
 	function showHint() {
-		if (curIndex >= 3) {
-			$('.levHint').show();
+		var lev = LevelSelector.getCurrentLevel();
+		if (lev !== null) {
+			lev.hintShown = true;
+			clipboardButtons.hint.setEnabled(false);
+			$('#page' + (LEVEL0_PAGE + lev.id) + ' .levHint').fadeIn();
 		}
 	}
 
@@ -123,12 +135,25 @@ var Clipboard = (function ($, Translator, multidrag, imgpath) {
 	}
 
 	function toggleAudio() {
-		if (Audio.isEnabled()){
-			sound.attr('src', '../levels/images/soundoff.png');
+		var b, src, elt;
+		if (Audio.isEnabled()){ // turn audio off
 			Audio.setEnabled(false);
+			if ($('#clipSoundOff').size() === 0) {
+				b = clipboardButtons.audio;
+				src = imgpath.get('resource/clipboard/button_sound_off', ['svg', 'png']);
+				elt = $('<img></img>').attr('id', 'clipSoundOff')
+					.attr('src', src).css({width: b.width, height: b.height,
+						left: b.x, top: 1365.33 - b.y - b.height});
+				elt.hide().fadeIn();
+				multidrag.create(ClickHandler).register(elt);
+				$('#clipboard').append(elt);
+			}
 		} else {
-			sound.attr('src', '../levels/images/soundon.png');
 			Audio.setEnabled(true);
+			elt = $('#clipSoundOff');
+			if (elt.size() > 0) {
+				elt.fadeOut(function () { elt.remove(); });
+			}
 		}
 	}
 
@@ -138,30 +163,41 @@ var Clipboard = (function ($, Translator, multidrag, imgpath) {
 		this.y = y;
 		this.width = w;
 		this.height = h;
-		this.fadeElt = null;
+		this.enabled = true;
+		this.fadeElt = $('<div></div>').addClass('clipButtonFade')
+			.css({left: x, top: 1365.33 - y - h, width: w, height: h})
+			.hide();
+		$('#clipboard').append(this.fadeElt);
+	}
+
+	Button.prototype.doClick = function (value) {
+		if (this.enabled) {
+			this.onClick();
+		}
 	}
 
 	Button.prototype.setEnabled = function (value) {
-		var elt;
 		if (value) {
-			elt = this.fadeElt;
-			if (elt !== null) {
-				this.fadeElt = null;
-				elt.remove();
+			if (!this.enabled) {
+				this.enabled = true;
+				this.fadeElt.fadeOut();
 			}
 		} else {
-			// TODO
+			if (this.enabled) {
+				this.enabled = false;
+				this.fadeElt.fadeIn();
+			}
 		}
 	};
 
 	var clipboardButtons = {
-		prev:  new Button(goPrev,       628, 1185, 132, 132),
-		level: new Button(goLevels,     848, 1185, 132, 132),
-		hint:  new Button(showHint,    1068, 1185, 132, 132),
-		next:  new Button(goNext,      1288, 1185, 132, 132),
-		info:  new Button(goInfo,       770,  203, 100, 100),
-		lang:  new Button(alterLang,    963,  203, 100, 100),
-		audio: new Button(toggleAudio, 1158,  203, 100, 100)
+		prev:  new Button(goPrev,       455,   48, 131, 132),
+		level: new Button(goLevels,     633,   48, 131, 132),
+		hint:  new Button(showHint,     811,   48, 131, 132),
+		next:  new Button(goNext,       989,   48, 131, 132),
+		info:  new Button(goInfo,      1166,   54, 120, 120),
+		lang:  new Button(alterLang,   1332,   54, 120, 120),
+		audio: new Button(toggleAudio, 1497,   54, 120, 120)
 	};
 
 	function ClickHandler(e) {
@@ -194,14 +230,15 @@ var Clipboard = (function ($, Translator, multidrag, imgpath) {
 				$.each(clipboardButtons, function (key, b) {
 					var dx, dy;
 					dx = x - b.x;
-					dy = y - b.y;
+					dy = (1365.33 - y) - b.y;
 					if (dx >= 0 && dy >= 0 && dx < b.width && dy < b.height) {
 						e.preventDefault();
-						b.onClick();
+						console.log('clicked', b.onClick.name);
+						b.doClick();
 						return false;
 					}
 				});
-			} else {
+			} else if (curIndex >= LEVEL0_PAGE && curIndex < CREDITS_PAGE) {
 				// clicked outside clipboard - hide it
 				e.preventDefault();
 				Clipboard.setVisible(false);
@@ -210,15 +247,17 @@ var Clipboard = (function ($, Translator, multidrag, imgpath) {
 	};
 
 	function createPage(index) {
-		var ret = $('<div></div>').addClass('page');
-		ret.attr('id', 'page' + index);
+		var page = $('<div></div>').addClass('page');
+		page.attr('id', 'page' + index);
 		if (index === 0) {
-			ret.append($('<h1></h1>').text("Electra's Candy"));
-		} else if (index < 3) {
-			ret.append($('<table></table>').addClass('levels')
+			page.append($('<div></div>').attr('id', 'clipTitle'));
+		} else if (index < LEVEL0_PAGE) {
+			page.append($('<table></table>').addClass('levels')
 				.append($('<tbody></tbody>').attr('id', 'levels' + index)));
+		} else if (index === CREDITS_PAGE) {
+			CreditsPage.configurePage(page);
 		}
-		return ret;
+		return page;
 	}
 
 	function configureClipboard() {
@@ -236,8 +275,16 @@ var Clipboard = (function ($, Translator, multidrag, imgpath) {
 	function createLevelLoader(levIndex) {
 		return function (e) {
 			e.preventDefault();
-			goToPage(LEVEL1_PAGE + levIndex);
+			goToPage(LEVEL0_PAGE + levIndex);
 		};
+	}
+
+	function loadTextTitle(page) {
+		var t;
+		t = Translator.getText('clipboard', 'title');
+		$('#clipTitle', page).html(t);
+		$('.clipCandy', page).attr('src',
+			imgpath.get('resource/app/app_icon', ['svg', 'png']));
 	}
 
 	function loadText() {
@@ -245,11 +292,12 @@ var Clipboard = (function ($, Translator, multidrag, imgpath) {
 
 		checkpath = imgpath.get('resource/clipboard/checkmark', ['svg', 'png']);
 
+		loadTextTitle($('#page0'));
 		$('#levels1').empty();
 		$('#levels2').empty();
 
 		$.each(allLevels, function (i, level) {
-			var onClick, id, title, text, hint, tocRow, order, check;
+			var onClick, id, title, text, hint, tocRow, order, hint, check;
 
 			onClick = createLevelLoader(i);
 			id = level.id;
@@ -263,22 +311,28 @@ var Clipboard = (function ($, Translator, multidrag, imgpath) {
 			if (!level.complete) {
 				check.hide();
 			}
-			tocRow.append($('<td></td>').addClass('tocComplete').append(check));
-			tocRow.append($('<td></td>').addClass('tocNumber')
-				.append($('<a></a>').attr('href', '#').click(onClick).text(id + '.')));
-			tocRow.append($('<td></td>').addClass('tocTitle')
-				.append($('<a></a>').attr('href', '#').click(onClick).text(title)));
+			tocRow.append($('<td></td>').addClass('tocComplete').append(
+				check));
+			tocRow.append($('<td></td>').addClass('tocNumber').append(
+				$('<a></a>').attr('href', '#').click(onClick)
+					.text((id + 1) + '.')));
+			tocRow.append($('<td></td>').addClass('tocTitle').append(
+				$('<a></a>').attr('href', '#').click(onClick).text(title)));
 			if (i < 10) {
 				$('#levels1').append(tocRow);
 			} else {
 				$('#levels2').append(tocRow);
 			}
 
-			order = $('#page' + (id + 2)).empty();
+			order = $('#page' + (LEVEL0_PAGE + id)).empty();
 			order.append($('<div></div>').addClass('levTitle')
-				.text(id + '. ' + title));
+				.text((id + 1) + '. ' + title));
 			order.append($('<div></div>').addClass('levOrder').text(text));
-			order.append($('<div></div>').addClass('levHint').text('Hint: ' + hint));
+			hint = $('<div></div>').addClass('levHint').text('Hint: ' + hint);
+			if (!level.showHint) {
+				hint.hide();
+			}
+			order.append(hint);
 			check = $('<div></div>').addClass('levComplete')
 				.append($('<img></img>').attr('src', checkpath))
 				.append('Complete');
@@ -288,7 +342,8 @@ var Clipboard = (function ($, Translator, multidrag, imgpath) {
 			order.append(check);
 		});
 
-		$('.levHint').hide();
+		CreditsPage.loadText($('#page' + CREDITS_PAGE));
+
 		$('.page').hide();
 		$('#page' + curIndex).show();
 	}
@@ -340,8 +395,8 @@ var Clipboard = (function ($, Translator, multidrag, imgpath) {
 	levelChanged.completeChanged = function (level) {
 		var id = level.id;
 		if (level.complete) {
-			$('#tocRow' + id).find('.tocComplete').find('img').show();
-			$('#page' + (LEVEL1_PAGE + id - 1)).find('.levComplete').show();
+			$('#tocRow' + id + ' .tocComplete img').fadeIn();
+			$('#page' + (LEVEL0_PAGE + id) + ' .levComplete').fadeIn();
 		}
 	}
 

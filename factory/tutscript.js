@@ -124,7 +124,9 @@ var TutorialScript = (function ($) {
 					elements.sensor().active_connection().exists()) {
 				// highlight the remaining outgoing sensor and incoming OR
 				targets = [];
-				targets.push(empty_sensors[0].connects[0]); // may be active?
+				if (empty_sensors.length > 0 && empty_sensors[0].connects) {
+					targets.push(empty_sensors[0].connects[0]);
+				}
 				targets.push(Filters.find_connection(or_operators[0], 'empty', true));
 				setBubble(targets, 4, 5, bubbleBase);
 			} else if (empty_sensors.length === 0) {
@@ -170,7 +172,9 @@ var TutorialScript = (function ($) {
 					elements.sensor().active_connection().exists()) {
 				//highlight the remaining outgoing sensor and incoming AND
 				targets = [];
-				targets.push(empty_sensors[0].connects[0]); // may be active?
+				if (empty_sensors.length > 0 && empty_sensors[0].connects) {
+					targets.push(empty_sensors[0].connects[0]);
+				}
 				targets.push(Filters.find_connection(and_operators[0], '', true));
 				setBubble(targets, 8, 5, bubbleBase);
 			} else if (empty_sensors.length === 0) {
