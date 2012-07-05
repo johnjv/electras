@@ -47,7 +47,7 @@ var Audio = (function ($) {
 		audioData = {
 			paper_sound: 'paper',
 			paper_sound2: 'paper',
-			belt_sound: 'belt3',
+			belt_sound: 'belt',
 			punch_sound: 'punch',
 			correct_sound: 'correct1',
 			correct2_sound: 'correct2',

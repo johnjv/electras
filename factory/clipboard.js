@@ -233,7 +233,7 @@ var Clipboard = (function ($, Translator, multidrag, imgpath) {
 					dy = (1365.33 - y) - b.y;
 					if (dx >= 0 && dy >= 0 && dx < b.width && dy < b.height) {
 						e.preventDefault();
-						console.log('clicked', b.onClick.name);
+						console.log('clicked ' + b.onClick.name);
 						b.doClick();
 						return false;
 					}
